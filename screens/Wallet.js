@@ -7,7 +7,6 @@ import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
 
 const Wallet = () => {
   const navigation = useNavigation();
-  const [totalNft, setTotalNft] = useState(1);
   const [showTransferAction, setShowTransferAction] = useState(false);
   const [showSend, setShowSend] = useState(false);
   const [showSendInput, setShowSendInput] = useState(false);
@@ -17,18 +16,6 @@ const Wallet = () => {
   const [showReceive, setShowReceive] = useState(false);
   const [showAddressCopied, setShowAddressCopied] = useState(false);
   const [showSuccessMint, setShowSuccessMint] = useState(false);
-
-  const doTotalNftMin = () => {
-    if (totalNft == 0) return;
-    let t = totalNft - 1;
-    setTotalNft(t);
-  }
-
-  const doTotalNftAdd = () => {
-    if (totalNft == 2) return;
-    let t = totalNft + 1;
-    setTotalNft(t);
-  }
 
   useEffect(() => {
     if (setShowAddressCopied) {
@@ -107,11 +94,6 @@ const Wallet = () => {
           </Text>
         </Pressable>
       </View>
-      {totalNft == 2 ? (
-        <Text style={[styles.theMaximumNumber, styles.textTypo]}>
-          The maximum number of mints is 2.
-        </Text>
-      ) : ""}
 
       {/* Section Wallet Info */}
       <View style={[styles.frameParentWallet]}>
@@ -166,9 +148,7 @@ const Wallet = () => {
         </View>
         <Pressable
           style={[styles.button2, styles.buttonLayout]}
-          onPress={() => {
-            doSendNext();
-          }}
+          onPress={doSendNext}
         >
           <Image
             style={styles.home1SvgrepoComIcon}
@@ -276,16 +256,29 @@ const Wallet = () => {
       </View> */}
 
       <View style={[styles.frameParentSend, styles.bottomNavPosition, !showSend && { display: "none" }]}>
-        <Pressable
-          style={styles.containerBackSend}
-          onPress={doSendBack}
-        >
-          <Image
-            style={[styles.icon2, styles.iconLayout]}
-            contentFit="cover"
-            source={require("../assets/ic_back_white.png")}
-          />
-        </Pressable>
+        {showSendResult ? (
+          <Pressable
+            style={styles.containerSendClose}
+            onPress={doSendBack}
+          >
+            <Image
+              style={[styles.icon2, styles.iconLayout]}
+              contentFit="cover"
+              source={require("../assets/ic_close_white.png")}
+            />
+          </Pressable>
+        ) : (
+          <Pressable
+            style={styles.containerSendBack}
+            onPress={doSendBack}
+          >
+            <Image
+              style={[styles.icon2, styles.iconLayout]}
+              contentFit="cover"
+              source={require("../assets/ic_back_white.png")}
+            />
+          </Pressable>
+        )}
 
         {/* Send Input Wallet Address */}
         <View style={[styles.frameView, !showSendInput && { display: "none" }]}>
@@ -361,10 +354,11 @@ const Wallet = () => {
             </Pressable>
           </View>
         </View>
+        {/* Send Input Wallet Address */}
 
         {/* Send Confirm Transaction */}
         <View style={[styles.frameView, !showSendConfirm && { display: "none" }]}>
-          <View style={styles.frameWrapper1}>
+          <View>
             <View style={styles.sendParent1}>
               <Text style={[styles.send, styles.ethTypo1]}>Send</Text>
               <View style={styles.youAreSending367WorthOfWrapper}>
@@ -382,7 +376,7 @@ const Wallet = () => {
                 </Text>
               </View>
             </View>
-            <View style={[styles.frameWrapper, styles.wrapperFlexBox]}>
+            <View style={[styles.wrapperFlexBox]}>
               <View
                 style={[
                   styles.x37e5385aba3592d75436127c7184dWrapper,
@@ -452,16 +446,56 @@ const Wallet = () => {
               </View>
             </View>
           </View>
-
           <View style={styles.buttonWrapper}>
-            <View style={[styles.button2Confirm, styles.buttonBorderConfirm]}>
+            <Pressable
+              style={[styles.button2Confirm, styles.buttonBorderConfirm]}
+              onPress={doSendNext}
+            >
               <Text style={[styles.buttonLabel, styles.ethTypo1]}>Send</Text>
-            </View>
+            </Pressable>
           </View>
         </View>
+        {/* Send Confirm Transaction */}
 
-        {/* Send Result Transaction */}
-        
+        {/* Send Confirm Transaction */}
+        <View style={[styles.frameView, !showSendResult && { display: "none" }]}>
+          <View>
+            <View style={styles.sendParent1}>
+              <Text style={[styles.send, styles.ethTypo1]}>Send</Text>
+              <View style={styles.youAreSending367WorthOfWrapper}>
+                <Text style={styles.youAreSendingContainer}>
+                  <Text style={styles.youAreSending}>
+                    Click transaction hash below{'\n'}
+                    to view on basescan
+                  </Text>
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.frameWrapper3}>
+            <View style={[styles.wrapperFlexBox]}>
+              <View
+                style={[
+                  styles.x37e5385aba3592d75436127c7184dWrapper,
+                  styles.frameParent2SpaceBlock,
+                ]}
+              >
+                <Text style={styles.x37e5385aba3592d75436127c7184d}>
+                  0x37E5385AbA3592D75436127C7184dA175574398e
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.buttonWrapper}>
+            <Pressable
+              style={[styles.button2Confirm, styles.buttonBorderConfirm]}
+              onPress={doSendNext}
+            >
+              <Text style={[styles.buttonLabel, styles.ethTypo1]}>Send</Text>
+            </Pressable>
+          </View>
+        </View>
+        {/* Send Confirm Transaction */}
       </View>
 
       {/* View Pop Up Copy Address */}
@@ -754,10 +788,19 @@ const styles = StyleSheet.create({
     zIndex: 1,
     position: "absolute",
   },
-  containerBackSend: {
+  containerSendBack: {
     left: "5.13%",
     top: "3.15%",
     right: "86.67%",
+    bottom: "87.3%",
+    width: "8.21%",
+    height: "6.56%",
+    zIndex: 1,
+    position: "absolute",
+  },
+  containerSendClose: {
+    right: "5.13%",
+    top: "3.15%",
     bottom: "87.3%",
     width: "8.21%",
     height: "6.56%",
@@ -1060,7 +1103,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   baseWalletAddress: {
-    color: Color.colorGray_700,
+    color: Color.darkInk,
     textAlign: "left",
     flex: 1,
     fontSize: FontSize.labelLarge_size,
@@ -1127,6 +1170,11 @@ const styles = StyleSheet.create({
   },
   frameWrapper2: {
     marginTop: 30,
+    width: 322,
+  },
+  frameWrapper3: {
+    marginTop: 127,
+    marginBottom: 128,
     width: 322,
   },
   frameParent3: {

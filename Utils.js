@@ -42,10 +42,8 @@ export const formatPostTimestamp = (timestamp) => {
 
 export const getFormattedPostTimestamp = (timestamp) => {
   try {
-    console.log("timestamp", timestamp)
     const now = moment();
     const duration = moment.duration(now.diff(moment(timestamp)));
-    console.log("duration", duration)
     return formatPostDuration(duration);
   } catch (e) {
     console.error("error-getFormattedPostTimestamp", e?.message);

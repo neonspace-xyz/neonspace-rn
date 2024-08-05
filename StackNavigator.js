@@ -19,6 +19,10 @@ const StackNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{ headerShown: false }} />
+        <Stack.Screen
           name="Login"
           component={Login}
           options={{ headerShown: false }}
@@ -28,10 +32,6 @@ const StackNavigator = () => {
           component={Mint}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Main"
-          component={Main}
-          options={{ headerShown: false }} />
         <Stack.Screen
           name="PostDetail"
           component={PostDetail}

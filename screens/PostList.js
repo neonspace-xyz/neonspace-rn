@@ -23,29 +23,6 @@ const Home = () => {
 
   const [isShowCreate, setIsShowCreate] = useState(false);
 
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     header: () =>
-  //       <>
-  //         <SafeAreaView style={styles.header}>
-  //           <View style={styles.header}>
-  //             <TextInput
-  //               style={styles.searchInput}
-  //               placeholder="Search by X handle"
-  //               placeholderTextColor={Color.colorGray_500}
-  //               value={searchValue}
-  //               onChangeText={(text) => setSearchValue(text)}
-  //             />
-  //             <Image
-  //               source={require("../assets/ic_chat.png")}
-  //               style={styles.headerImage}
-  //             />
-  //           </View>
-  //         </SafeAreaView>
-  //       </>,
-  //   });
-  // }, [navigation]);
-
   useFocusEffect(
     React.useCallback(() => {
       fetchItems();
@@ -106,6 +83,7 @@ const Home = () => {
   };
 
   const handleDetail = (item) => {
+    if(isShowCreate) return;
     navigation.navigate("PostDetail", { item });
   };
 
