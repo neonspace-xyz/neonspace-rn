@@ -6,6 +6,9 @@ import Mint from './screens/Mint';
 import Main from './screens/Main';
 import PostDetail from './screens/PostDetail';
 import PostLikedBy from './screens/PostLikedBy';
+import MyProfile from './screens/MyProfile';
+import { StatusBar } from 'expo-status-bar';
+import { Color } from './GlobalStyles';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -14,11 +17,11 @@ const StackNavigator = () => {
     headerTitleAlign: 'center',
     headerBackVisible: false
   };
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
+
+        {/* <Stack.Screen
           name="Login"
           component={Login}
           options={{ headerShown: false }}
@@ -27,12 +30,8 @@ const StackNavigator = () => {
           name="Mint"
           component={Mint}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Main"
-          component={Main}
-          options={{ headerShown: false }} />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="PostDetail"
           component={PostDetail}
         />
@@ -40,6 +39,15 @@ const StackNavigator = () => {
           name="PostLikedBy"
           component={PostLikedBy}
         />
+
+        <Stack.Screen
+          name="MyProfile"
+          component={MyProfile}
+        /> */}
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{ headerShown: false }} />
 
       </Stack.Navigator>
     </NavigationContainer>

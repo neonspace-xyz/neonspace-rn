@@ -6,6 +6,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PostList from './PostList';
 import Wallet from './Wallet';
+import MyProfile from "./MyProfile";
+import Home from "./Home";
+import { StatusBar } from "expo-status-bar";
+import ProfileDetail from "../components/ProfileDetail";
 
 
 const Main = () => {
@@ -39,10 +43,11 @@ const Main = () => {
         }
       })}
     >
-      <Tab.Screen name="Home" component={PostList} />
+              
+      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Notification" component={PostList} />
       <Tab.Screen name="Wallet" component={Wallet} />
-      <Tab.Screen name="Profile" component={PostList} />
+      <Tab.Screen name="Profile" component={MyProfile} />
     </Tab.Navigator>
   );
 };
