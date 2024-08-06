@@ -6,6 +6,7 @@ import Mint from './screens/Mint';
 import Main from './screens/Main';
 import PostDetail from './screens/PostDetail';
 import PostLikedBy from './screens/PostLikedBy';
+import ChatList from './screens/ChatList';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -39,6 +40,11 @@ const StackNavigator = () => {
         <Stack.Screen
           name="PostLikedBy"
           component={PostLikedBy}
+        />
+        <Stack.Screen
+          name="ChatList"
+          component={ChatList}
+          options={{ headerShown: false }}
         />
 
       </Stack.Navigator>
