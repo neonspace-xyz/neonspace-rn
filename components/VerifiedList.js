@@ -12,7 +12,7 @@ import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
 
-const SearchBar = ({backButton}) => {
+const VerifiedList = () => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState([]);
@@ -110,33 +110,39 @@ const SearchBar = ({backButton}) => {
   };
 
   return (
-    <>
-      <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
-      <View style={styles.header}>
-          {backButton ? <Pressable
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../assets/back.png")}
-              style={styles.headerImage}
-            />
-          </Pressable> : <></>}
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search by X handle"
-            placeholderTextColor={Color.colorGray_500}
-            value={searchValue}
-            onChangeText={(text) => setSearchValue(text)}
+    <View style={[styles.containerList]}>
+      <FlatList
+        data={items}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            title="Pull to refresh"
+            titleColor={Color.darkInk}
+            colors={[Color.darkInk]}
+            tintColor={Color.darkInk}
           />
-          <Pressable
-            onPress={() => setIsShowCreate(true)}>
-            <Image
-              source={require("../assets/ic_chat.png")}
-              style={styles.headerImage}
+        }
+        onEndReached={onLoadMore}
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={() =>
+          loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
+        }
+        renderItem={({ item }) => {
+          return (
+            <PostSection
+              isDetail={false}
+              item={item}
+              onPress={() => navigation.navigate("OtherProfile")}
             />
-          </Pressable>
-        {/* </View> */}
-      </View> 
-    </>
+          )
+        }}
+      />
+      {/* {isShowCreate && (
+        <PostCreate
+          setIsShowCreate={setIsShowCreate} />
+      )} */}
+    </View>
   );
 };
 
@@ -150,19 +156,21 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorGray_100,
   },
   header: {
-    // marginTop: 60,
-    width: "100%",
+    marginTop: 40,
     flexDirection: 'row',
     alignItems: 'center',
-    gap:10,
     padding: 14,
     backgroundColor: Color.colorGray_100,
   },
   containerList: {
+    flex:1,
     width: "100%",
-    height: "100%",
-    alignItems: "center",
+    // height: "60%",
+    // alignItems: "center",
     backgroundColor: Color.colorGray_200,
+    // borderColor:"red",
+    // borderWidth:5
+
   },
   searchInput: {
     flex: 1,
@@ -201,4 +209,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchBar;
+export default VerifiedList;

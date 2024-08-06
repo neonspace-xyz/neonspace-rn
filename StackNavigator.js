@@ -9,6 +9,9 @@ import PostLikedBy from './screens/PostLikedBy';
 import MyProfile from './screens/MyProfile';
 import { StatusBar } from 'expo-status-bar';
 import { Color } from './GlobalStyles';
+import EditProfile from './screens/EditProfile';
+import Verified from './screens/Verified';
+import OtherProfile from './screens/OtherProfile';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -47,6 +50,21 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Main"
           component={Main}
+          options={{ headerShown: false }} />
+
+        <Stack.Screen
+          name="OtherProfile"
+          component={OtherProfile}
+          options={{ headerShown: false }} />
+
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfile}
+          options={{ headerShown: false }} />
+
+        <Stack.Screen
+          name="Verified"
+          component={Verified}
           options={{ headerShown: false }} />
 
       </Stack.Navigator>

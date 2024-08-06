@@ -3,148 +3,24 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
-import PostList from "./PostList";
+import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SearchBar from "./SearchBar";
+import SearchBar from "../components/SearchBar";
+import OtherProfileDetail from "../components/OtherProfileDetail";
 
-const ProfileDetail = () => {
+const OtherProfile = () => {
   const navigation = useNavigation();
   return (
-    <View style={styles.myProfile}>
-      <View style={{flex:1, flexDirection:"row", maxHeight:120,
-      
-      }}>
-        <Image
-          style={[styles.myProfileItem]}
-          contentFit="cover"
-          source={require("../assets/photo.png")}
-        />
-        <View style={styles.frameParent10}>
-          <View style={styles.nameParent4}>
-            <Text style={[styles.name6, styles.timeTypo]}>Name</Text>
-            <Text style={[styles.endlessmeee6, styles.nameTypo]}>
-              @endlessmeee
-            </Text>
-          </View>
-          <Text style={[styles.theBioText, styles.textTypo]}>
-            The bio text will be here. The maximum number of lines is 2 and that
-            means max. characters is 100.
-          </Text>
-        </View>
-      </View>
-      <View style={{flex:1, flexDirection:"row", marginTop:10, maxHeight:30, gap: 10
-      // borderColor:"red", borderWidth:2,
-      }}>
-        <Pressable
-          style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
-          onPress={() => navigation.navigate("EditProfile")}
-        >
-          <Text style={[styles.editProfile, styles.editProfileTypo]}>
-            Edit profile
-          </Text>
-        </Pressable>
-        <View
-          style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock]}
-        >
-          <Text style={[styles.editProfile, styles.editProfileTypo]}>
-            Share profile
-          </Text>
-        </View>
-      </View>     
+    <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
 
-      <View style={{
-        // borderWidth:2, borderColor:"red", 
-        height:"100%",
-      flex:1, padding:10, gap:8}}>
-        <Text
-          style={[
-            styles.walletAddress0xedhvContainer,
-          ]}
-        >
-          <Text style={styles.walletAddress}>{`Wallet Address: `}</Text>
-          <Text style={styles.timeTypo}>0xe...dhv</Text>
-        </Text>
-        <Text
-          style={[
-            styles.walletAddress0xedhvContainer,
-          ]}
-        >
-          <Text style={styles.walletAddress}>{`Verified by: `}</Text>
-          <Image
-            style={styles.groupIcon}
-            contentFit="cover"
-            source={require("../assets/photo-duo.png")}
-          />
-          <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-            Sam, Polymath, and 12 others
-          </Text>
-        </Text>
+      <SearchBar backButton={true}/>
 
-        <Pressable
-          onPress={() => navigation.navigate("Verified")}
-        >
-          <Text
-            style={[
-              styles.walletAddress0xedhvContainer,
-            ]}
-          >
-            <Text style={styles.walletAddress}>{`Verified: `}</Text>
-            <Image
-              style={styles.groupIcon}
-              contentFit="cover"
-              source={require("../assets/photo-duo.png")}
-            />
-            <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-              Sam, Polymath, and 12 others
-            </Text>
-          </Text>
-        </Pressable>
-      </View> 
-
-      <View style={[styles.frameParent8, styles.topNavBg]}>
-        <Pressable
-          style={styles.verifiedWrapperFlexBox}
-          onPress={() => navigation.navigate("MyProfileYouVerifiedVerifiedBy")}
-        >
-          <Text style={[styles.youVerified, styles.bioExampleTypo]}>
-            Posts
-          </Text>
-        </Pressable>
-        <View style={[styles.verifiedByWrapper, styles.verifiedWrapperFlexBox]}>
-          <Text style={[styles.youVerified, styles.bioExampleTypo]}>
-            Likes
-          </Text>
-        </View>
-      </View>
-      {/* <View style={[styles.frameParent13, styles.frameParentPosition]}>
-        <View style={styles.ellipseParent}>
-          <Text style={[styles.verifiedBy, styles.nameTypo]}>Verified by:</Text>
-          <Image
-            style={styles.groupIcon}
-            contentFit="cover"
-            //source={require("../assets/group-871.png")}
-          />
-          <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-            Sam, Polymath, and 12 others
-          </Text>
-        </View>
-        <Pressable
-          style={styles.verifiedParent}
-          onPress={() => navigation.navigate("MyProfileYouVerifiedVerifiedBy")}
-        >
-          <Text style={[styles.verified, styles.nameTypo]}>Verified:</Text>
-          <Image
-            style={styles.groupIcon}
-            contentFit="cover"
-            //source={require("../assets/group-871.png")}
-          />
-          <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-            Sam, Polymath, and 2 others
-          </Text>
-        </Pressable>
-      </View>       */}
-    </View>
-  );
+      <OtherProfileDetail/>
+  
+      <PostList/>
+    </SafeAreaView>
+  )
 };
 
 const styles = StyleSheet.create({
@@ -152,8 +28,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     overflow: "hidden",
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    flexDirection:"column",
     alignItems: "center",
+    // borderColor:"red",
+    // borderWidth:5,
     backgroundColor: Color.colorGray_100,
   },
   frameParent12Layout: {
@@ -190,8 +69,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontFamily: FontFamily.clashGrotesk,
   },
+  frameParentPosition: {
+    left: 14,
+    position: "absolute",
+  },
   profileWrapperSpaceBlock: {
-    // paddingVertical: Padding.p_3xs,
+    paddingVertical: Padding.p_9xs,
     justifyContent: "center",
   },
   editProfileTypo: {
@@ -246,6 +129,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.clashGrotesk,
   },
   myProfileChild: {
+    top: 101,
     height: 294,
     left: 0,
     overflow: "hidden",
@@ -342,15 +226,16 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_xs,
   },
   frameParent10: {
-    // borderColor:"red", borderWidth:2,
+    top: 123,
+    left: 116,
     width: 260,
-    padding: 10
-    // justifyContent: "center",
+    justifyContent: "center",
+    position: "absolute",
   },
   myProfileItem: {
+    top: 115,
     width: 90,
     height: 90,
-    margin:10
   },
   editProfile: {
     fontWeight: "500",
@@ -376,10 +261,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: Padding.p_xs,
     alignItems: "center",
     flex: 1,
+    marginLeft: 12,
   },
   frameParent11: {
     top: 219,
     flexDirection: "row",
+    width: 362,
   },
   postsWrapper: {
     borderColor: Color.colorDeeppink,
@@ -395,18 +282,17 @@ const styles = StyleSheet.create({
   },
   walletAddress: {
     fontFamily: FontFamily.clashGrotesk,
+    // alignItems:"center",
+    // borderColor:"red",
+    // borderWidth:2,height:"100"
   },
   walletAddress0xedhvContainer: {
+    // borderColor:"red", borderWidth:2,
     // top: 258,
     // width: 217,
-    // borderWidth:2,borderColor:"red",
     // textAlign: "left",
-    // alignItems:"center",
-    // verticalAlign:"top",
-    // flex:1,
-    // justifyContent:"center",
-    color: Color.darkInk,
-    fontSize: FontSize.labelLarge_size,
+    // color: Color.darkInk,
+    // fontSize: FontSize.labelLarge_size,
   },
   verifiedBy: {
     width: 74,
@@ -420,10 +306,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   samPolymathAnd: {
-    alignItems:"center"
-    // width: 218,
-    // marginLeft: 8,
-    // textAlign: "left",
+    width: 218,
+    marginLeft: 8,
+    textAlign: "left",
   },
   verified: {
     width: 55,
@@ -613,49 +498,12 @@ const styles = StyleSheet.create({
     left: "50%",
   },
   myProfile: {
-    // overflow: "hidden",
+    height: 844,
+    overflow: "hidden",
     width: "100%",
     flex: 1,
-    // alignItems: "flex-start",
-    // justifyContent:"flex-end",
     backgroundColor: Color.colorGray_200,
-    // borderColor:"red", borderWidth:2,
-    // maxHeight:280
-  },
-
-  frameParent8: {
-    // borderColor:"blue",
-    // borderWidth:2,
-    // top: 101,
-    // paddingTop: Padding.p_9xs,
-    // marginLeft: -195,
-    // backgroundColor: Color.colorGray_100,
-    height:40
-    // left: "50%",
-    // position: "absolute",
-  },
-  topNavBg: {
-    backgroundColor: Color.colorGray_100,
-    flexDirection: "row",
-    width:"100%"
-  },
-  verifiedWrapperFlexBox: {
-    // paddingVertical: Padding.p_7xs,
-    justifyContent: "center",
-    flex: 1,
-    // paddingHorizontal: Padding.p_xs,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  youVerified: {
-    fontWeight: "500",
-  },
-  bioExampleTypo: {
-    fontSize: FontSize.size_sm,
-    textAlign: "left",
-    color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
   },
 });
 
-export default ProfileDetail;
+export default OtherProfile;

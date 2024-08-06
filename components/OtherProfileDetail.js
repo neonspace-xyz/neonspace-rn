@@ -7,7 +7,7 @@ import PostList from "./PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "./SearchBar";
 
-const ProfileDetail = () => {
+const OtherProfileDetail = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.myProfile}>
@@ -32,15 +32,21 @@ const ProfileDetail = () => {
           </Text>
         </View>
       </View>
-      <View style={{flex:1, flexDirection:"row", marginTop:10, maxHeight:30, gap: 10
+      <View style={{flex:1, flexDirection:"row", maxHeight:30, gap:2
       // borderColor:"red", borderWidth:2,
       }}>
         <Pressable
+          style={[styles.verifyWrapper, styles.profileWrapperSpaceBlock]}
+          onPress={() => {}}
+        >
+          <Text style={[styles.verify, styles.verifyTypo]}>Verify</Text>
+        </Pressable>
+        <Pressable
           style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
-          onPress={() => navigation.navigate("EditProfile")}
+          onPress={() => {}}
         >
           <Text style={[styles.editProfile, styles.editProfileTypo]}>
-            Edit profile
+            Send message
           </Text>
         </Pressable>
         <View
@@ -100,7 +106,7 @@ const ProfileDetail = () => {
           </Text>
         </Pressable>
       </View> 
-
+      
       <View style={[styles.frameParent8, styles.topNavBg]}>
         <Pressable
           style={styles.verifiedWrapperFlexBox}
@@ -116,33 +122,6 @@ const ProfileDetail = () => {
           </Text>
         </View>
       </View>
-      {/* <View style={[styles.frameParent13, styles.frameParentPosition]}>
-        <View style={styles.ellipseParent}>
-          <Text style={[styles.verifiedBy, styles.nameTypo]}>Verified by:</Text>
-          <Image
-            style={styles.groupIcon}
-            contentFit="cover"
-            //source={require("../assets/group-871.png")}
-          />
-          <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-            Sam, Polymath, and 12 others
-          </Text>
-        </View>
-        <Pressable
-          style={styles.verifiedParent}
-          onPress={() => navigation.navigate("MyProfileYouVerifiedVerifiedBy")}
-        >
-          <Text style={[styles.verified, styles.nameTypo]}>Verified:</Text>
-          <Image
-            style={styles.groupIcon}
-            contentFit="cover"
-            //source={require("../assets/group-871.png")}
-          />
-          <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-            Sam, Polymath, and 2 others
-          </Text>
-        </Pressable>
-      </View>       */}
     </View>
   );
 };
@@ -155,6 +134,50 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: "center",
     backgroundColor: Color.colorGray_100,
+  },
+
+  // verify: {
+  //   color: Color.colorGray_100,
+  //   fontWeight: "500",
+  // },
+  // verifyWrapper: {
+  //   borderWidth: 1.5,
+  //   borderRadius: Border.br_5xs,
+  //   paddingVertical: Padding.p_9xs,
+  //   borderColor: Color.darkInk,
+  //   borderStyle: "solid",
+  //   flexDirection: "row",
+  //   paddingHorizontal: Padding.p_xs,
+  //   alignItems: "center",
+  //   flex: 1,
+  //   backgroundColor: "red",
+  // },
+  // verifyTypo: {
+  //   fontSize: FontSize.size_sm,
+  //   textAlign: "left",
+  //   fontFamily: FontFamily.clashGrotesk,
+  // },
+  verify: {
+    color: Color.colorGray_100,
+    fontWeight: "500",
+  },  
+  verifyTypo: {
+    fontSize: FontSize.size_sm,
+    textAlign: "left",
+    color: Color.darkInk,
+    fontFamily: FontFamily.clashGrotesk,
+  },
+  verifyWrapper: {
+    borderWidth: 1.5,
+    borderRadius: Border.br_5xs,
+    paddingVertical: Padding.p_9xs,
+    borderColor: Color.darkInk,
+    borderStyle: "solid",
+    flexDirection: "row",
+    paddingHorizontal: Padding.p_xs,
+    alignItems: "center",
+    flex: 1,
+    backgroundColor: Color.darkInk,
   },
   frameParent12Layout: {
     width: 390,
@@ -354,6 +377,20 @@ const styles = StyleSheet.create({
   },
   editProfile: {
     fontWeight: "500",
+  },
+  verify: {
+    fontWeight: "500",
+  },
+  verifyWrapper: {
+    borderWidth: 1.5,
+    borderRadius: Border.br_5xs,
+    paddingVertical: Padding.p_9xs,
+    borderColor: Color.darkInk,
+    borderStyle: "solid",
+    flexDirection: "row",
+    paddingHorizontal: Padding.p_xs,
+    alignItems: "center",
+    flex: 1,
   },
   editProfileWrapper: {
     borderWidth: 1.5,
@@ -622,7 +659,6 @@ const styles = StyleSheet.create({
     // borderColor:"red", borderWidth:2,
     // maxHeight:280
   },
-
   frameParent8: {
     // borderColor:"blue",
     // borderWidth:2,
@@ -658,4 +694,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileDetail;
+export default OtherProfileDetail;
