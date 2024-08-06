@@ -5,9 +5,9 @@ export const getRandomNumber = (min = 10, max = 20) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const getRandomTimestamp = () => {
+export const getRandomTimestamp = (amount) => {
   const now = moment();
-  const twoDaysAgo = now.clone().subtract(2, 'days');
+  const twoDaysAgo = now.clone().subtract(amount, 'days');
   const randomTimestamp = twoDaysAgo.valueOf() + Math.floor(Math.random() * (now.valueOf() - twoDaysAgo.valueOf() + 1));
   return moment(randomTimestamp).toDate(); // Converts back to a Date object if needed
 }
@@ -30,6 +30,20 @@ export const formatPostDuration = (duration) => {
     return Math.floor(duration.asMinutes()) + 'm';
   } else {
     return Math.floor(duration.asSeconds()) + 's';
+  }
+}
+
+export const formatChatListTime = (timestamp) => {
+  const date = moment(timestamp);
+  const now = moment();
+  const oneWeekAgo = now.clone().subtract(7, 'days');
+
+  if (date.isAfter(oneWeekAgo)) {
+    // If the date is within the last week, show the day of the week
+    return date.format('ddd');
+  } else {
+    // If the date is more than a week old, show the full date in DD/MM/YYYY format
+    return date.format('DD/MM/YYYY');
   }
 }
 

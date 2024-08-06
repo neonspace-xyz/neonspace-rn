@@ -94,3 +94,29 @@ export const styleHeaderBackIcon = {
   width: "100%",
   height: "100%",
 }
+  
+export const StyleTextTitle = {
+  textAlign: "center",
+  fontWeight: "400",
+  fontSize: FontSize.size_sm,
+  fontFamily: FontFamily.helvetica,
+  color: Color.darkInk,
+};
+  
+export const StyleTextTitle2 = {
+  textAlign: "center",
+  fontWeight: "400",
+  fontSize: FontSize.size_xs,
+  fontFamily: FontFamily.helvetica,
+  color: Color.darkInk,
+};
+  
+export const StyleButtonBack = {
+  width: 32,
+  height: 30,
+};
+
+export const StyleButtonBackIcon = {
+  height: "100%",
+  width: "100%",
+};

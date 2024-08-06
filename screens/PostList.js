@@ -16,6 +16,7 @@ const Home = () => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState([]);
+  const [searchItems, setSearchItems] = useState([]);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -26,15 +27,16 @@ const Home = () => {
   const textInputRef = useRef(null);
   const handleBlurTextInput = () => {
     if (textInputRef.current) {
-      setIsShowSearch(!isShowSearch);
+      setSearchValue("");
       textInputRef.current.blur();
+      setIsShowSearch(!isShowSearch);
     }
   };
-
 
   useFocusEffect(
     React.useCallback(() => {
       fetchItems();
+      fetchSearchItems();
     }, [])
   );
 
@@ -43,10 +45,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getChats();
+    getItems();
   }, [])
 
-  const getChats = async () => {
+  const getItems = async () => {
   };
 
   const fetchItems = async () => {
@@ -70,11 +72,39 @@ const Home = () => {
         text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
         view: getRandomNumber(0, 100),
         like: like,
-        datetime: getRandomTimestamp(),
+        datetime: getRandomTimestamp(30),
         itemLikes: itemLikes
       });
     }
     setItems(data);
+  };
+
+  const fetchSearchItems = async () => {
+    let data = [];
+    for (let i = 1; i < getRandomNumber(); i++) {
+      let like = getRandomNumber(0, 7);
+      let itemLikes = [];
+      for (let j = 0; j < like; j++) {
+        itemLikes.push({
+          name: `Name${j}`,
+          username: `@username${j}`,
+          image: IMG_PROFILE[getRandomNumber(0, 4)],
+          bio: `Founder at ChainCredit. #DYOR ${j}`,
+        })
+      }
+      data.push({
+        id: i,
+        name: `Name${i}`,
+        username: `@username${i}`,
+        image: IMG_PROFILE[getRandomNumber(0, 4)],
+        text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
+        view: getRandomNumber(0, 100),
+        like: like,
+        datetime: getRandomTimestamp(30),
+        itemLikes: itemLikes
+      });
+    }
+    setSearchItems(data);
   };
 
   const onRefresh = async () => {
@@ -101,7 +131,7 @@ const Home = () => {
       <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
       <View style={styles.header}>
         <Pressable
-          style={!isShowSearch && { display: "none" }}
+          style={[styles.headerIcon, !isShowSearch && { display: "none" }]}
           onPress={() => handleBlurTextInput()}>
           <Image
             source={require("../assets/ic_back_white.png")}
@@ -114,11 +144,17 @@ const Home = () => {
           placeholder="Search by X handle"
           placeholderTextColor={Color.colorGray_500}
           value={searchValue}
-          onChangeText={(text) => setSearchValue(text)}
-          onFocus={() => setIsShowSearch(!isShowSearch)}
+          onChangeText={(text) => {
+            setSearchValue(text);
+            fetchSearchItems();
+          }}
+          onFocus={() => {
+            setSearchItems([]);
+            setIsShowSearch(!isShowSearch);
+          }}
         />
         <Pressable
-          style={isShowSearch && { display: "none" }}
+          style={[styles.headerIcon, isShowSearch && { display: "none" }]}
           onPress={() => navigation.navigate("ChatList")}>
           <Image
             source={require("../assets/ic_chat.png")}
@@ -134,6 +170,33 @@ const Home = () => {
         </View>
       )}
       <View style={[styles.containerListSearch, !isShowSearch && { display: "none" }]}>
+        <FlatList
+          data={searchItems}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              title="Pull to refresh"
+              titleColor={Color.darkInk}
+              colors={[Color.darkInk]}
+              tintColor={Color.darkInk}
+            />
+          }
+          onEndReached={onLoadMore}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={() =>
+            loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
+          }
+          renderItem={({ item }) => {
+            return (
+              <PostSection
+                isDetail={false}
+                item={item}
+                onPress={() => handleDetail(item)}
+              />
+            )
+          }}
+        />
       </View>
       <View style={[styles.containerList, isShowSearch && { display: "none" }]}>
         <FlatList
@@ -182,11 +245,15 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorGray_100,
   },
   header: {
-    marginTop: 40,
+    marginTop: 30,
+    height: 68,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 14,
+    paddingHorizontal: 14,
     backgroundColor: Color.colorGray_100,
+  },
+  headerIcon: {
+    marginTop: 10,
   },
   containerListSearch: {
     width: "100%",
@@ -204,6 +271,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
+    marginTop: 16,
     backgroundColor: Color.colorGray_200,
     borderRadius: 5,
     paddingLeft: 10,

@@ -7,6 +7,7 @@ import Main from './screens/Main';
 import PostDetail from './screens/PostDetail';
 import PostLikedBy from './screens/PostLikedBy';
 import ChatList from './screens/ChatList';
+import ChatView from './screens/ChatView';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -45,6 +46,10 @@ const StackNavigator = () => {
           name="ChatList"
           component={ChatList}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChatView"
+          component={ChatView}
         />
 
       </Stack.Navigator>

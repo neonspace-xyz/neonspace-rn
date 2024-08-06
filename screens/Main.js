@@ -5,6 +5,7 @@ import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PostList from './PostList';
+import NotificationList from './NotificationList';
 import Wallet from './Wallet';
 
 
@@ -40,7 +41,7 @@ const Main = () => {
       })}
     >
       <Tab.Screen name="Home" component={PostList} />
-      <Tab.Screen name="Notification" component={PostList} />
+      <Tab.Screen name="Notification" component={NotificationList} />
       <Tab.Screen name="Wallet" component={Wallet} />
       <Tab.Screen name="Profile" component={PostList} />
     </Tab.Navigator>
