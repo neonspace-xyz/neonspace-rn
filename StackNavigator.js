@@ -12,6 +12,7 @@ import { Color } from './GlobalStyles';
 import EditProfile from './screens/EditProfile';
 import Verified from './screens/Verified';
 import OtherProfile from './screens/OtherProfile';
+import MyAssets from './screens/MyAssets';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -47,7 +48,8 @@ const StackNavigator = () => {
           name="MyProfile"
           component={MyProfile}
         /> */}
-        <Stack.Screen
+        
+        {/* <Stack.Screen
           name="Main"
           component={Main}
           options={{ headerShown: false }} />
@@ -65,6 +67,11 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Verified"
           component={Verified}
+          options={{ headerShown: false }} /> */}
+
+        <Stack.Screen
+          name="MyAssets"
+          component={MyAssets}
           options={{ headerShown: false }} />
 
       </Stack.Navigator>
