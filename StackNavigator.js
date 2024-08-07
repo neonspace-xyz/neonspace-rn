@@ -4,9 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './screens/Login';
 import Mint from './screens/Mint';
 import Main from './screens/Main';
-import PostList from './screens/PostList';
+import PostHome from './screens/PostHome';
 import PostDetail from './screens/PostDetail';
-import PostLikedBy from './screens/PostLikedBy';
+import PostLikeList from './screens/PostLikeList';
 import ChatList from './screens/ChatList';
 import ChatView from './screens/ChatView';
 import NotificationList from './screens/NotificationList';
@@ -38,8 +38,8 @@ const StackNavigator = () => {
           component={Main}
           options={{ headerShown: false }} />
         <Stack.Screen
-          name="PostList"
-          component={PostList}
+          name="PostHome"
+          component={PostHome}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -47,8 +47,8 @@ const StackNavigator = () => {
           component={PostDetail}
         />
         <Stack.Screen
-          name="PostLikedBy"
-          component={PostLikedBy}
+          name="PostLikeList"
+          component={PostLikeList}
         />
         <Stack.Screen
           name="ChatList"

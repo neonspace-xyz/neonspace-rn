@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
-const PostLikedBySection = ({ item }) => {
+const PostLikeSection = ({ item }) => {
 
   return (
     <View index={item?.id} style={[styles.frameParent]}>
@@ -75,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostLikedBySection;
+export default PostLikeSection;

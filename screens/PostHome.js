@@ -11,8 +11,9 @@ import PostSection from "../components/PostSection";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "../components/PostCreate";
 import { IMG_PROFILE } from "../Constant";
+import PostList from "../components/PostList";
 
-const Home = () => {
+const PostHome = () => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState([]);
@@ -199,36 +200,9 @@ const Home = () => {
           }}
         />
       </View>
-      <View style={[styles.containerList, isShowSearch && { display: "none" }]}>
-        <FlatList
-          style={styles.flat}
-          data={items}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              title="Pull to refresh"
-              titleColor={Color.darkInk}
-              colors={[Color.darkInk]}
-              tintColor={Color.darkInk}
-            />
-          }
-          onEndReached={onLoadMore}
-          onEndReachedThreshold={0.1}
-          ListFooterComponent={() =>
-            loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
-          }
-          renderItem={({ item }) => {
-            return (
-              <PostSection
-                isDetail={false}
-                item={item}
-                onPress={() => handleDetail(item)}
-              />
-            )
-          }}
-        />
-      </View>
+      <PostList
+        isShowSearch={isShowSearch}
+        isShowCreate={isShowCreate} />
       {isShowCreate && (
         <PostCreate
           setIsShowCreate={setIsShowCreate} />
@@ -317,4 +291,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default PostHome;

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Color } from "../GlobalStyles";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import PostList from './PostList';
+import PostHome from './PostHome';
 import NotificationList from './NotificationList';
 import Wallet from './Wallet';
 
@@ -37,10 +37,10 @@ const Main = () => {
         }
       })}
     >
-      <Tab.Screen name="Home" component={PostList} />
+      <Tab.Screen name="Home" component={PostHome} />
       <Tab.Screen name="Notification" component={NotificationList} />
       <Tab.Screen name="Wallet" component={Wallet} />
-      <Tab.Screen name="Profile" component={PostList} />
+      <Tab.Screen name="Profile" component={PostHome} />
     </Tab.Navigator>
   );
 };
