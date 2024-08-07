@@ -38,16 +38,16 @@ const ChatSection = ({ isDetail, item, onPress }) => {
 
 const styles = StyleSheet.create({
   frameParent: {
-    width: 362,
-    alignItems: "center",
-    marginTop: 12,
-    paddingVertical: Padding.p_sm,
+    overflow: "hidden",
+    marginTop: 16,
+    marginHorizontal: 12,
     paddingHorizontal: Padding.p_xs,
-    backgroundColor: Color.colorDarkslategray_400,
+    paddingVertical: Padding.p_sm,
     borderRadius: Border.br_3xs,
+    backgroundColor: Color.colorDarkslategray_400,
+    alignItems: "center",
     flexDirection: "row",
     alignSelf: "stretch",
-    overflow: "hidden",
   },
   svgrepoIconLayout: {
     width: 32,

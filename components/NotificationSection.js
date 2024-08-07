@@ -2,11 +2,9 @@ import React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
-import { formatPostTimestamp, getFormattedPostTimestamp, getRandomNumber } from "../Utils";
 import { useNavigation } from "@react-navigation/core";
 
 const NotificationSection = ({ item, onPress }) => {
-  const navigation = useNavigation();
 
   return (
     <Pressable index={item?.id}>
@@ -54,12 +52,13 @@ const NotificationSection = ({ item, onPress }) => {
 
 const styles = StyleSheet.create({
   frameSpaceBlock: {
-    marginTop: 12,
-    width: 362,
-    paddingVertical: Padding.p_sm,
+    overflow: "hidden",
+    marginTop: 16,
+    marginHorizontal: 12,
     paddingHorizontal: Padding.p_xs,
-    backgroundColor: Color.colorDarkslategray_400,
+    paddingVertical: Padding.p_sm,
     borderRadius: Border.br_3xs,
+    backgroundColor: Color.colorDarkslategray_400,
     alignSelf: "stretch",
     flexDirection: "row",
     overflow: "hidden",

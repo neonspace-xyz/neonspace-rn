@@ -4,6 +4,7 @@ import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
 import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
+import { Component_Max_Width } from "../Constant";
 
 const Wallet = () => {
   const navigation = useNavigation();
@@ -566,6 +567,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorGray_100,
   },
   wrapperFlexBox: {
+    width: "100%",
     paddingVertical: Padding.p_3xs,
     justifyContent: "center",
     alignItems: "center",
@@ -609,7 +611,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Padding.p_sm,
     paddingTop: Padding.p_xl,
     paddingBottom: Padding.p_13xl,
-    width: 390,
+    width: "100%",
     position: "absolute",
   },
   walletBalance0EthWalletAParent: {
@@ -705,7 +707,7 @@ const styles = StyleSheet.create({
     paddingTop: Padding.p_xl,
     paddingBottom: Padding.p_37xl,
     alignItems: "center",
-    width: 390,
+    width: "100%",
     backgroundColor: Color.colorGray_100,
     position: "absolute",
   },
@@ -841,7 +843,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Color.colorGray_100,
     position: "absolute",
-    width: 390,
+    width: "100%",
   },
   svgrepoLayout: {
     width: 32,
@@ -880,7 +882,8 @@ const styles = StyleSheet.create({
     paddingVertical: Padding.p_xs,
     paddingHorizontal: Padding.p_5xl,
     height: 54,
-    width: 322,
+    width: "90%",
+    maxWidth: Component_Max_Width,
     borderWidth: 3,
     alignItems: "center",
     flexDirection: "row",
@@ -1147,7 +1150,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   x37e5385aba3592d75436127c7184d: {
-    textAlign: "left",
+    textAlign: "center",
     fontSize: FontSize.labelLarge_size,
     color: Color.darkInk,
     fontFamily: FontFamily.clashGrotesk,
@@ -1175,7 +1178,6 @@ const styles = StyleSheet.create({
   frameWrapper3: {
     marginTop: 127,
     marginBottom: 128,
-    width: 322,
   },
   frameParent3: {
     alignSelf: "stretch",

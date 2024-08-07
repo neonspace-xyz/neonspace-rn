@@ -95,13 +95,13 @@ const PostSection = ({ isDetail, item, onPress }) => {
 
 const styles = StyleSheet.create({
   frameParent: {
+    overflow: "hidden",
     marginTop: 16,
     marginHorizontal: 12,
-    borderRadius: Border.br_3xs,
-    backgroundColor: Color.colorDarkslategray_400,
     paddingHorizontal: Padding.p_xs,
     paddingVertical: Padding.p_sm,
-    overflow: "hidden",
+    borderRadius: Border.br_3xs,
+    backgroundColor: Color.colorDarkslategray_400,
   },
   frameFlexBox: {
     alignItems: "center",

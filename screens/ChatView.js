@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   parentInput: {
+    width: "100%",
     // borderTopWidth: 1,
     // borderTopColor: "#dddddd",
     backgroundColor: Color.colorGray_100

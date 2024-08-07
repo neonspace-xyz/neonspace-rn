@@ -131,7 +131,7 @@ const Home = () => {
       </View>
       <View style={[styles.containerListSearch, !isShowSearch && { display: "none" }]}>
         <FlatList
-          style={{ paddingHorizontal: 16 }}
+          style={styles.flat}
           data={searchItems}
           refreshControl={
             <RefreshControl
@@ -160,7 +160,7 @@ const Home = () => {
       </View>
       <View style={[styles.containerList, isShowSearch && { display: "none" }]}>
         <FlatList
-          style={{ paddingHorizontal: 16 }}
+          style={styles.flat}
           data={items}
           refreshControl={
             <RefreshControl
@@ -224,6 +224,9 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
+  },
+  flat: {
+    width: "100%",
   },
   searchInput: {
     flex: 1,

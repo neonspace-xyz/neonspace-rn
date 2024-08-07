@@ -37,6 +37,7 @@ const PostLikedBy = () => {
     <View style={styles.container}>
       <View style={[styles.containerList]}>
         <FlatList
+          style={styles.flat}
           data={items}
           renderItem={({ item }) => {
             return (
@@ -65,6 +66,9 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
+  },
+  flat: {
+    width: "100%"
   },
 });
 

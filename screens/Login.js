@@ -3,6 +3,7 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
+import { Component_Max_Width } from "../Constant";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -64,9 +65,10 @@ const styles = StyleSheet.create({
   },
   txtDesc: {
     top: 199,
-    width: 302,
     fontSize: FontSize.size_sm,
     position: "absolute",
+    width: "80%",
+    maxWidth: Component_Max_Width,
   },
   imgLogo: {
     marginTop: -111,
@@ -77,12 +79,13 @@ const styles = StyleSheet.create({
   },
   button: {
     position: "absolute",
-    top: 640,
+    top: "75%",
     borderRadius: Border.br_5xs,
     borderStyle: "solid",
     borderColor: Color.colorDeeppink,
     borderWidth: 3,
-    width: 362,
+    width: "90%",
+    maxWidth: Component_Max_Width,
     height: 54,
     flexDirection: "row",
     alignItems: "center",

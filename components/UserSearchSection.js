@@ -41,12 +41,13 @@ const UserSearchSection = ({ isDetail, item, onPress }) => {
 
 const styles = StyleSheet.create({
   ellipseGroup: {
-    marginTop: 12,
-    backgroundColor: Color.colorDarkslategray_400,
-    borderRadius: Border.br_3xs,
-    paddingHorizontal: Padding.p_xs,
     overflow: "hidden",
-    width: 362,
+    marginTop: 16,
+    marginHorizontal: 12,
+    paddingHorizontal: Padding.p_xs,
+    paddingVertical: Padding.p_sm,
+    borderRadius: Border.br_3xs,
+    backgroundColor: Color.colorDarkslategray_400,
   },
   ellipseSpaceBlock: {
     paddingVertical: Padding.p_sm,
