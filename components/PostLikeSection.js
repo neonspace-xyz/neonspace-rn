@@ -4,25 +4,23 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
-const PostLikedBySection = ({ item }) => {
+const PostLikeSection = ({ item }) => {
 
   return (
     <View index={item?.id} style={[styles.frameParent]}>
-      <View style={styles.ellipseSpaceBlock}>
-        <Image
-          style={styles.frameChild}
-          contentFit="cover"
-          source={item.image}
-        />
-        <View style={styles.frameGroup}>
-          <View style={[styles.nameParent, styles.topNavFlexBox]}>
-            <Text style={[styles.name, styles.nameTypo]}>{item.name}</Text>
-            <Text style={[styles.endlessmeee, styles.nameTypo]}>
-              {item.username}
-            </Text>
-          </View>
-          <Text style={[styles.bioHere, styles.nameTypo]}>{item.bio}</Text>
+      <Image
+        style={styles.frameChild}
+        contentFit="cover"
+        source={item.image}
+      />
+      <View style={styles.frameGroup}>
+        <View style={[styles.nameParent, styles.topNavFlexBox]}>
+          <Text style={[styles.name, styles.nameTypo]}>{item.name}</Text>
+          <Text style={[styles.endlessmeee, styles.nameTypo]}>
+            {item.username}
+          </Text>
         </View>
+        <Text style={[styles.bioHere, styles.nameTypo]}>{item.bio}</Text>
       </View>
     </View>
   );
@@ -30,18 +28,16 @@ const PostLikedBySection = ({ item }) => {
 
 const styles = StyleSheet.create({
   frameParent: {
+    overflow: "hidden",
     marginTop: 16,
-    width: 362,
-    alignItems: "center",
-  },
-  ellipseSpaceBlock: {
-    paddingVertical: Padding.p_sm,
+    marginHorizontal: 12,
     paddingHorizontal: Padding.p_xs,
-    backgroundColor: Color.colorDarkslategray_400,
+    paddingVertical: Padding.p_sm,
     borderRadius: Border.br_3xs,
+    backgroundColor: Color.colorDarkslategray_400,
+    alignItems: "center",
     alignSelf: "stretch",
     flexDirection: "row",
-    overflow: "hidden",
   },
   frameChild: {
     width: 32,
@@ -79,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostLikedBySection;
+export default PostLikeSection;

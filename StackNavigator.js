@@ -4,7 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './screens/Login';
 import Mint from './screens/Mint';
 import Main from './screens/Main';
+import PostHome from './screens/PostHome';
 import PostDetail from './screens/PostDetail';
+
 import PostLikedBy from './screens/PostLikedBy';
 import MyProfile from './screens/MyProfile';
 import { StatusBar } from 'expo-status-bar';
@@ -13,6 +15,11 @@ import EditProfile from './screens/EditProfile';
 import Verified from './screens/Verified';
 import OtherProfile from './screens/OtherProfile';
 import MyAssets from './screens/MyAssets';
+import PostLikeList from './screens/PostLikeList';
+import ChatList from './screens/ChatList';
+import ChatView from './screens/ChatView';
+import NotificationList from './screens/NotificationList';
+import Wallet from './screens/Wallet';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -25,7 +32,7 @@ const StackNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator>
 
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Login"
           component={Login}
           options={{ headerShown: false }}
@@ -34,22 +41,48 @@ const StackNavigator = () => {
           name="Mint"
           component={Mint}
           options={{ headerShown: false }}
-        /> */}
-        {/* <Stack.Screen
+        />
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{ headerShown: false }} />
+        <Stack.Screen
+          name="PostHome"
+          component={PostHome}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="PostDetail"
           component={PostDetail}
         />
         <Stack.Screen
-          name="PostLikedBy"
-          component={PostLikedBy}
+          name="PostLikeList"
+          component={PostLikeList}
+        />
+        <Stack.Screen
+          name="ChatList"
+          component={ChatList}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChatView"
+          component={ChatView}
+        />
+        <Stack.Screen
+          name="NotificationList"
+          component={NotificationList}
+        />
+        <Stack.Screen
+          name="Wallet"
+          component={Wallet}
         />
 
         <Stack.Screen
           name="MyProfile"
           component={MyProfile}
-        /> */}
+        />
         
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Main"
           component={Main}
           options={{ headerShown: false }} />
@@ -67,7 +100,7 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Verified"
           component={Verified}
-          options={{ headerShown: false }} /> */}
+          options={{ headerShown: false }} />
 
         <Stack.Screen
           name="MyAssets"

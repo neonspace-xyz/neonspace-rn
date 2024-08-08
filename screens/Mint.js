@@ -4,6 +4,7 @@ import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
+import { Component_Max_Width } from "../Constant";
 
 const Mint = () => {
   const navigation = useNavigation();
@@ -282,8 +283,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: Padding.p_sm,
     paddingTop: Padding.p_xl,
     paddingBottom: Padding.p_13xl,
-    width: 390,
+    width: "100%",
     position: "absolute",
+    alignItems: "center"
   },
   walletBalance0EthWalletAParent: {
     alignSelf: "stretch",
@@ -329,7 +331,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderWidth: 3,
-    width: 362,
+    width: "95%",
+    maxWidth: Component_Max_Width,
     height: 54,
     paddingHorizontal: Padding.p_5xl,
     paddingVertical: Padding.p_xs,
@@ -356,7 +359,7 @@ const styles = StyleSheet.create({
     paddingTop: Padding.p_xl,
     paddingBottom: Padding.p_37xl,
     alignItems: "center",
-    width: 390,
+    width: "100%",
     backgroundColor: Color.colorGray_100,
     position: "absolute",
   },
@@ -440,7 +443,8 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorDarkslategray_400,
     paddingHorizontal: Padding.p_xl,
     paddingVertical: 30,
-    width: 362,
+    width: "90%",
+    maxWidth: Component_Max_Width,
     alignItems: "center",
     overflow: "hidden",
     position: "absolute",

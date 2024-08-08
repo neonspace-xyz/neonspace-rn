@@ -59,7 +59,7 @@ const PostSection = ({ isDetail, item, onPress }) => {
                 </View>
                 <Pressable
                   style={[styles.heartSvgrepoCom1Parent, styles.frameViewFlexBox]}
-                  onPress={() => navigation.navigate("PostLikedBy", { itemLikes: item?.itemLikes})}
+                  onPress={() => navigation.navigate("PostLikeList", { itemLikes: item?.itemLikes})}
                 >
                   <Image
                     style={styles.eyeSvgrepoCom11}
@@ -95,13 +95,13 @@ const PostSection = ({ isDetail, item, onPress }) => {
 
 const styles = StyleSheet.create({
   frameParent: {
+    overflow: "hidden",
     marginTop: 16,
     marginHorizontal: 12,
-    borderRadius: Border.br_3xs,
-    backgroundColor: Color.colorDarkslategray_400,
     paddingHorizontal: Padding.p_xs,
     paddingVertical: Padding.p_sm,
-    overflow: "hidden",
+    borderRadius: Border.br_3xs,
+    backgroundColor: Color.colorDarkslategray_400,
   },
   frameFlexBox: {
     alignItems: "center",
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
   frameChild: {
     width: 32,
     height: 32,
+    marginRight: 8
   },
   frameContainer: {
     justifyContent: "space-between",

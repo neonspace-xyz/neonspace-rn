@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TextInput, Platform, KeyboardAvoidingView } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
-import { POST_MAX_CHAR } from "../Constant";
+import { Component_Max_Width, POST_MAX_CHAR } from "../Constant";
 
 const PostCreate = ({ setIsShowCreate }) => {
   const [message, setMessage] = useState('');
@@ -112,12 +112,13 @@ const styles = StyleSheet.create({
       height: 2,
     },
     position: "absolute",
-    width: 390,
+    width: "100%",
   },
   postModal: {
     backgroundColor: Color.colorDarkslategray_400,
     borderRadius: Border.br_3xs,
-    width: 362,
+    width: "100%",
+    maxWidth: Component_Max_Width,
     overflow: "hidden",
   },
   frameParent9: {
@@ -194,13 +195,16 @@ const styles = StyleSheet.create({
     paddingVertical: Padding.p_xs,
     justifyContent: "center",
     alignItems: "center",
-    width: 362,
+    width: "100%",
+    maxWidth: Component_Max_Width,
     flexDirection: "row",
     height: 54,
     marginTop: 12,
     backgroundColor: Color.colorGray_100,
   },
   btnSaveAsDraft: {
+    width: "100%",
+    maxWidth: Component_Max_Width,
     marginTop: 12,
     fontFamily: FontFamily.clashGrotesk,
     textAlign: "left",

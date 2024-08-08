@@ -4,9 +4,9 @@ import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StyleSheet, Text, View, Pressable, FlatList } from "react-native";
 import { Color, styleHeaderTitle, styleHeaderBack, styleHeaderBackIcon } from "../GlobalStyles";
-import PostLikedBySection from "../components/PostLikedBySection";
+import PostLikeSection from "../components/PostLikeSection";
 
-const PostLikedBy = () => {
+const PostLikeList = () => {
   const route = useRoute();
   const items = route.params?.itemLikes ? route.params?.itemLikes : [];
   const navigation = useNavigation();
@@ -37,10 +37,11 @@ const PostLikedBy = () => {
     <View style={styles.container}>
       <View style={[styles.containerList]}>
         <FlatList
+          style={styles.flat}
           data={items}
           renderItem={({ item }) => {
             return (
-              <PostLikedBySection
+              <PostLikeSection
                 item={item}
               />
             )
@@ -66,6 +67,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
   },
+  flat: {
+    width: "100%"
+  },
 });
 
-export default PostLikedBy;
+export default PostLikeList;
