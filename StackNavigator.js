@@ -7,10 +7,7 @@ import Main from './screens/Main';
 import PostHome from './screens/PostHome';
 import PostDetail from './screens/PostDetail';
 
-import PostLikedBy from './screens/PostLikedBy';
 import MyProfile from './screens/MyProfile';
-import { StatusBar } from 'expo-status-bar';
-import { Color } from './GlobalStyles';
 import EditProfile from './screens/EditProfile';
 import Verified from './screens/Verified';
 import OtherProfile from './screens/OtherProfile';
@@ -80,12 +77,8 @@ const StackNavigator = () => {
         <Stack.Screen
           name="MyProfile"
           component={MyProfile}
+          options={{ headerShown: false }}
         />
-        
-        <Stack.Screen
-          name="Main"
-          component={Main}
-          options={{ headerShown: false }} />
 
         <Stack.Screen
           name="OtherProfile"

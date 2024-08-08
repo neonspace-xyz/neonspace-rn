@@ -6,13 +6,16 @@ import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import PostList from "./PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "./SearchBar";
+import { getRandomNumber } from "../Utils";
+import { IMG_PROFILE } from "../Constant";
 
 const OtherProfileDetail = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.myProfile}>
-      <View style={{flex:1, flexDirection:"row", maxHeight:120,
-      
+      <View style={{
+        flex: 1, flexDirection: "row", maxHeight: 120,
+
       }}>
         <Image
           style={[styles.myProfileItem]}
@@ -32,18 +35,29 @@ const OtherProfileDetail = () => {
           </Text>
         </View>
       </View>
-      <View style={{flex:1, flexDirection:"row", maxHeight:30, gap:2
-      // borderColor:"red", borderWidth:2,
+      <View style={{
+        flex: 1, flexDirection: "row", maxHeight: 30, gap: 2
+        // borderColor:"red", borderWidth:2,
       }}>
         <Pressable
           style={[styles.verifyWrapper, styles.profileWrapperSpaceBlock]}
-          onPress={() => {}}
+          onPress={() => { }}
         >
           <Text style={[styles.verify, styles.verifyTypo]}>Verify</Text>
         </Pressable>
         <Pressable
           style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
-          onPress={() => {}}
+          onPress={() => {
+            let i = getRandomNumber();
+            navigation.push("ChatView", {
+              id: i,
+              name: `Name${i}`,
+              username: `@username${i}`,
+              image: IMG_PROFILE[getRandomNumber(0, 4)],
+              nft: `Name of NFT${i}`,
+              price: getRandomNumber(0.01, 1.00),
+            })
+          }}
         >
           <Text style={[styles.editProfile, styles.editProfileTypo]}>
             Send message
@@ -56,12 +70,13 @@ const OtherProfileDetail = () => {
             Share profile
           </Text>
         </View>
-      </View>     
+      </View>
 
       <View style={{
         // borderWidth:2, borderColor:"red", 
-        height:"100%",
-      flex:1, padding:10, gap:8}}>
+        height: "100%",
+        flex: 1, padding: 10, gap: 8
+      }}>
         <Text
           style={[
             styles.walletAddress0xedhvContainer,
@@ -87,7 +102,7 @@ const OtherProfileDetail = () => {
         </Text>
 
         <Pressable
-          onPress={() => navigation.navigate("Verified")}
+          onPress={() => navigation.push("Verified")}
         >
           <Text
             style={[
@@ -105,8 +120,8 @@ const OtherProfileDetail = () => {
             </Text>
           </Text>
         </Pressable>
-      </View> 
-      
+      </View>
+
       <View style={[styles.frameParent8, styles.topNavBg]}>
         <Pressable
           style={styles.verifiedWrapperFlexBox}
@@ -160,7 +175,7 @@ const styles = StyleSheet.create({
   verify: {
     color: Color.colorGray_100,
     fontWeight: "500",
-  },  
+  },
   verifyTypo: {
     fontSize: FontSize.size_sm,
     textAlign: "left",
@@ -373,7 +388,7 @@ const styles = StyleSheet.create({
   myProfileItem: {
     width: 90,
     height: 90,
-    margin:10
+    margin: 10
   },
   editProfile: {
     fontWeight: "500",
@@ -457,7 +472,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   samPolymathAnd: {
-    alignItems:"center"
+    alignItems: "center"
     // width: 218,
     // marginLeft: 8,
     // textAlign: "left",
@@ -666,14 +681,14 @@ const styles = StyleSheet.create({
     // paddingTop: Padding.p_9xs,
     // marginLeft: -195,
     // backgroundColor: Color.colorGray_100,
-    height:40
+    height: 40
     // left: "50%",
     // position: "absolute",
   },
   topNavBg: {
     backgroundColor: Color.colorGray_100,
     flexDirection: "row",
-    width:"100%"
+    width: "100%"
   },
   verifiedWrapperFlexBox: {
     // paddingVertical: Padding.p_7xs,

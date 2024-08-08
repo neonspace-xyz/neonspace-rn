@@ -42,14 +42,14 @@ const ChatDetail = () => {
       ),
       headerRight: () => (
         <View>
-          {/* <Pressable onPress={() => { navigation.navigate("ChatInfo", { chat }); }}> */}
-          <Image
-            style={styles.menuIcon}
-            contentFit="cover"
-            // source={{ uri: chat?.image_url }}
-            source={require("../assets/ellipse-2.png")}
-          />
-          {/* </Pressable> */}
+          <Pressable onPress={() => { navigation.push("OtherProfile", { otherUser: true }); }}>
+            <Image
+              style={styles.menuIcon}
+              contentFit="cover"
+              // source={{ uri: chat?.image_url }}
+              source={require("../assets/ellipse-2.png")}
+            />
+          </Pressable>
         </View>
       ),
       headerStyle: {
@@ -90,7 +90,7 @@ const ChatDetail = () => {
     for (let i = 1; i < getRandomNumber(20, 40); i++) {
       data.push({
         id: i,
-        role: roles[getRandomNumber(0,1)],
+        role: roles[getRandomNumber(0, 1)],
         message: `recent text message view here if the text is too${i}`,
         time: getRandomTimestamp(2)
       });

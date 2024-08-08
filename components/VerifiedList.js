@@ -11,6 +11,7 @@ import PostSection from "./PostSection";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
+import PostLikeSection from "./PostLikeSection";
 
 const VerifiedList = () => {
   const navigation = useNavigation();
@@ -65,28 +66,13 @@ const VerifiedList = () => {
 
   const fetchItems = async () => {
     let data = [];
-    for (let i = 1; i < getRandomNumber(); i++) {
-      let like = getRandomNumber(0,7);
-      let itemLikes = [];
-      for (let j = 0; j < like; j++) {
-        itemLikes.push({
-          name: `Name${j}`,
-          username: `@username${j}`,
-          image: IMG_PROFILE[getRandomNumber(0,4)],
-          bio: `Founder at ChainCredit. #DYOR ${j}`,
-        })
-      }
+    for (let j = 0; j < getRandomNumber(); j++) {
       data.push({
-        id: i,
-        name: `Name${i}`,
-        username: `@username${i}`,
-        image: IMG_PROFILE[getRandomNumber(0,4)],
-        text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
-        view: getRandomNumber(0,100),
-        like: like,
-        datetime: getRandomTimestamp(),
-        itemLikes: itemLikes
-      });
+        name: `Name${j}`,
+        username: `@username${j}`,
+        image: IMG_PROFILE[getRandomNumber(0, 4)],
+        bio: `Founder at ChainCredit. #DYOR ${j}`,
+      })
     }
     setItems(data);
   };
@@ -130,10 +116,8 @@ const VerifiedList = () => {
         }
         renderItem={({ item }) => {
           return (
-            <PostSection
-              isDetail={false}
+            <PostLikeSection
               item={item}
-              onPress={() => navigation.navigate("OtherProfile")}
             />
           )
         }}
@@ -163,7 +147,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorGray_100,
   },
   containerList: {
-    flex:1,
+    flex: 1,
     width: "100%",
     // height: "60%",
     // alignItems: "center",

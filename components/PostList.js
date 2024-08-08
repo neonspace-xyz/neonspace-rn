@@ -8,7 +8,7 @@ import PostSection from "../components/PostSection";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 
-const PostList = ({ isShowSearch, isShowCreate }) => {
+const PostList = ({ isProfile, isShowSearch, isShowCreate }) => {
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
@@ -77,7 +77,7 @@ const PostList = ({ isShowSearch, isShowCreate }) => {
   };
 
   return (
-    <View style={[styles.containerList, isShowSearch && { display: "none" }]}>
+    <View style={[isProfile ? styles.containerListProfile : styles.containerList, isShowSearch && { display: "none" }]}>
       <FlatList
         style={styles.flat}
         data={items}
@@ -114,6 +114,12 @@ const styles = StyleSheet.create({
   containerList: {
     width: "100%",
     height: "100%",
+    alignItems: "center",
+    backgroundColor: Color.colorGray_200,
+  },
+  containerListProfile: {
+    width: "100%",
+    height: "40%",
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
   },

@@ -5,11 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import PostHome from './PostHome';
 import NotificationList from './NotificationList';
 import Wallet from './Wallet';
-import MyProfile from "./MyProfile";
-import Home from "./Home";
-import { StatusBar } from "expo-status-bar";
-import ProfileDetail from "../components/ProfileDetail";
-
+import MyProfile from './MyProfile';
 
 const Main = () => {
   // Create the bottom tab navigator

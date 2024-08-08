@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, StatusBar } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,16 +8,25 @@ import SearchBar from "../components/SearchBar";
 import ProfileDetail from "../components/ProfileDetail";
 
 const MyProfile = () => {
+  const route = useRoute();
+  const otherUser = route.params?.otherUser;
+
   const navigation = useNavigation();
+  const [isShowCreate, setIsShowCreate] = React.useState(false);
+  const [isShowSearch, setIsShowSearch] = React.useState(false);
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
 
-      <SearchBar/>
+      <SearchBar
+        backButton={otherUser} />
 
-      <ProfileDetail/>
-  
-      <PostList/>
+      <ProfileDetail />
+
+      <PostList
+        isProfile={true}
+        isShowSearch={isShowSearch}
+        isShowCreate={isShowCreate} />
     </SafeAreaView>
   )
 };
@@ -29,7 +37,7 @@ const styles = StyleSheet.create({
     width: "100%",
     overflow: "hidden",
     justifyContent: 'flex-start',
-    flexDirection:"column",
+    flexDirection: "column",
     alignItems: "center",
     // borderColor:"red",
     // borderWidth:5,

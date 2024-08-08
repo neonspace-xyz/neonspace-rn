@@ -201,6 +201,7 @@ const PostHome = () => {
         />
       </View>
       <PostList
+        isProfile={false}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />
       {isShowCreate && (

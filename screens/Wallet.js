@@ -118,14 +118,14 @@ const Wallet = () => {
                 Transfer
               </Text>
             </Pressable>
-            {/* <Pressable
+            <Pressable
               style={[styles.topUpWalletWrapper, styles.buttonBorder, styles.btnMyAssets]}
-              onPress={() => setShowTransferAction(!showTransferAction)}
+              onPress={() => navigation.navigate("MyAssets")}
             >
               <Text style={[styles.topUpWallet, styles.walletTypo]}>
                 My assets
               </Text>
-            </Pressable> */}
+            </Pressable>
           </View>
         </View>
       </View>

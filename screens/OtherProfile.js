@@ -10,15 +10,21 @@ import OtherProfileDetail from "../components/OtherProfileDetail";
 
 const OtherProfile = () => {
   const navigation = useNavigation();
+  const [isShowCreate, setIsShowCreate] = React.useState(false);
+  const [isShowSearch, setIsShowSearch] = React.useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
 
-      <SearchBar backButton={true}/>
+      <SearchBar backButton={true} />
 
-      <OtherProfileDetail/>
-  
-      <PostList/>
+      <OtherProfileDetail />
+
+      <PostList
+        isProfile={true}
+        isShowSearch={isShowSearch}
+        isShowCreate={isShowCreate} />
     </SafeAreaView>
   )
 };
@@ -29,7 +35,7 @@ const styles = StyleSheet.create({
     width: "100%",
     overflow: "hidden",
     justifyContent: 'flex-start',
-    flexDirection:"column",
+    flexDirection: "column",
     alignItems: "center",
     // borderColor:"red",
     // borderWidth:5,

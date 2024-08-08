@@ -5,24 +5,27 @@ import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
 const PostLikeSection = ({ item }) => {
+  const navigation = useNavigation();
 
   return (
-    <View index={item?.id} style={[styles.frameParent]}>
-      <Image
-        style={styles.frameChild}
-        contentFit="cover"
-        source={item.image}
-      />
-      <View style={styles.frameGroup}>
-        <View style={[styles.nameParent, styles.topNavFlexBox]}>
-          <Text style={[styles.name, styles.nameTypo]}>{item.name}</Text>
-          <Text style={[styles.endlessmeee, styles.nameTypo]}>
-            {item.username}
-          </Text>
+    <Pressable onPress={() => { navigation.push("OtherProfile", { otherUser: true }); }}>
+      <View index={item?.id} style={[styles.frameParent]}>
+        <Image
+          style={styles.frameChild}
+          contentFit="cover"
+          source={item.image}
+        />
+        <View style={styles.frameGroup}>
+          <View style={[styles.nameParent, styles.topNavFlexBox]}>
+            <Text style={[styles.name, styles.nameTypo]}>{item.name}</Text>
+            <Text style={[styles.endlessmeee, styles.nameTypo]}>
+              {item.username}
+            </Text>
+          </View>
+          <Text style={[styles.bioHere, styles.nameTypo]}>{item.bio}</Text>
         </View>
-        <Text style={[styles.bioHere, styles.nameTypo]}>{item.bio}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
