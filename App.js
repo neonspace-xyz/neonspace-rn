@@ -1,5 +1,7 @@
 import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
 import StackNavigator from "./StackNavigator";
+import { Color } from "./GlobalStyles";
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({

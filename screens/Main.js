@@ -5,6 +5,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import PostHome from './PostHome';
 import NotificationList from './NotificationList';
 import Wallet from './Wallet';
+import MyProfile from "./MyProfile";
+import Home from "./Home";
+import { StatusBar } from "expo-status-bar";
+import ProfileDetail from "../components/ProfileDetail";
 
 
 const Main = () => {
@@ -40,7 +44,7 @@ const Main = () => {
       <Tab.Screen name="Home" component={PostHome} />
       <Tab.Screen name="Notification" component={NotificationList} />
       <Tab.Screen name="Wallet" component={Wallet} />
-      <Tab.Screen name="Profile" component={PostHome} />
+      <Tab.Screen name="Profile" component={MyProfile} />
     </Tab.Navigator>
   );
 };
