@@ -6,6 +6,15 @@ import Mint from './screens/Mint';
 import Main from './screens/Main';
 import PostHome from './screens/PostHome';
 import PostDetail from './screens/PostDetail';
+
+import PostLikedBy from './screens/PostLikedBy';
+import MyProfile from './screens/MyProfile';
+import { StatusBar } from 'expo-status-bar';
+import { Color } from './GlobalStyles';
+import EditProfile from './screens/EditProfile';
+import Verified from './screens/Verified';
+import OtherProfile from './screens/OtherProfile';
+import MyAssets from './screens/MyAssets';
 import PostLikeList from './screens/PostLikeList';
 import ChatList from './screens/ChatList';
 import ChatView from './screens/ChatView';
@@ -19,10 +28,10 @@ const StackNavigator = () => {
     headerTitleAlign: 'center',
     headerBackVisible: false
   };
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
+
         <Stack.Screen
           name="Login"
           component={Login}
@@ -67,6 +76,36 @@ const StackNavigator = () => {
           name="Wallet"
           component={Wallet}
         />
+
+        <Stack.Screen
+          name="MyProfile"
+          component={MyProfile}
+        />
+        
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{ headerShown: false }} />
+
+        <Stack.Screen
+          name="OtherProfile"
+          component={OtherProfile}
+          options={{ headerShown: false }} />
+
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfile}
+          options={{ headerShown: false }} />
+
+        <Stack.Screen
+          name="Verified"
+          component={Verified}
+          options={{ headerShown: false }} />
+
+        <Stack.Screen
+          name="MyAssets"
+          component={MyAssets}
+          options={{ headerShown: false }} />
 
       </Stack.Navigator>
     </NavigationContainer>

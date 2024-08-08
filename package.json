@@ -23,6 +23,7 @@
     "expo-status-bar": "~1.12.1",
     "moment": "^2.30.1",
     "moment-duration-format": "^2.3.2",
+    "neonspace-app": "file:",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.3",

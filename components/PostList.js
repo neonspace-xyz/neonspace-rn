@@ -16,7 +16,6 @@ const PostList = ({ isShowSearch, isShowCreate }) => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-
   useFocusEffect(
     React.useCallback(() => {
       fetchItems();
@@ -39,7 +38,7 @@ const PostList = ({ isShowSearch, isShowCreate }) => {
         itemLikes.push({
           name: `Name${j}`,
           username: `@username${j}`,
-          image: IMG_PROFILE[getRandomNumber(0, 4)],
+          image: IMG_PROFILE[getRandomNumber(0,4)],
           bio: `Founder at ChainCredit. #DYOR ${j}`,
         })
       }
