@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "neonspace-app",
-    "slug": "neonspace-app",
+    "slug": "neonspace",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,13 +20,19 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.neonspace.app"
+      "package": "com.devlegion.neonspace"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "0b725655-ab3c-452c-90c4-8527afe6c7e2"
+      }
+    },
+    "owner": "billy93"
   }
 }

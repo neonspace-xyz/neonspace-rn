@@ -131,8 +131,7 @@ const ChatDetail = () => {
         </Pressable>
       </View>
 
-      <View style={{width:"100%"}}>
-        <KeyboardAvoidingView behavior="padding" style={{flexDirection:"column"}}>
+        <KeyboardAvoidingView behavior="padding" style={{width:"100%", flex:1}}>
           <ScrollView
             ref={scrollViewRef}
             style={styles.scrollView}
@@ -187,7 +186,6 @@ const ChatDetail = () => {
             </View>
           </View>
         </KeyboardAvoidingView>
-      </View>
     </SafeAreaView>
   )
 };
@@ -209,14 +207,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
-  },
-  scrollView: {
-    width: "100%",
-    // height:"100%",
-    height:"80%",
-    // paddingTop: 10,
-    // borderColor:"red",
-    // borderWidth:5
   },
   container_empty: {
     justifyContent: 'center',
@@ -247,11 +237,20 @@ const styles = StyleSheet.create({
   clickOnTheTypo: {
     marginTop: 20,
   },
+  scrollView: {
+    width: "100%",
+    // height:"100%",
+    // height:"80%",
+    // paddingTop: 10,
+    // borderColor:"red",
+    // borderWidth:1
+  },
+
   parentInput: {
     // borderColor:"red",
-    // borderWidth:5,
+    // borderWidth:1,
     width: "100%",
-    height:"20%",
+    // height:"20%",
     backgroundColor: Color.colorGray_100
   },
   subParentInput: {
