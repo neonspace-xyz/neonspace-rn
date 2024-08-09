@@ -93,24 +93,6 @@ const Home = () => {
     setItems(data);
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await fetchItems(); // Fetch fresh data
-    setRefreshing(false);
-  };
-
-  const onLoadMore = () => {
-    if (!loadingMore && hasMore) {
-      setLoadingMore(true);
-      fetchItems(); // Fetch more data
-      setLoadingMore(false);
-    }
-  };
-
-  const handleDetail = (item) => {
-    navigation.navigate("PostDetail", { item });
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <SearchBar/>

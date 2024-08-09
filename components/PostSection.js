@@ -5,7 +5,7 @@ import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
 import { formatPostTimestamp, getFormattedPostTimestamp, getRandomNumber } from "../Utils";
 import { useNavigation } from "@react-navigation/core";
 
-const PostSection = ({ isDetail, item, onPress }) => {
+const PostSection = ({ tab, isDetail, item, onPress }) => {
   const navigation = useNavigation();
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
 
@@ -59,7 +59,7 @@ const PostSection = ({ isDetail, item, onPress }) => {
                 </View>
                 <Pressable
                   style={[styles.heartSvgrepoCom1Parent, styles.frameViewFlexBox]}
-                  onPress={() => navigation.navigate("PostLikeList", { itemLikes: item?.itemLikes})}
+                  onPress={() => navigation.push(`PostLikeList${tab}`, { tab, itemLikes: item?.itemLikes })}
                 >
                   <Image
                     style={styles.eyeSvgrepoCom11}
@@ -74,7 +74,6 @@ const PostSection = ({ isDetail, item, onPress }) => {
             <View style={[styles.frameViewFlexBox, {}]}>
               <Pressable
                 style={[styles.heartSvgrepoCom1Parent, styles.frameViewFlexBox]}
-              // onPress={() => navigation.navigate("PostDetailsWhoLiked")}
               >
                 <Image
                   style={styles.eyeSvgrepoCom11}

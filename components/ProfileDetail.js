@@ -7,7 +7,7 @@ import PostList from "./PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "./SearchBar";
 
-const ProfileDetail = () => {
+const ProfileDetail = ({ tab }) => {
   const navigation = useNavigation();
   return (
     <View style={styles.myProfile}>
@@ -81,7 +81,7 @@ const ProfileDetail = () => {
         </Text>
 
         <Pressable
-          onPress={() => navigation.navigate("Verified")}
+          onPress={() => navigation.push(`Verified${tab}`, { tab })}
         >
           <Text
             style={[

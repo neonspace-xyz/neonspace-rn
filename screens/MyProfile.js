@@ -8,9 +8,8 @@ import SearchBar from "../components/SearchBar";
 import ProfileDetail from "../components/ProfileDetail";
 
 const MyProfile = () => {
-  const route = useRoute();
-  const otherUser = route.params?.otherUser;
 
+  const tab = 4;
   const navigation = useNavigation();
   const [isShowCreate, setIsShowCreate] = React.useState(false);
   const [isShowSearch, setIsShowSearch] = React.useState(false);
@@ -19,11 +18,14 @@ const MyProfile = () => {
       <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
 
       <SearchBar
-        backButton={otherUser} />
+        tab={tab}
+        backButton={false} />
 
-      <ProfileDetail />
+      <ProfileDetail
+        tab={tab} />
 
       <PostList
+        tab={tab}
         isProfile={true}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />

@@ -1,31 +1,33 @@
 import * as React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Padding, Border } from "../GlobalStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import VerifiedList from "../components/VerifiedList";
 
 const Verified = () => {
+  const route = useRoute();
+  const { tab } = route.params;
   const navigation = useNavigation();
   const [verifiedBy, setVerifiedBy] = React.useState(false);
-  
+
   return (
     <SafeAreaView style={styles.myProfileVerifiedBy}>
       <View style={styles.header}>
-          <Pressable
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../assets/back.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>
-          
-          <Text style={
-            [styles.editProfile, styles.timeTypo]
-            // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
-            }>Verification</Text>  
-      </View> 
+        <Pressable
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={require("../assets/back.png")}
+            style={styles.headerImage}
+          />
+        </Pressable>
+
+        <Text style={
+          [styles.editProfile, styles.timeTypo]
+          // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
+        }>Verification</Text>
+      </View>
 
       <View style={[styles.frameParent8, styles.topNavBg]}>
         <Pressable
@@ -43,290 +45,17 @@ const Verified = () => {
         </View>
       </View>
 
-      <VerifiedList/>
+      <VerifiedList
+        tab={tab} />
     </SafeAreaView>
   )
-
-  return (
-    <View style={styles.myProfileVerifiedBy}>
-      <View style={[styles.frameParent, styles.notchIconPosition]}>
-        <View style={styles.ellipseParent}>
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            // source={require("../assets/ellipse-24.png")}
-          />
-          <View style={styles.frameGroup}>
-            <View style={styles.nameParent}>
-              <Text style={[styles.name, styles.nameTypo]}>Name</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                @endlessmeee
-              </Text>
-            </View>
-            <Text style={[styles.bioExample, styles.bioExampleTypo]}>
-              Bio example.
-            </Text>
-          </View>
-        </View>
-        <View style={[styles.ellipseGroup, styles.ellipseGroupSpaceBlock]}>
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            // source={require("../assets/ellipse-2.png")}
-          />
-          <View style={styles.frameGroup}>
-            <View style={styles.nameParent}>
-              <Text style={[styles.name, styles.nameTypo]}>Name</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                @endlessmeee
-              </Text>
-            </View>
-            <Text style={[styles.bioExample, styles.bioExampleTypo]}>
-              Bio here
-            </Text>
-          </View>
-        </View>
-        <View style={[styles.ellipseGroup, styles.ellipseGroupSpaceBlock]}>
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            // source={require("../assets/ellipse-22.png")}
-          />
-          <View style={styles.frameGroup}>
-            <View style={styles.nameParent}>
-              <Text style={[styles.name, styles.nameTypo]}>Name</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                @endlessmeee
-              </Text>
-            </View>
-            <Text style={[styles.bioExample, styles.bioExampleTypo]}>
-              Bio example.
-            </Text>
-          </View>
-        </View>
-        <Pressable
-          style={[styles.framePressable, styles.ellipseGroupSpaceBlock]}
-          onPress={() => navigation.navigate("OtherUserProfileNotYetVerified")}
-        >
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            // source={require("../assets/ellipse-21.png")}
-          />
-          <View style={styles.frameGroup}>
-            <View style={styles.nameParent}>
-              <Text style={[styles.name, styles.nameTypo]}>Name</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                @endlessmeee
-              </Text>
-            </View>
-            <Text style={[styles.bioExample, styles.bioExampleTypo]}>
-              Founder at ChainCredit. View is mine #DYOR
-            </Text>
-          </View>
-        </Pressable>
-        <View style={[styles.ellipseGroup, styles.ellipseGroupSpaceBlock]}>
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            // source={require("../assets/ellipse-2.png")}
-          />
-          <View style={styles.frameGroup}>
-            <View style={styles.nameParent}>
-              <Text style={[styles.name, styles.nameTypo]}>Name</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                @endlessmeee
-              </Text>
-            </View>
-            <Text style={[styles.bioExample, styles.bioExampleTypo]}>
-              Bio here
-            </Text>
-          </View>
-        </View>
-        <View style={[styles.ellipseGroup, styles.ellipseGroupSpaceBlock]}>
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            // source={require("../assets/ellipse-24.png")}
-          />
-          <View style={styles.frameGroup}>
-            <View style={styles.nameParent}>
-              <Text style={[styles.name, styles.nameTypo]}>Name</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                @endlessmeee
-              </Text>
-            </View>
-            <Text style={[styles.bioExample, styles.bioExampleTypo]}>
-              Bio example.
-            </Text>
-          </View>
-        </View>
-        <View style={[styles.framePressable, styles.ellipseGroupSpaceBlock]}>
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            // source={require("../assets/ellipse-21.png")}
-          />
-          <View style={styles.frameGroup}>
-            <View style={styles.nameParent}>
-              <Text style={[styles.name, styles.nameTypo]}>Name</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                @endlessmeee
-              </Text>
-            </View>
-            <Text style={[styles.bioExample, styles.bioExampleTypo]}>
-              Founder at ChainCredit. View is mine #DYOR
-            </Text>
-          </View>
-        </View>
-        <View style={[styles.ellipseGroup, styles.ellipseGroupSpaceBlock]}>
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            // source={require("../assets/ellipse-24.png")}
-          />
-          <View style={styles.frameGroup}>
-            <View style={styles.nameParent}>
-              <Text style={[styles.name, styles.nameTypo]}>Name</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                @endlessmeee
-              </Text>
-            </View>
-            <Text style={[styles.bioExample, styles.bioExampleTypo]}>
-              Bio example.
-            </Text>
-          </View>
-        </View>
-        <View style={[styles.ellipseGroup, styles.ellipseGroupSpaceBlock]}>
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            // source={require("../assets/ellipse-22.png")}
-          />
-          <View style={styles.frameGroup}>
-            <View style={styles.nameParent}>
-              <Text style={[styles.name, styles.nameTypo]}>Name</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                @endlessmeee
-              </Text>
-            </View>
-            <Text style={[styles.bioExample, styles.bioExampleTypo]}>
-              Bio example.
-            </Text>
-          </View>
-        </View>
-        <View style={[styles.ellipseGroup, styles.ellipseGroupSpaceBlock]}>
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            // source={require("../assets/ellipse-2.png")}
-          />
-          <View style={styles.frameGroup}>
-            <View style={styles.nameParent}>
-              <Text style={[styles.name, styles.nameTypo]}>Name</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                @endlessmeee
-              </Text>
-            </View>
-            <Text style={[styles.bioExample, styles.bioExampleTypo]}>
-              Bio here
-            </Text>
-          </View>
-        </View>
-      </View>
-      <View style={[styles.frameParent8, styles.topNavBg]}>
-        <Pressable
-          style={styles.verifiedWrapperFlexBox}
-          onPress={() => navigation.navigate("MyProfileYouVerifiedVerifiedBy")}
-        >
-          <Text style={[styles.youVerified, styles.bioExampleTypo]}>
-            You verified
-          </Text>
-        </Pressable>
-        <View style={[styles.verifiedByWrapper, styles.verifiedWrapperFlexBox]}>
-          <Text style={[styles.youVerified, styles.bioExampleTypo]}>
-            Verified by
-          </Text>
-        </View>
-      </View>
-      <View style={[styles.statusBarIphone, styles.timePosition]}>
-        <View style={styles.timeIphone}>
-          <Text style={[styles.time, styles.timeTypo]}>9:41</Text>
-        </View>
-        <View style={styles.cellularwifibatteryIphone}>
-          <View style={[styles.battery, styles.borderPosition]}>
-            <View style={[styles.border, styles.borderPosition]} />
-            <Image
-              style={styles.capIcon}
-              contentFit="cover"
-              // source={require("../assets/cap.png")}
-            />
-            <View style={styles.capacity} />
-          </View>
-          <Image
-            style={styles.wifiIcon}
-            contentFit="cover"
-            // source={require("../assets/wifi1.png")}
-          />
-          <Image
-            style={styles.cellularConnectionIcon}
-            contentFit="cover"
-            // source={require("../assets/cellular-connection1.png")}
-          />
-        </View>
-        <Image
-          style={[styles.notchIcon, styles.notchIconPosition]}
-          contentFit="cover"
-          // source={require("../assets/notch.png")}
-        />
-      </View>
-      <View style={[styles.topNav, styles.topNavBg]}>
-        <Pressable
-          style={styles.wrapperLayout}
-          onPress={() => navigation.navigate("MyProfile")}
-        >
-          <Image
-            style={styles.iconLayout}
-            contentFit="cover"
-            // source={require("../assets/group-8.png")}
-          />
-        </Pressable>
-        <Pressable
-          style={[styles.container, styles.containerLayout]}
-          onPress={() => navigation.goBack()}
-        >
-          <Image
-            style={[styles.icon1, styles.iconLayout]}
-            contentFit="cover"
-            // source={require("../assets/group-61.png")}
-          />
-        </Pressable>
-        <Text style={[styles.verification, styles.timeTypo]}>Verification</Text>
-        <Image
-          style={styles.vectorIcon}
-          contentFit="cover"
-          // source={require("../assets/vector1.png")}
-        />
-        <Image
-          style={[styles.topNavChild, styles.wrapperLayout]}
-          contentFit="cover"
-          // source={require("../assets/frame-583.png")}
-        />
-        <Image
-          style={[styles.vuesaxboldmoreIcon, styles.containerLayout]}
-          contentFit="cover"
-          // source={require("../assets/vuesaxboldmore.png")}
-        />
-      </View>
-    </View>
-  );
 };
 
 const styles = StyleSheet.create({
   header: {
     // marginTop: 60,
     width: "100%",
-// height:100,
+    // height:100,
     // maxHeight:100,
     // flex:1,
     flexDirection: 'row',
@@ -344,10 +73,10 @@ const styles = StyleSheet.create({
     fontSize: FontSize.labelLarge_size,
     // marginLeft: 14,
     // flex: 1,
-    flexGrow:1, color:"white", 
-    textAlign:"center", 
-    paddingTop:3, 
-    alignItems:"center",
+    flexGrow: 1, color: "white",
+    textAlign: "center",
+    paddingTop: 3,
+    alignItems: "center",
     color: Color.darkInk,
     fontWeight: "600",
   },
@@ -379,7 +108,7 @@ const styles = StyleSheet.create({
   topNavBg: {
     backgroundColor: Color.colorGray_100,
     flexDirection: "row",
-    width:"100%"
+    width: "100%"
   },
   verifiedWrapperFlexBox: {
     paddingVertical: Padding.p_7xs,
@@ -476,7 +205,7 @@ const styles = StyleSheet.create({
     paddingTop: Padding.p_9xs,
     // marginLeft: -195,
     backgroundColor: Color.colorGray_100,
-    height:50
+    height: 50
     // left: "50%",
     // position: "absolute",
   },
@@ -602,9 +331,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   myProfileVerifiedBy: {
-    flexDirection:"column",
+    flexDirection: "column",
     backgroundColor: Color.colorGray_200,
-    height:"100%",
+    height: "100%",
     // borderColor:"red",
     // borderWidth:2,
     // height: 844,

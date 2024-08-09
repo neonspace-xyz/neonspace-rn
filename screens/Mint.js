@@ -172,7 +172,7 @@ const Mint = () => {
         <View style={[styles.buttonParent, styles.buttonParentSpaceBlock]}>
           <Pressable
             style={[styles.button1, styles.buttonBorder2]}
-            onPress={() => navigation.navigate("Main")}
+            onPress={() => navigation.replace("Main")}
           >
             <Text style={[styles.buttonLabel, styles.eth1Typo]}>
               Share on X

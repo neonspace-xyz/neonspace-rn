@@ -4,7 +4,7 @@ import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, Activ
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect } from '@react-navigation/core';
+import { useFocusEffect, useRoute } from '@react-navigation/core';
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
 import { formatChatListTime, getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "../components/PostCreate";
@@ -13,7 +13,9 @@ import ChatSection from "../components/ChatSection";
 import moment from "moment";
 import UserSearchSection from "../components/UserSearchSection";
 
-const Home = () => {
+const ChatList = () => {
+  const route = useRoute();
+  const { tab } = route.params;
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState([]);
@@ -98,7 +100,7 @@ const Home = () => {
 
   const handleDetail = (item) => {
     if (isShowCreate) return;
-    navigation.navigate("ChatView", { item });
+    navigation.push(`ChatView${tab}`, { tab, item });
   };
 
   return (
@@ -247,4 +249,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default ChatList;

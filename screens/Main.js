@@ -2,7 +2,7 @@ import * as React from "react";
 import { Color } from "../GlobalStyles";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import PostHome from './PostHome';
+import PostStackNavigator from './PostStackNavigator';
 import NotificationList from './NotificationList';
 import Wallet from './Wallet';
 import MyProfile from './MyProfile';
@@ -37,7 +37,7 @@ const Main = () => {
         }
       })}
     >
-      <Tab.Screen name="Home" component={PostHome} />
+      <Tab.Screen name="Home" component={PostStackNavigator} />
       <Tab.Screen name="Notification" component={NotificationList} />
       <Tab.Screen name="Wallet" component={Wallet} />
       <Tab.Screen name="Profile" component={MyProfile} />

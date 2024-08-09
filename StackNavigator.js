@@ -6,7 +6,6 @@ import Mint from './screens/Mint';
 import Main from './screens/Main';
 import PostHome from './screens/PostHome';
 import PostDetail from './screens/PostDetail';
-
 import MyProfile from './screens/MyProfile';
 import EditProfile from './screens/EditProfile';
 import Verified from './screens/Verified';
@@ -40,16 +39,16 @@ const StackNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Main"
-          component={Main}
-          options={{ headerShown: false }} />
+            name="Main"
+            component={Main}
+            options={{ headerShown: false }} />
         <Stack.Screen
           name="PostHome"
           component={PostHome}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="PostDetail"
+          name="PostDetaila"
           component={PostDetail}
         />
         <Stack.Screen

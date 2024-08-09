@@ -29,7 +29,7 @@ const Login = () => {
       />
       <Pressable
         style={[styles.button]}
-        onPress={() => navigation.navigate("Mint")}
+        onPress={() => navigation.replace("Mint")}
       >
         <Text style={[styles.buttonLabel, styles.txtStyle]}>
           Login with X

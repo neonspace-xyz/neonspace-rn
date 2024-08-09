@@ -9,7 +9,7 @@ import SearchBar from "./SearchBar";
 import { getRandomNumber } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 
-const OtherProfileDetail = () => {
+const OtherProfileDetail = ({ tab }) => {
   const navigation = useNavigation();
   return (
     <View style={styles.myProfile}>
@@ -49,13 +49,15 @@ const OtherProfileDetail = () => {
           style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
           onPress={() => {
             let i = getRandomNumber();
-            navigation.push("ChatView", {
-              id: i,
-              name: `Name${i}`,
-              username: `@username${i}`,
-              image: IMG_PROFILE[getRandomNumber(0, 4)],
-              nft: `Name of NFT${i}`,
-              price: getRandomNumber(0.01, 1.00),
+            navigation.push(`ChatView${tab}`, {
+              tab, item: {
+                id: i,
+                name: `Name${i}`,
+                username: `@username${i}`,
+                image: IMG_PROFILE[getRandomNumber(0, 4)],
+                nft: `Name of NFT${i}`,
+                price: getRandomNumber(0.01, 1.00),
+              }
             })
           }}
         >
@@ -102,7 +104,7 @@ const OtherProfileDetail = () => {
         </Text>
 
         <Pressable
-          onPress={() => navigation.push("Verified")}
+          onPress={() => navigation.push(`Verified${tab}`, { tab })}
         >
           <Text
             style={[
@@ -125,7 +127,7 @@ const OtherProfileDetail = () => {
       <View style={[styles.frameParent8, styles.topNavBg]}>
         <Pressable
           style={styles.verifiedWrapperFlexBox}
-          onPress={() => navigation.navigate("MyProfileYouVerifiedVerifiedBy")}
+        // onPress={() => navigation.navigate("MyProfileYouVerifiedVerifiedBy")}
         >
           <Text style={[styles.youVerified, styles.bioExampleTypo]}>
             Posts

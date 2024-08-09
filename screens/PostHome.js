@@ -13,7 +13,9 @@ import PostCreate from "../components/PostCreate";
 import { IMG_PROFILE } from "../Constant";
 import PostList from "../components/PostList";
 
-const PostHome = () => {
+const PostHome = ({ route }) => {
+  const { tab } = route?.params;
+
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState([]);
@@ -124,7 +126,8 @@ const PostHome = () => {
 
   const handleDetail = (item) => {
     if (isShowCreate) return;
-    navigation.navigate("PostDetail", { item });
+    isShowSearch(false);
+    navigation.navigate(`PostDetail${tab}`, { tab, item });
   };
 
   return (
@@ -156,7 +159,7 @@ const PostHome = () => {
         />
         <Pressable
           style={[styles.headerIcon, isShowSearch && { display: "none" }]}
-          onPress={() => navigation.navigate("ChatList")}>
+          onPress={() => navigation.navigate(`ChatList${tab}`, { tab })}>
           <Image
             source={require("../assets/ic_chat.png")}
             style={styles.headerImageChat}
@@ -192,6 +195,7 @@ const PostHome = () => {
           renderItem={({ item }) => {
             return (
               <PostSection
+                tab={tab}
                 isDetail={false}
                 item={item}
                 onPress={() => handleDetail(item)}
@@ -201,6 +205,7 @@ const PostHome = () => {
         />
       </View>
       <PostList
+        tab={tab}
         isProfile={false}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />

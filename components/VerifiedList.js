@@ -13,7 +13,7 @@ import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
 import PostLikeSection from "./PostLikeSection";
 
-const VerifiedList = () => {
+const VerifiedList = ({ tab }) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState([]);
@@ -91,10 +91,6 @@ const VerifiedList = () => {
     }
   };
 
-  const handleDetail = (item) => {
-    navigation.navigate("PostDetail", { item });
-  };
-
   return (
     <View style={[styles.containerList]}>
       <FlatList
@@ -117,6 +113,7 @@ const VerifiedList = () => {
         renderItem={({ item }) => {
           return (
             <PostLikeSection
+              tab={tab}
               item={item}
             />
           )

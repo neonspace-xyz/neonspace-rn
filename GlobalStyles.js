@@ -120,3 +120,26 @@ export const StyleButtonBackIcon = {
   height: "100%",
   width: "100%",
 };
+
+export const StyleHeaderView = {
+  width: "100%",
+  flexDirection: 'row',
+  padding: 14,
+  backgroundColor: Color.colorGray_100,
+}
+
+export const StyleHeaderImg = {
+  width: 30,
+  height: 30,
+}
+
+export const StyleHeaderTitle = {
+  fontSize: FontSize.labelLarge_size,
+  flexGrow: 1, color: "white",
+  textAlign: "center",
+  paddingTop: 3,
+  alignItems: "center",
+  color: Color.darkInk,
+  fontWeight: "600",
+  fontFamily: FontFamily.clashGrotesk,
+}

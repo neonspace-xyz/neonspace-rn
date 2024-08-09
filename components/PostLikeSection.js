@@ -4,11 +4,11 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
-const PostLikeSection = ({ item }) => {
+const PostLikeSection = ({ tab, item }) => {
   const navigation = useNavigation();
 
   return (
-    <Pressable onPress={() => { navigation.push("OtherProfile", { otherUser: true }); }}>
+    <Pressable onPress={() => { navigation.push(`OtherProfile${tab}`, { tab, otherUser: true }); }}>
       <View index={item?.id} style={[styles.frameParent]}>
         <Image
           style={styles.frameChild}

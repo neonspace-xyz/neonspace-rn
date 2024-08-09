@@ -8,7 +8,7 @@ import PostSection from "../components/PostSection";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 
-const PostList = ({ isProfile, isShowSearch, isShowCreate }) => {
+const PostList = ({ tab, isProfile, isShowSearch, isShowCreate }) => {
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
@@ -73,7 +73,7 @@ const PostList = ({ isProfile, isShowSearch, isShowCreate }) => {
 
   const handleDetail = (item) => {
     if (isShowCreate) return;
-    navigation.navigate("PostDetail", { item });
+    navigation.push(`PostDetail${tab}`, { tab, item });
   };
 
   return (
