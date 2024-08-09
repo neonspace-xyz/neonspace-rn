@@ -19,7 +19,7 @@ const Main = () => {
 
   return (
     <Tab.Navigator
-      
+
       screenOptions={({ route }) => ({
         tabBarButton: (props) => (
           <TouchableOpacity
@@ -53,10 +53,50 @@ const Main = () => {
         }
       })}
     >
-      <Tab.Screen name="Home" component={PostStackNavigator} />
-      <Tab.Screen name="Notification" component={NotificationStackNavigator} />
-      <Tab.Screen name="Wallet" component={WalletStackNavigator} />
-      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
+      <Tab.Screen name="Home" component={PostStackNavigator}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            navigation.navigate('Home', {
+              screen: 'PostList1',
+              params: {
+                reset: true,
+              },
+            });
+          }
+        })} />
+      <Tab.Screen name="Notification" component={NotificationStackNavigator}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            navigation.navigate('Notification', {
+              screen: 'Notification2',
+              params: {
+                reset: true,
+              },
+            });
+          }
+        })} />
+      <Tab.Screen name="Wallet" component={WalletStackNavigator}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            navigation.navigate('Wallet', {
+              screen: 'Wallet3',
+              params: {
+                reset: true,
+              },
+            });
+          }
+        })} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            navigation.navigate('Profile', {
+              screen: 'MyProfile4',
+              params: {
+                reset: true,
+              },
+            });
+          }
+        })} />
     </Tab.Navigator>
   );
 };
