@@ -32,7 +32,7 @@ const ChatSection = ({ isDetail, item, onPress }) => {
           </Text>
         </View>
       </View>
-    </Pressable >
+    </Pressable>
   );
 };
 
