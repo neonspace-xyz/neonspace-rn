@@ -22,8 +22,15 @@ function NotificationStackNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Notification2" component={NotificationList} initialParams={dataToSend} />
+      
       <Stack.Screen name="ChatList2" component={ChatList} initialParams={dataToSend} />
       <Stack.Screen name="ChatView2" component={ChatView} initialParams={dataToSend} />
+      
+      <Stack.Screen name="OtherProfile2" component={OtherProfile} initialParams={dataToSend} />
+      <Stack.Screen name="Verified2" component={Verified} />
+
+      <Stack.Screen name="PostDetail2" component={PostDetail} initialParams={dataToSend} />
+      <Stack.Screen name="PostLikeList2" component={PostLikeList} initialParams={dataToSend} />
 
       {/* <Stack.Screen name="MyAssets3" component={MyAssets} initialParams={dataToSend} />       */}
     </Stack.Navigator>

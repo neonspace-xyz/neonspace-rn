@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
-const NotificationSection = ({ item, onPress }) => {
+const NotificationSection = ({ item }) => {
 
   return (
     <Pressable index={item?.id}>

@@ -134,13 +134,13 @@ const NotificationList = ({ route }) => {
           />
         </Pressable>
       </View>
-      {!isShowCreate && (
+      {/* {!isShowCreate && (
         <View style={styles.containerFAB}>
           <Pressable style={styles.FAB} onPress={doPostCreate}>
             <Icon name="add" size={45} color={Color.colorBlack} />
           </Pressable>
         </View>
-      )}
+      )} */}
       <View style={[styles.containerListSearch, !isShowSearch && { display: "none" }]}>
         <FlatList
           style={styles.flat}
