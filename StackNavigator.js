@@ -42,7 +42,7 @@ const StackNavigator = () => {
             name="Main"
             component={Main}
             options={{ headerShown: false }} />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="PostHome"
           component={PostHome}
           options={{ headerShown: false }}
@@ -97,7 +97,7 @@ const StackNavigator = () => {
         <Stack.Screen
           name="MyAssets"
           component={MyAssets}
-          options={{ headerShown: false }} />
+          options={{ headerShown: false }} /> */}
 
       </Stack.Navigator>
     </NavigationContainer>

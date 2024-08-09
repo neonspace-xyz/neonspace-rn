@@ -32,7 +32,7 @@ const Verified = () => {
       <View style={[styles.frameParent8, styles.topNavBg]}>
         <Pressable
           style={styles.verifiedWrapperFlexBox}
-          onPress={() => navigation.navigate("MyProfileYouVerifiedVerifiedBy")}
+          onPress={() => {}}
         >
           <Text style={[styles.youVerified, styles.bioExampleTypo]}>
             You verified

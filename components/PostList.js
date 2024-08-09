@@ -99,6 +99,7 @@ const PostList = ({ tab, isProfile, isShowSearch, isShowCreate }) => {
         renderItem={({ item }) => {
           return (
             <PostSection
+              tab={tab}
               isDetail={false}
               item={item}
               onPress={() => handleDetail(item)}

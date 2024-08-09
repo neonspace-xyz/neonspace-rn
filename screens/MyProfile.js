@@ -7,9 +7,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
 import ProfileDetail from "../components/ProfileDetail";
 
-const MyProfile = () => {
-
-  const tab = 4;
+const MyProfile = ({ route }) => {
+  const { tab } = route?.params;
   const navigation = useNavigation();
   const [isShowCreate, setIsShowCreate] = React.useState(false);
   const [isShowSearch, setIsShowSearch] = React.useState(false);

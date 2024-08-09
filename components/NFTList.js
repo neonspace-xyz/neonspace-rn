@@ -180,7 +180,7 @@ const NFTList = () => {
             <Accordion title="Section 1">
               
               {nftData.map((item, index) => (
-              <View style={styles.rectangleFlexBox}>
+              <View style={styles.rectangleFlexBox} key={index}>
                 <Image
                   style={styles.nftIcon}
                   contentFit="cover"

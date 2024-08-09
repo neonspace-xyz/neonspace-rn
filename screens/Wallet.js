@@ -6,7 +6,9 @@ import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
 import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
 import { Component_Max_Width } from "../Constant";
 
-const Wallet = () => {
+const Wallet = ({ route }) => {
+  const { tab } = route?.params;
+  
   const navigation = useNavigation();
   const [showTransferAction, setShowTransferAction] = useState(false);
   const [showSend, setShowSend] = useState(false);
@@ -120,7 +122,7 @@ const Wallet = () => {
             </Pressable>
             <Pressable
               style={[styles.topUpWalletWrapper, styles.buttonBorder, styles.btnMyAssets]}
-              onPress={() => navigation.navigate("MyAssets")}
+              onPress={() => navigation.navigate(`MyAssets${tab}`)}
             >
               <Text style={[styles.topUpWallet, styles.walletTypo]}>
                 My assets

@@ -4,7 +4,7 @@ import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, Activ
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect } from '@react-navigation/core';
+import { useFocusEffect, useRoute } from '@react-navigation/core';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
@@ -12,8 +12,10 @@ import PostCreate from "../components/PostCreate";
 import NotificationSection from "../components/NotificationSection";
 import moment from "moment";
 
-const NotificationList = () => {
+const NotificationList = ({ route }) => {
   const navigation = useNavigation();
+  const { tab } = route.params;
+
   const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState([]);
   const [searchItems, setSearchItems] = useState([]);
@@ -125,7 +127,7 @@ const NotificationList = () => {
         />
         <Pressable
           style={[styles.headerIcon, isShowSearch && { display: "none" }]}
-          onPress={() => navigation.navigate("ChatList")}>
+          onPress={() => navigation.navigate(`ChatList${tab}`)}>
           <Image
             source={require("../assets/ic_chat.png")}
             style={styles.headerImageChat}

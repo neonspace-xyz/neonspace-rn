@@ -6,14 +6,30 @@ import PostStackNavigator from './PostStackNavigator';
 import NotificationList from './NotificationList';
 import Wallet from './Wallet';
 import MyProfile from './MyProfile';
+import WalletStackNavigator from "./WalletStackNavigator";
+import ProfileStackNavigator from "./ProfileStackNavigator";
+import { TouchableOpacity } from "react-native";
+import { CommonActions, useFocusEffect, useNavigation } from "@react-navigation/core";
+import NotificationStackNavigator from "./NotificationStackNavigator";
 
 const Main = () => {
   // Create the bottom tab navigator
   const Tab = createBottomTabNavigator();
+  const navigation = useNavigation();
 
   return (
     <Tab.Navigator
+      
       screenOptions={({ route }) => ({
+        tabBarButton: (props) => (
+          <TouchableOpacity
+            {...props}
+            onPress={() => {
+              // console.log("Tab clicked : ", props.onPress())
+              props.onPress();
+            }}
+          />
+        ),
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -38,9 +54,9 @@ const Main = () => {
       })}
     >
       <Tab.Screen name="Home" component={PostStackNavigator} />
-      <Tab.Screen name="Notification" component={NotificationList} />
-      <Tab.Screen name="Wallet" component={Wallet} />
-      <Tab.Screen name="Profile" component={MyProfile} />
+      <Tab.Screen name="Notification" component={NotificationStackNavigator} />
+      <Tab.Screen name="Wallet" component={WalletStackNavigator} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
     </Tab.Navigator>
   );
 };

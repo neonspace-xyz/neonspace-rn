@@ -11,7 +11,7 @@ import PostSection from "./PostSection";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
-import PostLikeSection from "./PostLikeSection";
+import VerifiedListSection from "./VerifiedListSection";
 
 const VerifiedList = ({ tab }) => {
   const navigation = useNavigation();
@@ -112,7 +112,7 @@ const VerifiedList = ({ tab }) => {
         }
         renderItem={({ item }) => {
           return (
-            <PostLikeSection
+            <VerifiedListSection
               tab={tab}
               item={item}
             />

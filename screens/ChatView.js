@@ -130,61 +130,64 @@ const ChatDetail = () => {
           />
         </Pressable>
       </View>
-      <KeyboardAvoidingView behavior="padding">
-        <ScrollView
-          ref={scrollViewRef}
-          style={styles.scrollView}
-          onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-          onLayout={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-        >
-          {messages?.length > 0 ? messages?.map((item, index) => {
-            console.log("item", item);
-            if (item?.role == 'user') {
-              return (<ChatSectionBubbleSelf key={index} item={item} />)
-            }
-            else {
-              return (<ChatSectionBubble key={index} item={item} />)
-            }
-          }) : (
-            <View style={styles.container_empty}>
-              <Image
-                style={styles.speechBubble1Icon}
-                contentFit="cover"
-                source={require("../assets/ic_trophy.png")}
+
+      <View style={{width:"100%"}}>
+        <KeyboardAvoidingView behavior="padding" style={{flexDirection:"column"}}>
+          <ScrollView
+            ref={scrollViewRef}
+            style={styles.scrollView}
+            onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+            onLayout={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+          >
+            {messages?.length > 0 ? messages?.map((item, index) => {
+              console.log("item", item);
+              if (item?.role == 'user') {
+                return (<ChatSectionBubbleSelf key={index} item={item} />)
+              }
+              else {
+                return (<ChatSectionBubble key={index} item={item} />)
+              }
+            }) : (
+              <View style={styles.container_empty}>
+                <Image
+                  style={styles.speechBubble1Icon}
+                  contentFit="cover"
+                  source={require("../assets/ic_trophy.png")}
+                />
+                <Text style={[styles.startChatting]}>
+                  Start chatting
+                </Text>
+                <Text
+                  style={[styles.clickOnThe]}
+                >{`Click on the text box below to begin.`}</Text>
+                <Text
+                  style={[styles.clickOnThe, styles.clickOnTheTypo]}
+                >{`Be sure to indicate whether the message was sent by you, [name], or if it’s just a prompt for us to understand more about the context or situation.`}</Text>
+              </View>
+            )}
+          </ScrollView>
+          <View style={styles.parentInput}>
+            <View style={styles.subParentInput}>
+              <TextInput
+                style={styles.chatInput}
+                placeholder="Type here..."
+                placeholderTextColor={Color.colorGray_400}
+                value={message}
+                onChangeText={(text) => setMessage(text)}
+                multiline={true}
+                numberOfLines={numberOfLines}
+                scrollEnabled={message.split('\n').length > 4}
               />
-              <Text style={[styles.startChatting]}>
-                Start chatting
-              </Text>
-              <Text
-                style={[styles.clickOnThe]}
-              >{`Click on the text box below to begin.`}</Text>
-              <Text
-                style={[styles.clickOnThe, styles.clickOnTheTypo]}
-              >{`Be sure to indicate whether the message was sent by you, [name], or if it’s just a prompt for us to understand more about the context or situation.`}</Text>
+              {/* <Pressable onPress={sendMessage}>
+              <Image
+                style={[styles.btnSendChat, loadingSend && styles.buttonDisable]}
+                source={require("../assets/ic_back_white.png")}
+              />
+            </Pressable> */}
             </View>
-          )}
-        </ScrollView>
-        <View style={styles.parentInput}>
-          <View style={styles.subParentInput}>
-            <TextInput
-              style={styles.chatInput}
-              placeholder="Type here..."
-              placeholderTextColor={Color.colorGray_400}
-              value={message}
-              onChangeText={(text) => setMessage(text)}
-              multiline={true}
-              numberOfLines={numberOfLines}
-              scrollEnabled={message.split('\n').length > 4}
-            />
-            {/* <Pressable onPress={sendMessage}>
-            <Image
-              style={[styles.btnSendChat, loadingSend && styles.buttonDisable]}
-              source={require("../assets/ic_back_white.png")}
-            />
-          </Pressable> */}
           </View>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   )
 };
@@ -209,7 +212,11 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: "100%",
-    paddingTop: 16,
+    // height:"100%",
+    height:"80%",
+    // paddingTop: 10,
+    // borderColor:"red",
+    // borderWidth:5
   },
   container_empty: {
     justifyContent: 'center',
@@ -241,7 +248,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   parentInput: {
+    // borderColor:"red",
+    // borderWidth:5,
     width: "100%",
+    height:"20%",
     backgroundColor: Color.colorGray_100
   },
   subParentInput: {

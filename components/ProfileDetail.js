@@ -37,7 +37,7 @@ const ProfileDetail = ({ tab }) => {
       }}>
         <Pressable
           style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
-          onPress={() => navigation.navigate("EditProfile")}
+          onPress={() => navigation.navigate(`EditProfile${tab}`)}
         >
           <Text style={[styles.editProfile, styles.editProfileTypo]}>
             Edit profile

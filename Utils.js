@@ -9,7 +9,7 @@ export const getRandomTimestamp = (amount) => {
   const now = moment();
   const twoDaysAgo = now.clone().subtract(amount, 'days');
   const randomTimestamp = twoDaysAgo.valueOf() + Math.floor(Math.random() * (now.valueOf() - twoDaysAgo.valueOf() + 1));
-  return moment(randomTimestamp).toDate(); // Converts back to a Date object if needed
+  return moment(randomTimestamp).toDate().toISOString(); // Converts back to a Date object if needed
 }
 
 export const formatPostDuration = (duration) => {
