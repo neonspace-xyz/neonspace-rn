@@ -16,6 +16,7 @@ import ChatList from './screens/ChatList';
 import ChatView from './screens/ChatView';
 import NotificationList from './screens/NotificationList';
 import Wallet from './screens/Wallet';
+import ReferralCode from './screens/ReferralCode';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -24,10 +25,17 @@ const StackNavigator = () => {
     headerTitleAlign: 'center',
     headerBackVisible: false
   };
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
 
+      
+      <Stack.Screen
+          name="ReferralCode"
+          component={ReferralCode}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Login"
           component={Login}
