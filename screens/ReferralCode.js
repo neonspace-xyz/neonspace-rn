@@ -2,10 +2,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import api from '../ApiHandler';
 import { API_URL, REFERAL_CODE } from '../Constant';
 
 const ReferralCodeScreen = () => {
   const navigation = useNavigation();
+  const [preparing, setPreparing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [referralCode, setReferralCode] = useState(REFERAL_CODE);
 
@@ -30,13 +32,25 @@ const ReferralCodeScreen = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
+        setPreparing(true);
         let usersession = await AsyncStorage.getItem("usersession");
+        usersession = JSON.parse(usersession);
 
         if (usersession != 'undefined' && usersession != null) {
-          navigation.replace("Mint");
+          let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
+          let resp = await api.get(url);
+          let data = resp.data;
+          if (data?.owned_nfts?.length == 0) {
+            navigation.navigate("Mint");
+          }
+          else {
+            navigation.replace("Mint");
+          }
         }
       } catch (error) {
         console.log('error:', error);
+      } finally {
+        setPreparing(false);
       }
     };
     checkLoginStatus();
@@ -55,7 +69,7 @@ const ReferralCodeScreen = () => {
       <TouchableOpacity
         style={styles.verifyButton}
         onPress={handleVerify}
-        disabled={loading}
+        disabled={loading || preparing}
       >
         <Text style={styles.verifyButtonText}>{loading ? "Verifing" : "Verify"}</Text>
       </TouchableOpacity>

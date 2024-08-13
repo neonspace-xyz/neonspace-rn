@@ -81,9 +81,19 @@ export const getSession = (session) => {
 
 export const logout = async (navigation) => {
   try {
-    console.log("logout");
     await AsyncStorage.removeItem('usersession');
-    navigation.replace("Login");
+    Alert.alert(
+      'Session Expired',
+      'Your session has expired. Please log in again.',
+      [{
+        text: 'OK', onPress: () => {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "Login" }]
+          });
+        }
+      }]
+    );
   } catch (error) {
     console.log("logout-error", error)
   }

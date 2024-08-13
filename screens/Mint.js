@@ -2,16 +2,72 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
 import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
 import { Component_Max_Width } from "../Constant";
+import api from "../ApiHandler";
+import { logout } from "../Utils";
 
 const Mint = () => {
   const navigation = useNavigation();
   const [totalNft, setTotalNft] = useState(1);
+  const [nftInfo, setnftInfo] = useState();
   const [showReceive, setShowReceive] = useState(false);
   const [showAddressCopied, setShowAddressCopied] = useState(false);
   const [showSuccessMint, setShowSuccessMint] = useState(false);
+
+  useEffect(() => {
+    getNftCurrentMintInfo();
+  }, [])
+
+  const getNftCurrentMintInfo = async () => {
+    try {
+      let url = `/nft/currentMintInfo`;
+      let resp = await api.get(url);
+      let data = resp.data;
+      setnftInfo(data);
+    } catch (error) {
+      if (error.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.error("getNftCurrentMintInfo-error", error)
+      }
+    }
+  }
+
+  const postUserMintNft = async () => {
+    try {
+      // setShowSuccessMint(!showSuccessMint);
+      // return;
+      if (!nftInfo) {
+        Alert.alert(
+          'Mint Failed',
+          'NFT Info not found',
+          [{
+            text: 'OK', onPress: () => {
+              getNftCurrentMintInfo();
+            }
+          }]
+        );
+        return;
+      }
+      let url = `/user/mintNft`;
+      let body = {
+        "nft_address": nftInfo.nft_address,
+        "quantity": totalNft,
+        "eth_value": "0"
+      };
+      let resp = await api.post(url, body);
+      let data = resp.data;
+      setShowSuccessMint(!showSuccessMint);
+    } catch (error) {
+      if (error.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.error("postUserMintNft-error", error)
+      }
+    }
+  }
 
   const doTotalNftMin = () => {
     if (totalNft == 0) return;
@@ -45,7 +101,7 @@ const Mint = () => {
         Neonrabbits NFT
       </Text>
       <Text style={[styles.txtTitle2, styles.txtStyle]}>
-        0.02 ETH
+        {Number(nftInfo?.mint_price).toFixed(2)} ETH
       </Text>
       <Image
         style={styles.imgNft}
@@ -97,7 +153,7 @@ const Mint = () => {
         </View>
         <Pressable
           style={styles.button}
-          onPress={() => setShowSuccessMint(!showSuccessMint)}
+          onPress={() => postUserMintNft()}
         >
           <Text style={[styles.buttonLabel, styles.eth1Typo]}>
             Mint Neonrabbits

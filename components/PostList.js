@@ -1,14 +1,15 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
 import PostSection from "../components/PostSection";
-import { convertTimestamp, getRandomNumber, getRandomTimestamp, getSession, logout } from "../Utils";
+import { convertTimestamp, getRandomNumber, getRandomTimestamp, getSession, handleError, logout } from "../Utils";
 import { API_URL, IMG_PROFILE } from "../Constant";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import api, { setNavigation } from "../ApiHandler";
 
 const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) => {
   const navigation = useNavigation();
@@ -26,7 +27,11 @@ const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) =
 
   useEffect(() => {
     getItems();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    fetchItems();
+  }, [page])
 
   const getItems = async () => {
     let data = await AsyncStorage.getItem('posts');
@@ -35,61 +40,49 @@ const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) =
   };
 
   const fetchItems = async () => {
-    if(!usersession) return;
+    if (!usersession) return;
     try {
-      let token = usersession.jwt_token;
       let userInfo = usersession.user_info;
-      let url = API_URL + `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
-      const resp = await axios.get(url,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
-      if (resp.status == 200) {
-        if (resp?.data?.posts) {
-          let _posts = [];
-          let posts = resp?.data?.posts;
-          for (const key in posts) {
-            if (Object.hasOwnProperty.call(posts, key)) {
-              let like = getRandomNumber(0, 7);
-              let itemLikes = [];
-              for (let j = 0; j < like; j++) {
-                itemLikes.push({
-                  name: `Name${j}`,
-                  username: `@username${j}`,
-                  image: IMG_PROFILE[getRandomNumber(0, 4)],
-                  bio: `Founder at ChainCredit. #DYOR ${j}`,
-                })
-              }
+      let url = `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
+      let resp = await api.get(url);
+      let posts = resp.data.posts;
 
-              const post = posts[key];
-              let item = {
-                id: key,
-                name: userInfo.name,
-                username: `@${userInfo.screen_name}`,
-                image: userInfo.profile_image,
-                text: post.post,
-                view: getRandomNumber(0, 100),
-                like: like,
-                datetime: convertTimestamp(post.published_timestamp),
-                itemLikes: itemLikes
-              }
-              _posts.push(item);
-            }
+      let _posts = [];
+      for (const key in posts) {
+        if (Object.hasOwnProperty.call(posts, key)) {
+          let like = getRandomNumber(0, 7);
+          let itemLikes = [];
+          for (let j = 0; j < like; j++) {
+            itemLikes.push({
+              name: `Name${j}`,
+              username: `@username${j}`,
+              image: IMG_PROFILE[getRandomNumber(0, 4)],
+              bio: `Founder at ChainCredit. #DYOR ${j}`,
+            })
           }
-          setItems(_posts);
-          await AsyncStorage.setItem('posts', JSON.stringify(_posts));
+
+          const post = posts[key];
+          let item = {
+            id: key,
+            name: userInfo.name,
+            username: `@${userInfo.screen_name}`,
+            image: userInfo.profile_image,
+            text: post.post,
+            view: getRandomNumber(0, 100),
+            like: like,
+            datetime: convertTimestamp(post.published_timestamp),
+            itemLikes: itemLikes
+          }
+          _posts.push(item);
         }
       }
-      else {
-        Alert.alert("Failed load posts");
-      }
+      setItems(_posts);
     } catch (error) {
-      console.error('Post-fetchItems', error);
+      if (error.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.log("error", error)
+      }
     }
   }
 
@@ -123,14 +116,17 @@ const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) =
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchItems(); // Fetch fresh data
+    setPage(1);
+    // await fetchItems(); // Fetch fresh data
     setRefreshing(false);
   };
 
   const onLoadMore = () => {
     if (!loadingMore && hasMore) {
       setLoadingMore(true);
-      fetchItems(); // Fetch more data
+      let _page = page;
+      setPage(_page++);
+      // fetchItems(); // Fetch more data
       setLoadingMore(false);
     }
   };
