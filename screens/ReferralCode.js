@@ -1,22 +1,46 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { API_URL, REFERAL_CODE } from '../Constant';
 
 const ReferralCodeScreen = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  const [referralCode, setReferralCode] = useState(REFERAL_CODE);
 
-  const [referralCode, setReferralCode] = useState('7hR4f3PHxk9H@4tK');
+  const handleVerify = async () => {
+    try {
+      setLoading(true);
+      // Handle the referral code verification here
+      console.log('Referral code entered:', referralCode);
 
-  const handleVerify = async() => {
-    // Handle the referral code verification here
-    console.log('Referral code entered:', referralCode);
-
-    const response = await fetch("https://dev-api.neonspace.xyz/user/verify?inviteCode="+referralCode);
-    const json = await response.json();
-    if(json.valid){
-        navigation.replace("Login")
+      const response = await fetch(`${API_URL}/user/verify?inviteCode=${referralCode}`);
+      const json = await response.json();
+      if (json.valid) {
+        navigation.replace("Login");
+      }
+    } catch (error) {
+      console.error("handleVerify", error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        let usersession = await AsyncStorage.getItem("usersession");
+
+        if (usersession != 'undefined' && usersession != null) {
+          navigation.replace("Mint");
+        }
+      } catch (error) {
+        console.log('error:', error);
+      }
+    };
+    checkLoginStatus();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -28,8 +52,12 @@ const ReferralCodeScreen = () => {
         value={referralCode}
         onChangeText={setReferralCode}
       />
-      <TouchableOpacity style={styles.verifyButton} onPress={handleVerify}>
-        <Text style={styles.verifyButtonText}>Verify</Text>
+      <TouchableOpacity
+        style={styles.verifyButton}
+        onPress={handleVerify}
+        disabled={loading}
+      >
+        <Text style={styles.verifyButtonText}>{loading ? "Verifing" : "Verify"}</Text>
       </TouchableOpacity>
     </View>
   );

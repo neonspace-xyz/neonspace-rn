@@ -1,10 +1,9 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, View, Pressable, TextInput, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, StatusBar } from "react-native";
+import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, ActivityIndicator, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect } from '@react-navigation/core';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
 import PostSection from "../components/PostSection";
@@ -12,13 +11,14 @@ import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "../components/PostCreate";
 import { IMG_PROFILE } from "../Constant";
 import PostList from "../components/PostList";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const PostHome = ({ route }) => {
   const { tab } = route?.params;
 
   const navigation = useNavigation();
+  const [usersession, setUsersession] = useState();
   const [searchValue, setSearchValue] = useState('');
-  const [items, setItems] = useState([]);
   const [searchItems, setSearchItems] = useState([]);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
@@ -36,51 +36,23 @@ const PostHome = ({ route }) => {
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchItems();
-      fetchSearchItems();
-    }, [])
-  );
-
   const doPostCreate = () => {
     setIsShowCreate(true);
   };
 
   useEffect(() => {
-    getItems();
-  }, [])
+    getSession();
+  }, []);
 
-  const getItems = async () => {
-  };
-
-  const fetchItems = async () => {
-    let data = [];
-    for (let i = 1; i < getRandomNumber(); i++) {
-      let like = getRandomNumber(0, 7);
-      let itemLikes = [];
-      for (let j = 0; j < like; j++) {
-        itemLikes.push({
-          name: `Name${j}`,
-          username: `@username${j}`,
-          image: IMG_PROFILE[getRandomNumber(0, 4)],
-          bio: `Founder at ChainCredit. #DYOR ${j}`,
-        })
-      }
-      data.push({
-        id: i,
-        name: `Name${i}`,
-        username: `@username${i}`,
-        image: IMG_PROFILE[getRandomNumber(0, 4)],
-        text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
-        view: getRandomNumber(0, 100),
-        like: like,
-        datetime: getRandomTimestamp(30),
-        itemLikes: itemLikes
-      });
+  const getSession = async () => {
+    let _usersession = await AsyncStorage.getItem("usersession");
+    if (_usersession == null) {
+      await logout(navigation);
+      return;
     }
-    setItems(data);
-  };
+    _usersession = JSON.parse(_usersession);
+    setUsersession(_usersession);
+  }
 
   const fetchSearchItems = async () => {
     let data = [];
@@ -205,12 +177,14 @@ const PostHome = ({ route }) => {
         />
       </View>
       <PostList
+        usersession={usersession}
         tab={tab}
         isProfile={false}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />
       {isShowCreate && (
         <PostCreate
+          usersession={usersession}
           setIsShowCreate={setIsShowCreate} />
       )}
     </SafeAreaView>

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, TextInput, Platform, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, Text, View, Pressable, TextInput, Platform, KeyboardAvoidingView, Alert, TouchableOpacity } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
-import { Component_Max_Width, POST_MAX_CHAR } from "../Constant";
+import { API_URL, Component_Max_Width, POST_MAX_CHAR } from "../Constant";
+import axios from "axios";
 
-const PostCreate = ({ setIsShowCreate }) => {
+const PostCreate = ({ usersession, setIsShowCreate }) => {
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const numberOfLines = Platform.select({
     ios: 4, // Set numberOfLines to 4 on iOS
@@ -12,8 +14,45 @@ const PostCreate = ({ setIsShowCreate }) => {
   });
 
   const doHideModal = () => {
+    if (loading) return;
     setMessage('');
     setIsShowCreate(false);
+  }
+
+  const doPost = async () => {
+    try {
+      if (!usersession) return;
+      setLoading(true);
+
+      let token = usersession.jwt_token;
+      let userInfo = usersession.user_info;
+      let url = API_URL + `/user/createPost`;
+      let body = {
+        "post": message
+      }
+      const resp = await axios.post(url, body,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      console.log("url", url);
+      console.log("body", body);
+      console.log("resp.data", resp.data);
+      if (resp.status == 200) {
+        Alert.alert("Your post has been published successfully!")
+        setLoading(false);
+        doHideModal();
+      }
+    } catch (error) {
+      Alert.alert("Failed", error.message);
+      console.error('Post-doPost', error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const onChangeMessage = (input) => {
@@ -35,9 +74,9 @@ const PostCreate = ({ setIsShowCreate }) => {
               source={require("../assets/ellipse-1.png")}
             />
             <View style={styles.frameContainer}>
-              <Text style={[styles.name, styles.timeClr]}>Name</Text>
+              <Text style={[styles.name, styles.timeClr]}>{usersession.user_info.name}</Text>
               <Text style={[styles.endlessmeee, styles.timeClr]}>
-                @endlessmeee
+                @{usersession.user_info.screen_name}
               </Text>
             </View>
           </View>
@@ -75,17 +114,25 @@ const PostCreate = ({ setIsShowCreate }) => {
           </Text>
           <Text style={[styles.thePostPreview, styles.postClr]}>{message?.length}/500</Text>
         </View>
-        <Pressable onPress={() => message.length > 0 && doHideModal()}>
+        <TouchableOpacity
+          disabled={loading}
+          onPress={() => message.length > 0 && doPost()}
+        >
           <View style={[styles.btnPost, message.length == 0 ? styles.buttonDisable : styles.buttonEnable]}>
-            <Text style={[styles.buttonLabel, message.length == 0 ? styles.buttonLabelDisable : styles.buttonLabelEnable]}>Post</Text>
+            <Text style={[styles.buttonLabel, message.length == 0 ? styles.buttonLabelDisable : styles.buttonLabelEnable]}>
+              {loading ? "Posting" : "Post"}
+            </Text>
           </View>
-        </Pressable>
+        </TouchableOpacity>
       </View>
-      <Pressable onPress={() => message.length > 0 && doHideModal()}>
+      <TouchableOpacity
+        disabled={loading}
+        onPress={() => message.length > 0 && doHideModal()}
+      >
         <Text style={[styles.btnSaveAsDraft, message.length == 0 ? styles.buttonDisable : styles.buttonSaveAsDraftEnable]}>
           Save as draft
         </Text>
-      </Pressable>
+      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 };

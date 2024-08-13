@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 import 'moment-duration-format';
 
@@ -11,6 +12,12 @@ export const getRandomTimestamp = (amount) => {
   const randomTimestamp = twoDaysAgo.valueOf() + Math.floor(Math.random() * (now.valueOf() - twoDaysAgo.valueOf() + 1));
   return moment(randomTimestamp).toDate().toISOString(); // Converts back to a Date object if needed
 }
+
+export const convertTimestamp = (timestamp) => {
+  const date = moment.unix(timestamp).utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+  return date;
+}
+
 
 export const formatPostDuration = (duration) => {
   // return moment.duration(duration).format('Y [Y], M [M], w [w], d [d], h [h], m [m], s [s]', {
@@ -62,5 +69,22 @@ export const getFormattedPostTimestamp = (timestamp) => {
   } catch (e) {
     console.error("error-getFormattedPostTimestamp", e?.message);
     return "";
+  }
+}
+
+export const getSession = (session) => {
+  const usersession = JSON.parse(session);
+  const token = usersession.jwt_token;
+  const userInfo = usersession.user_info;
+  return { usersession, token, userInfo };
+}
+
+export const logout = async (navigation) => {
+  try {
+    console.log("logout");
+    await AsyncStorage.removeItem('usersession');
+    navigation.replace("Login");
+  } catch (error) {
+    console.log("logout-error", error)
   }
 }

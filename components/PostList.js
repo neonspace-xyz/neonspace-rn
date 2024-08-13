@@ -5,10 +5,12 @@ import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
 import PostSection from "../components/PostSection";
-import { getRandomNumber, getRandomTimestamp } from "../Utils";
-import { IMG_PROFILE } from "../Constant";
+import { convertTimestamp, getRandomNumber, getRandomTimestamp, getSession, logout } from "../Utils";
+import { API_URL, IMG_PROFILE } from "../Constant";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const PostList = ({ tab, isProfile, isShowSearch, isShowCreate }) => {
+const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) => {
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
@@ -27,9 +29,71 @@ const PostList = ({ tab, isProfile, isShowSearch, isShowCreate }) => {
   }, [])
 
   const getItems = async () => {
+    let data = await AsyncStorage.getItem('posts');
+    data = JSON.parse(data);
+    setItems(data);
   };
 
   const fetchItems = async () => {
+    if(!usersession) return;
+    try {
+      let token = usersession.jwt_token;
+      let userInfo = usersession.user_info;
+      let url = API_URL + `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
+      const resp = await axios.get(url,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      if (resp.status == 200) {
+        if (resp?.data?.posts) {
+          let _posts = [];
+          let posts = resp?.data?.posts;
+          for (const key in posts) {
+            if (Object.hasOwnProperty.call(posts, key)) {
+              let like = getRandomNumber(0, 7);
+              let itemLikes = [];
+              for (let j = 0; j < like; j++) {
+                itemLikes.push({
+                  name: `Name${j}`,
+                  username: `@username${j}`,
+                  image: IMG_PROFILE[getRandomNumber(0, 4)],
+                  bio: `Founder at ChainCredit. #DYOR ${j}`,
+                })
+              }
+
+              const post = posts[key];
+              let item = {
+                id: key,
+                name: userInfo.name,
+                username: `@${userInfo.screen_name}`,
+                image: userInfo.profile_image,
+                text: post.post,
+                view: getRandomNumber(0, 100),
+                like: like,
+                datetime: convertTimestamp(post.published_timestamp),
+                itemLikes: itemLikes
+              }
+              _posts.push(item);
+            }
+          }
+          setItems(_posts);
+          await AsyncStorage.setItem('posts', JSON.stringify(_posts));
+        }
+      }
+      else {
+        Alert.alert("Failed load posts");
+      }
+    } catch (error) {
+      console.error('Post-fetchItems', error);
+    }
+  }
+
+  const fetchItemsDummy = async () => {
     let data = [];
     for (let i = 1; i < getRandomNumber(); i++) {
       let like = getRandomNumber(0, 7);
@@ -38,7 +102,7 @@ const PostList = ({ tab, isProfile, isShowSearch, isShowCreate }) => {
         itemLikes.push({
           name: `Name${j}`,
           username: `@username${j}`,
-          image: IMG_PROFILE[getRandomNumber(0,4)],
+          image: IMG_PROFILE[getRandomNumber(0, 4)],
           bio: `Founder at ChainCredit. #DYOR ${j}`,
         })
       }
