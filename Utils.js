@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 import 'moment-duration-format';
+import { Alert } from "react-native";
 
 export const getRandomNumber = (min = 10, max = 20) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -72,6 +73,10 @@ export const getFormattedPostTimestamp = (timestamp) => {
   }
 }
 
+export const shortenAddress = (address, chars = 4) => {
+  return `${address.slice(0, chars)}...${address.slice(-chars)}`;
+};
+
 export const getSession = (session) => {
   const usersession = JSON.parse(session);
   const token = usersession.jwt_token;
@@ -80,8 +85,10 @@ export const getSession = (session) => {
 }
 
 export const logout = async (navigation) => {
-  try {
+  try { 
+    console.log("logout-called")
     await AsyncStorage.removeItem('usersession');
+    await AsyncStorage.removeItem('posts');
     Alert.alert(
       'Session Expired',
       'Your session has expired. Please log in again.',

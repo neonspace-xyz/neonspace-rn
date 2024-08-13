@@ -25,7 +25,6 @@ const Main = () => {
           <TouchableOpacity
             {...props}
             onPress={() => {
-              // console.log("Tab clicked : ", props.onPress())
               props.onPress();
             }}
           />

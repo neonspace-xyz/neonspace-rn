@@ -3065,6 +3065,11 @@ expo-asset@~10.0.10:
     invariant "^2.2.4"
     md5-file "^3.2.3"
 
+expo-clipboard@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/expo-clipboard/-/expo-clipboard-6.0.3.tgz#dfea74d4a004dce59ecefd063d6fb9f1c356a03f"
+  integrity sha512-RIKDsuHkYfaspifbFpVC8sBVFKR05L7Pj7mU2/XkbrW9m01OBNvdpGraXEMsTFCx97xMGsZpEw9pPquL4j4xVg==
+
 expo-constants@~16.0.0:
   version "16.0.2"
   resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-16.0.2.tgz"
@@ -3073,7 +3078,7 @@ expo-constants@~16.0.0:
     "@expo/config" "~9.0.0"
     "@expo/env" "~0.3.0"
 
-expo-file-system@~17.0.1:
+expo-file-system@^17.0.1, expo-file-system@~17.0.1:
   version "17.0.1"
   resolved "https://registry.npmjs.org/expo-file-system/-/expo-file-system-17.0.1.tgz"
   integrity sha512-dYpnZJqTGj6HCYJyXAgpFkQWsiCH3HY1ek2cFZVHFoEc5tLz9gmdEgTF6nFHurvmvfmXqxi7a5CXyVm0aFYJBw==
@@ -4882,13 +4887,14 @@ neo-async@^2.5.0:
     "@types/react" "~18.2.79"
     axios "^1.7.3"
     expo "~51.0.26"
+    expo-file-system "^17.0.1"
     expo-font "~12.0.9"
     expo-image "~1.12.13"
     expo-linear-gradient "^13.0.2"
     expo-status-bar "~1.12.1"
     moment "^2.30.1"
     moment-duration-format "^2.3.2"
-    neonspace-app "file:../../../../../Library/Caches/Yarn/v6/npm-neonspace-app-1.0.0-7d98a0b5-e9a7-4f43-9572-a7ff890e4296-1723482610817/node_modules/neonspace-app"
+    neonspace-app "file:../../../../../Library/Caches/Yarn/v6/npm-neonspace-app-1.0.0-4e88b678-5391-4c09-8424-3c1208d321f2-1723588917229/node_modules/neonspace-app"
     react "18.2.0"
     react-dom "18.2.0"
     react-native "0.74.5"

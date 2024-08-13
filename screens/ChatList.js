@@ -43,10 +43,6 @@ const ChatList = () => {
     }, [])
   );
 
-  const doPostCreate = () => {
-    console.log('Floating button pressed');
-  };
-
   useEffect(() => {
     getItems();
   }, [])

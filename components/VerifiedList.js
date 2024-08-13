@@ -53,10 +53,6 @@ const VerifiedList = ({ tab }) => {
     }, [])
   );
 
-  const doPostCreate = () => {
-    console.log('Floating button pressed');
-  };
-
   useEffect(() => {
     getChats();
   }, [])

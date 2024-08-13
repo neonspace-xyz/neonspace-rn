@@ -7,6 +7,7 @@ import { Component_Max_Width, REFERAL_CODE as REFERRAL_CODE, TWITTER_OAUTH } fro
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from '../Constant';
+import api from '../utils/ApiHandler';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -23,7 +24,6 @@ const Login = () => {
       console.log("doLogin-token", _oauthToken);
       if (_oauthToken) {
         console.log("link", `${TWITTER_OAUTH}${_oauthToken}`)
-
         setModalVisible(true);
         setOauthToken(_oauthToken);
         // openOAuthURL(_oauthToken);
@@ -70,18 +70,39 @@ const Login = () => {
       console.log("getTwitterAccessToken-data", resp.data);
       if (resp.status === 200 && resp?.data) {
         let accessToken = resp.data;
-        AsyncStorage.setItem("usersession", JSON.stringify(accessToken));
-        navigation.replace("Mint");
+        await AsyncStorage.setItem("usersession", JSON.stringify(accessToken));
+        await getUser(accessToken);
       }
       else {
         Alert.alert("Login Failed", "Failed to get access token");
       }
     } catch (error) {
+      setOAuthVerifier('');
       Alert.alert("Login Failed", "Failed to get access token");
       console.error("getTwitterAccessToken-error", error);
       return null;
     }
   };
+
+  const getUser = async (usersession) => {
+    try {
+      let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
+      let resp = await api.get(url);
+      let data = resp.data;
+      if (data?.owned_nfts?.length == 0) {
+        navigation.navigate("Mint");
+      }
+      else {
+        navigation.replace("Main");
+      }
+    } catch (err) {
+      if (err.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.error("checkLoginStatus-getUser-error", err)
+      }
+    }
+  }
 
   // useEffect(() => {
   //   const handleOpenURL = async (event) => {

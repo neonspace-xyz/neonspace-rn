@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_URL } from './Constant';
+import { API_URL } from '../Constant';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -36,7 +36,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => response,
   error => {
-    console.log("error.response", error.response.data.error)
+    console.error("axios-error.response", error.response.data.error)
     if (
       error.response.status === 500 &&
       error.response.data.error === 'ExpiredSignature'

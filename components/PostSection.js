@@ -10,91 +10,97 @@ const PostSection = ({ tab, isDetail, item, onPress }) => {
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
 
   return (
-    <Pressable index={item?.id} onPress={() => isDetail ? null : onPress()}>
-      <View style={styles.frameParent}>
-        <View style={styles.frameFlexBox}>
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            source={item.image}
-          />
-          <View style={[styles.frameGroup, styles.frameFlexBox]}>
-            <View style={styles.frameFlexBox}>
-              <Text style={[styles.name, styles.nameTypo]}>{item?.name}</Text>
-              <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                {item?.username}
-              </Text>
-            </View>
+    <View style={styles.frame}>
+      <Pressable index={item?.id} onPress={() => isDetail ? null : onPress()}>
+        <View style={styles.frameParent}>
+          <View style={styles.frameFlexBox}>
             <Image
-              style={styles.frameItem}
+              style={styles.frameChild}
               contentFit="cover"
-              source={require("../assets/ic_dot_white.png")}
+              source={item.image}
             />
-            <Text style={[styles.txtDateTime, styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
-          </View>
-        </View>
-        <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
-          {item?.text}
-        </Text>
-        <View style={[styles.frameContainer, isDetail ? styles.imSoExcitedSpaceBlock : styles.imSoExcitedSpaceBlock2]}>
-          {isDetail ? (
-            <>
+            <View style={[styles.frameGroup, styles.frameFlexBox]}>
               <View style={styles.frameFlexBox}>
-                <Text style={styles.pmTypo}>{timeFormat}</Text>
-                <Image
-                  style={styles.frameItem}
-                  contentFit="cover"
-                  source={require("../assets/ic_dot_gray.png")}
-                />
-                <Text style={[styles.text, styles.pmTypo]}>{dateFormat}</Text>
+                <Text style={[styles.name, styles.nameTypo]}>{item?.name}</Text>
+                <Text style={[styles.endlessmeee, styles.nameTypo]}>
+                  {item?.username}
+                </Text>
               </View>
-              <View style={styles.frameViewFlexBox}>
-                <View style={styles.frameViewFlexBox}>
+              <Image
+                style={styles.frameItem}
+                contentFit="cover"
+                source={require("../assets/ic_dot_white.png")}
+              />
+              <Text style={[styles.txtDateTime, styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
+            </View>
+          </View>
+          <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
+            {item?.text}
+          </Text>
+          <View style={[styles.frameContainer, isDetail ? styles.imSoExcitedSpaceBlock : styles.imSoExcitedSpaceBlock2]}>
+            {isDetail ? (
+              <>
+                <View style={styles.frameFlexBox}>
+                  <Text style={styles.pmTypo}>{timeFormat}</Text>
                   <Image
-                    style={styles.eyeSvgrepoCom11}
+                    style={styles.frameItem}
                     contentFit="cover"
-                    source={require("../assets/ic_eye.png")}
+                    source={require("../assets/ic_dot_gray.png")}
                   />
-                  <Text style={[styles.text1, styles.txtDefault]}>{item?.view}</Text>
+                  <Text style={[styles.text, styles.pmTypo]}>{dateFormat}</Text>
                 </View>
+                <View style={styles.frameViewFlexBox}>
+                  <View style={styles.frameViewFlexBox}>
+                    <Image
+                      style={styles.eyeSvgrepoCom11}
+                      contentFit="cover"
+                      source={require("../assets/ic_eye.png")}
+                    />
+                    <Text style={[styles.text1, styles.txtDefault]}>{item?.view}</Text>
+                  </View>
+                  <Pressable
+                    style={[styles.heartSvgrepoCom1Parent, styles.frameViewFlexBox]}
+                    onPress={() => navigation.push(`PostLikeList${tab}`, { tab, itemLikes: item?.itemLikes })}
+                  >
+                    <Image
+                      style={styles.eyeSvgrepoCom11}
+                      contentFit="cover"
+                      source={require("../assets/ic_heart_fill.png")}
+                    />
+                    <Text style={[styles.text1, styles.txtDefault]}>{item?.like}</Text>
+                  </Pressable>
+                </View>
+              </>
+            ) : (
+              <View style={[styles.frameViewFlexBox, {}]}>
                 <Pressable
                   style={[styles.heartSvgrepoCom1Parent, styles.frameViewFlexBox]}
-                  onPress={() => navigation.push(`PostLikeList${tab}`, { tab, itemLikes: item?.itemLikes })}
                 >
                   <Image
                     style={styles.eyeSvgrepoCom11}
                     contentFit="cover"
-                    source={require("../assets/ic_heart_fill.png")}
+                    source={item.like == 0 ? require("../assets/ic_heart_empty.png") : require("../assets/ic_heart_fill.png")}
                   />
-                  <Text style={[styles.text1, styles.txtDefault]}>{item?.like}</Text>
+                  <Text style={[styles.text1, styles.txtDefault]}>{item.like}</Text>
                 </Pressable>
               </View>
-            </>
-          ) : (
-            <View style={[styles.frameViewFlexBox, {}]}>
-              <Pressable
-                style={[styles.heartSvgrepoCom1Parent, styles.frameViewFlexBox]}
-              >
-                <Image
-                  style={styles.eyeSvgrepoCom11}
-                  contentFit="cover"
-                  source={item.like == 0 ? require("../assets/ic_heart_empty.png") : require("../assets/ic_heart_fill.png")}
-                />
-                <Text style={[styles.text1, styles.txtDefault]}>{item.like}</Text>
-              </Pressable>
-            </View>
-          )}
+            )}
 
 
+          </View>
         </View>
-      </View>
-    </Pressable >
+      </Pressable>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  frame: {
+    width: "100%"
+  },
   frameParent: {
     overflow: "hidden",
+    width: "95%",
     marginTop: 16,
     marginHorizontal: 12,
     paddingHorizontal: Padding.p_xs,

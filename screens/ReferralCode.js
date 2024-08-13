@@ -2,8 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import api from '../ApiHandler';
+import api from '../utils/ApiHandler';
 import { API_URL, REFERAL_CODE } from '../Constant';
+import { logout } from '../Utils';
 
 const ReferralCodeScreen = () => {
   const navigation = useNavigation();
@@ -15,8 +16,6 @@ const ReferralCodeScreen = () => {
     try {
       setLoading(true);
       // Handle the referral code verification here
-      console.log('Referral code entered:', referralCode);
-
       const response = await fetch(`${API_URL}/user/verify?inviteCode=${referralCode}`);
       const json = await response.json();
       if (json.valid) {
@@ -37,18 +36,26 @@ const ReferralCodeScreen = () => {
         usersession = JSON.parse(usersession);
 
         if (usersession != 'undefined' && usersession != null) {
-          let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
-          let resp = await api.get(url);
-          let data = resp.data;
-          if (data?.owned_nfts?.length == 0) {
-            navigation.navigate("Mint");
-          }
-          else {
-            navigation.replace("Mint");
+          try {
+            let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
+            let resp = await api.get(url);
+            let data = resp.data;
+            if (data?.owned_nfts?.length == 0) {
+              navigation.navigate("Mint");
+            }
+            else {
+              navigation.replace("Main");
+            }
+          } catch (err) {
+            if (err.isSessionExpired) {
+              await logout(navigation);
+            } else {
+              console.error("checkLoginStatus-getUser-error", err)
+            }
           }
         }
       } catch (error) {
-        console.log('error:', error);
+        console.error('checkLoginStatus-error:', error);
       } finally {
         setPreparing(false);
       }

@@ -1,24 +1,33 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
+import * as Clipboard from 'expo-clipboard';
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
-import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
+import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import DownloadHelper from "../utils/DownloadHelper";
+import api from "../utils/ApiHandler";
 import { Component_Max_Width } from "../Constant";
-import api from "../ApiHandler";
-import { logout } from "../Utils";
+import { logout, shortenAddress } from "../Utils";
+import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
 
 const Mint = () => {
   const navigation = useNavigation();
   const [totalNft, setTotalNft] = useState(1);
   const [nftInfo, setnftInfo] = useState();
+  const [usersession, setUsersession] = useState();
+  const [mintNftResult, setMintNftResult] = useState();
+  const [userInfo, setUserInfo] = useState();
+  const [nft, setNft] = useState();
+  const [downloading, setDownloading] = useState(false);
   const [showReceive, setShowReceive] = useState(false);
   const [showAddressCopied, setShowAddressCopied] = useState(false);
   const [showSuccessMint, setShowSuccessMint] = useState(false);
 
-  useEffect(() => {
-    getNftCurrentMintInfo();
-  }, [])
+  const getUsersession = async () => {
+    let _usersession = await AsyncStorage.getItem("usersession");
+    setUsersession(JSON.parse(_usersession));
+  }
 
   const getNftCurrentMintInfo = async () => {
     try {
@@ -35,10 +44,26 @@ const Mint = () => {
     }
   }
 
+  useEffect(() => {
+    getUsersession();
+    getNftCurrentMintInfo();
+  }, [])
+
+  useEffect(() => {
+    if (usersession) {
+      getUser();
+    }
+  }, [mintNftResult, usersession]);
+
   const postUserMintNft = async () => {
     try {
-      // setShowSuccessMint(!showSuccessMint);
-      // return;
+      setMintNftResult({
+        "minter": "0x31796bfbd71cf1c73d6bbf25e5d6ae1f746eccab",
+        "nft": "0x063aa9f317f3c90a2c35c516bdb926ad346a07b7",
+        "transaction_hash": "0x97c49a5c78484837d7f1e3ab38f4b6c36c07451c15af7edb642e506aa8c5c567"
+      });
+      setShowSuccessMint(!showSuccessMint);
+      return;
       if (!nftInfo) {
         Alert.alert(
           'Mint Failed',
@@ -69,6 +94,33 @@ const Mint = () => {
     }
   }
 
+  const getUser = async () => {
+    try {
+      let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
+      let resp = await api.get(url);
+      let data = resp.data;
+      setUserInfo(data);
+      if (data?.owned_nfts?.length > 0) {
+        let ownedNft = data?.owned_nfts[0];
+        if (ownedNft?.token_ids?.length > 0) {
+          setNft(ownedNft.token_ids[0]);
+        }
+        else {
+          Alert.alert('Error', "User doesn't have any NFT.");
+        }
+      }
+      else {
+        Alert.alert('Error', "User doesn't have any NFT");
+      }
+    } catch (err) {
+      if (err.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.error("getUser-error", err)
+      }
+    }
+  }
+
   const doTotalNftMin = () => {
     if (totalNft == 0) return;
     let t = totalNft - 1;
@@ -79,6 +131,33 @@ const Mint = () => {
     if (totalNft == 2) return;
     let t = totalNft + 1;
     setTotalNft(t);
+  }
+
+  const doDownloadImage = async () => {
+    try {
+      setDownloading(true);
+      if (nft?.image) {
+        await DownloadHelper(nft?.image);
+      }
+      else {
+        Alert.alert('Warning', "Image NFT not found");
+      }
+    } catch (error) {
+      console.error("doDownloadImage", error);
+    } finally {
+      setDownloading(false);
+    }
+  }
+
+  const doCopyWallet = async () => {
+    try {
+      if (userInfo?.wallet_address) {
+        await Clipboard.setStringAsync(userInfo?.wallet_address);
+      }
+      setShowAddressCopied(!showAddressCopied);
+    } catch (error) {
+      console.error("doCopyWallet", error);
+    }
   }
 
   useEffect(() => {
@@ -135,11 +214,11 @@ const Mint = () => {
           <View style={styles.walletBalance0Container}>
             <View style={styles.row}>
               <Text style={[styles.walletBalance, styles.walletTypo]}>Wallet Balance: </Text>
-              <Text style={[styles.eth1Typo, styles.walletTypo]}>0.02 ETH</Text>
+              <Text style={[styles.eth1Typo, styles.walletTypo]}>{userInfo?.wallet_balance ? Number(userInfo.wallet_balance).toFixed(2) : '0.00'} ETH</Text>
             </View>
             <View style={styles.row}>
               <Text style={[styles.walletBalance, styles.walletTypo]}>Wallet Address: </Text>
-              <Text style={[styles.eth1Typo, styles.walletTypo]}>0xe...dhv</Text>
+              <Text style={[styles.eth1Typo, styles.walletTypo]}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
             </View>
           </View>
           <Pressable
@@ -186,8 +265,8 @@ const Mint = () => {
             source={require("../assets/ic_barcode.png")}
           />
           <View style={styles.xedhvParent}>
-            <Text style={styles.xedhv}>0xe...dhv</Text>
-            <Pressable onPress={() => setShowAddressCopied(!showAddressCopied)}>
+            <Text style={styles.xedhv}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
+            <Pressable onPress={doCopyWallet}>
               <Image
                 style={styles.copySvgrepoCom1Icon}
                 contentFit="cover"
@@ -212,36 +291,46 @@ const Mint = () => {
 
       {/* View Success Mint */}
       <View style={[styles.postModal, !showSuccessMint && { display: "none" }]}>
-        <Image
-          style={styles.mintItemLayout}
-          contentFit="cover"
-          source={require("../assets/ic_nft_default.png")}
-        />
+        {nft?.image ? (
+          <Image
+            style={styles.mintItemLayout}
+            contentFit="cover"
+            source={nft?.image}
+          />
+        ) : (
+          <Image
+            style={styles.mintItemLayout}
+            contentFit="cover"
+            source={require("../assets/ic_nft_default.png")}
+          />
+        )}
         <View style={styles.buttonParentSpaceBlock}>
           <Text style={[styles.congratulations, styles.eth1Typo]}>
             Congratulations!
           </Text>
           <Text style={[styles.youAre287, styles.youAre287Typo]}>
-            You are #287 Neonrabbit
+            You are #{nft?.token_id} Neonrabbit
           </Text>
         </View>
         <View style={[styles.buttonParent, styles.buttonParentSpaceBlock]}>
-          <Pressable
+          <TouchableOpacity
             style={[styles.button1, styles.buttonBorder2]}
             onPress={() => navigation.replace("Main")}
           >
             <Text style={[styles.buttonLabel, styles.eth1Typo]}>
               Share on X
             </Text>
-          </Pressable>
-          <Pressable
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[styles.button2, styles.buttonBorder2]}
-            onPress={() => setShowSuccessMint(!showSuccessMint)}
+            // onPress={() => setShowSuccessMint(!showSuccessMint)}
+            disabled={downloading}
+            onPress={doDownloadImage}
           >
             <Text style={[styles.buttonLabel, styles.eth1Typo]}>
-              Download Original Image
+              {downloading ? "Download ..." : "Download Original Image"}
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

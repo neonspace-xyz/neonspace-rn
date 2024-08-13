@@ -1,15 +1,14 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Alert } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
 import PostSection from "../components/PostSection";
-import { convertTimestamp, getRandomNumber, getRandomTimestamp, getSession, handleError, logout } from "../Utils";
-import { API_URL, IMG_PROFILE } from "../Constant";
-import axios from "axios";
+import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
+import { IMG_PROFILE } from "../Constant";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import api, { setNavigation } from "../ApiHandler";
+import api from "../utils/ApiHandler";
 
 const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) => {
   const navigation = useNavigation();
@@ -28,6 +27,10 @@ const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) =
   useEffect(() => {
     getItems();
   }, []);
+
+  useEffect(() => {
+    fetchItems();
+  }, [])
 
   useEffect(() => {
     fetchItems();
@@ -77,11 +80,12 @@ const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) =
         }
       }
       setItems(_posts);
+      await AsyncStorage.setItem('posts', JSON.stringify(_posts));
     } catch (error) {
       if (error.isSessionExpired) {
         await logout(navigation);
       } else {
-        console.log("error", error)
+        console.error("PostList-fetchItems-error", error)
       }
     }
   }
@@ -117,7 +121,6 @@ const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) =
   const onRefresh = async () => {
     setRefreshing(true);
     setPage(1);
-    // await fetchItems(); // Fetch fresh data
     setRefreshing(false);
   };
 
@@ -126,7 +129,6 @@ const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) =
       setLoadingMore(true);
       let _page = page;
       setPage(_page++);
-      // fetchItems(); // Fetch more data
       setLoadingMore(false);
     }
   };

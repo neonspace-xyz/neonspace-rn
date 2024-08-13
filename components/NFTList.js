@@ -52,10 +52,6 @@ const NFTList = () => {
     }, [])
   );
 
-  const doPostCreate = () => {
-    console.log('Floating button pressed');
-  };
-
   useEffect(() => {
     getChats();
   }, [])
