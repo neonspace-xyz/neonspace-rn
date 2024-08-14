@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import * as Clipboard from 'expo-clipboard';
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity, Share } from "react-native";
 import DownloadHelper from "../utils/DownloadHelper";
 import api from "../utils/ApiHandler";
 import { Component_Max_Width } from "../Constant";
@@ -55,15 +55,15 @@ const Mint = () => {
     }
   }, [mintNftResult, usersession]);
 
-  const postUserMintNft = async () => {
+  const doMint = async () => {
     try {
-      setMintNftResult({
-        "minter": "0x31796bfbd71cf1c73d6bbf25e5d6ae1f746eccab",
-        "nft": "0x063aa9f317f3c90a2c35c516bdb926ad346a07b7",
-        "transaction_hash": "0x97c49a5c78484837d7f1e3ab38f4b6c36c07451c15af7edb642e506aa8c5c567"
-      });
-      setShowSuccessMint(!showSuccessMint);
-      return;
+      // setMintNftResult({
+      //   "minter": "0x31796bfbd71cf1c73d6bbf25e5d6ae1f746eccab",
+      //   "nft": "0x063aa9f317f3c90a2c35c516bdb926ad346a07b7",
+      //   "transaction_hash": "0x97c49a5c78484837d7f1e3ab38f4b6c36c07451c15af7edb642e506aa8c5c567"
+      // });
+      // setShowSuccessMint(!showSuccessMint);
+      // return;
       if (!nftInfo) {
         Alert.alert(
           'Mint Failed',
@@ -105,13 +105,13 @@ const Mint = () => {
         if (ownedNft?.token_ids?.length > 0) {
           setNft(ownedNft.token_ids[0]);
         }
-        else {
-          Alert.alert('Error', "User doesn't have any NFT.");
-        }
+        // else {
+        //   Alert.alert('Error', "User doesn't have any NFT.");
+        // }
       }
-      else {
-        Alert.alert('Error', "User doesn't have any NFT");
-      }
+      // else {
+      //   Alert.alert('Error', "User doesn't have any NFT");
+      // }
     } catch (err) {
       if (err.isSessionExpired) {
         await logout(navigation);
@@ -157,6 +157,51 @@ const Mint = () => {
       setShowAddressCopied(!showAddressCopied);
     } catch (error) {
       console.error("doCopyWallet", error);
+    }
+  }
+
+  const doShareOnX = async () => {
+    try {
+      let content = {
+        message: 'I minted a Neonrabbit! Neonrabbits are always on adventures at Neonspace. Check it out!',
+      };
+      if (nft?.image) {
+        content['url'] = nft?.image;
+      }
+      console.log("doShareOnX-content", content);
+
+      const result = await Share.share(content, {
+        // Optional: only display Twitter as an option
+        excludedActivityTypes: [
+          'com.apple.UIKit.activity.PostToFacebook',
+          'com.apple.UIKit.activity.PostToWeibo',
+          'com.apple.UIKit.activity.Message',
+          'com.apple.UIKit.activity.Mail',
+          'com.apple.UIKit.activity.Print',
+          'com.apple.UIKit.activity.CopyToPasteboard',
+          'com.apple.UIKit.activity.AssignToContact',
+          'com.apple.UIKit.activity.SaveToCameraRoll',
+          'com.apple.UIKit.activity.AddToReadingList',
+          'com.apple.UIKit.activity.PostToFlickr',
+          'com.apple.UIKit.activity.PostToVimeo',
+          'com.apple.UIKit.activity.PostToTencentWeibo',
+          'com.apple.UIKit.activity.AirDrop',
+        ]
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+          console.log("share", result.activityType)
+        } else {
+          // shared
+          console.log("share")
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+        console.log("dismissed")
+      }
+    } catch (error) {
+      Alert.alert(error.message);
     }
   }
 
@@ -232,7 +277,7 @@ const Mint = () => {
         </View>
         <Pressable
           style={styles.button}
-          onPress={() => postUserMintNft()}
+          onPress={() => doMint()}
         >
           <Text style={[styles.buttonLabel, styles.eth1Typo]}>
             Mint Neonrabbits
@@ -315,7 +360,8 @@ const Mint = () => {
         <View style={[styles.buttonParent, styles.buttonParentSpaceBlock]}>
           <TouchableOpacity
             style={[styles.button1, styles.buttonBorder2]}
-            onPress={() => navigation.replace("Main")}
+            // onPress={() => navigation.replace("Main")}
+            onPress={doShareOnX}
           >
             <Text style={[styles.buttonLabel, styles.eth1Typo]}>
               Share on X

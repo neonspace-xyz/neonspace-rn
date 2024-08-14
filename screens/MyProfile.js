@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState, useRef } from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
@@ -6,12 +7,29 @@ import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
 import ProfileDetail from "../components/ProfileDetail";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MyProfile = ({ route }) => {
   const { tab } = route?.params;
   const navigation = useNavigation();
-  const [isShowCreate, setIsShowCreate] = React.useState(false);
-  const [isShowSearch, setIsShowSearch] = React.useState(false);
+  const [usersession, setUsersession] = useState();
+  const [isShowCreate, setIsShowCreate] = useState(false);
+  const [isShowSearch, setIsShowSearch] = useState(false);
+
+  useEffect(() => {
+    getSession();
+  }, []);
+
+  const getSession = async () => {
+    let _usersession = await AsyncStorage.getItem("usersession");
+    if (_usersession == null) {
+      await logout(navigation);
+      return;
+    }
+    _usersession = JSON.parse(_usersession);
+    setUsersession(_usersession);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
@@ -21,10 +39,12 @@ const MyProfile = ({ route }) => {
         backButton={false} />
 
       <ProfileDetail
-        tab={tab} />
+        tab={tab}
+        userInfo={usersession?.user_info} />
 
       <PostList
         tab={tab}
+        userInfo={usersession?.user_info}
         isProfile={true}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />

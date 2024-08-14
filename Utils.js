@@ -77,6 +77,40 @@ export const shortenAddress = (address, chars = 4) => {
   return `${address.slice(0, chars)}...${address.slice(-chars)}`;
 };
 
+export const truncateString = (str, maxLength) => {
+  if (str.length <= maxLength) {
+    return str;
+  }
+  return str.slice(0, maxLength) + '...';
+};
+
+export const processUserVerifiedList = (users) => {
+  let names = '-';
+  let images = [];
+  try {
+    let _verifiedNameArr = [];
+    for (const user of users) {
+      _verifiedNameArr.push(`${truncateString(user.screen_name, 15)}`);
+      images.push(user.profile_image);
+      if (_verifiedNameArr.length == 2) {
+        break;
+      }
+    }
+    if (users?.length > 2) {
+      let sisa = userInfo.verified.length - 2;
+      _verifiedNameArr.push(`and ${sisa} other${sisa > 1 && 's'}`);
+    }
+
+    if (_verifiedNameArr.length > 0) {
+      names = _verifiedNameArr.join(",");
+    }
+  } catch (error) {
+    console.error("processUserVerifiedList", error);
+  } finally {
+    return { names, images };
+  }
+}
+
 export const getSession = (session) => {
   const usersession = JSON.parse(session);
   const token = usersession.jwt_token;
@@ -85,10 +119,9 @@ export const getSession = (session) => {
 }
 
 export const logout = async (navigation) => {
-  try { 
+  try {
     console.log("logout-called")
     await AsyncStorage.removeItem('usersession');
-    await AsyncStorage.removeItem('posts');
     Alert.alert(
       'Session Expired',
       'Your session has expired. Please log in again.',

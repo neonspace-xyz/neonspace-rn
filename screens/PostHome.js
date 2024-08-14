@@ -1,17 +1,18 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, ActivityIndicator, StatusBar } from "react-native";
+import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, ActivityIndicator, StatusBar, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
-import PostSection from "../components/PostSection";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "../components/PostCreate";
 import { IMG_PROFILE } from "../Constant";
 import PostList from "../components/PostList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import api from "../utils/ApiHandler";
+import UserSearchSection from "../components/UserSearchSection";
 
 const PostHome = ({ route }) => {
   const { tab } = route?.params;
@@ -55,6 +56,52 @@ const PostHome = ({ route }) => {
   }
 
   const fetchSearchItems = async () => {
+    if (searchValue == '') return;
+    let data = [];
+    try {
+      let url = `/twitter/getUser`;
+      let body = {
+        "screen_name": searchValue
+      };
+      let resp = await api.post(url, body);
+      if (resp.data) {
+        let user = resp.data;
+        url = `/user/getUser?userId=${user.id}`;
+        resp = await api.get(url);
+        if(resp.data) {
+          data.push(resp.data);
+        }
+      }
+    } catch (error) {
+      Alert.alert("User not found");
+      console.error("fetchSearchItems", error)
+    } finally {
+      setSearchItems(data);
+    }
+  };
+
+  const handleDetail = (item) => {
+    if (isShowCreate) return;
+    setIsShowSearch(false);
+    setSearchValue('');
+    navigation.navigate(`OtherProfile${tab}`, { tab, userInfo: item });
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchSearchItems(); // Fetch fresh data
+    setRefreshing(false);
+  };
+
+  const onLoadMore = async () => {
+    if (!loadingMore && hasMore) {
+      setLoadingMore(true);
+      await fetchSearchItems(); // Fetch more data
+      setLoadingMore(false);
+    }
+  };
+
+  const fetchSearchItemsDummy = async () => {
     let data = [];
     for (let i = 1; i < getRandomNumber(); i++) {
       let like = getRandomNumber(0, 7);
@@ -82,26 +129,6 @@ const PostHome = ({ route }) => {
     setSearchItems(data);
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await fetchItems(); // Fetch fresh data
-    setRefreshing(false);
-  };
-
-  const onLoadMore = () => {
-    if (!loadingMore && hasMore) {
-      setLoadingMore(true);
-      fetchItems(); // Fetch more data
-      setLoadingMore(false);
-    }
-  };
-
-  const handleDetail = (item) => {
-    if (isShowCreate) return;
-    isShowSearch(false);
-    navigation.navigate(`PostDetail${tab}`, { tab, item });
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
@@ -122,12 +149,15 @@ const PostHome = ({ route }) => {
           value={searchValue}
           onChangeText={(text) => {
             setSearchValue(text);
-            fetchSearchItems();
+            // fetchSearchItems();
           }}
           onFocus={() => {
-            setSearchItems([]);
-            setIsShowSearch(!isShowSearch);
+            if (!isShowSearch) {
+              setSearchItems([]);
+              setIsShowSearch(!isShowSearch);
+            }
           }}
+          onSubmitEditing={fetchSearchItems}
         />
         <Pressable
           style={[styles.headerIcon, isShowSearch && { display: "none" }]}
@@ -147,37 +177,41 @@ const PostHome = ({ route }) => {
       )}
       <View style={[styles.containerListSearch, !isShowSearch && { display: "none" }]}>
         <FlatList
-          style={styles.flat}
+          style={[styles.flat, !isShowSearch && { display: "none" }]}
           data={searchItems}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              title="Pull to refresh"
-              titleColor={Color.darkInk}
-              colors={[Color.darkInk]}
-              tintColor={Color.darkInk}
-            />
-          }
-          onEndReached={onLoadMore}
-          onEndReachedThreshold={0.1}
-          ListFooterComponent={() =>
-            loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
-          }
+          // refreshControl={
+          //   <RefreshControl
+          //     refreshing={refreshing}
+          //     onRefresh={onRefresh}
+          //     title="Pull to refresh"
+          //     titleColor={Color.darkInk}
+          //     colors={[Color.darkInk]}
+          //     tintColor={Color.darkInk}
+          //   />
+          // }
+          // onEndReached={onLoadMore}
+          // onEndReachedThreshold={0.1}
+          // ListFooterComponent={() =>
+          //   loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
+          // }
           renderItem={({ item }) => {
             return (
-              <PostSection
-                tab={tab}
-                isDetail={false}
+              <UserSearchSection
                 item={item}
                 onPress={() => handleDetail(item)}
               />
+              // <PostSection
+              // tab={tab}
+              //   isDetail={false}
+              //   item={item}
+              //   onPress={() => handleDetail(item)}
+              // />
             )
           }}
         />
       </View>
       <PostList
-        usersession={usersession}
+        userInfo={usersession?.user_info}
         tab={tab}
         isProfile={false}
         isShowSearch={isShowSearch}

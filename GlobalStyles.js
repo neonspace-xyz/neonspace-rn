@@ -131,6 +131,7 @@ export const StyleHeaderView = {
 export const StyleHeaderImg = {
   width: 30,
   height: 30,
+  borderRadius: 50
 }
 
 export const StyleHeaderTitle = {

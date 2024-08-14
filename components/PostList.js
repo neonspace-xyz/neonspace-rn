@@ -7,10 +7,10 @@ import { Color } from "../GlobalStyles";
 import PostSection from "../components/PostSection";
 import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from "../utils/ApiHandler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) => {
+const PostList = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }) => {
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
@@ -25,27 +25,12 @@ const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) =
   );
 
   useEffect(() => {
-    getItems();
-  }, []);
-
-  useEffect(() => {
     fetchItems();
-  }, [])
-
-  useEffect(() => {
-    fetchItems();
-  }, [page])
-
-  const getItems = async () => {
-    let data = await AsyncStorage.getItem('posts');
-    data = JSON.parse(data);
-    setItems(data);
-  };
+  }, [userInfo]);
 
   const fetchItems = async () => {
-    if (!usersession) return;
+    if (!userInfo) return;
     try {
-      let userInfo = usersession.user_info;
       let url = `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
       let resp = await api.get(url);
       let posts = resp.data.posts;
@@ -80,7 +65,6 @@ const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) =
         }
       }
       setItems(_posts);
-      await AsyncStorage.setItem('posts', JSON.stringify(_posts));
     } catch (error) {
       if (error.isSessionExpired) {
         await logout(navigation);
@@ -121,6 +105,7 @@ const PostList = ({ usersession, tab, isProfile, isShowSearch, isShowCreate }) =
   const onRefresh = async () => {
     setRefreshing(true);
     setPage(1);
+    fetchItems();
     setRefreshing(false);
   };
 

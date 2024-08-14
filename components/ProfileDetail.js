@@ -1,39 +1,68 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
-import PostList from "./PostList";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SearchBar from "./SearchBar";
+import { processUserVerifiedList, shortenAddress } from "../Utils";
 
-const ProfileDetail = ({ tab }) => {
+const ProfileDetail = ({ tab, userInfo }) => {
   const navigation = useNavigation();
+  const [userVerifiedByImages, setUserVerifiedByImages] = useState([]);
+  const [userVerifiedByNames, setUserVerifiedByNames] = useState('');
+  const [userVerifiedImages, setUserVerifiedImages] = useState([]);
+  const [userVerifiedNames, setUserVerifiedNames] = useState('');
+
+  useEffect(() => {
+    const check = async () => {
+      if (!userInfo) return;
+
+      let { names: names1, images: images1 } = processUserVerifiedList(userInfo?.verified_by);
+      setUserVerifiedByNames(names1);
+      setUserVerifiedByImages(images1);
+
+      let { names: names2, images: images2 } = processUserVerifiedList(userInfo?.verified);
+      setUserVerifiedNames(names2);
+      setUserVerifiedImages(images2);
+    }
+
+    check();
+
+  }, [userInfo])
   return (
     <View style={styles.myProfile}>
-      <View style={{flex:1, flexDirection:"row", maxHeight:120,
-      
+      <View style={{
+        flex: 1, flexDirection: "row", maxHeight: 120,
+
       }}>
-        <Image
-          style={[styles.myProfileItem]}
-          contentFit="cover"
-          source={require("../assets/photo.png")}
-        />
+        {userInfo?.profile_image ? (
+          <Image
+            style={[styles.myProfileItem]}
+            contentFit="cover"
+            source={userInfo.profile_image}
+          />
+        ) : (
+          <Image
+            style={[styles.myProfileItem]}
+            contentFit="cover"
+            source={require("../assets/photo.png")}
+          />
+        )}
         <View style={styles.frameParent10}>
           <View style={styles.nameParent4}>
-            <Text style={[styles.name6, styles.timeTypo]}>Name</Text>
+            <Text style={[styles.name6, styles.timeTypo]}>{userInfo?.name ? userInfo.name : "Name"}</Text>
             <Text style={[styles.endlessmeee6, styles.nameTypo]}>
-              @endlessmeee
+              {userInfo?.screen_name ? `@${userInfo.screen_name}` : "@endlessmeee"}
             </Text>
           </View>
           <Text style={[styles.theBioText, styles.textTypo]}>
-            The bio text will be here. The maximum number of lines is 2 and that
-            means max. characters is 100.
+            {userInfo?.bio ? truncateString(userInfo.bio, 100) : "The bio text will be here. The maximum number of lines is 2 and that means max. characters is 100."}
           </Text>
         </View>
       </View>
-      <View style={{flex:1, flexDirection:"row", marginTop:10, maxHeight:30, gap: 10
-      // borderColor:"red", borderWidth:2,
+      <View style={{
+        flex: 1, flexDirection: "row", marginTop: 10, maxHeight: 30, gap: 10
+        // borderColor:"red", borderWidth:2,
       }}>
         <Pressable
           style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
@@ -50,19 +79,20 @@ const ProfileDetail = ({ tab }) => {
             Share profile
           </Text>
         </View>
-      </View>     
+      </View>
 
       <View style={{
         // borderWidth:2, borderColor:"red", 
-        height:"100%",
-      flex:1, padding:10, gap:8}}>
+        height: "100%",
+        flex: 1, padding: 10, gap: 8
+      }}>
         <Text
           style={[
             styles.walletAddress0xedhvContainer,
           ]}
         >
           <Text style={styles.walletAddress}>{`Wallet Address: `}</Text>
-          <Text style={styles.timeTypo}>0xe...dhv</Text>
+          <Text style={styles.timeTypo}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
         </Text>
         <Text
           style={[
@@ -76,7 +106,7 @@ const ProfileDetail = ({ tab }) => {
             source={require("../assets/photo-duo.png")}
           />
           <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-            Sam, Polymath, and 12 others
+            {userVerifiedByNames}
           </Text>
         </Text>
 
@@ -95,11 +125,11 @@ const ProfileDetail = ({ tab }) => {
               source={require("../assets/photo-duo.png")}
             />
             <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-              Sam, Polymath, and 12 others
+              {userVerifiedNames}
             </Text>
           </Text>
         </Pressable>
-      </View> 
+      </View>
 
       <View style={[styles.frameParent8, styles.topNavBg]}>
         <Pressable
@@ -350,7 +380,8 @@ const styles = StyleSheet.create({
   myProfileItem: {
     width: 90,
     height: 90,
-    margin:10
+    margin: 10,
+    borderRadius: 50
   },
   editProfile: {
     fontWeight: "500",
@@ -420,7 +451,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   samPolymathAnd: {
-    alignItems:"center"
+    alignItems: "center"
     // width: 218,
     // marginLeft: 8,
     // textAlign: "left",
@@ -630,14 +661,14 @@ const styles = StyleSheet.create({
     // paddingTop: Padding.p_9xs,
     // marginLeft: -195,
     // backgroundColor: Color.colorGray_100,
-    height:40
+    height: 40
     // left: "50%",
     // position: "absolute",
   },
   topNavBg: {
     backgroundColor: Color.colorGray_100,
     flexDirection: "row",
-    width:"100%"
+    width: "100%"
   },
   verifiedWrapperFlexBox: {
     // paddingVertical: Padding.p_7xs,

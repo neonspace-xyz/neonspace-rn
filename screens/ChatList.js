@@ -10,7 +10,6 @@ import { formatChatListTime, getRandomNumber, getRandomTimestamp } from "../Util
 import PostCreate from "../components/PostCreate";
 import { IMG_PROFILE } from "../Constant";
 import ChatSection from "../components/ChatSection";
-import moment from "moment";
 import UserSearchSection from "../components/UserSearchSection";
 
 const ChatList = () => {
@@ -69,10 +68,10 @@ const ChatList = () => {
     let data = [];
     for (let i = 1; i < getRandomNumber(1, 20); i++) {
       data.push({
-        id: i,
+        user_id: i,
         name: `Name${i}`,
-        username: `@username${i}`,
-        image: IMG_PROFILE[getRandomNumber(0, 4)],
+        screen_name: `@username${i}`,
+        profile_image: IMG_PROFILE[getRandomNumber(0, 4)],
         nft: `Name of NFT${i}`,
         price: getRandomNumber(0.01, 1.00),
       });
@@ -96,7 +95,7 @@ const ChatList = () => {
 
   const handleDetail = (item) => {
     if (isShowCreate) return;
-    navigation.push(`ChatView${tab}`, { tab, item });
+    navigation.push(`ChatView${tab}`, { tab, userInfo: item });
   };
 
   return (

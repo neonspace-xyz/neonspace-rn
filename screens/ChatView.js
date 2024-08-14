@@ -1,15 +1,15 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Image, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View, TextInput, Alert, Platform, BackHandler } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { Image, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View, TextInput, Platform, BackHandler } from 'react-native'
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/core';
 import ChatSectionBubble from '../components/ChatSectionBubble';
 import ChatSectionBubbleSelf from '../components/ChatSectionBubbleSelf';
-import { Border, Color, FontFamily, FontSize, StyleButtonBack, StyleButtonBackIcon, styleHeaderBack, styleHeaderBackIcon, StyleHeaderImg, StyleHeaderTitle, StyleHeaderView, StyleTextTitle } from '../GlobalStyles';
+import { Border, Color, FontFamily, FontSize, StyleHeaderImg, StyleHeaderTitle, StyleHeaderView } from '../GlobalStyles';
 import { getRandomNumber, getRandomTimestamp } from '../Utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ChatDetail = () => {
   const route = useRoute();
-  const { tab, chat } = route.params;
+  const { tab, userInfo } = route.params;
 
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
@@ -21,43 +21,6 @@ const ChatDetail = () => {
     ios: 4, // Set numberOfLines to 4 on iOS
     android: message ? Math.min(4, message.split('\n').length) : 1, // Let it be undefined on Android to allow multiline
   });
-
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerTitle: () => (
-  //       <View>
-  //         <Text style={StyleTextTitle} numberOfLines={1}>{chat?.name ? chat?.name : "Name"}</Text>
-  //         <Text style={StyleTextTitle} numberOfLines={1}>{chat?.username ? chat?.username : "@endlessmee"}</Text>
-  //       </View>
-  //     ),
-  //     headerLeft: () => (
-  //       <View style={styleHeaderBack}>
-  //         <Pressable onPress={() => { navigation.goBack(); }}>
-  //           <Image
-  //             style={styleHeaderBackIcon}
-  //             contentFit="cover"
-  //             source={require("../assets/ic_back_white.png")}
-  //           />
-  //         </Pressable>
-  //       </View>
-  //     ),
-  //     headerRight: () => (
-  //       <View>
-  //         <Pressable onPress={() => { navigation.push("OtherProfile", { otherUser: true }); }}>
-  //           <Image
-  //             style={styles.menuIcon}
-  //             contentFit="cover"
-  //             // source={{ uri: chat?.image_url }}
-  //             source={require("../assets/ellipse-2.png")}
-  //           />
-  //         </Pressable>
-  //       </View>
-  //     ),
-  //     headerStyle: {
-  //       backgroundColor: Color.colorGray_100
-  //     },
-  //   })
-  // }, []);
 
   useEffect(() => {
     const backAction = () => {
@@ -118,74 +81,80 @@ const ChatDetail = () => {
           />
         </Pressable>
         <Text style={[StyleHeaderTitle]}>
-          {chat?.name ? chat?.name : "Name"}
+          {userInfo?.name ? userInfo?.name : "Name"}
           {` `}
-          {chat?.username ? chat?.username : "@endlessmee"}
+          {userInfo?.screen_name ? `@${userInfo?.screen_name}` : "@endlessmee"}
         </Text>
         <Pressable
           onPress={() => { navigation.push(`OtherProfile${tab}`, { tab, otherUser: true }); }}>
-          <Image
-            source={require("../assets/ellipse-2.png")}
-            style={StyleHeaderImg}
-          />
+          {userInfo?.profile_image ? (
+            <Image
+              source={userInfo?.profile_image}
+              style={StyleHeaderImg}
+            />
+          ) : (
+            <Image
+              source={require("../assets/ellipse-2.png")}
+              style={StyleHeaderImg}
+            />
+          )}
         </Pressable>
       </View>
 
-        <KeyboardAvoidingView behavior="padding" style={{width:"100%", flex:1}}>
-          <ScrollView
-            ref={scrollViewRef}
-            style={styles.scrollView}
-            onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-            onLayout={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-          >
-            {messages?.length > 0 ? messages?.map((item, index) => {
-              console.log("item", item);
-              if (item?.role == 'user') {
-                return (<ChatSectionBubbleSelf key={index} item={item} />)
-              }
-              else {
-                return (<ChatSectionBubble key={index} item={item} />)
-              }
-            }) : (
-              <View style={styles.container_empty}>
-                <Image
-                  style={styles.speechBubble1Icon}
-                  contentFit="cover"
-                  source={require("../assets/ic_trophy.png")}
-                />
-                <Text style={[styles.startChatting]}>
-                  Start chatting
-                </Text>
-                <Text
-                  style={[styles.clickOnThe]}
-                >{`Click on the text box below to begin.`}</Text>
-                <Text
-                  style={[styles.clickOnThe, styles.clickOnTheTypo]}
-                >{`Be sure to indicate whether the message was sent by you, [name], or if it’s just a prompt for us to understand more about the context or situation.`}</Text>
-              </View>
-            )}
-          </ScrollView>
-          <View style={styles.parentInput}>
-            <View style={styles.subParentInput}>
-              <TextInput
-                style={styles.chatInput}
-                placeholder="Type here..."
-                placeholderTextColor={Color.colorGray_400}
-                value={message}
-                onChangeText={(text) => setMessage(text)}
-                multiline={true}
-                numberOfLines={numberOfLines}
-                scrollEnabled={message.split('\n').length > 4}
+      <KeyboardAvoidingView behavior="padding" style={{ width: "100%", flex: 1 }}>
+        <ScrollView
+          ref={scrollViewRef}
+          style={styles.scrollView}
+          onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+          onLayout={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+        >
+          {messages?.length > 0 ? messages?.map((item, index) => {
+            if (item?.role == 'user') {
+              return (<ChatSectionBubbleSelf key={index} item={item} />)
+            }
+            else {
+              return (<ChatSectionBubble key={index} item={item} />)
+            }
+          }) : (
+            <View style={styles.container_empty}>
+              <Image
+                style={styles.speechBubble1Icon}
+                contentFit="cover"
+                source={require("../assets/ic_trophy.png")}
               />
-              {/* <Pressable onPress={sendMessage}>
+              <Text style={[styles.startChatting]}>
+                Start chatting
+              </Text>
+              <Text
+                style={[styles.clickOnThe]}
+              >{`Click on the text box below to begin.`}</Text>
+              <Text
+                style={[styles.clickOnThe, styles.clickOnTheTypo]}
+              >{`Be sure to indicate whether the message was sent by you, [name], or if it’s just a prompt for us to understand more about the context or situation.`}</Text>
+            </View>
+          )}
+        </ScrollView>
+        <View style={styles.parentInput}>
+          <View style={styles.subParentInput}>
+            <TextInput
+              style={styles.chatInput}
+              placeholder="Type here..."
+              placeholderTextColor={Color.colorGray_400}
+              value={message}
+              onChangeText={(text) => setMessage(text)}
+              multiline={true}
+              numberOfLines={numberOfLines}
+              scrollEnabled={message.split('\n').length > 4}
+            />
+            {/* <Pressable onPress={sendMessage}>
               <Image
                 style={[styles.btnSendChat, loadingSend && styles.buttonDisable]}
                 source={require("../assets/ic_back_white.png")}
               />
             </Pressable> */}
-            </View>
           </View>
-        </KeyboardAvoidingView>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 };

@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
   svgrepoIconLayout: {
     width: 32,
     height: 32,
+    borderRadius: 50
   },
   frameGroup: {
     marginLeft: 10,

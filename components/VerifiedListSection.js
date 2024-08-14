@@ -8,7 +8,7 @@ const VerifiedListSection = ({ tab, item }) => {
   const navigation = useNavigation();
 
   return (
-    <Pressable onPress={() => { navigation.push(`OtherProfile${tab}`, { tab, otherUser: true }); }}>
+    <Pressable onPress={() => { navigation.push(`OtherProfile${tab}`, { tab }); }}>
       <View index={item?.id} style={[styles.frameParent]}>
         <Image
           style={styles.frameChild}
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   frameChild: {
     width: 32,
     height: 32,
+    borderRadius: 50
   },
   frameGroup: {
     marginLeft: 10,

@@ -32,6 +32,7 @@ const ReferralCodeScreen = () => {
     const checkLoginStatus = async () => {
       try {
         setPreparing(true);
+        // await AsyncStorage.removeItem('usersession');
         let usersession = await AsyncStorage.getItem("usersession");
         usersession = JSON.parse(usersession);
 

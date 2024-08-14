@@ -115,7 +115,8 @@ const styles = StyleSheet.create({
   frameChild: {
     width: 32,
     height: 32,
-    marginRight: 8
+    marginRight: 8,
+    borderRadius: 50
   },
   frameContainer: {
     justifyContent: "space-between",

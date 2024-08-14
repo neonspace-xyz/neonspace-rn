@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
+import { useState } from "react";
+import { StyleSheet, StatusBar } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import PostList from "../components/PostList";
@@ -10,10 +10,10 @@ import OtherProfileDetail from "../components/OtherProfileDetail";
 
 const OtherProfile = () => {
   const route = useRoute();
-  const { tab, otherUser } = route.params;
+  const { tab, userInfo } = route.params;
   const navigation = useNavigation();
-  const [isShowCreate, setIsShowCreate] = React.useState(false);
-  const [isShowSearch, setIsShowSearch] = React.useState(false);
+  const [isShowCreate, setIsShowCreate] = useState(false);
+  const [isShowSearch, setIsShowSearch] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -21,13 +21,15 @@ const OtherProfile = () => {
 
       <SearchBar
         tab={tab}
-        backButton={otherUser} />
+        backButton={true} />
 
       <OtherProfileDetail
-        tab={tab} />
+        tab={tab}
+        userInfo={userInfo} />
 
       <PostList
         tab={tab}
+        userInfo={userInfo}
         isProfile={true}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />

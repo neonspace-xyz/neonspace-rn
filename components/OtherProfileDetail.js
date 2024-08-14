@@ -1,37 +1,118 @@
 import * as React from "react";
+import { useState } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
+import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
-import PostList from "./PostList";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SearchBar from "./SearchBar";
-import { getRandomNumber } from "../Utils";
-import { IMG_PROFILE } from "../Constant";
+import { getRandomNumber, processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
+import api from "../utils/ApiHandler";
+import { useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const OtherProfileDetail = ({ tab }) => {
+const OtherProfileDetail = ({ tab, userInfo }) => {
   const navigation = useNavigation();
+  const [isVerified, setIsVerified] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [userVerifiedByImages, setUserVerifiedByImages] = useState([]);
+  const [userVerifiedByNames, setUserVerifiedByNames] = useState('');
+  const [userVerifiedImages, setUserVerifiedImages] = useState([]);
+  const [userVerifiedNames, setUserVerifiedNames] = useState('');
+
+  useEffect(() => {
+    doRefreshUserInfo();
+  }, [])
+
+  useEffect(() => {
+    const check = async () => {
+      if (!userInfo) return;
+
+      let { names: names1, images: images1 } = processUserVerifiedList(userInfo?.verified_by);
+      setUserVerifiedByNames(names1);
+      setUserVerifiedByImages(images1);
+
+      let { names: names2, images: images2 } = processUserVerifiedList(userInfo?.verified);
+      setUserVerifiedNames(names2);
+      setUserVerifiedImages(images2);
+
+      let usersession = await AsyncStorage.getItem("usersession");
+      usersession = JSON.parse(usersession);
+
+      if (usersession?.user_info.verified_by?.length > 0) {
+        for (const item of usersession?.user_info.verified_by) {
+          if (userInfo.user_id == item.user_id) {
+            setIsVerified(true);
+            break;
+          }
+        }
+      }
+    }
+
+    check();
+
+  }, [userInfo])
+
+  const doRefreshUserInfo = async () => {
+    try {
+      let url = `/user/getUser?userId=${userInfo.user_id}`;
+      let resp = await api.get(url);
+      let data = resp.data;
+      userInfo = data;
+    } catch (error) {
+      console.error("doRefreshUserInfo", error);
+    }
+  }
+
+  const doVerify = async () => {
+    if (!userInfo?.user_id) {
+      Alert.alert("User ID undefined");
+      return;
+    }
+    try {
+      setVerifying(true);
+      let body = {
+        "user_id": userInfo.user_id,
+        "verify": true
+      }
+      let resp = await api.post('/user/updateVerification', body)
+      Alert.alert("Verify Success");
+      await doRefreshUserInfo();
+
+      // refresh verified data on usersession 
+    } catch (error) {
+      Alert.alert("Verify failed", error)
+      console.error("doVerify", error);
+    } finally {
+      setVerifying(false);
+    }
+  }
   return (
     <View style={styles.myProfile}>
       <View style={{
         flex: 1, flexDirection: "row", maxHeight: 120,
 
       }}>
-        <Image
-          style={[styles.myProfileItem]}
-          contentFit="cover"
-          source={require("../assets/photo.png")}
-        />
+        {userInfo?.profile_image ? (
+          <Image
+            style={[styles.myProfileItem]}
+            contentFit="cover"
+            source={userInfo.profile_image}
+          />
+        ) : (
+          <Image
+            style={[styles.myProfileItem]}
+            contentFit="cover"
+            source={require("../assets/photo.png")}
+          />
+        )}
         <View style={styles.frameParent10}>
           <View style={styles.nameParent4}>
-            <Text style={[styles.name6, styles.timeTypo]}>Name</Text>
+            <Text style={[styles.name6, styles.timeTypo]}>{userInfo?.name ? userInfo.name : "Name"}</Text>
             <Text style={[styles.endlessmeee6, styles.nameTypo]}>
-              @endlessmeee
+              {userInfo?.screen_name ? `@${userInfo.screen_name}` : "@endlessmeee"}
             </Text>
           </View>
           <Text style={[styles.theBioText, styles.textTypo]}>
-            The bio text will be here. The maximum number of lines is 2 and that
-            means max. characters is 100.
+            {userInfo?.bio ? truncateString(userInfo.bio, 100) : "The bio text will be here. The maximum number of lines is 2 and that means max. characters is 100."}
           </Text>
         </View>
       </View>
@@ -39,39 +120,33 @@ const OtherProfileDetail = ({ tab }) => {
         flex: 1, flexDirection: "row", maxHeight: 30, gap: 2
         // borderColor:"red", borderWidth:2,
       }}>
-        <Pressable
+        <TouchableOpacity
           style={[styles.verifyWrapper, styles.profileWrapperSpaceBlock]}
-          onPress={() => { }}
+          disabled={isVerified || verifying}
+          onPress={doVerify}
         >
-          <Text style={[styles.verify, styles.verifyTypo]}>Verify</Text>
-        </Pressable>
-        <Pressable
+          <Text style={[styles.verify, styles.verifyTypo]}>{isVerified ? "Verified" : verifying ? "Verifying..." : "Verify"}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
           onPress={() => {
             let i = getRandomNumber();
             navigation.push(`ChatView${tab}`, {
-              tab, item: {
-                id: i,
-                name: `Name${i}`,
-                username: `@username${i}`,
-                image: IMG_PROFILE[getRandomNumber(0, 4)],
-                nft: `Name of NFT${i}`,
-                price: getRandomNumber(0.01, 1.00),
-              }
+              tab, userInfo
             })
           }}
         >
           <Text style={[styles.editProfile, styles.editProfileTypo]}>
             Send message
           </Text>
-        </Pressable>
-        <View
+        </TouchableOpacity>
+        <TouchableOpacity
           style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock]}
         >
           <Text style={[styles.editProfile, styles.editProfileTypo]}>
             Share profile
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
 
       <View style={{
@@ -85,25 +160,30 @@ const OtherProfileDetail = ({ tab }) => {
           ]}
         >
           <Text style={styles.walletAddress}>{`Wallet Address: `}</Text>
-          <Text style={styles.timeTypo}>0xe...dhv</Text>
-        </Text>
-        <Text
-          style={[
-            styles.walletAddress0xedhvContainer,
-          ]}
-        >
-          <Text style={styles.walletAddress}>{`Verified by: `}</Text>
-          <Image
-            style={styles.groupIcon}
-            contentFit="cover"
-            source={require("../assets/photo-duo.png")}
-          />
-          <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-            Sam, Polymath, and 12 others
-          </Text>
+          <Text style={styles.timeTypo}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
         </Text>
 
-        <Pressable
+        <TouchableOpacity
+          onPress={() => navigation.push(`Verified${tab}`, { tab })}
+        >
+          <Text
+            style={[
+              styles.walletAddress0xedhvContainer,
+            ]}
+          >
+            <Text style={styles.walletAddress}>{`Verified by: `}</Text>
+            <Image
+              style={styles.groupIcon}
+              contentFit="cover"
+              source={require("../assets/photo-duo.png")}
+            />
+            <Text style={[styles.samPolymathAnd, styles.textTypo]}>
+              {userVerifiedByNames}
+            </Text>
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           onPress={() => navigation.push(`Verified${tab}`, { tab })}
         >
           <Text
@@ -118,10 +198,10 @@ const OtherProfileDetail = ({ tab }) => {
               source={require("../assets/photo-duo.png")}
             />
             <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-              Sam, Polymath, and 12 others
+              {userVerifiedNames}
             </Text>
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <View style={[styles.frameParent8, styles.topNavBg]}>
@@ -390,7 +470,8 @@ const styles = StyleSheet.create({
   myProfileItem: {
     width: 90,
     height: 90,
-    margin: 10
+    margin: 10,
+    borderRadius: 50
   },
   editProfile: {
     fontWeight: "500",

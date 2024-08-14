@@ -11,13 +11,13 @@ const UserSearchSection = ({ isDetail, item, onPress }) => {
         <Image
           style={[styles.frameChild, styles.frameChildLayout]}
           contentFit="cover"
-          source={item.image}
+          source={item.profile_image}
         />
         <View style={styles.frameGroup}>
           <View style={styles.nameParentFlexBox}>
             <Text style={[styles.name, styles.nameTypo]}>{item.name}</Text>
             <Text style={[styles.endlessmeee, styles.nameTypo]}>
-              {item.username}
+              {item.screen_name}
             </Text>
           </View>
           <View style={[styles.nameOfNftParent, styles.nameParentFlexBox]}>
