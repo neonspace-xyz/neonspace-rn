@@ -1,16 +1,62 @@
-import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
+import { StyleSheet, Text, View, Pressable, StatusBar, Switch, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
 import ProfileDetail from "../components/ProfileDetail";
+import { useAuth } from "../components/AuthProvider";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const EditProfile = () => {
   const navigation = useNavigation();
-  
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [bio, setBio] = useState();
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  const {api} = useAuth();
+
+  const getUser = async () => {
+    try {
+      let _usersession = await AsyncStorage.getItem("usersession");
+      if (_usersession == null) {
+        await logout(navigation);
+        return;
+      }
+      _usersession = JSON.parse(_usersession);
+      let url = `/user/getUser?userId=${_usersession.user_info.user_id}`;
+      let resp = await api.get(url);
+      setIsEnabled(resp.data.hide_wallet)
+      setBio(resp.data.bio)
+    } catch (err) {
+      console.log("ERR : ", err)
+      if (err.isSessionExpired) {
+        await logout(navigation);
+      } else {
+      }
+    }
+  }
+
+  useEffect(() => {
+    console.log("RUN GET USER")
+    getUser();
+  }, [])
+
+  const editProfile = async() => {
+    console.log("Edit profile")
+    let url = `/user/editProfile`;
+    let body = {
+      "hide_wallet": isEnabled,
+      "bio": bio
+    }
+
+    let resp = await api.post(url, body);
+    console.log(resp)
+    if(resp)
+      navigation.goBack();
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -28,7 +74,7 @@ const EditProfile = () => {
             }>Edit Profile</Text>
             
           <Pressable
-            onPress={() => navigation.goBack()}>
+            onPress={() => editProfile()}>
             <Text style={[styles.save1, styles.save1Typo]}>Save</Text>
           </Pressable>
       </View> 
@@ -59,21 +105,38 @@ backgroundColor: Color.colorGray_100,
             Show my wallet address
           </Text>
           <View style={styles.groupLayout}>
-            <View style={[styles.groupChild, styles.groupLayout]} />
-            <Image
+            {/* <Image
               style={[styles.groupItem, styles.wrapperLayout]}
               contentFit="cover"
               source={require("../assets/switch.png")}
+            /> */}
+
+            <Switch
+              trackColor={{false: '#767577', true: '#81b0ff'}}
+              style={{transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]}}
+              thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={isEnabled}
             />
           </View>
         </View>
         <View style={styles.frameItem} />
         <View style={styles.bioParent}>
           <Text style={[styles.showMyWallet, styles.theBioTextTypo]}>Bio</Text>
-          <Text style={[styles.theBioText, styles.theBioTextTypo]}>
-            The bio text will be here. The maximum number of lines is 2 and that
-            means max. characters is 100.
-          </Text>
+
+          <TextInput
+            style={[styles.bioInput]}
+            multiline={true}
+            numberOfLines={4}
+            placeholder="Type your text here..."
+            value={bio}
+            onChangeText={(text) => setBio(text)}
+            textAlignVertical="top"
+          />
+          {/* <Text style={[styles.theBioText, styles.theBioTextTypo]}>
+            {userData?.bio}
+          </Text> */}
         </View>
       </View>
       
@@ -110,6 +173,14 @@ const styles = StyleSheet.create({
     width: 390,
     left: 0,
     position: "absolute",
+  },
+  bioInput:{
+    // borderWidth:2,
+    // borderColor:"red",
+    alignItems:"flex-start",
+    width:"90%",
+    color: Color.darkInk,
+    fontFamily: FontFamily.clashGrotesk,
   },
   iconLayout1: {
     maxHeight: "100%",
@@ -367,6 +438,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     flexDirection: "row",
     justifyContent: "space-between",
+    gap:20
   },
   editMyProfile: {
     backgroundColor: Color.colorGray_200,

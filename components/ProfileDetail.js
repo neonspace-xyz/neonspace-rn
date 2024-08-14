@@ -4,7 +4,7 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
-import { processUserVerifiedList, shortenAddress } from "../Utils";
+import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
 
 const ProfileDetail = ({ tab, userInfo }) => {
   const navigation = useNavigation();
@@ -27,7 +27,6 @@ const ProfileDetail = ({ tab, userInfo }) => {
     }
 
     check();
-
   }, [userInfo])
   return (
     <View style={styles.myProfile}>
