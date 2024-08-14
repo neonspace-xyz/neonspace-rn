@@ -13,10 +13,11 @@ import PostList from "../components/PostList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from "../utils/ApiHandler";
 import UserSearchSection from "../components/UserSearchSection";
+// import { useAuth } from "../components/AuthProvider";
 
 const PostHome = ({ route }) => {
   const { tab } = route?.params;
-
+  // const { api, isAuthenticated } = useAuth();
   const navigation = useNavigation();
   const [usersession, setUsersession] = useState();
   const [searchValue, setSearchValue] = useState('');

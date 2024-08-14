@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import StackNavigator from "./StackNavigator";
 import { Color } from "./GlobalStyles";
 import { useEffect } from "react";
+import { AuthProvider } from "./components/AuthProvider";
 
 export default function App() {
   const [fontsLoaded, error] = useFonts({
@@ -10,7 +11,6 @@ export default function App() {
     'Satoshi': require('./assets/fonts/Satoshi.ttf'),
     // 'SF Pro Text': require('./assets/fonts/SfProText.OTF')
   });
-
   useEffect(() => {
     if (error) throw error;
 

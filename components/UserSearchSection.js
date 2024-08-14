@@ -35,7 +35,7 @@ const UserSearchSection = ({ isDetail, item, onPress }) => {
           </View>
         </View>
       </View>
-    </Pressable >
+    </Pressable>
   );
 };
 
