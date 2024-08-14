@@ -13,7 +13,7 @@ const ChatSectionBubbleSelf = ({ item }) => {
       colors={[Color.gradientLeft, Color.gradientRight]}
     >
       <Text style={styles.textMessage}>
-        {item?.message ? item?.message : "Description here, this is a description and example of the text that may appear here, no need to truncate, the full text will be displayed over here. Description here, this is a description and example of the text that may appear here, truncate after the second line for example."}
+        {item?.message?.content ? item?.message?.content : "Description here, this is a description and example of the text that may appear here, no need to truncate, the full text will be displayed over here. Description here, this is a description and example of the text that may appear here, truncate after the second line for example."}
       </Text>
       <Text style={styles.textTime}>
         {item?.timestamp ? moment(item?.timestamp).format('hh:mm a') : moment(new Date()).format('hh:mm a')}

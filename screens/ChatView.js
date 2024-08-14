@@ -4,8 +4,10 @@ import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/core'
 import ChatSectionBubble from '../components/ChatSectionBubble';
 import ChatSectionBubbleSelf from '../components/ChatSectionBubbleSelf';
 import { Border, Color, FontFamily, FontSize, StyleHeaderImg, StyleHeaderTitle, StyleHeaderView } from '../GlobalStyles';
-import { getRandomNumber, getRandomTimestamp } from '../Utils';
+import { getRandomNumber, getRandomTimestamp, logout } from '../Utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { CHAT_OFFSET, WS_URL } from '../Constant';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatDetail = () => {
   const route = useRoute();
@@ -13,14 +15,20 @@ const ChatDetail = () => {
 
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
-
-  const [message, setMessage] = useState('');
+  const [usersession, setUsersession] = useState();
+  const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [loadingSend, setLoadingSend] = useState(false);
+  const [socket, setSocket] = useState(null);
+
   const numberOfLines = Platform.select({
     ios: 4, // Set numberOfLines to 4 on iOS
-    android: message ? Math.min(4, message.split('\n').length) : 1, // Let it be undefined on Android to allow multiline
+    android: input ? Math.min(4, input.split('\n').length) : 1, // Let it be undefined on Android to allow multiline
   });
+
+  useEffect(() => {
+    getSession();
+  }, []);
 
   useEffect(() => {
     const backAction = () => {
@@ -37,10 +45,8 @@ const ChatDetail = () => {
   }, []);
 
   useEffect(() => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
-    }
-  }, [messages]);
+    getChatHistory();
+  }, [usersession])
 
   useFocusEffect(
     React.useCallback(() => {
@@ -48,26 +54,77 @@ const ChatDetail = () => {
     }, [])
   );
 
+  useEffect(() => {
+    if (!usersession?.jwt_token) return;
+    // console.log("to", userInfo.user_id);
+    // console.log("token", usersession.jwt_token);
+    // console.log("offset", CHAT_OFFSET);
+    const ws = new WebSocket(`${WS_URL}/chat/start?to=${userInfo?.user_id}&token=${usersession.jwt_token}&offset=${CHAT_OFFSET}`);
+
+    ws.onopen = () => {
+      console.log('Connected to WebSocket server');
+    };
+
+    ws.onmessage = (e) => {
+      let newMessage = JSON.parse(e.data);
+      let _message = JSON.parse(newMessage.message);
+      newMessage['message'] = _message;
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    };
+
+    ws.onclose = () => {
+      console.log('Disconnected from WebSocket server');
+    };
+
+    setSocket(ws);
+
+    return () => ws.close();
+  }, [usersession]);
+
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  }, [messages]);
+
+  const getSession = async () => {
+    let _usersession = await AsyncStorage.getItem("usersession");
+    if (_usersession == null) {
+      await logout(navigation);
+      return;
+    }
+    _usersession = JSON.parse(_usersession);
+    setUsersession(_usersession);
+  }
+
   const getChatHistory = async () => {
-    let roles = ["user", "ai"];
+    if (!usersession) return;
+
     let data = [];
-    for (let i = 1; i < getRandomNumber(20, 40); i++) {
+    for (let i = 1; i < getRandomNumber(1, 3); i++) {
       data.push({
-        id: i,
-        role: roles[getRandomNumber(0, 1)],
-        message: `recent text message view here if the text is too${i}`,
-        time: getRandomTimestamp(2)
-      });
+        "from": i % 2 === 0 ? userInfo.user_id : usersession.user_info.user_id,
+        "to": i % 2 === 0 ? usersession.user_info.user_id : userInfo.user_id,
+        "message": {
+          "content": `recent text message view here if the text is too${i}`,
+          "timestamp": "2024-08-14T12: 11: 00.338Z"
+        },
+        "timestamp": getRandomTimestamp(2)
+      })
     }
     setMessages(data);
   }
 
   const sendMessage = async () => {
-    if (message == '') {
+    if (input == '') {
       return;
     }
-    const newMessage = message;
-    setMessage('');
+    const newMessage = input;
+    if (socket && input.trim()) {
+      const message = { content: input, timestamp: new Date() };
+      socket.send(JSON.stringify(message));
+      setInput('');
+    }
   }
 
   return (
@@ -109,7 +166,7 @@ const ChatDetail = () => {
           onLayout={() => scrollViewRef.current.scrollToEnd({ animated: true })}
         >
           {messages?.length > 0 ? messages?.map((item, index) => {
-            if (item?.role == 'user') {
+            if (item?.to == userInfo?.user_id) {
               return (<ChatSectionBubbleSelf key={index} item={item} />)
             }
             else {
@@ -140,18 +197,18 @@ const ChatDetail = () => {
               style={styles.chatInput}
               placeholder="Type here..."
               placeholderTextColor={Color.colorGray_400}
-              value={message}
-              onChangeText={(text) => setMessage(text)}
+              value={input}
+              onChangeText={(text) => setInput(text)}
               multiline={true}
               numberOfLines={numberOfLines}
-              scrollEnabled={message.split('\n').length > 4}
+              scrollEnabled={input.split('\n').length > 4}
             />
-            {/* <Pressable onPress={sendMessage}>
+            <Pressable onPress={sendMessage}>
               <Image
                 style={[styles.btnSendChat, loadingSend && styles.buttonDisable]}
                 source={require("../assets/ic_back_white.png")}
               />
-            </Pressable> */}
+            </Pressable>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -231,8 +288,7 @@ const styles = StyleSheet.create({
     marginBottom: Platform.OS == "ios" ? 40 : 0,
   },
   chatInput: {
-    width: "100%",
-    // minHeight: 30,
+    width: "90%",
     maxHeight: 80,
     padding: 8,
     borderRadius: Border.br_9xs,

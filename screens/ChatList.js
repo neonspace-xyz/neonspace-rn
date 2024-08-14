@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, ActivityIndicator, StatusBar } from "react-native";
+import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, ActivityIndicator, StatusBar, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +11,7 @@ import PostCreate from "../components/PostCreate";
 import { IMG_PROFILE } from "../Constant";
 import ChatSection from "../components/ChatSection";
 import UserSearchSection from "../components/UserSearchSection";
+import api from "../utils/ApiHandler";
 
 const ChatList = () => {
   const route = useRoute();
@@ -65,18 +66,28 @@ const ChatList = () => {
   };
 
   const fetchSearchItems = async () => {
+    if (searchValue == '') return;
     let data = [];
-    for (let i = 1; i < getRandomNumber(1, 20); i++) {
-      data.push({
-        user_id: i,
-        name: `Name${i}`,
-        screen_name: `@username${i}`,
-        profile_image: IMG_PROFILE[getRandomNumber(0, 4)],
-        nft: `Name of NFT${i}`,
-        price: getRandomNumber(0.01, 1.00),
-      });
+    try {
+      let url = `/twitter/getUser`;
+      let body = {
+        "screen_name": searchValue
+      };
+      let resp = await api.post(url, body);
+      if (resp.data) {
+        let user = resp.data;
+        url = `/user/getUser?userId=${user.id}`;
+        resp = await api.get(url);
+        if (resp.data) {
+          data.push(resp.data);
+        }
+      }
+    } catch (error) {
+      Alert.alert("User not found");
+      console.error("fetchSearchItems", error)
+    } finally {
+      setSearchItems(data);
     }
-    setSearchItems(data);
   };
 
   const onRefresh = async () => {
@@ -118,39 +129,45 @@ const ChatList = () => {
           value={searchValue}
           onChangeText={(text) => {
             setSearchValue(text);
-            fetchSearchItems();
           }}
           onFocus={() => {
             setSearchItems([]);
             setIsShowSearch(!isShowSearch);
           }}
+          onSubmitEditing={fetchSearchItems}
         />
       </View>
       <View style={[styles.containerListSearch, !isShowSearch && { display: "none" }]}>
         <FlatList
-          style={styles.flat}
+          style={[styles.flat, !isShowSearch && { display: "none" }]}
           data={searchItems}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              title="Pull to refresh"
-              titleColor={Color.darkInk}
-              colors={[Color.darkInk]}
-              tintColor={Color.darkInk}
-            />
-          }
-          onEndReached={onLoadMore}
-          onEndReachedThreshold={0.1}
-          ListFooterComponent={() =>
-            loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
-          }
+          // refreshControl={
+          //   <RefreshControl
+          //     refreshing={refreshing}
+          //     onRefresh={onRefresh}
+          //     title="Pull to refresh"
+          //     titleColor={Color.darkInk}
+          //     colors={[Color.darkInk]}
+          //     tintColor={Color.darkInk}
+          //   />
+          // }
+          // onEndReached={onLoadMore}
+          // onEndReachedThreshold={0.1}
+          // ListFooterComponent={() =>
+          //   loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
+          // }
           renderItem={({ item }) => {
             return (
               <UserSearchSection
                 item={item}
                 onPress={() => handleDetail(item)}
               />
+              // <PostSection
+              // tab={tab}
+              //   isDetail={false}
+              //   item={item}
+              //   onPress={() => handleDetail(item)}
+              // />
             )
           }}
         />

@@ -1,4 +1,5 @@
 export const API_URL = "https://dev-api.neonspace.xyz";
+export const WS_URL = "wss://dev-api.neonspace.xyz";
 
 export const TWITTER_OAUTH = "https://api.twitter.com/oauth/authorize?oauth_token="
 
@@ -7,6 +8,8 @@ export const OAUTH_TOKEN = "0uLCZwAAAAABtNzEAAABkUB2AB4";
 export const OAUTH_VERIFER = "tUtRt5jagT25Cw9olTC6P0ISXuZhxk2B";
 
 export const POST_MAX_CHAR = 501;
+
+export const CHAT_OFFSET = 0;
 
 export const Component_Max_Width = 400;
 

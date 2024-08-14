@@ -11,8 +11,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OtherProfileDetail = ({ tab, userInfo }) => {
   const navigation = useNavigation();
+  const [userInfo2, setUserInfo2] = useState(userInfo);
   const [isVerified, setIsVerified] = useState(false);
-  const [verifying, setVerifying] = useState(false);
+  const [loadingVerify, setLoadingVerify] = useState(false);
   const [userVerifiedByImages, setUserVerifiedByImages] = useState([]);
   const [userVerifiedByNames, setUserVerifiedByNames] = useState('');
   const [userVerifiedImages, setUserVerifiedImages] = useState([]);
@@ -24,22 +25,22 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
 
   useEffect(() => {
     const check = async () => {
-      if (!userInfo) return;
+      if (!userInfo2) return;
 
-      let { names: names1, images: images1 } = processUserVerifiedList(userInfo?.verified_by);
+      let { names: names1, images: images1 } = processUserVerifiedList(userInfo2?.verified_by);
       setUserVerifiedByNames(names1);
       setUserVerifiedByImages(images1);
 
-      let { names: names2, images: images2 } = processUserVerifiedList(userInfo?.verified);
+      let { names: names2, images: images2 } = processUserVerifiedList(userInfo2?.verified);
       setUserVerifiedNames(names2);
       setUserVerifiedImages(images2);
 
       let usersession = await AsyncStorage.getItem("usersession");
       usersession = JSON.parse(usersession);
 
-      if (usersession?.user_info.verified_by?.length > 0) {
-        for (const item of usersession?.user_info.verified_by) {
-          if (userInfo.user_id == item.user_id) {
+      if (userInfo2.verified?.length > 0) {
+        for (const item of userInfo2.verified) {
+          if (usersession.user_info.user_id == item.user_id) {
             setIsVerified(true);
             break;
           }
@@ -49,40 +50,43 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
 
     check();
 
-  }, [userInfo])
+  }, [userInfo2])
 
   const doRefreshUserInfo = async () => {
     try {
-      let url = `/user/getUser?userId=${userInfo.user_id}`;
+      let url = `/user/getUser?userId=${userInfo2.user_id}`;
       let resp = await api.get(url);
       let data = resp.data;
-      userInfo = data;
+      setUserInfo2(data);
     } catch (error) {
       console.error("doRefreshUserInfo", error);
     }
   }
 
   const doVerify = async () => {
-    if (!userInfo?.user_id) {
+    if (!userInfo2?.user_id) {
       Alert.alert("User ID undefined");
       return;
     }
     try {
-      setVerifying(true);
+      setLoadingVerify(true);
       let body = {
-        "user_id": userInfo.user_id,
-        "verify": true
+        "user_id": userInfo2.user_id,
+        "verify": !isVerified
       }
       let resp = await api.post('/user/updateVerification', body)
+      // console.log("doVerify-body", body);
+      // console.log("doVerify-data", resp.data);
       Alert.alert("Verify Success");
       await doRefreshUserInfo();
+      setIsVerified(!isVerified);
 
       // refresh verified data on usersession 
     } catch (error) {
       Alert.alert("Verify failed", error)
       console.error("doVerify", error);
     } finally {
-      setVerifying(false);
+      setLoadingVerify(false);
     }
   }
   return (
@@ -91,11 +95,11 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
         flex: 1, flexDirection: "row", maxHeight: 120,
 
       }}>
-        {userInfo?.profile_image ? (
+        {userInfo2?.profile_image ? (
           <Image
             style={[styles.myProfileItem]}
             contentFit="cover"
-            source={userInfo.profile_image}
+            source={userInfo2.profile_image}
           />
         ) : (
           <Image
@@ -106,13 +110,13 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
         )}
         <View style={styles.frameParent10}>
           <View style={styles.nameParent4}>
-            <Text style={[styles.name6, styles.timeTypo]}>{userInfo?.name ? userInfo.name : "Name"}</Text>
+            <Text style={[styles.name6, styles.timeTypo]}>{userInfo2?.name ? userInfo2.name : "Name"}</Text>
             <Text style={[styles.endlessmeee6, styles.nameTypo]}>
-              {userInfo?.screen_name ? `@${userInfo.screen_name}` : "@endlessmeee"}
+              {userInfo2?.screen_name ? `@${userInfo2.screen_name}` : "@endlessmeee"}
             </Text>
           </View>
           <Text style={[styles.theBioText, styles.textTypo]}>
-            {userInfo?.bio ? truncateString(userInfo.bio, 100) : "The bio text will be here. The maximum number of lines is 2 and that means max. characters is 100."}
+            {userInfo2?.bio ? truncateString(userInfo2.bio, 100) : "The bio text will be here. The maximum number of lines is 2 and that means max. characters is 100."}
           </Text>
         </View>
       </View>
@@ -122,18 +126,17 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
       }}>
         <TouchableOpacity
           style={[styles.verifyWrapper, styles.profileWrapperSpaceBlock]}
-          disabled={isVerified || verifying}
+          disabled={loadingVerify}
           onPress={doVerify}
         >
-          <Text style={[styles.verify, styles.verifyTypo]}>{isVerified ? "Verified" : verifying ? "Verifying..." : "Verify"}</Text>
+          <Text style={[styles.verify, styles.verifyTypo]}>
+            {loadingVerify ? isVerified ? "Undo..." : "Verifying..." : isVerified ? "Undo Verification" : "Verify"}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
           onPress={() => {
-            let i = getRandomNumber();
-            navigation.push(`ChatView${tab}`, {
-              tab, userInfo
-            })
+            navigation.push(`ChatView${tab}`, { tab, userInfo: userInfo2 })
           }}
         >
           <Text style={[styles.editProfile, styles.editProfileTypo]}>
@@ -160,7 +163,7 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
           ]}
         >
           <Text style={styles.walletAddress}>{`Wallet Address: `}</Text>
-          <Text style={styles.timeTypo}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
+          <Text style={styles.timeTypo}>{userInfo2?.wallet_address ? shortenAddress(userInfo2?.wallet_address) : " 0x00"}</Text>
         </Text>
 
         <TouchableOpacity
@@ -751,6 +754,7 @@ const styles = StyleSheet.create({
     // overflow: "hidden",
     width: "100%",
     flex: 1,
+    paddingHorizontal: 12,
     // alignItems: "flex-start",
     // justifyContent:"flex-end",
     backgroundColor: Color.colorGray_200,

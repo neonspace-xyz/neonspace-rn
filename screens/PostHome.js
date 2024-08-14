@@ -149,7 +149,6 @@ const PostHome = ({ route }) => {
           value={searchValue}
           onChangeText={(text) => {
             setSearchValue(text);
-            // fetchSearchItems();
           }}
           onFocus={() => {
             if (!isShowSearch) {

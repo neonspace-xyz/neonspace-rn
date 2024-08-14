@@ -647,6 +647,7 @@ const styles = StyleSheet.create({
     // overflow: "hidden",
     width: "100%",
     flex: 1,
+    paddingHorizontal: 12,
     // alignItems: "flex-start",
     // justifyContent:"flex-end",
     backgroundColor: Color.colorGray_200,
