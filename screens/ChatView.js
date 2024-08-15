@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Image, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View, TextInput, Platform, BackHandler } from 'react-native'
+import { Image, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View, TextInput, Platform, BackHandler, Alert } from 'react-native'
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/core';
 import ChatSectionBubble from '../components/ChatSectionBubble';
 import ChatSectionBubbleSelf from '../components/ChatSectionBubbleSelf';
@@ -44,15 +44,15 @@ const ChatDetail = () => {
     return () => backHandler.remove();
   }, []);
 
-  useEffect(() => {
-    getChatHistory();
-  }, [usersession])
+  // useEffect(() => {
+  //   getChatHistory();
+  // }, [usersession])
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getChatHistory();
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getChatHistory();
+  //   }, [])
+  // );
 
   useEffect(() => {
     if (!usersession?.jwt_token) return;
@@ -74,6 +74,7 @@ const ChatDetail = () => {
 
     ws.onclose = () => {
       console.log('Disconnected from WebSocket server');
+      // Alert.alert("Disconnected");
     };
 
     setSocket(ws);
@@ -126,6 +127,7 @@ const ChatDetail = () => {
       setInput('');
     }
   }
+  console.log("userInfo", userInfo.to.profile_image)
 
   return (
     <SafeAreaView style={styles.container} keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
@@ -140,13 +142,13 @@ const ChatDetail = () => {
         <Text style={[StyleHeaderTitle]}>
           {userInfo?.name ? userInfo?.name : "Name"}
           {` `}
-          {userInfo?.screen_name ? `@${userInfo?.screen_name}` : "@endlessmee"}
+          {userInfo?.screen_name ? `a@${userInfo?.screen_name}` : "@endlessmee"}
         </Text>
         <Pressable
-          onPress={() => { navigation.push(`OtherProfile${tab}`, { tab, otherUser: true }); }}>
-          {userInfo?.profile_image ? (
+          onPress={() => { navigation.push(`OtherProfile${tab}`, { tab, userInfo: userInfo.to }); }}>
+          {userInfo?.to?.profile_image ? (
             <Image
-              source={userInfo?.profile_image}
+              source={userInfo.to.profile_image}
               style={StyleHeaderImg}
             />
           ) : (
@@ -257,7 +259,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: FontFamily.helvetica,
     fontSize: FontSize.size_sm,
-    color: Color.colorDarkslategray_400,
+    color: Color.darkInk,
     width: 327,
   },
   clickOnTheTypo: {

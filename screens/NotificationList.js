@@ -1,29 +1,28 @@
 import * as React from "react";
-import { Image } from "expo-image";
-import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, ActivityIndicator, StatusBar } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
+import moment from "moment";
+import { Image } from "expo-image";
+import { useNavigation } from "@react-navigation/native";
+import EventSource from 'react-native-event-source';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect, useRoute } from '@react-navigation/core';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/core';
+import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, ActivityIndicator, StatusBar } from "react-native";
+import { API_URL } from "../Constant";
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
-import PostCreate from "../components/PostCreate";
 import NotificationSection from "../components/NotificationSection";
-import moment from "moment";
 
 const NotificationList = ({ route }) => {
   const navigation = useNavigation();
   const { tab } = route.params;
 
-  const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
   const [searchItems, setSearchItems] = useState([]);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [isShowCreate, setIsShowCreate] = useState(false);
   const [isShowSearch, setIsShowSearch] = useState(false);
 
   const textInputRef = useRef(null);
@@ -42,13 +41,28 @@ const NotificationList = ({ route }) => {
     }, [])
   );
 
-  const doPostCreate = () => {
-    setIsShowCreate(true);
-  };
-
   useEffect(() => {
     getItems();
   }, [])
+
+  useEffect(() => {
+    const eventSource = new EventSource(`${API_URL}/event/stream`);
+
+    eventSource.onmessage = (event) => {
+      const newData = JSON.parse(event.data);
+      console.log("newData", newData)
+      // setData((prevData) => [...prevData, newData]);
+    };
+
+    eventSource.onerror = (error) => {
+      console.error('SSE error:', error);
+      eventSource.close(); // Close the connection on error
+    };
+
+    return () => {
+      eventSource.close(); // Clean up the connection when the component unmounts
+    };
+  }, []);
 
   const getItems = async () => {
   };
@@ -94,8 +108,6 @@ const NotificationList = ({ route }) => {
   };
 
   const handleDetail = (item) => {
-    if (isShowCreate) return;
-    navigation.navigate("PostDetail", { item });
   };
 
   return (
@@ -201,10 +213,6 @@ const NotificationList = ({ route }) => {
           }}
         />
       </View>
-      {isShowCreate && (
-        <PostCreate
-          setIsShowCreate={setIsShowCreate} />
-      )}
     </SafeAreaView>
   );
 };

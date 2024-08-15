@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Image } from "expo-image";
 import { Alert, View, TextInput, Modal, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
@@ -177,11 +177,12 @@ const Login = () => {
       />
       <TouchableOpacity
         style={[styles.button]}
+        disabled={loading}
         onPress={doLogin}
       // onPress={() => navigation.replace("Mint")}
       >
         <Text style={[styles.buttonLabel, styles.txtStyle]}>
-          Login with X
+          {loading ? "Loading..." : "Login with X"}
         </Text>
       </TouchableOpacity>
       <Modal
