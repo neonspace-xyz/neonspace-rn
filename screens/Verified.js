@@ -5,12 +5,25 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Padding, Border } from "../GlobalStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import VerifiedList from "../components/VerifiedList";
+import { useAuth } from "../components/AuthProvider";
 
 const Verified = () => {
   const route = useRoute();
-  const { tab, verifiedByParam } = route.params;
+  const { tab, verifiedByParam, userId } = route.params;
   const navigation = useNavigation();
+  const { getOtherUser } = useAuth();
   const [verifiedBy, setVerifiedBy] = React.useState(verifiedByParam);
+
+  const [verifiedData, setVerifiedData] = React.useState([]);
+  const [verifiedByData, setVerifiedByData] = React.useState([]);
+
+  React.useEffect(() => {
+    getOtherUser(userId).then((user) => {
+      console.log("user : ", user)
+      setVerifiedData(user.verified);
+      setVerifiedByData(user.verified_by);
+    })
+  },[])
 
   return (
     <SafeAreaView style={styles.myProfileVerifiedBy}>
@@ -53,10 +66,12 @@ const Verified = () => {
 
       {verifiedBy ? 
       <VerifiedList
-        tab={tab} />
+        tab={tab}
+        data={verifiedByData} />
         :
         <VerifiedList
-        tab={tab} />
+        tab={tab}
+        data={verifiedData} />
       }  
     </SafeAreaView>
   )

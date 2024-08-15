@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { API_URL } from '../Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { logout } from '../Utils';
 
 const AuthContext = createContext();
 
@@ -59,8 +60,39 @@ export const AuthProvider = ({ children }) => {
     }
   );
 
+  const getSession = async () => {
+    let _usersession = await AsyncStorage.getItem("usersession");
+    if (_usersession == null) {
+      await logout(navigation);
+      return;
+    }
+    _usersession = JSON.parse(_usersession);
+    return _usersession
+  }
+
+  const getUser = async () => {
+    try {
+      let _usersession = await getSession();
+      let url = `/user/getUser?userId=${_usersession.user_info.user_id}`;
+      let resp = await api.get(url);
+      return resp.data
+    } catch (err) {
+    }
+    return null;
+  }
+
+  const getOtherUser = async (id) => {
+    try {
+      let url = `/user/getUser?userId=${id}`;
+      let resp = await api.get(url);
+      return resp.data
+    } catch (err) {
+    }
+    return null;
+  }
+
   return (
-    <AuthContext.Provider value={{ api, isAuthenticated }}>
+    <AuthContext.Provider value={{ api, isAuthenticated, getUser, getOtherUser, getSession }}>
       {children}
     </AuthContext.Provider>
   );

@@ -167,7 +167,7 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
         </Text>
 
         <TouchableOpacity
-          onPress={() => navigation.push(`Verified${tab}`, { tab })}
+          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, userId:userInfo2.user_id })}
         >
           <Text
             style={[
@@ -187,7 +187,7 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.push(`Verified${tab}`, { tab })}
+          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, userId:userInfo2.user_id })}
         >
           <Text
             style={[

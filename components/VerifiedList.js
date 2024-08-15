@@ -13,7 +13,7 @@ import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
 import VerifiedListSection from "./VerifiedListSection";
 
-const VerifiedList = ({ tab }) => {
+const VerifiedList = ({ tab, data }) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState([]);
@@ -90,7 +90,7 @@ const VerifiedList = ({ tab }) => {
   return (
     <View style={[styles.containerList]}>
       <FlatList
-        data={items}
+        data={data}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

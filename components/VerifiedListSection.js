@@ -8,21 +8,21 @@ const VerifiedListSection = ({ tab, item }) => {
   const navigation = useNavigation();
 
   return (
-    <Pressable onPress={() => { navigation.push(`OtherProfile${tab}`, { tab }); }}>
+    <Pressable onPress={() => { navigation.push(`OtherProfile${tab}`, { tab, id:item.user_id }); }}>
       <View index={item?.id} style={[styles.frameParent]}>
         <Image
           style={styles.frameChild}
           contentFit="cover"
-          source={item.image}
+          source={item.profile_image}
         />
         <View style={styles.frameGroup}>
           <View style={[styles.nameParent, styles.topNavFlexBox]}>
             <Text style={[styles.name, styles.nameTypo]}>{item.name}</Text>
             <Text style={[styles.endlessmeee, styles.nameTypo]}>
-              {item.username}
+              @{item.screen_name}
             </Text>
           </View>
-          <Text style={[styles.bioHere, styles.nameTypo]}>{item.bio}</Text>
+          <Text style={[styles.bioHere, styles.nameTypo]}>{item.name}</Text>
         </View>
       </View>
     </Pressable>

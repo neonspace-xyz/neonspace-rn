@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
@@ -85,8 +85,8 @@ const ProfileDetail = ({ tab, userInfo }) => {
         height: "100%",
         flex: 1, padding: 10, gap: 8
       }}>
-      <Pressable
-          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true })}
+      <TouchableOpacity
+          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, userId:userInfo.user_id })}
         >
         <Text
           style={[
@@ -111,9 +111,9 @@ const ProfileDetail = ({ tab, userInfo }) => {
             {userVerifiedByNames}
           </Text>
         </Text>
-      </Pressable>
-        <Pressable
-          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false })}
+      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, userId:userInfo.user_id })}
         >
           <Text
             style={[
@@ -130,7 +130,7 @@ const ProfileDetail = ({ tab, userInfo }) => {
               {userVerifiedNames}
             </Text>
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <View style={[styles.frameParent8, styles.topNavBg]}>
