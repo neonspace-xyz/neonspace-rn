@@ -8,9 +8,9 @@ import VerifiedList from "../components/VerifiedList";
 
 const Verified = () => {
   const route = useRoute();
-  const { tab } = route.params;
+  const { tab, verifiedByParam } = route.params;
   const navigation = useNavigation();
-  const [verifiedBy, setVerifiedBy] = React.useState(false);
+  const [verifiedBy, setVerifiedBy] = React.useState(verifiedByParam);
 
   return (
     <SafeAreaView style={styles.myProfileVerifiedBy}>
@@ -31,22 +31,33 @@ const Verified = () => {
 
       <View style={[styles.frameParent8, styles.topNavBg]}>
         <Pressable
-          style={styles.verifiedWrapperFlexBox}
-          onPress={() => {}}
+          style={[!verifiedBy ? styles.tabSelected: "", styles.verifiedWrapperFlexBox]}
+          onPress={() => {
+            setVerifiedBy(false)
+          }}
         >
           <Text style={[styles.youVerified, styles.bioExampleTypo]}>
             You verified
           </Text>
         </Pressable>
-        <View style={[styles.verifiedByWrapper, styles.verifiedWrapperFlexBox]}>
+        <Pressable 
+        onPress={() => {
+          setVerifiedBy(true)
+        }}
+        style={[verifiedBy ? styles.tabSelected: "", styles.verifiedWrapperFlexBox]}>
           <Text style={[styles.youVerified, styles.bioExampleTypo]}>
             Verified by
           </Text>
-        </View>
+        </Pressable>
       </View>
 
+      {verifiedBy ? 
       <VerifiedList
         tab={tab} />
+        :
+        <VerifiedList
+        tab={tab} />
+      }  
     </SafeAreaView>
   )
 };
@@ -192,6 +203,12 @@ const styles = StyleSheet.create({
   },
   youVerified: {
     fontWeight: "500",
+  },
+  tabSelected:{
+    borderColor: Color.colorDeeppink,
+    borderBottomWidth: 2,
+    borderStyle: "solid",
+
   },
   verifiedByWrapper: {
     borderColor: Color.colorDeeppink,

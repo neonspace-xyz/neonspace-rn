@@ -85,6 +85,9 @@ const ProfileDetail = ({ tab, userInfo }) => {
         height: "100%",
         flex: 1, padding: 10, gap: 8
       }}>
+      <Pressable
+          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true })}
+        >
         <Text
           style={[
             styles.walletAddress0xedhvContainer,
@@ -108,9 +111,9 @@ const ProfileDetail = ({ tab, userInfo }) => {
             {userVerifiedByNames}
           </Text>
         </Text>
-
+      </Pressable>
         <Pressable
-          onPress={() => navigation.push(`Verified${tab}`, { tab })}
+          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false })}
         >
           <Text
             style={[
