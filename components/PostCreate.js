@@ -3,9 +3,10 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TextInput, Platform, KeyboardAvoidingView, Alert, TouchableOpacity } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
 import { API_URL, Component_Max_Width, POST_MAX_CHAR } from "../Constant";
-import axios from "axios";
+import { useAuth } from "./AuthProvider";
 
 const PostCreate = ({ usersession, setIsShowCreate }) => {
+  const { api } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const numberOfLines = Platform.select({
@@ -24,24 +25,11 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
       if (!usersession) return;
       setLoading(true);
 
-      let token = usersession.jwt_token;
-      let userInfo = usersession.user_info;
       let url = API_URL + `/user/createPost`;
       let body = {
         "post": message
       }
-      const resp = await axios.post(url, body,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
-      console.log("url", url);
-      console.log("body", body);
-      console.log("resp.data", resp.data);
+      const resp = await api.post(url, body);
       if (resp.status == 200) {
         Alert.alert("Your post has been published successfully!")
         setLoading(false);

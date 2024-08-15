@@ -3,31 +3,47 @@ import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import * as Clipboard from 'expo-clipboard';
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity, Share } from "react-native";
-import DownloadHelper from "../utils/DownloadHelper";
-import api from "../utils/ApiHandler";
 import { Component_Max_Width } from "../Constant";
 import { logout, shortenAddress } from "../Utils";
+import { useAuth } from "../components/AuthProvider";
+import DownloadHelper from "../utils/DownloadHelper";
 import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
 
 const Mint = () => {
+  const { api, getUser } = useAuth();
   const navigation = useNavigation();
+  const [userInfo, setUserInfo] = useState();
   const [totalNft, setTotalNft] = useState(1);
   const [nftInfo, setnftInfo] = useState();
-  const [usersession, setUsersession] = useState();
-  const [mintNftResult, setMintNftResult] = useState();
-  const [userInfo, setUserInfo] = useState();
   const [nft, setNft] = useState();
   const [downloading, setDownloading] = useState(false);
   const [showReceive, setShowReceive] = useState(false);
   const [showAddressCopied, setShowAddressCopied] = useState(false);
   const [showSuccessMint, setShowSuccessMint] = useState(false);
 
-  const getUsersession = async () => {
-    let _usersession = await AsyncStorage.getItem("usersession");
-    setUsersession(JSON.parse(_usersession));
-  }
+  useEffect(() => {
+    getUser().then((data) => {
+      setUserInfo(data);
+      if (data?.owned_nfts?.length > 0) {
+        let ownedNft = data?.owned_nfts[0];
+        if (ownedNft?.token_ids?.length > 0) {
+          setNft(ownedNft.token_ids[0]);
+        }
+      }
+    });
+
+    getNftCurrentMintInfo();
+  }, []);
+
+  useEffect(() => {
+    if (setShowAddressCopied) {
+      const timer = setTimeout(() => {
+        setShowAddressCopied(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAddressCopied]);
 
   const getNftCurrentMintInfo = async () => {
     try {
@@ -44,26 +60,11 @@ const Mint = () => {
     }
   }
 
-  useEffect(() => {
-    getUsersession();
-    getNftCurrentMintInfo();
-  }, [])
-
-  useEffect(() => {
-    if (usersession) {
-      getUser();
-    }
-  }, [mintNftResult, usersession]);
-
   const doMint = async () => {
     try {
-      // setMintNftResult({
-      //   "minter": "0x31796bfbd71cf1c73d6bbf25e5d6ae1f746eccab",
-      //   "nft": "0x063aa9f317f3c90a2c35c516bdb926ad346a07b7",
-      //   "transaction_hash": "0x97c49a5c78484837d7f1e3ab38f4b6c36c07451c15af7edb642e506aa8c5c567"
-      // });
       // setShowSuccessMint(!showSuccessMint);
       // return;
+
       if (!nftInfo) {
         Alert.alert(
           'Mint Failed',
@@ -90,33 +91,6 @@ const Mint = () => {
         await logout(navigation);
       } else {
         console.error("postUserMintNft-error", error)
-      }
-    }
-  }
-
-  const getUser = async () => {
-    try {
-      let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
-      let resp = await api.get(url);
-      let data = resp.data;
-      setUserInfo(data);
-      if (data?.owned_nfts?.length > 0) {
-        let ownedNft = data?.owned_nfts[0];
-        if (ownedNft?.token_ids?.length > 0) {
-          setNft(ownedNft.token_ids[0]);
-        }
-        // else {
-        //   Alert.alert('Error', "User doesn't have any NFT.");
-        // }
-      }
-      // else {
-      //   Alert.alert('Error', "User doesn't have any NFT");
-      // }
-    } catch (err) {
-      if (err.isSessionExpired) {
-        await logout(navigation);
-      } else {
-        console.error("getUser-error", err)
       }
     }
   }
@@ -204,15 +178,6 @@ const Mint = () => {
       Alert.alert(error.message);
     }
   }
-
-  useEffect(() => {
-    if (setShowAddressCopied) {
-      const timer = setTimeout(() => {
-        setShowAddressCopied(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [showAddressCopied])
 
   return (
     <View style={styles.container}>

@@ -1,9 +1,8 @@
 import * as React from "react";
-import { useLayoutEffect } from "react";
 import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StyleSheet, Text, View, Pressable, FlatList } from "react-native";
-import { Color, styleHeaderTitle, styleHeaderBack, styleHeaderBackIcon, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle } from "../GlobalStyles";
+import { Color, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle } from "../GlobalStyles";
 import PostLikeSection from "../components/PostLikeSection";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -11,28 +10,6 @@ const PostLikeList = () => {
   const route = useRoute();
   const { tab, itemLikes } = route.params;
   const navigation = useNavigation();
-
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerTitle: () => (
-  //       <Text style={styleHeaderTitle}>Liked by</Text>
-  //     ),
-  //     headerLeft: () => (
-  //       <View style={styleHeaderBack}>
-  //         <Pressable onPress={() => { navigation.goBack(); }}>
-  //           <Image
-  //             style={styleHeaderBackIcon}
-  //             contentFit="cover"
-  //             source={require("../assets/ic_back_white.png")}
-  //           />
-  //         </Pressable>
-  //       </View>
-  //     ),
-  //     headerStyle: {
-  //       backgroundColor: Color.colorGray_100
-  //     },
-  //   })
-  // }, []);
 
   return (
     <SafeAreaView style={styles.container}>

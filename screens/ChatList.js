@@ -10,9 +10,10 @@ import { getRandomNumber, logout } from "../Utils";
 import PostCreate from "../components/PostCreate";
 import ChatSection from "../components/ChatSection";
 import UserSearchSection from "../components/UserSearchSection";
-import api from "../utils/ApiHandler";
+import { useAuth } from "../components/AuthProvider";
 
 const ChatList = () => {
+  const { api } = useAuth();
   const route = useRoute();
   const { tab } = route.params;
   const navigation = useNavigation();

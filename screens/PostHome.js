@@ -1,23 +1,21 @@
 import * as React from "react";
-import { Image } from "expo-image";
-import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, ActivityIndicator, StatusBar, Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
+import { Image } from "expo-image";
+import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { StyleSheet, View, Pressable, TextInput, FlatList, StatusBar, Alert } from "react-native";
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "../components/PostCreate";
 import { IMG_PROFILE } from "../Constant";
 import PostList from "../components/PostList";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import api from "../utils/ApiHandler";
 import UserSearchSection from "../components/UserSearchSection";
-// import { useAuth } from "../components/AuthProvider";
+import { useAuth } from "../components/AuthProvider";
 
 const PostHome = ({ route }) => {
+  const { api, getSession } = useAuth();
   const { tab } = route?.params;
-  // const { api, isAuthenticated } = useAuth();
   const navigation = useNavigation();
   const [usersession, setUsersession] = useState();
   const [searchValue, setSearchValue] = useState('');
@@ -28,6 +26,12 @@ const PostHome = ({ route }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isShowCreate, setIsShowCreate] = useState(false);
   const [isShowSearch, setIsShowSearch] = useState(false);
+
+  useEffect(() => {
+    getSession().then((data) => {
+      setUsersession(data);
+    });
+  }, []);
 
   const textInputRef = useRef(null);
   const handleBlurTextInput = () => {
@@ -41,20 +45,6 @@ const PostHome = ({ route }) => {
   const doPostCreate = () => {
     setIsShowCreate(true);
   };
-
-  useEffect(() => {
-    getSession();
-  }, []);
-
-  const getSession = async () => {
-    let _usersession = await AsyncStorage.getItem("usersession");
-    if (_usersession == null) {
-      await logout(navigation);
-      return;
-    }
-    _usersession = JSON.parse(_usersession);
-    setUsersession(_usersession);
-  }
 
   const fetchSearchItems = async () => {
     if (searchValue == '') return;

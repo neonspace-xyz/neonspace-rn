@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Image, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View, TextInput, Platform, BackHandler, Alert } from 'react-native'
-import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import ChatSectionBubble from '../components/ChatSectionBubble';
 import ChatSectionBubbleSelf from '../components/ChatSectionBubbleSelf';
 import { Border, Color, FontFamily, FontSize, StyleHeaderImg, StyleHeaderTitle, StyleHeaderView } from '../GlobalStyles';
 import { getRandomNumber, getRandomTimestamp, logout } from '../Utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CHAT_OFFSET, WS_URL } from '../Constant';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../components/AuthProvider';
 
 const ChatDetail = () => {
+  const { getSession } = useAuth();
   const route = useRoute();
   const { tab, userInfo } = route.params;
 
@@ -25,9 +26,11 @@ const ChatDetail = () => {
     ios: 4, // Set numberOfLines to 4 on iOS
     android: input ? Math.min(4, input.split('\n').length) : 1, // Let it be undefined on Android to allow multiline
   });
-
+  
   useEffect(() => {
-    getSession();
+    getSession().then((user) => {
+      setUsersession(user);
+    });
   }, []);
 
   useEffect(() => {
@@ -43,16 +46,6 @@ const ChatDetail = () => {
 
     return () => backHandler.remove();
   }, []);
-
-  // useEffect(() => {
-  //   getChatHistory();
-  // }, [usersession])
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     getChatHistory();
-  //   }, [])
-  // );
 
   useEffect(() => {
     if (!usersession?.jwt_token) return;
@@ -74,7 +67,7 @@ const ChatDetail = () => {
 
     ws.onclose = () => {
       console.log('Disconnected from WebSocket server');
-      // Alert.alert("Disconnected");
+      Alert.alert("Disconnected");
     };
 
     setSocket(ws);
@@ -87,16 +80,6 @@ const ChatDetail = () => {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
   }, [messages]);
-
-  const getSession = async () => {
-    let _usersession = await AsyncStorage.getItem("usersession");
-    if (_usersession == null) {
-      await logout(navigation);
-      return;
-    }
-    _usersession = JSON.parse(_usersession);
-    setUsersession(_usersession);
-  }
 
   const getChatHistory = async () => {
     if (!usersession) return;
@@ -120,7 +103,6 @@ const ChatDetail = () => {
     if (input == '') {
       return;
     }
-    const newMessage = input;
     if (socket && input.trim()) {
       const message = { content: input, timestamp: new Date() };
       socket.send(JSON.stringify(message));

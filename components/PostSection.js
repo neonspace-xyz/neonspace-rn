@@ -2,7 +2,7 @@ import React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
-import { formatPostTimestamp, getFormattedPostTimestamp, getRandomNumber } from "../Utils";
+import { formatPostTimestamp, getFormattedPostTimestamp } from "../Utils";
 import { useNavigation } from "@react-navigation/core";
 
 const PostSection = ({ tab, isDetail, item, onPress }) => {

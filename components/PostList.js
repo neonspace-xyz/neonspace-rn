@@ -7,10 +7,10 @@ import { Color } from "../GlobalStyles";
 import PostSection from "../components/PostSection";
 import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
-import api from "../utils/ApiHandler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "./AuthProvider";
 
 const PostList = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }) => {
+  const { api } = useAuth();
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);

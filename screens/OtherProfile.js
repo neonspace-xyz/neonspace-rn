@@ -1,18 +1,16 @@
 import { React, useEffect, useState } from "react";
 import { StyleSheet, StatusBar } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
 import OtherProfileDetail from "../components/OtherProfileDetail";
 import { useAuth } from "../components/AuthProvider";
-import { getSession } from "../Utils";
 
 const OtherProfile = () => {
   const route = useRoute();
   const { tab, id } = route.params;
-  const navigation = useNavigation();
   const [isShowCreate, setIsShowCreate] = useState(false);
   const [isShowSearch, setIsShowSearch] = useState(false);
   const [userInfo, setUserInfo] = useState();

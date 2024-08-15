@@ -31,8 +31,6 @@ const StackNavigator = () => {
     <NavigationContainer>
       <AuthProvider>
         <Stack.Navigator>
-
-        
         <Stack.Screen
             name="ReferralCode"
             component={ReferralCode}
