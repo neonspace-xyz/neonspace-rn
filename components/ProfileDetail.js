@@ -13,6 +13,14 @@ const ProfileDetail = ({ tab, userInfo }) => {
   const [userVerifiedImages, setUserVerifiedImages] = useState([]);
   const [userVerifiedNames, setUserVerifiedNames] = useState('');
 
+  const CircularImage = ({ source }) => {
+    return (
+      <View style={styles.imageContainer}>
+        <Image source={source} style={styles.image} />
+      </View>
+    );
+  };
+
   useEffect(() => {
     const check = async () => {
       if (!userInfo) return;
@@ -102,17 +110,31 @@ const ProfileDetail = ({ tab, userInfo }) => {
           ]}
         >
           <Text style={styles.walletAddress}>{`Verified by: `}</Text>
-          <Image
-            style={styles.groupIcon}
-            contentFit="cover"
-            source={require("../assets/photo-duo.png")}
-          />
-          <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-            {userVerifiedByNames}
-          </Text>
+
+          <View style={{flexDirection:"row", alignItems:"center"}}>
+
+                {userVerifiedByImages[0] && 
+                  <CircularImage source={userVerifiedByImages[0]}></CircularImage>
+                }
+                {userVerifiedByImages[1] && 
+              <View style={[styles.imageContainer, {
+                // borderColor:'red',
+                // borderWidth:2,
+                position: 'absolute',
+                top: 0,
+                left: 20
+              }]}>
+                <Image source={userVerifiedByImages[1]} style={styles.image} />
+              </View>
+                }
+              <Text style={[styles.samPolymathAnd, styles.textTypo, {marginLeft:15}]}>
+                {userVerifiedByNames}
+              </Text>
+            </View>
         </Text>
       </TouchableOpacity>
         <TouchableOpacity
+         style={{flexDirection:"row"}}
           onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, userId:userInfo.user_id })}
         >
           <Text
@@ -121,14 +143,32 @@ const ProfileDetail = ({ tab, userInfo }) => {
             ]}
           >
             <Text style={styles.walletAddress}>{`Verified: `}</Text>
-            <Image
+
+            <View style={{flexDirection:"row", alignItems:"center"}}>
+
+                {userVerifiedImages[0] && 
+                  <CircularImage source={userVerifiedImages[0]}></CircularImage>
+                }
+                {userVerifiedImages[1] && 
+              <View style={[styles.imageContainer, {
+                // borderColor:'red',
+                // borderWidth:2,
+                position: 'absolute',
+                top: 0,
+                left: 20
+              }]}>
+                <Image source={userVerifiedImages[1]} style={styles.image} />
+              </View>
+                }
+              <Text style={[styles.samPolymathAnd, styles.textTypo, {marginLeft:15}]}>
+                {userVerifiedNames}
+              </Text>
+            </View>
+            {/* <Image
               style={styles.groupIcon}
               contentFit="cover"
               source={require("../assets/photo-duo.png")}
-            />
-            <Text style={[styles.samPolymathAnd, styles.textTypo]}>
-              {userVerifiedNames}
-            </Text>
+            /> */}
           </Text>
         </TouchableOpacity>
       </View>
@@ -689,6 +729,21 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: Color.darkInk,
     fontFamily: FontFamily.clashGrotesk,
+  },
+  imageContainer: {
+    // borderWidth:2,
+    // borderColor:"red",
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    // overflow: 'hidden',
+    marginHorizontal: 10,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 50,
+    resizeMode: 'cover',
   },
 });
 

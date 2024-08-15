@@ -8,27 +8,23 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
 import ProfileDetail from "../components/ProfileDetail";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "../components/AuthProvider";
 
 const MyProfile = ({ route }) => {
   const { tab } = route?.params;
   const navigation = useNavigation();
   const [usersession, setUsersession] = useState();
+  const [userInfo, setUserInfo] = useState();
   const [isShowCreate, setIsShowCreate] = useState(false);
   const [isShowSearch, setIsShowSearch] = useState(false);
 
-  useEffect(() => {
-    getSession();
-  }, []);
+  const {getUser} = useAuth();
 
-  const getSession = async () => {
-    let _usersession = await AsyncStorage.getItem("usersession");
-    if (_usersession == null) {
-      await logout(navigation);
-      return;
-    }
-    _usersession = JSON.parse(_usersession);
-    setUsersession(_usersession);
-  }
+  useEffect(() => {
+    getUser().then((user) => {
+      setUserInfo(user);
+    });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,16 +34,19 @@ const MyProfile = ({ route }) => {
         tab={tab}
         backButton={false} />
 
+      {userInfo &&
+      <>
       <ProfileDetail
         tab={tab}
-        userInfo={usersession?.user_info} />
+        userInfo={userInfo} />
 
       <PostList
         tab={tab}
-        userInfo={usersession?.user_info}
+        userInfo={userInfo}
         isProfile={true}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />
+        </>}
     </SafeAreaView>
   )
 };
