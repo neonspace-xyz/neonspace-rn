@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
   containerListProfile: {
     width: "100%",
-    height: "40%",
+    height: "55%",
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
   },

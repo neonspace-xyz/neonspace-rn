@@ -4,36 +4,45 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
-import { getRandomNumber, processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
-import api from "../utils/ApiHandler";
+import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "./AuthProvider";
 
 const OtherProfileDetail = ({ tab, userInfo }) => {
+  const { api, getUser } = useAuth();
   const navigation = useNavigation();
+  const [user, setUser] = useState();
   const [userInfo2, setUserInfo2] = useState(userInfo);
   const [isVerified, setIsVerified] = useState(false);
   const [loadingVerify, setLoadingVerify] = useState(false);
   const [userVerifiedByImages, setUserVerifiedByImages] = useState([]);
-  const [userVerifiedByNames, setUserVerifiedByNames] = useState('');
+  const [userVerifiedByNames, setUserVerifiedByNames] = useState('-');
   const [userVerifiedImages, setUserVerifiedImages] = useState([]);
-  const [userVerifiedNames, setUserVerifiedNames] = useState('');
+  const [userVerifiedNames, setUserVerifiedNames] = useState('-');
 
   useEffect(() => {
     doRefreshUserInfo();
+    getUser().then((data) => {
+      setUser(data);
+    })
   }, [])
 
   useEffect(() => {
     const check = async () => {
       if (!userInfo2) return;
 
-      let { names: names1, images: images1 } = processUserVerifiedList(userInfo2?.verified_by);
-      setUserVerifiedByNames(names1);
-      setUserVerifiedByImages(images1);
+      if (userInfo2?.verified_by) {
+        let { names: names1, images: images1 } = processUserVerifiedList(userInfo2?.verified_by);
+        setUserVerifiedByNames(names1);
+        setUserVerifiedByImages(images1);
+      }
 
-      let { names: names2, images: images2 } = processUserVerifiedList(userInfo2?.verified);
-      setUserVerifiedNames(names2);
-      setUserVerifiedImages(images2);
+      if (userInfo2?.verified) {
+        let { names: names2, images: images2 } = processUserVerifiedList(userInfo2?.verified);
+        setUserVerifiedNames(names2);
+        setUserVerifiedImages(images2);
+      }
 
       let usersession = await AsyncStorage.getItem("usersession");
       usersession = JSON.parse(usersession);
@@ -54,9 +63,12 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
 
   const doRefreshUserInfo = async () => {
     try {
+      if (!userInfo2?.user_id) return;
       let url = `/user/getUser?userId=${userInfo2.user_id}`;
+      console.log("url", url)
       let resp = await api.get(url);
       let data = resp.data;
+      console.log("data", data)
       setUserInfo2(data);
     } catch (error) {
       console.error("doRefreshUserInfo", error);
@@ -75,13 +87,9 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
         "verify": !isVerified
       }
       let resp = await api.post('/user/updateVerification', body)
-      // console.log("doVerify-body", body);
-      // console.log("doVerify-data", resp.data);
       Alert.alert("Verify Success");
       await doRefreshUserInfo();
       setIsVerified(!isVerified);
-
-      // refresh verified data on usersession 
     } catch (error) {
       Alert.alert("Verify failed", error)
       console.error("doVerify", error);
@@ -120,37 +128,52 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
           <View style={styles.nameParent4}>
             <Text style={[styles.name6, styles.timeTypo]}>{userInfo2?.name ? userInfo2.name : "Name"}</Text>
             <Text style={[styles.endlessmeee6, styles.nameTypo]}>
-              {userInfo2?.screen_name ? `@${userInfo2.screen_name}` : "@endlessmeee"}
+              {userInfo2?.screen_name ? `@${userInfo2.screen_name}` : "@username"}
             </Text>
           </View>
           <Text style={[styles.theBioText, styles.textTypo]}>
-            {userInfo2?.bio ? truncateString(userInfo2.bio, 100) : "The bio text will be here. The maximum number of lines is 2 and that means max. characters is 100."}
+            {userInfo2?.bio ? truncateString(userInfo2.bio, 100) : ""}
           </Text>
         </View>
       </View>
       <View style={{
         flex: 1, flexDirection: "row", maxHeight: 30, gap: 2
-        // borderColor:"red", borderWidth:2,
       }}>
-        <TouchableOpacity
-          style={[styles.verifyWrapper, styles.profileWrapperSpaceBlock]}
-          disabled={loadingVerify}
-          onPress={doVerify}
-        >
-          <Text style={[styles.verify, styles.verifyTypo]}>
-            {loadingVerify ? isVerified ? "Undo..." : "Verifying..." : isVerified ? "Undo Verification" : "Verify"}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
-          onPress={() => {
-            navigation.push(`ChatView${tab}`, { tab, userInfo: userInfo2 })
-          }}
-        >
-          <Text style={[styles.editProfile, styles.editProfileTypo]}>
-            Send message
-          </Text>
-        </TouchableOpacity>
+        {user?.user_id == userInfo2?.user_id ? (
+          <>
+            <TouchableOpacity
+              style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
+              onPress={() => navigation.navigate(`EditProfile${tab}`)}
+            >
+              <Text style={[styles.editProfile, styles.editProfileTypo]}>
+                Edit profile
+              </Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <TouchableOpacity
+              style={[styles.verifyWrapper, styles.profileWrapperSpaceBlock]}
+              disabled={loadingVerify}
+              onPress={doVerify}
+            >
+              <Text style={[styles.verify, styles.verifyTypo]}>
+                {loadingVerify ? isVerified ? "Undo..." : "Verifying..." : isVerified ? "Undo Verification" : "Verify"}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
+              onPress={() => {
+                navigation.push(`ChatView${tab}`, { tab, userInfo: userInfo2 })
+              }}
+            >
+              <Text style={[styles.editProfile, styles.editProfileTypo]}>
+                Send message
+              </Text>
+            </TouchableOpacity>
+          </>
+        )}
+
         <TouchableOpacity
           style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock]}
         >
@@ -175,7 +198,7 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
         </Text>
 
         <TouchableOpacity
-          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, userId:userInfo2.user_id })}
+          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user: userInfo2 })}
         >
           <Text
             style={[
@@ -183,23 +206,23 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
             ]}
           >
             <Text style={styles.walletAddress}>{`Verified by: `}</Text>
-            <View style={{flexDirection:"row", alignItems:"center"}}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
 
-                {userVerifiedByImages[0] && 
-                  <CircularImage source={userVerifiedByImages[0]}></CircularImage>
-                }
-                {userVerifiedByImages[1] && 
-              <View style={[styles.imageContainer, {
-                // borderColor:'red',
-                // borderWidth:2,
-                position: 'absolute',
-                top: 0,
-                left: 20
-              }]}>
-                <Image source={userVerifiedByImages[1]} style={styles.image} />
-              </View>
-                }
-              <Text style={[styles.samPolymathAnd, styles.textTypo, {marginLeft:15}]}>
+              {userVerifiedByImages[0] &&
+                <CircularImage source={userVerifiedByImages[0]}></CircularImage>
+              }
+              {userVerifiedByImages[1] &&
+                <View style={[styles.imageContainer, {
+                  // borderColor:'red',
+                  // borderWidth:2,
+                  position: 'absolute',
+                  top: 0,
+                  left: 20
+                }]}>
+                  <Image source={userVerifiedByImages[1]} style={styles.image} />
+                </View>
+              }
+              <Text style={[styles.samPolymathAnd, styles.textTypo, { marginLeft: 15 }]}>
                 {userVerifiedByNames}
               </Text>
             </View>
@@ -207,7 +230,7 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, userId:userInfo2.user_id })}
+          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, user: userInfo2 })}
         >
           <Text
             style={[
@@ -215,23 +238,23 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
             ]}
           >
             <Text style={styles.walletAddress}>{`Verified: `}</Text>
-            <View style={{flexDirection:"row", alignItems:"center"}}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
 
-                {userVerifiedImages[0] && 
-                  <CircularImage source={userVerifiedImages[0]}></CircularImage>
-                }
-                {userVerifiedImages[1] && 
-              <View style={[styles.imageContainer, {
-                // borderColor:'red',
-                // borderWidth:2,
-                position: 'absolute',
-                top: 0,
-                left: 20
-              }]}>
-                <Image source={userVerifiedImages[1]} style={styles.image} />
-              </View>
-                }
-              <Text style={[styles.samPolymathAnd, styles.textTypo, {marginLeft:15}]}>
+              {userVerifiedImages[0] &&
+                <CircularImage source={userVerifiedImages[0]}></CircularImage>
+              }
+              {userVerifiedImages[1] &&
+                <View style={[styles.imageContainer, {
+                  // borderColor:'red',
+                  // borderWidth:2,
+                  position: 'absolute',
+                  top: 0,
+                  left: 20
+                }]}>
+                  <Image source={userVerifiedImages[1]} style={styles.image} />
+                </View>
+              }
+              <Text style={[styles.samPolymathAnd, styles.textTypo, { marginLeft: 15 }]}>
                 {userVerifiedNames}
               </Text>
             </View>
@@ -783,15 +806,10 @@ const styles = StyleSheet.create({
     left: "50%",
   },
   myProfile: {
-    // overflow: "hidden",
     width: "100%",
-    flex: 1,
+    height: "45%",
     paddingHorizontal: 12,
-    // alignItems: "flex-start",
-    // justifyContent:"flex-end",
     backgroundColor: Color.colorGray_200,
-    // borderColor:"red", borderWidth:2,
-    // maxHeight:280
   },
   frameParent8: {
     // borderColor:"blue",

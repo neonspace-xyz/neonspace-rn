@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
 
-const ProfileDetail = ({ tab, userInfo }) => {
+const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const navigation = useNavigation();
   const [userVerifiedByImages, setUserVerifiedByImages] = useState([]);
   const [userVerifiedByNames, setUserVerifiedByNames] = useState('');
@@ -37,7 +37,7 @@ const ProfileDetail = ({ tab, userInfo }) => {
     check();
   }, [userInfo])
   return (
-    <View style={styles.myProfile}>
+    <View style={[styles.myProfile, isShowSearch && { display: "none" }]}>
       <View style={{
         flex: 1, flexDirection: "row", maxHeight: 120,
 
@@ -71,14 +71,14 @@ const ProfileDetail = ({ tab, userInfo }) => {
         flex: 1, flexDirection: "row", marginTop: 10, maxHeight: 30, gap: 10
         // borderColor:"red", borderWidth:2,
       }}>
-        <Pressable
+        <TouchableOpacity
           style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
           onPress={() => navigation.navigate(`EditProfile${tab}`)}
         >
           <Text style={[styles.editProfile, styles.editProfileTypo]}>
             Edit profile
           </Text>
-        </Pressable>
+        </TouchableOpacity>
         <View
           style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock]}
         >
@@ -94,7 +94,7 @@ const ProfileDetail = ({ tab, userInfo }) => {
         flex: 1, padding: 10, gap: 8
       }}>
       <TouchableOpacity
-          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, userId:userInfo.user_id })}
+          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user:userInfo })}
         >
         <Text
           style={[
@@ -135,7 +135,7 @@ const ProfileDetail = ({ tab, userInfo }) => {
       </TouchableOpacity>
         <TouchableOpacity
          style={{flexDirection:"row"}}
-          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, userId:userInfo.user_id })}
+          onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, user:userInfo })}
         >
           <Text
             style={[
@@ -686,17 +686,11 @@ const styles = StyleSheet.create({
     left: "50%",
   },
   myProfile: {
-    // overflow: "hidden",
     width: "100%",
-    flex: 1,
+    height: "45%",
     paddingHorizontal: 12,
-    // alignItems: "flex-start",
-    // justifyContent:"flex-end",
     backgroundColor: Color.colorGray_200,
-    // borderColor:"red", borderWidth:2,
-    // maxHeight:280
   },
-
   frameParent8: {
     // borderColor:"blue",
     // borderWidth:2,

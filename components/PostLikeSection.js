@@ -8,7 +8,9 @@ const PostLikeSection = ({ tab, item }) => {
   const navigation = useNavigation();
 
   return (
-    <Pressable onPress={() => { navigation.push(`OtherProfile${tab}`, { tab }); }}>
+    <Pressable onPress={() => {
+      // navigation.push(`OtherProfile${tab}`, { tab });
+    }}>
       <View index={item?.id} style={[styles.frameParent]}>
         <Image
           style={styles.frameChild}

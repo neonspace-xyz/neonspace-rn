@@ -3,19 +3,14 @@ import { Color } from "../GlobalStyles";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PostStackNavigator from './PostStackNavigator';
-import NotificationList from './NotificationList';
-import Wallet from './Wallet';
-import MyProfile from './MyProfile';
 import WalletStackNavigator from "./WalletStackNavigator";
 import ProfileStackNavigator from "./ProfileStackNavigator";
 import { TouchableOpacity } from "react-native";
-import { CommonActions, useFocusEffect, useNavigation } from "@react-navigation/core";
 import NotificationStackNavigator from "./NotificationStackNavigator";
 
 const Main = () => {
   // Create the bottom tab navigator
   const Tab = createBottomTabNavigator();
-  const navigation = useNavigation();
 
   return (
     <Tab.Navigator

@@ -42,7 +42,8 @@ export const formatPostDuration = (duration) => {
 }
 
 export const formatChatListTime = (timestamp) => {
-  const date = moment(timestamp);
+  const isSeconds = timestamp.toString().length === 10;
+  const date = isSeconds ? moment(timestamp) : moment.unix(timestamp);
   const now = moment();
   const oneWeekAgo = now.clone().subtract(7, 'days');
 

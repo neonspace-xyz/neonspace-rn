@@ -9,7 +9,7 @@ import { useAuth } from "../components/AuthProvider";
 
 const Verified = () => {
   const route = useRoute();
-  const { tab, verifiedByParam, userId } = route.params;
+  const { tab, verifiedByParam, user } = route.params;
   const navigation = useNavigation();
   const { getOtherUser } = useAuth();
   const [verifiedBy, setVerifiedBy] = React.useState(verifiedByParam);
@@ -18,12 +18,15 @@ const Verified = () => {
   const [verifiedByData, setVerifiedByData] = React.useState([]);
 
   React.useEffect(() => {
-    getOtherUser(userId).then((user) => {
-      console.log("user : ", user)
+    if(!user) return;
+    setVerifiedData(user.verified);
+    setVerifiedByData(user.verified_by);
+
+    getOtherUser(user.user_id).then((user) => {
       setVerifiedData(user.verified);
       setVerifiedByData(user.verified_by);
     })
-  },[])
+  },[user])
 
   return (
     <SafeAreaView style={styles.myProfileVerifiedBy}>

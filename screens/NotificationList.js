@@ -1,43 +1,28 @@
 import * as React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
-import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
 import EventSource from 'react-native-event-source';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/core';
-import { StyleSheet, View, Pressable, TextInput, FlatList, RefreshControl, ActivityIndicator, StatusBar } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator } from "react-native";
 import { API_URL } from "../Constant";
-import { Color, FontFamily, FontSize } from "../GlobalStyles";
+import { Color } from "../GlobalStyles";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import NotificationSection from "../components/NotificationSection";
+import Header from "../components/Header";
 
 const NotificationList = ({ route }) => {
-  const navigation = useNavigation();
   const { tab } = route.params;
-
   const [items, setItems] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
-  const [searchItems, setSearchItems] = useState([]);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [isShowSearch, setIsShowSearch] = useState(false);
-
-  const textInputRef = useRef(null);
-  const handleBlurTextInput = () => {
-    if (textInputRef.current) {
-      setSearchValue("");
-      textInputRef.current.blur();
-      setIsShowSearch(!isShowSearch);
-    }
-  };
-
+  
   useFocusEffect(
     React.useCallback(() => {
       fetchItems();
-      fetchSearchItems();
     }, [])
   );
 
@@ -80,19 +65,6 @@ const NotificationList = ({ route }) => {
     setItems(data);
   };
 
-  const fetchSearchItems = async () => {
-    let data = [];
-    for (let i = 1; i < getRandomNumber(); i++) {
-      data.push({
-        id: i,
-        title: `Notification title here${i}`,
-        description: `Notification details and information here${i}`,
-        datetime: moment(getRandomTimestamp(7)).format("DD/MM/YYYY h:mm A"),
-      });
-    }
-    setSearchItems(data);
-  };
-
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchItems(); // Fetch fresh data
@@ -112,77 +84,12 @@ const NotificationList = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
-      <View style={styles.header}>
-        <Pressable
-          style={[styles.headerIcon, !isShowSearch && { display: "none" }]}
-          onPress={() => handleBlurTextInput()}>
-          <Image
-            source={require("../assets/ic_back_white.png")}
-            style={styles.headerImageBack}
-          />
-        </Pressable>
-        <TextInput
-          ref={textInputRef}
-          style={styles.searchInput}
-          placeholder="Search by X handle"
-          placeholderTextColor={Color.colorGray_500}
-          value={searchValue}
-          onChangeText={(text) => {
-            setSearchValue(text);
-            fetchSearchItems();
-          }}
-          onFocus={() => {
-            setSearchItems([]);
-            setIsShowSearch(!isShowSearch);
-          }}
-        />
-        <Pressable
-          style={[styles.headerIcon, isShowSearch && { display: "none" }]}
-          onPress={() => navigation.navigate(`ChatList${tab}`)}>
-          <Image
-            source={require("../assets/ic_chat.png")}
-            style={styles.headerImageChat}
-          />
-        </Pressable>
-      </View>
-      {/* {!isShowCreate && (
-        <View style={styles.containerFAB}>
-          <Pressable style={styles.FAB} onPress={doPostCreate}>
-            <Icon name="add" size={45} color={Color.colorBlack} />
-          </Pressable>
-        </View>
-      )} */}
-      <View style={[styles.containerListSearch, !isShowSearch && { display: "none" }]}>
-        <FlatList
-          style={styles.flat}
-          data={searchItems}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              title="Pull to refresh"
-              titleColor={Color.darkInk}
-              colors={[Color.darkInk]}
-              tintColor={Color.darkInk}
-            />
-          }
-          onEndReached={onLoadMore}
-          onEndReachedThreshold={0.1}
-          ListFooterComponent={() =>
-            loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
-          }
-          renderItem={({ item }) => {
-            return (
-              <NotificationSection
-                isDetail={false}
-                item={item}
-                onPress={() => handleDetail(item)}
-              />
-            )
-          }}
-        />
-      </View>
+      <Header
+        tab={tab}
+        isHideList={false}
+        isShowSearch={isShowSearch}
+        setIsShowSearch={setIsShowSearch}
+      />
       <View style={[styles.containerList, isShowSearch && { display: "none" }]}>
         <FlatList
           style={styles.flat}
@@ -226,24 +133,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Color.colorGray_100,
   },
-  header: {
-    marginTop: 30,
-    height: 68,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 14,
-    backgroundColor: Color.colorGray_100,
-  },
-  headerIcon: {
-    marginTop: 10,
-  },
-  containerListSearch: {
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    backgroundColor: Color.colorGray_200,
-    zIndex: 1
-  },
   containerList: {
     width: "100%",
     height: "100%",
@@ -252,48 +141,6 @@ const styles = StyleSheet.create({
   },
   flat: {
     width: "100%"
-  },
-  searchInput: {
-    flex: 1,
-    height: 40,
-    marginTop: 16,
-    backgroundColor: Color.colorGray_200,
-    borderRadius: 5,
-    paddingLeft: 10,
-    color: Color.darkInk,
-    textAlign: "left",
-    fontFamily: FontFamily.clashGrotesk,
-    fontWeight: "500",
-    fontSize: FontSize.labelLarge_size,
-  },
-  headerImageBack: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-  },
-  headerImageChat: {
-    width: 30,
-    height: 30,
-    marginLeft: 10,
-  },
-  containerFAB: {
-    position: 'absolute',
-    zIndex: 1,
-    bottom: 30,
-    right: 30,
-  },
-  FAB: {
-    backgroundColor: Color.darkInk, // Adjust color as needed
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
   },
 });
 

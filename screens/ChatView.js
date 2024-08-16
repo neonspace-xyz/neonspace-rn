@@ -10,12 +10,13 @@ import { CHAT_OFFSET, WS_URL } from '../Constant';
 import { useAuth } from '../components/AuthProvider';
 
 const ChatDetail = () => {
-  const { getSession } = useAuth();
+  const { getSession, getOtherUser } = useAuth();
   const route = useRoute();
   const { tab, userInfo } = route.params;
 
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
+  const [userInfo2, setUserInfo2] = useState();
   const [usersession, setUsersession] = useState();
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
@@ -26,12 +27,19 @@ const ChatDetail = () => {
     ios: 4, // Set numberOfLines to 4 on iOS
     android: input ? Math.min(4, input.split('\n').length) : 1, // Let it be undefined on Android to allow multiline
   });
-  
+
   useEffect(() => {
     getSession().then((user) => {
       setUsersession(user);
     });
   }, []);
+
+  useEffect(() => {
+    if(!userInfo?.to?.user_id) return;
+    getOtherUser(userInfo.to.user_id).then((user) => {
+      setUserInfo2(user);
+    })
+  }, [userInfo]);
 
   useEffect(() => {
     const backAction = () => {
@@ -109,7 +117,6 @@ const ChatDetail = () => {
       setInput('');
     }
   }
-  console.log("userInfo", userInfo.to.profile_image)
 
   return (
     <SafeAreaView style={styles.container} keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
@@ -122,15 +129,15 @@ const ChatDetail = () => {
           />
         </Pressable>
         <Text style={[StyleHeaderTitle]}>
-          {userInfo?.name ? userInfo?.name : "Name"}
+          {userInfo2?.name ? userInfo2?.name : "Name"}
           {` `}
-          {userInfo?.screen_name ? `a@${userInfo?.screen_name}` : "@endlessmee"}
+          {userInfo2?.screen_name ? `a@${userInfo2?.screen_name}` : "@endlessmee"}
         </Text>
         <Pressable
-          onPress={() => { navigation.push(`OtherProfile${tab}`, { tab, userInfo: userInfo.to }); }}>
-          {userInfo?.to?.profile_image ? (
+          onPress={() => { navigation.push(`OtherProfile${tab}`, { tab, user: userInfo2 }); }}>
+          {userInfo2?.profile_image ? (
             <Image
-              source={userInfo.to.profile_image}
+              source={userInfo2?.profile_image}
               style={StyleHeaderImg}
             />
           ) : (

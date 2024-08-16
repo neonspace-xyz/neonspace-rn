@@ -40,12 +40,10 @@ const EditProfile = () => {
   }
 
   useEffect(() => {
-    console.log("RUN GET USER")
     getUser();
   }, [])
 
   const editProfile = async() => {
-    console.log("Edit profile")
     let url = `/user/editProfile`;
     let body = {
       "hide_wallet": isEnabled,
@@ -53,7 +51,6 @@ const EditProfile = () => {
     }
 
     let resp = await api.post(url, body);
-    console.log(resp)
     if(resp)
       navigation.goBack();
   }

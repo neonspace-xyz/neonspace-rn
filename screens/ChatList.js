@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useRoute } from '@react-navigation/core';
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
-import { getRandomNumber, logout } from "../Utils";
+import { logout } from "../Utils";
 import PostCreate from "../components/PostCreate";
 import ChatSection from "../components/ChatSection";
 import UserSearchSection from "../components/UserSearchSection";
@@ -65,33 +65,11 @@ const ChatList = () => {
       if (error.isSessionExpired) {
         await logout(navigation);
       } else {
-        console.error("CHatList-fetchItems-error", error)
+        console.error("ChatList-fetchItems-error", error)
       }
     }
   }
-
-  const fetchItemsDummy = async () => {
-    let data = [];
-    for (let i = 1; i < getRandomNumber(); i++) {
-      data.push({
-        "to": {
-          "user_id": "972316529244094464",
-          "profile_image": "https://pbs.twimg.com/profile_images/1809855903224705024/Zu4Nbq5C_normal.jpg",
-          "name": "Billy",
-          "screen_name": "billy_impact"
-        },
-        "chat_id": "0x6d1808f94a021b4968748be090f13490b4aeaa7490082faef3cc782b57e8aa31",
-        "last_message": {
-          "from": "972316529244094464",
-          "to": "1822535801093419008",
-          "message": "{\"content\":\"Alhamdulilah\",\"timestamp\":\"2024-08-14T12:31:14.471Z\"}",
-          "timestamp": 1723638675
-        }
-      })
-    }
-    setItems(data);
-  };
-
+  
   const fetchSearchItems = async () => {
     if (searchValue == '') return;
     let data = [];
