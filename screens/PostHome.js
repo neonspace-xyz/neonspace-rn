@@ -35,9 +35,10 @@ const PostHome = ({ route }) => {
         setIsShowSearch={setIsShowSearch}
       />
       <PostList
-        userInfo={usersession?.user_info}
         tab={tab}
         isProfile={false}
+        usersession={usersession}
+        userInfo={usersession?.user_info}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />
 
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1,
     bottom: 30,
-    right: 30,
+    right: 50,
   },
   FAB: {
     backgroundColor: Color.darkInk, // Adjust color as needed

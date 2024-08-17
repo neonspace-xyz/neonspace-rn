@@ -14,12 +14,16 @@ const OtherProfile = () => {
   const { tab, user } = route.params;
   const [isShowCreate, setIsShowCreate] = useState(false);
   const [isShowSearch, setIsShowSearch] = useState(false);
+  const [usersession, setUsersession] = useState();
   const [userInfo, setUserInfo] = useState();
 
-  const { getOtherUser } = useAuth();
+  const { getSession, getOtherUser } = useAuth();
 
   useEffect(() => {
     if (!user) return;
+    getSession().then((data) => {
+      setUsersession(data);
+    });
     setUserInfo(user)
     getOtherUser(user.user_id).then((user) => {
       setUserInfo(user)
@@ -48,8 +52,9 @@ const OtherProfile = () => {
 
           <PostList
             tab={tab}
-            userInfo={userInfo}
             isProfile={true}
+            usersession={usersession}
+            userInfo={userInfo}
             isShowSearch={isShowSearch}
             isShowCreate={isShowCreate} />
         </>

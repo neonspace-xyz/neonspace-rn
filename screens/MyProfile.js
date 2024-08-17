@@ -45,8 +45,9 @@ const MyProfile = ({ route }) => {
         isShowSearch={isShowSearch} />
       <PostList
         tab={tab}
-        userInfo={userInfo}
         isProfile={true}
+        usersession={usersession}
+        userInfo={userInfo}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />
       {isShowCreate && (

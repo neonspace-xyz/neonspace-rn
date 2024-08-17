@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
 import { formatPostTimestamp, getFormattedPostTimestamp } from "../Utils";
 import { useNavigation } from "@react-navigation/core";
 
-const PostSection = ({ tab, isDetail, item, onPress }) => {
+const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) => {
   const navigation = useNavigation();
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
-
+  
   return (
     <View style={styles.frame}>
       <Pressable index={item?.id} onPress={() => isDetail ? null : onPress()}>
@@ -19,11 +19,11 @@ const PostSection = ({ tab, isDetail, item, onPress }) => {
               contentFit="cover"
               source={item.image}
             />
-            <View style={[styles.frameGroup, styles.frameFlexBox]}>
+            <View style={[styles.frameFlexBox]}>
               <View style={styles.frameFlexBox}>
                 <Text style={[styles.name, styles.nameTypo]}>{item?.name}</Text>
                 <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                  {item?.username}
+                  {item?.screen_name}
                 </Text>
               </View>
               <Image
@@ -33,6 +33,15 @@ const PostSection = ({ tab, isDetail, item, onPress }) => {
               />
               <Text style={[styles.txtDateTime, styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
             </View>
+            {!isDetail && `@${userInfo.screen_name}` == item.screen_name && (
+              <TouchableOpacity onPress={(event) => onMore(event, index)} style={styles.viewImgMore}>
+                <Image
+                  style={styles.imgMore}
+                  contentFit="cover"
+                  source={require("../assets/ic_more_white.png")}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
             {item?.text}
@@ -85,12 +94,10 @@ const PostSection = ({ tab, isDetail, item, onPress }) => {
                 </Pressable>
               </View>
             )}
-
-
           </View>
         </View>
-      </Pressable>
-    </View>
+      </Pressable >
+    </View >
   );
 };
 
@@ -185,6 +192,17 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_xs,
     color: Color.darkInk,
     fontFamily: FontFamily.clashGrotesk,
+  },
+  viewImgMore: {
+    width: 25,
+    height: 30,
+    justifyContent: "center",
+    marginLeft: 'auto',
+  },
+  imgMore: {
+    width: 25,
+    height: 25,
+    marginLeft: 'auto',
   },
   heartSvgrepoCom1Parent: {
     marginLeft: 16,
