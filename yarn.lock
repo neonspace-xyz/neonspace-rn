@@ -4306,18 +4306,13 @@ lightningcss-linux-x64-gnu@1.19.0:
 
 lightningcss-linux-x64-musl@1.19.0:
   version "1.19.0"
-  resolved "https://registry.yarnpkg.com/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.19.0.tgz#e36a5df8193ae961d22974635e4c100a1823bb8c"
+  resolved "https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.19.0.tgz"
   integrity sha512-SJoM8CLPt6ECCgSuWe+g0qo8dqQYVcPiW2s19dxkmSI5+Uu1GIRzyKA0b7QqmEXolA+oSJhQqCmJpzjY4CuZAg==
 
 lightningcss-win32-x64-msvc@1.19.0:
   version "1.19.0"
   resolved "https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.19.0.tgz"
   integrity sha512-0AFQKvVzXf9byrXUq9z0anMGLdZJS+XSDqidyijI5njIwj6MdbvX2UZK/c4FfNmeRa2N/8ngTffoIuOUit5eIQ==
-
-lightningcss-linux-x64-musl@1.19.0:
-  version "1.19.0"
-  resolved "https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.19.0.tgz"
-  integrity sha512-SJoM8CLPt6ECCgSuWe+g0qo8dqQYVcPiW2s19dxkmSI5+Uu1GIRzyKA0b7QqmEXolA+oSJhQqCmJpzjY4CuZAg==
 
 lightningcss@~1.19.0:
   version "1.19.0"
@@ -4900,7 +4895,7 @@ neo-async@^2.5.0:
     expo-status-bar "~1.12.1"
     moment "^2.30.1"
     moment-duration-format "^2.3.2"
-    neonspace-app "file:../../../../Library/Caches/Yarn/v6/npm-neonspace-app-1.0.0-1fceed84-cb5b-44c4-8b93-0361033a777c-1723912131707/node_modules/neonspace-app"
+    neonspace-app "file:../../../../Library/Caches/Yarn/v6/npm-neonspace-app-1.0.0-bc956dc3-30fe-4db6-be42-fdf624095023-1723913690239/node_modules/neonspace-app"
     react "18.2.0"
     react-dom "18.2.0"
     react-native "0.74.5"
@@ -5518,6 +5513,11 @@ react-native-gesture-handler@~2.16.1:
     invariant "^2.2.4"
     lodash "^4.17.21"
     prop-types "^15.7.2"
+
+react-native-pager-view@^6.3.4:
+  version "6.3.4"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.3.4.tgz#a4b6b5c43c52b8faabbfe67807b9fb1555a2f018"
+  integrity sha512-4PEQd52EOwWcfiFJZ4VGSlY+GZfumvUzNbAozsMEgJaLvOHOMMl+Arfsc0txgtGdS49uEiHFLLZthZQzxx/Mog==
 
 react-native-paper@^5.12.5:
   version "5.12.5"

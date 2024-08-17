@@ -1,13 +1,12 @@
 import { React, useEffect, useState } from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
+import { Color } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
 import OtherProfileDetail from "../components/OtherProfileDetail";
 import { useAuth } from "../components/AuthProvider";
-import Header2 from "../components/Header2";
 
 const OtherProfile = () => {
   const route = useRoute();
