@@ -7,6 +7,7 @@ import WalletStackNavigator from "./WalletStackNavigator";
 import ProfileStackNavigator from "./ProfileStackNavigator";
 import { TouchableOpacity } from "react-native";
 import NotificationStackNavigator from "./NotificationStackNavigator";
+import CrowdsourceStackNavigator from "./CrowdsourceStackNavigator";
 
 const Main = () => {
   // Create the bottom tab navigator
@@ -35,7 +36,9 @@ const Main = () => {
             iconName = focused ? 'wallet' : 'wallet-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
-          }
+          } else if (route.name === 'Crowdsource') {
+            iconName = focused ? 'logo-usd' : 'logo-usd';
+          } 
 
           return <Icon name={iconName} size={size} color={color} />;
         },
@@ -52,6 +55,17 @@ const Main = () => {
           tabPress: (e) => {
             navigation.navigate('Home', {
               screen: 'PostList1',
+              params: {
+                reset: true,
+              },
+            });
+          }
+        })} />
+        <Tab.Screen name="Crowdsource" component={CrowdsourceStackNavigator}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            navigation.navigate('Crowdsource', {
+              screen: 'CrowdsourceView5',
               params: {
                 reset: true,
               },

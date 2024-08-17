@@ -1,18 +1,43 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Pressable, TouchableOpacity, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
+import CrowdsourceEventList from "./CrowdsourceEventList";
+import CrowdsourceHiringList from "./CrowdsourceHiringList";
+import { useAuth } from "./AuthProvider";
+import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 
 const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const navigation = useNavigation();
+
+  const layout = useWindowDimensions();
   const [userVerifiedByImages, setUserVerifiedByImages] = useState([]);
   const [userVerifiedByNames, setUserVerifiedByNames] = useState('');
   const [userVerifiedImages, setUserVerifiedImages] = useState([]);
   const [userVerifiedNames, setUserVerifiedNames] = useState('');
-
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'first', title: 'Post' },
+    { key: 'second', title: 'Like' },
+  ]);
+  const [isShowCreate, setIsShowCreate] = useState(false);
+  
+  const renderScene = SceneMap({
+    first: FirstRoute,
+    second: SecondRoute,
+  });
+   
+  const renderTabBar = (props) => (
+    <TabBar
+      {...props}
+      style={styles.tabBar}
+      indicatorStyle={styles.indicator}
+      labelStyle={styles.label}
+    />
+  );
   const CircularImage = ({ source }) => {
     return (
       <View style={styles.imageContainer}>
@@ -174,19 +199,27 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       </View>
 
       <View style={[styles.frameParent8, styles.topNavBg]}>
-        <Pressable
+
+      <TabView
+        navigationState={{ index, routes, tab, isShowSearch, isShowCreate }}        
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        renderTabBar={renderTabBar}
+        style={{backgroundColor:  Color.colorGray_100}}
+        initialLayout={{ width: layout.width }}
+      />
+        {/* <View
           style={styles.verifiedWrapperFlexBox}
-          onPress={() => navigation.navigate("MyProfileYouVerifiedVerifiedBy")}
         >
           <Text style={[styles.youVerified, styles.bioExampleTypo]}>
             Posts
           </Text>
-        </Pressable>
+        </View>
         <View style={[styles.verifiedByWrapper, styles.verifiedWrapperFlexBox]}>
           <Text style={[styles.youVerified, styles.bioExampleTypo]}>
             Likes
           </Text>
-        </View>
+        </View> */}
       </View>
       {/* <View style={[styles.frameParent13, styles.frameParentPosition]}>
         <View style={styles.ellipseParent}>
@@ -217,6 +250,50 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       </View>       */}
     </View>
   );
+};
+
+const FirstRoute = ({index, routes, tab, isShowSearch, isShowCreate}) => {
+  const { getUser } = useAuth();
+  const [userInfo, setUserInfo] = useState();
+
+  useEffect(() => {
+    getUser().then((user) => {
+      // console.log(user)
+      setUserInfo(user);
+    });
+  }, [])
+
+  return (userInfo &&
+    <View style={{ flex: 1}} >
+        <CrowdsourceHiringList
+          tab={tab}
+          userInfo={userInfo}
+          isProfile={false}
+          isShowSearch={isShowSearch}
+          isShowCreate={isShowCreate} />
+    </View>)
+  
+};
+
+const SecondRoute = ({index, routes, tab, isShowSearch, isShowCreate}) => {
+  const { getUser } = useAuth();
+  const [userInfo, setUserInfo] = useState();
+
+  useEffect(() => {
+    getUser().then((user) => {
+      // console.log(user)
+      setUserInfo(user);
+    });
+  }, [])
+  return (userInfo &&
+    <View style={{ flex: 1 }} >
+        <CrowdsourceEventList
+          tab={tab}
+          userInfo={userInfo}
+          isProfile={false}
+          isShowSearch={isShowSearch}
+          isShowCreate={isShowCreate} />
+    </View>)
 };
 
 const styles = StyleSheet.create({
@@ -739,6 +816,15 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     resizeMode: 'cover',
   },
+  tabBar: {
+      backgroundColor:   Color.colorGray_100, // Background color of the tab bar
+    },
+    indicator: {
+      backgroundColor: '#ff4081', // Color of the selected tab indicator
+    },
+    label: {
+      color: '#ffffff', // Color of the tab labels
+    },
 });
 
 export default ProfileDetail;
