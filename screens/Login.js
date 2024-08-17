@@ -110,7 +110,7 @@ const Login = () => {
       console.log('URL received:', url);
 
       // Check if the URL matches the expected callback pattern
-      if (url.startsWith('exp://149.28.155.219:8081')) {
+      if (url.startsWith('exp://neonspace.blockleader.io')) {
         // Parse the URL and extract the oauth_token and oauth_verifier
         const regex = /[?&]([^=#]+)=([^&#]*)/g;
         let params = {};
