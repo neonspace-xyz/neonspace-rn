@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image } from "expo-image";
 import { Alert, View, TextInput, Modal, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
@@ -24,9 +24,9 @@ const Login = () => {
       console.log("doLogin-token", _oauthToken);
       if (_oauthToken) {
         console.log("link", `${TWITTER_OAUTH}${_oauthToken}`)
-        setModalVisible(true);
+        // setModalVisible(true);
         setOauthToken(_oauthToken);
-        // openOAuthURL(_oauthToken);
+        openOAuthURL(_oauthToken);
         // navigation.replace("Mint");
       }
       else {
@@ -104,42 +104,42 @@ const Login = () => {
     }
   }
 
-  // useEffect(() => {
-  //   const handleOpenURL = async (event) => {
-  //     const { url } = event;
-  //     console.log('URL received:', url);
+  useEffect(() => {
+    const handleOpenURL = async (event) => {
+      const { url } = event;
+      console.log('URL received:', url);
 
-  //     // Check if the URL matches the expected callback pattern
-  //     if (url.startsWith('neonspacexyz://twitter/callback')) {
-  //       // Parse the URL and extract the oauth_token and oauth_verifier
-  //       const regex = /[?&]([^=#]+)=([^&#]*)/g;
-  //       let params = {};
-  //       let match;
-  //       while ((match = regex.exec(url))) {
-  //         params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
-  //       }
+      // Check if the URL matches the expected callback pattern
+      if (url.startsWith('exp://149.28.155.219:8081')) {
+        // Parse the URL and extract the oauth_token and oauth_verifier
+        const regex = /[?&]([^=#]+)=([^&#]*)/g;
+        let params = {};
+        let match;
+        while ((match = regex.exec(url))) {
+          params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
+        }
 
-  //       const { oauth_token, oauth_verifier } = params;
+        const { oauth_token, oauth_verifier } = params;
 
-  //       if (oauth_token && oauth_verifier) {
-  //         console.log("fallback", oauth_token, oauth_verifier);
-  //         await getTwitterAccessToken(oauth_token, oauth_verifier);
-  //       } else {
-  //         Alert.alert('Login Failed', 'OAuth token or verifier not found!');
-  //       }
-  //     } else {
-  //       Alert.alert('Login Failed', 'Unrecognized URL callback!');
-  //     }
-  //   };
+        if (oauth_token && oauth_verifier) {
+          console.log("fallback", oauth_token, oauth_verifier);
+          await getTwitterAccessToken(oauth_token, oauth_verifier);
+        } else {
+          Alert.alert('Login Failed', 'OAuth token or verifier not found!');
+        }
+      } else {
+        Alert.alert('Login Failed', 'Unrecognized URL callback!');
+      }
+    };
 
   //   // Listen for URL callback
-  //   Linking.addEventListener('url', handleOpenURL);
+    Linking.addEventListener('url', handleOpenURL);
 
   //   // Cleanup the event listener on unmount
-  //   return () => {
-  //     Linking.removeEventListener('url', handleOpenURL);
-  //   };
-  // }, []);
+    return () => {
+      Linking.removeAllListeners('url', handleOpenURL);
+    };
+  }, []);
 
   const openOAuthURL = async (oauthToken) => {
     try {

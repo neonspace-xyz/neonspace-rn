@@ -10,8 +10,17 @@ import { AuthProvider } from './components/AuthProvider';
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
 
+  const linking = {
+    prefixes: ['exp://192.168.1.4:8081'],
+    config: {
+      screens: {
+        Login: 'twitter/callback',
+      },
+    },
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <AuthProvider>
         <Stack.Navigator>
           <Stack.Screen
