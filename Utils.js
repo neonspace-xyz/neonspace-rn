@@ -19,7 +19,6 @@ export const convertTimestamp = (timestamp) => {
   return date;
 }
 
-
 export const formatPostDuration = (duration) => {
   // return moment.duration(duration).format('Y [Y], M [M], w [w], d [d], h [h], m [m], s [s]', {
   //   trim: 'both'
@@ -54,6 +53,11 @@ export const formatChatListTime = (timestamp) => {
     // If the date is more than a week old, show the full date in DD/MM/YYYY format
     return date.format('DD/MM/YYYY');
   }
+}
+
+export const formatEventTime = (timestamp) => {
+  const formattedDate = moment(timestamp).format("MMMM Do YYYY");
+  return formattedDate;
 }
 
 export const formatPostTimestamp = (timestamp) => {

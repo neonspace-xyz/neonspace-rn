@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     overflow: "hidden",
-    justifyContent: 'center',
-    alignItems: "center",
+    // justifyContent: 'center',
+    // alignItems: "center",
     backgroundColor: Color.colorGray_100,
   },
   containerList: {

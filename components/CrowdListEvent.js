@@ -4,12 +4,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
-import PostSection from "./PostSection";
 import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
+import CrowdSectionEvent from "./CrowdSectionEvent";
 
-const CrowdsourceHiringList = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }) => {
+const CrowdListEvent = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }) => {
   const { api } = useAuth();
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
@@ -28,7 +28,7 @@ const CrowdsourceHiringList = ({ userInfo, tab, isProfile, isShowSearch, isShowC
     fetchItems();
   }, [userInfo]);
 
-  const fetchItems = async () => {
+  const fetchItemsNew = async () => {
     if (!userInfo) return;
     try {
       let url = `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
@@ -74,7 +74,7 @@ const CrowdsourceHiringList = ({ userInfo, tab, isProfile, isShowSearch, isShowC
     }
   }
 
-  const fetchItemsDummy = async () => {
+  const fetchItems = async () => {
     let data = [];
     for (let i = 1; i < getRandomNumber(); i++) {
       let like = getRandomNumber(0, 7);
@@ -87,13 +87,19 @@ const CrowdsourceHiringList = ({ userInfo, tab, isProfile, isShowSearch, isShowC
           bio: `Founder at ChainCredit. #DYOR ${j}`,
         })
       }
+      let view = getRandomNumber(0, 100);
       data.push({
         id: i,
         name: `Name${i}`,
-        username: `@username${i}`,
+        screen_name: `@username${i}`,
         image: IMG_PROFILE[getRandomNumber(0, 4)],
-        text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
-        view: getRandomNumber(0, 100),
+        title: `Title${i}`,
+        company: `Company${i}`,
+        location: `Location${i}`,
+        link: 'https://neonrabbits.io',
+        detail: getRandomTimestamp(10),
+        text: 'Event details lorem ipsum neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic part lorem ipsum long text here example lorem ipsum.',
+        view: view,
         like: like,
         datetime: getRandomTimestamp(30),
         itemLikes: itemLikes
@@ -120,7 +126,7 @@ const CrowdsourceHiringList = ({ userInfo, tab, isProfile, isShowSearch, isShowC
 
   const handleDetail = (item) => {
     if (isShowCreate) return;
-    navigation.push(`PostDetail${tab}`, { tab, item });
+    navigation.push(`CrowdDetailEvent${tab}`, { tab, item });
   };
 
   return (
@@ -145,7 +151,7 @@ const CrowdsourceHiringList = ({ userInfo, tab, isProfile, isShowSearch, isShowC
         }
         renderItem={({ item }) => {
           return (
-            <PostSection
+            <CrowdSectionEvent
               tab={tab}
               isDetail={false}
               item={item}
@@ -176,4 +182,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CrowdsourceHiringList;
+export default CrowdListEvent;

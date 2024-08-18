@@ -5,8 +5,8 @@ import { StyleSheet, Text, View, Pressable, TouchableOpacity, useWindowDimension
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
-import CrowdsourceEventList from "./CrowdsourceEventList";
-import CrowdsourceHiringList from "./CrowdsourceHiringList";
+import CrowdListEvent from "./CrowdListEvent";
+import CrowdListHiring from "./CrowdListHiring";
 import { useAuth } from "./AuthProvider";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 
@@ -265,7 +265,7 @@ const FirstRoute = ({index, routes, tab, isShowSearch, isShowCreate}) => {
 
   return (userInfo &&
     <View style={{ flex: 1}} >
-        <CrowdsourceHiringList
+        <CrowdListHiring
           tab={tab}
           userInfo={userInfo}
           isProfile={false}
@@ -287,7 +287,7 @@ const SecondRoute = ({index, routes, tab, isShowSearch, isShowCreate}) => {
   }, [])
   return (userInfo &&
     <View style={{ flex: 1 }} >
-        <CrowdsourceEventList
+        <CrowdListEvent
           tab={tab}
           userInfo={userInfo}
           isProfile={false}

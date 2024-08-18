@@ -114,22 +114,19 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    backgroundColor: Color.colorGray_100,
+    paddingVertical: 10,
   },
   header: {
-    marginTop: 30,
-    height: 68,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 14,
-    backgroundColor: Color.colorGray_100,
   },
   headerIcon: {
-    marginTop: 10,
   },
   searchInput: {
     flex: 1,
     height: 40,
-    marginTop: 16,
     backgroundColor: Color.colorGray_200,
     borderRadius: 5,
     paddingLeft: 10,
@@ -153,6 +150,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center",
+    marginTop: 10,
     backgroundColor: Color.colorGray_200,
     zIndex: 1
   },

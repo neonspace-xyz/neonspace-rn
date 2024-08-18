@@ -1,7 +1,14 @@
 import React from 'react';
-// import { createStackNavigator } from '@react-navigation/native-stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CrowdsourceView from './CrowdsourceView';
+import CrowdDetailHiring from './CrowdDetailHiring';
+import CrowdDetailEvent from './CrowdDetailEvent';
+import CrowdDetailQuest from './CrowdDetailQuest';
+import PostLikeList from './PostLikeList';
+import ChatList from './ChatList';
+import ChatView from './ChatView';
+import OtherProfile from './OtherProfile';
+import Verified from './Verified';
 
 
 const Stack = createNativeStackNavigator();
@@ -13,12 +20,14 @@ function CrowdsourceStackNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="CrowdsourceView5" component={CrowdsourceView} initialParams={dataToSend} />
-      {/* <Stack.Screen name="PostDetail1" component={PostDetail} initialParams={dataToSend} />
-      <Stack.Screen name="PostLikeList1" component={PostLikeList} initialParams={dataToSend} />
-      <Stack.Screen name="ChatList1" component={ChatList} initialParams={dataToSend} />
-      <Stack.Screen name="ChatView1" component={ChatView} initialParams={dataToSend} />
-      <Stack.Screen name="OtherProfile1" component={OtherProfile} initialParams={dataToSend} />
-      <Stack.Screen name="Verified1" component={Verified} /> */}
+      <Stack.Screen name="CrowdDetailHiring5" component={CrowdDetailHiring} initialParams={dataToSend} />
+      <Stack.Screen name="CrowdDetailEvent5" component={CrowdDetailEvent} initialParams={dataToSend} />
+      <Stack.Screen name="CrowdDetailQuest5" component={CrowdDetailQuest} initialParams={dataToSend} />
+      <Stack.Screen name="PostLikeList5" component={PostLikeList} initialParams={dataToSend} />
+      <Stack.Screen name="ChatList5" component={ChatList} initialParams={dataToSend} />
+      <Stack.Screen name="ChatView5" component={ChatView} initialParams={dataToSend} />
+      <Stack.Screen name="OtherProfile5" component={OtherProfile} initialParams={dataToSend} />
+      <Stack.Screen name="Verified5" component={Verified} />
     </Stack.Navigator>
   );
 }

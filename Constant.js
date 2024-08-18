@@ -20,3 +20,9 @@ export const IMG_PROFILE = [
     require('./assets/ellipse-4.png'),
     require('./assets/ellipse-5.png')
 ]
+
+export const CROWD = {
+    HIRING: 'Hiring',
+    EVENT: 'Event',
+    QUEST: 'Quest'
+}

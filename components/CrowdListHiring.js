@@ -4,12 +4,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
-import PostSection from "./PostSection";
+import CrowdSectionHiring from "./CrowdSectionHiring";
 import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
 
-const CrowdsourceQuestList = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }) => {
+const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }) => {
   const { api } = useAuth();
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
@@ -28,7 +28,7 @@ const CrowdsourceQuestList = ({ userInfo, tab, isProfile, isShowSearch, isShowCr
     fetchItems();
   }, [userInfo]);
 
-  const fetchItems = async () => {
+  const fetchItemsNew = async () => {
     if (!userInfo) return;
     try {
       let url = `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
@@ -74,7 +74,7 @@ const CrowdsourceQuestList = ({ userInfo, tab, isProfile, isShowSearch, isShowCr
     }
   }
 
-  const fetchItemsDummy = async () => {
+  const fetchItems = async () => {
     let data = [];
     for (let i = 1; i < getRandomNumber(); i++) {
       let like = getRandomNumber(0, 7);
@@ -82,18 +82,23 @@ const CrowdsourceQuestList = ({ userInfo, tab, isProfile, isShowSearch, isShowCr
       for (let j = 0; j < like; j++) {
         itemLikes.push({
           name: `Name${j}`,
-          username: `@username${j}`,
+          screen_name: `@username${j}`,
           image: IMG_PROFILE[getRandomNumber(0, 4)],
           bio: `Founder at ChainCredit. #DYOR ${j}`,
         })
       }
+      let view = getRandomNumber(0, 2);
       data.push({
         id: i,
         name: `Name${i}`,
-        username: `@username${i}`,
+        screen_name: `@username${i}`,
         image: IMG_PROFILE[getRandomNumber(0, 4)],
-        text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
-        view: getRandomNumber(0, 100),
+        title: `Title${i}`,
+        company: `Company${i}`,
+        location: `Location${i}`,
+        detail: `80k-120k`,
+        text: 'Are you passionate about lorem ipsum tect Neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic partners, and source new partnerships lorem ipsum.\n\nAbout\n\nBrinc is a global lorem ipsum I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! ',
+        view: view,
         like: like,
         datetime: getRandomTimestamp(30),
         itemLikes: itemLikes
@@ -120,7 +125,7 @@ const CrowdsourceQuestList = ({ userInfo, tab, isProfile, isShowSearch, isShowCr
 
   const handleDetail = (item) => {
     if (isShowCreate) return;
-    navigation.push(`PostDetail${tab}`, { tab, item });
+    navigation.push(`CrowdDetailHiring${tab}`, { tab, item });
   };
 
   return (
@@ -145,7 +150,7 @@ const CrowdsourceQuestList = ({ userInfo, tab, isProfile, isShowSearch, isShowCr
         }
         renderItem={({ item }) => {
           return (
-            <PostSection
+            <CrowdSectionHiring
               tab={tab}
               isDetail={false}
               item={item}
@@ -176,4 +181,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CrowdsourceQuestList;
+export default CrowdListHiring;
