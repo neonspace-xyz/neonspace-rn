@@ -5,11 +5,16 @@ import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
 import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
 import { Component_Max_Width } from "../Constant";
+import { useAuth } from "../components/AuthProvider";
+import WalletHeader from "../components/WalletHeader";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Wallet = ({ route }) => {
   const { tab } = route?.params;
   
   const navigation = useNavigation();
+  const {getUser} = useAuth();
+
   const [showTransferAction, setShowTransferAction] = useState(false);
   const [showSend, setShowSend] = useState(false);
   const [showSendInput, setShowSendInput] = useState(false);
@@ -19,6 +24,15 @@ const Wallet = ({ route }) => {
   const [showReceive, setShowReceive] = useState(false);
   const [showAddressCopied, setShowAddressCopied] = useState(false);
   const [showSuccessMint, setShowSuccessMint] = useState(false);
+  const [userData, setUserData] = useState();
+
+  
+  useEffect(() => {
+    getUser().then((user) => {
+      console.log(user)
+      setUserData(user);
+    })
+  }, [])
 
   useEffect(() => {
     if (setShowAddressCopied) {
@@ -65,20 +79,38 @@ const Wallet = ({ route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <WalletHeader
+        tab={tab}
+        isHideList={false}
+        isShowSearch={false}
+      />
       <Image
         style={styles.imgBackground}
         contentFit="cover"
         source={require("../assets/group-865.png")}
       />
+
+
       <Text style={[styles.txtTitle, styles.txtStyle]}>
-        Neonrabbits #287
+        {userData && userData?.owned_nfts[0]?.token_ids[0]?.name}
       </Text>
-      <Image
-        style={styles.imgNft}
-        contentFit="cover"
-        source={require("../assets/ic_nft_default.png")}
-      />
+
+      { 
+        userData?.owned_nfts[0]?.token_ids[0]?.image ? 
+          <Image
+            style={styles.imgNft}
+            contentFit="cover"
+            source={userData?.owned_nfts[0]?.token_ids[0]?.image}
+          /> 
+        :
+          <Image
+            style={styles.imgNft}
+            contentFit="cover"
+            source={require("../assets/ic_nft_default.png")}
+          /> 
+      }
+      
       <View style={styles.frameGroup}>
         <Pressable
           style={styles.button}
@@ -512,7 +544,7 @@ const Wallet = ({ route }) => {
           Wallet address copied to clipboard
         </Text>
       </View>
-    </View >
+    </SafeAreaView>
   );
 };
 
@@ -521,11 +553,14 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     overflow: "hidden",
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: "center",
     backgroundColor: Color.colorGray_100,
+    // borderColor:'red',
+    // borderWidth:2
   },
   imgBackground: {
+    position:"absolute",
     height: "100%",
     width: "100%",
   },
@@ -535,28 +570,29 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.clashGrotesk,
   },
   txtTitle: {
-    top: 140,
+    top: 70,
     fontSize: FontSize.size_13xl,
     fontWeight: "600",
     position: "absolute",
   },
   txtTitle2: {
-    top: 178,
+    top: 60,
     fontWeight: "700",
     width: 272,
     fontSize: FontSize.size_9xl,
     position: "absolute",
   },
   imgNft: {
-    marginTop: -178,
-    top: "50%",
+    // marginTop: -178,
+    // top: "50%",
+    top:130,
     height: 272,
     borderRadius: Border.br_5xs,
     width: 272,
     position: "absolute",
   },
   frameGroup: {
-    top: 450,
+    top: 390,
     height: 160,
     width: "100%",
     alignItems: "center",

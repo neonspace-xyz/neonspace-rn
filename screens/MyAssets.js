@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -9,11 +8,22 @@ import SearchBar from "../components/SearchBar";
 import ProfileDetail from "../components/ProfileDetail";
 import TokenList from "../components/TokenList";
 import NFTList from "../components/NFTList";
+import { useAuth } from "../components/AuthProvider";
+import React, { useEffect, useState } from "react";
+import { shortenAddress } from "../Utils";
 
 const MyAssets = () => {
   const navigation = useNavigation();
-  const [isTokenList, setIsTokenList] = React.useState(true)
-
+  const [isTokenList, setIsTokenList] = useState(true)
+  const {getUser} = useAuth();
+  const [userData, setUserData] = useState();
+  
+  useEffect(() => {
+    getUser().then((user) => {
+      console.log(user)
+      setUserData(user);
+    });
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
     <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
@@ -51,15 +61,26 @@ const MyAssets = () => {
         padding:15,
         gap:15
       }}>
-        <Image
-          style={styles.frameChild}
-          contentFit="cover"
-          source={require("../assets/photo.png")}
-        />
+      
+      { 
+        userData && userData?.owned_nfts[0]?.token_ids[0]?.image ? 
+          <Image
+            style={styles.frameChild}
+            contentFit="cover"
+            source={userData?.owned_nfts[0]?.token_ids[0]?.image}
+          /> 
+        :
+          <Image
+            style={styles.frameChild}
+            contentFit="cover"
+            source={require("../assets/photo.png")}
+          /> 
+      }
+
         <View style={styles.frameWrapper}>
           <View style={styles.neonrabbit287Parent}>
             <Text style={[styles.neonrabbit287, styles.ethTypo]}>
-              Neonrabbit #287
+            {userData && userData?.owned_nfts[0]?.token_ids[0]?.name}
             </Text>
             <View style={styles.walletAddress0xedhvGroup}>
               <Text
@@ -69,7 +90,7 @@ const MyAssets = () => {
                 ]}
               >
                 <Text style={styles.walletBalance}>{`Wallet Address: `}</Text>
-                <Text style={styles.ethTypo}>0xe...dhv</Text>
+                <Text style={styles.ethTypo}>{userData && shortenAddress(userData?.wallet_address)}</Text>
               </Text>
               <Image
                 style={styles.copySvgrepoCom1Icon}
@@ -96,8 +117,8 @@ const MyAssets = () => {
         </Pressable>
       </View>
 
-      {isTokenList && <TokenList/>}
-      {!isTokenList && <NFTList/>}
+      {isTokenList && userData && <TokenList itemsData={userData.owned_tokens}/>}
+      {!isTokenList && userData && <NFTList itemsData={userData.owned_nfts}/>}
       
     </SafeAreaView>
   )
@@ -733,6 +754,7 @@ const styles = StyleSheet.create({
   frameChild: {
     width: 90,
     height: 90,
+    borderRadius: 50
   },
   neonrabbit287: {
     fontSize: FontSize.size_xl,

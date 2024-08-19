@@ -8,14 +8,14 @@ import { useFocusEffect } from '@react-navigation/core';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import PostSection from "./PostSection";
-import { getRandomNumber, getRandomTimestamp } from "../Utils";
+import { getRandomNumber, getRandomTimestamp, shortenAddress } from "../Utils";
 import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
 
-const NFTList = () => {
+const NFTList = ({itemsData}) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(itemsData);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -84,7 +84,7 @@ const NFTList = () => {
         itemLikes: itemLikes
       });
     }
-    setItems(data);
+    // setItems(data);
   };
 
   const onRefresh = async () => {
@@ -175,12 +175,12 @@ const NFTList = () => {
           return (
             <Accordion title="Section 1">
               
-              {nftData.map((item, index) => (
+              {item.token_ids.map((item2, index) => (
               <View style={styles.rectangleFlexBox} key={index}>
                 <Image
                   style={styles.nftIcon}
                   contentFit="cover"
-                  source={require("../assets/rectangle-photo.png")}
+                  source={item2.image}
                 />
                 <View style={{
                   justifyContent: "center",
@@ -193,7 +193,7 @@ const NFTList = () => {
                     color: Color.darkInk,
                     fontFamily: FontFamily.clashGrotesk,
                   }}>
-                    Neonrabbits #287
+                    {item2.name}
                   </Text>
                   
                   <View style={{
@@ -238,7 +238,7 @@ const NFTList = () => {
                       color: Color.darkInk,
                       fontFamily: FontFamily.clashGrotesk,
                     }}>
-                      0xe...dhv
+                      {shortenAddress(item.contract_address)}
                     </Text>
                   </View>
 

@@ -12,10 +12,10 @@ import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
 
-const TokenList = () => {
+const TokenList = ({itemsData}) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(itemsData);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -84,7 +84,7 @@ const TokenList = () => {
         itemLikes: itemLikes
       });
     }
-    setItems(data);
+    // setItems(data);
   };
 
   const onRefresh = async () => {

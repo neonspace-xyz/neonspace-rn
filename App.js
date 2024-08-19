@@ -4,6 +4,7 @@ import StackNavigator from "./StackNavigator";
 import { Color } from "./GlobalStyles";
 import { useEffect } from "react";
 import { AuthProvider } from "./components/AuthProvider";
+import './gesture-handler';
 
 export default function App() {
   const [fontsLoaded, error] = useFonts({
