@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Wallet from './Wallet';
 import MyAssets from './MyAssets';
 import QrCamera from './QrCamera';
+import Webview from '../components/Webview';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,7 @@ function WalletStackNavigator() {
       <Stack.Screen name="Wallet3" component={Wallet} initialParams={dataToSend} />
       <Stack.Screen name="MyAssets3" component={MyAssets} initialParams={dataToSend} />
       <Stack.Screen name="QrCamera3" component={QrCamera} initialParams={dataToSend} />
+      <Stack.Screen name="Webview3" component={Webview} initialParams={dataToSend} />
       
 
       {/* <Stack.Screen name="PostDetail1" component={PostDetail} initialParams={dataToSend} />

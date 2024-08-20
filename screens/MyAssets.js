@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,6 +13,9 @@ import React, { useEffect, useState } from "react";
 import { shortenAddress } from "../Utils";
 
 const MyAssets = () => {
+  const route = useRoute();
+  const { tab } = route.params;
+
   const navigation = useNavigation();
   const [isTokenList, setIsTokenList] = useState(true)
   const {getUser} = useAuth();
@@ -118,7 +121,7 @@ const MyAssets = () => {
       </View>
 
       {isTokenList && userData && <TokenList itemsData={userData.owned_tokens}/>}
-      {!isTokenList && userData && <NFTList itemsData={userData.owned_nfts}/>}
+      {!isTokenList && userData && <NFTList tab={tab} itemsData={userData.owned_nfts}/>}
       
     </SafeAreaView>
   )

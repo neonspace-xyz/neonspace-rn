@@ -12,7 +12,7 @@ import { getRandomNumber, getRandomTimestamp, shortenAddress } from "../Utils";
 import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
 
-const NFTList = ({itemsData}) => {
+const NFTList = ({tab, itemsData}) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState(itemsData);
@@ -176,7 +176,12 @@ const NFTList = ({itemsData}) => {
             <Accordion title="Section 1">
               
               {item.token_ids.map((item2, index) => (
-              <View style={styles.rectangleFlexBox} key={index}>
+              <Pressable style={styles.rectangleFlexBox} key={index} onPress={() => {
+                let url = `https://testnets.opensea.io/assets/sepolia/${item.contract_address}/${item2.token_id}`;
+                // let url = `https://testnets.opensea.io/assets/sepolia/0x063aa9f317f3c90a2c35c516bdb926ad346a07b7/131`;
+                // console.log(url)
+                navigation.push(`Webview${tab}`, { tab, url:url });
+              }}>
                 <Image
                   style={styles.nftIcon}
                   contentFit="cover"
@@ -243,7 +248,7 @@ const NFTList = ({itemsData}) => {
                   </View>
 
                 </View>
-              </View>
+              </Pressable>
               ))}
             </Accordion>
           )
