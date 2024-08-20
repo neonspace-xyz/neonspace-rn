@@ -33,7 +33,7 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
               />
               <Text style={[styles.txtDateTime, styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
             </View>
-            {!isDetail && `@${userInfo?.screen_name}` == item?.screen_name && (
+            {`@${userInfo?.screen_name}` == item?.screen_name && (
               <TouchableOpacity onPress={(event) => onMore(event, index)} style={styles.viewImgMore}>
                 <Image
                   style={styles.imgMore}

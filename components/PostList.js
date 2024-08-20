@@ -1,14 +1,14 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity, Text, Dimensions, Alert } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
 import PostSection from "../components/PostSection";
-import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
+import { convertTimestamp, getRandomNumber, logout } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
-import { Image } from "expo-image";
+import PopupOption from "./PopupOption";
 
 const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowCreate }) => {
   const { api } = useAuth();
@@ -18,8 +18,8 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowC
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const windowDimensions = Dimensions.get('window');
 
+  const windowDimensions = Dimensions.get('window');
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const flatListRef = useRef(null);
@@ -80,6 +80,12 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowC
     }
   }
 
+  const onScroll = async () => {
+    if (selectedItemIndex) {
+      setSelectedItemIndex(null);
+    }
+  }
+
   const onRefresh = async () => {
     setRefreshing(true);
     setPage(1);
@@ -102,16 +108,16 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowC
   };
 
   const handleMore = (event, index) => {
-    if(selectedItemIndex == index) {
+    if (selectedItemIndex == index) {
       setSelectedItemIndex(null);
       return;
     }
     const { pageY, pageX } = event.nativeEvent;
-    // Adjust menu position to stay within screen bounds
+
     const menuWidth = 190; // Adjust based on your menu width
     const menuHeight = 81; // Adjust based on your menu height
     let newLeft = pageX;
-    let newTop = pageY - 100; // Position the menu below the button
+    let newTop = pageY - 110; // Position the menu below the button
     let windowHeight = windowDimensions.height - 100;
 
     if (newLeft + menuWidth > windowDimensions.width) {
@@ -121,6 +127,13 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowC
     if (pageY + menuHeight > windowHeight) {
       newTop = pageY - 220;
     }
+
+    if (isProfile) {
+      newTop = newTop - (windowDimensions.height / 2) + 100;
+    }
+
+    console.log("pageY", pageY, "pageX", pageX);
+    console.log("top", newTop, "left", newLeft);
 
     setMenuPosition({ top: newTop, left: newLeft });
     setSelectedItemIndex(index);
@@ -150,18 +163,13 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowC
     );
   };
 
-  const handleEdit = () => {
-    const selectedItem = items[selectedItemIndex];
-    // navigation.navigate('EditScreen', { item: selectedItem });
-    setSelectedItemIndex(null);
-  };
-
   return (
     <View style={[isProfile ? styles.containerListProfile : styles.containerList, isShowSearch && { display: "none" }]}>
       <FlatList
         ref={flatListRef}
         style={styles.flat}
         data={items}
+        onScroll={onScroll}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -183,27 +191,20 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowC
               tab={tab}
               isDetail={false}
               index={index}
-              userInfo={usersession.user_info}
               item={item}
+              userInfo={usersession?.user_info}
               onPress={() => handleDetail(item)}
               onMore={handleMore}
             />
           )
         }}
       />
-      {selectedItemIndex !== null && (
-        <View style={[styles.optionsMenu, { top: menuPosition.top + 10, left: menuPosition.left }]}>
-          <TouchableOpacity style={styles.optionItem} onPress={handleEdit}>
-            <Text style={styles.optionText}>Edit</Text>
-            <Image source={require('../assets/ic_edit_white.png')} style={styles.optionIcon} />
-          </TouchableOpacity>
-          <View style={styles.divider} />
-          <TouchableOpacity style={styles.optionItem} onPress={confirmDelete}>
-            <Text style={styles.optionText}>Delete</Text>
-            <Image source={require('../assets/ic_trash_white.png')} style={styles.optionIcon} />
-          </TouchableOpacity>
-        </View>
-      )}
+      <PopupOption
+        showEdit={false}
+        selectedItemIndex={selectedItemIndex}
+        menuPosition={menuPosition}
+        handleDelete={confirmDelete}
+      />
     </View>
   );
 };
@@ -223,37 +224,6 @@ const styles = StyleSheet.create({
   },
   flat: {
     width: "100%"
-  },
-  optionsMenu: {
-    width: 160,
-    position: 'absolute',
-    backgroundColor: Color.colorDarkslategray_100,
-    borderRadius: 5,
-    borderColor: Color.colorDarkslategray_100,
-    borderWidth: 1,
-    shadowColor: Color.colorDarkslategray_100,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    zIndex: 1,
-  },
-  optionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 10,
-  },
-  optionText: {
-    fontSize: 16,
-    color: Color.darkInk
-  },
-  optionIcon: {
-    width: 20,
-    height: 20,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#ccc',
   },
 });
 

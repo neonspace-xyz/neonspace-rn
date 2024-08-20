@@ -9,6 +9,8 @@ const CrowdSectionEvent = ({ tab, isDetail, index, userInfo, item, onPress, onMo
   const navigation = useNavigation();
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
 
+  console.log(`E-@${userInfo?.screen_name}`, item?.screen_name, `@${userInfo?.screen_name}` == item?.screen_name)
+
   return (
     <View style={styles.frame}>
       <Pressable index={item?.id} onPress={() => isDetail ? null : onPress()}>
@@ -33,7 +35,7 @@ const CrowdSectionEvent = ({ tab, isDetail, index, userInfo, item, onPress, onMo
               />
               <Text style={[styles.txtDateTime, styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
             </View>
-            {!isDetail && `@${userInfo?.screen_name}` == item?.screen_name && (
+            {`@${userInfo?.screen_name}` == item?.screen_name && (
               <TouchableOpacity onPress={(event) => onMore(event, index)} style={styles.viewImgMore}>
                 <Image
                   style={styles.imgMore}

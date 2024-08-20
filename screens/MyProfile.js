@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1,
     bottom: 30,
-    right: 30,
+    right: 50,
   },
   FAB: {
     backgroundColor: Color.darkInk, // Adjust color as needed

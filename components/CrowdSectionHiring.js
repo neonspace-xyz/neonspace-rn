@@ -9,6 +9,8 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
   const navigation = useNavigation();
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
 
+  console.log(`H-@${userInfo?.screen_name}`, item?.screen_name, `@${userInfo?.screen_name}` == item?.screen_name)
+
   return (
     <View style={styles.frame}>
       <Pressable index={item?.id} onPress={() => isDetail ? null : onPress()}>
@@ -33,7 +35,7 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
               />
               <Text style={[styles.txtDateTime, styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
             </View>
-            {!isDetail && `@${userInfo?.screen_name}` == item?.screen_name && (
+            {`@${userInfo?.screen_name}` == item?.screen_name && (
               <TouchableOpacity onPress={(event) => onMore(event, index)} style={styles.viewImgMore}>
                 <Image
                   style={styles.imgMore}

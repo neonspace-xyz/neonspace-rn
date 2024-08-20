@@ -1,13 +1,14 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
 import CrowdSectionHiring from "./CrowdSectionHiring";
 import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
+import PopupOption from "./PopupOption";
 
 const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }) => {
   const { api } = useAuth();
@@ -17,6 +18,11 @@ const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate 
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  
+  const windowDimensions = Dimensions.get('window');
+  const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+  const flatListRef = useRef(null);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -91,7 +97,7 @@ const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate 
       data.push({
         id: i,
         name: `Name${i}`,
-        screen_name: `@username${i}`,
+        screen_name: '@FimoTex96172',//`@username${i}`,
         image: IMG_PROFILE[getRandomNumber(0, 4)],
         title: `Title${i}`,
         company: `Company${i}`,
@@ -106,6 +112,17 @@ const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate 
     }
     setItems(data);
   };
+
+  const handleDetail = (item) => {
+    if (isShowCreate) return;
+    navigation.push(`CrowdDetailHiring${tab}`, { tab, item });
+  };
+
+  const onScroll = async () => {
+    if (selectedItemIndex) {
+      setSelectedItemIndex(null);
+    }
+  }
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -123,9 +140,66 @@ const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate 
     }
   };
 
-  const handleDetail = (item) => {
-    if (isShowCreate) return;
-    navigation.push(`CrowdDetailHiring${tab}`, { tab, item });
+  const handleMore = (event, index) => {
+    if (selectedItemIndex == index) {
+      setSelectedItemIndex(null);
+      return;
+    }
+    const { pageY, pageX } = event.nativeEvent;
+
+    const menuWidth = 190; // Adjust based on your menu width
+    const menuHeight = 81; // Adjust based on your menu height
+    let newLeft = pageX;
+    let newTop = pageY - 150; // Position the menu below the button
+    let windowHeight = windowDimensions.height - 100;
+
+    if (newLeft + menuWidth > windowDimensions.width) {
+      newLeft = windowDimensions.width - menuWidth;
+    }
+
+    if (pageY + menuHeight > windowHeight) {
+      newTop = pageY - 280;
+    }
+
+    if (isProfile) {
+      newTop = newTop - (windowDimensions.height / 2) + 100;
+    }
+
+    console.log("pageY", pageY, "pageX", pageX);
+    console.log("top", newTop, "left", newLeft);
+
+    setMenuPosition({ top: newTop, left: newLeft });
+    setSelectedItemIndex(index);
+  };
+  
+  const handleEdit = () => {
+    const selectedItem = items[selectedItemIndex];
+    // navigation.navigate('EditScreen', { item: selectedItem });
+    setSelectedItemIndex(null);
+  };
+
+  const handleDelete = () => {
+    console.log(`Deleting item ${selectedItemIndex}`);
+    setSelectedItemIndex(null);
+  };
+
+  const confirmDelete = () => {
+    Alert.alert(
+      "Delete the post",
+      "Are you sure you want to delete the post?",
+      [
+        {
+          text: "No",
+          onPress: () => setSelectedItemIndex(null),
+          style: "cancel"
+        },
+        {
+          text: "Yes",
+          onPress: handleDelete
+        }
+      ],
+      { cancelable: true }
+    );
   };
 
   return (
@@ -133,6 +207,7 @@ const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate 
       <FlatList
         style={styles.flat}
         data={items}
+        onScroll={onScroll}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -148,16 +223,26 @@ const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate 
         ListFooterComponent={() =>
           loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
         }
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
           return (
             <CrowdSectionHiring
               tab={tab}
               isDetail={false}
+              index={index}
               item={item}
+              userInfo={userInfo}
               onPress={() => handleDetail(item)}
+              onMore={handleMore}
             />
           )
         }}
+      />
+      <PopupOption
+        showEdit={true}
+        selectedItemIndex={selectedItemIndex}
+        menuPosition={menuPosition}
+        handleEdit={handleEdit}
+        handleDelete={confirmDelete}
       />
     </View>
   );

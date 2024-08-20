@@ -130,7 +130,7 @@ const ChatDetail = () => {
         </Pressable>
         <Text style={[StyleHeaderTitle]}>
           {userInfo2?.name ? userInfo2?.name : "Name"}
-          {` `}
+          {`\n`}
           {userInfo2?.screen_name ? `a@${userInfo2?.screen_name}` : "@endlessmee"}
         </Text>
         <Pressable
