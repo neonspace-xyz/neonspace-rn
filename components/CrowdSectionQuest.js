@@ -9,8 +9,6 @@ const CrowdSectionQuest = ({ tab, isDetail, index, userInfo, item, onPress, onMo
   const navigation = useNavigation();
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
 
-  console.log(`Q-@${userInfo?.screen_name}`, item?.screen_name, `@${userInfo?.screen_name}` == item?.screen_name)
-
   return (
     <View style={styles.frame}>
       <Pressable index={item?.id} onPress={() => isDetail ? null : onPress()}>
