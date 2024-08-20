@@ -8,6 +8,8 @@ import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from '../Constant';
 import api from '../utils/ApiHandler';
+import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -155,9 +157,8 @@ const Login = () => {
       console.error("openOAuthURL", error);
     }
   }
-
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image
         style={styles.imgBackground}
         contentFit="cover"
@@ -175,16 +176,26 @@ const Login = () => {
         contentFit="cover"
         source={require("../assets/ic_logo.png")}
       />
-      <TouchableOpacity
-        style={[styles.button]}
-        disabled={loading}
-        onPress={doLogin}
-      // onPress={() => navigation.replace("Mint")}
-      >
-        <Text style={[styles.buttonLabel, styles.txtStyle]}>
-          {loading ? "Loading..." : "Login with X"}
-        </Text>
-      </TouchableOpacity>
+
+      <LinearGradient
+          colors={['#FC00A7', '#65EDE3']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.gradientBorder}
+        >
+         <View style={styles.buttonInner}>
+            <TouchableOpacity
+              style={[styles.buttonContainer]}
+              disabled={loading}
+              onPress={doLogin}
+            // onPress={() => navigation.replace("Mint")}
+            >
+              <Text style={[styles.buttonLabel, styles.txtStyle]}>
+                {loading ? "Loading..." : "Login with X"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+      </LinearGradient>
       <Modal
         visible={modalVisible}
         transparent={true}
@@ -214,7 +225,7 @@ const Login = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -273,6 +284,12 @@ const styles = StyleSheet.create({
     paddingVertical: Padding.p_xs,
     backgroundColor: Color.colorGray_100,
   },
+  buttonContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    borderRadius: 10,
+  },
   buttonLabel: {
     fontSize: FontSize.labelLarge_size,
     lineHeight: 24,
@@ -316,6 +333,36 @@ const styles = StyleSheet.create({
   confirmButton: {
     fontSize: 16,
     color: 'green',
+  },
+  gradientBorder: {
+    // borderColor:'red',
+    // borderWidth:5,
+    padding: 2, // Lebar border gradien
+    borderRadius: 10,
+    
+    position: "absolute",
+    top: "75%",
+    // borderRadius: Border.br_5xs,
+    // borderStyle: "solid",
+    // borderColor: Color.colorDeeppink,
+    // borderWidth: 3,
+    width: "90%",
+    maxWidth: Component_Max_Width,
+    // height: 54,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    // paddingHorizontal: Padding.p_5xl,
+    // paddingVertical: Padding.p_xs,
+    // backgroundColor: Color.colorGray_100,
+  },
+  buttonInner: {
+    // width: 100,
+    // marginTop: -111,
+    // top: "50%",
+    width:"100%",
+    backgroundColor: '#1c1c1c', // Warna background tombol
+    borderRadius: 10,
   },
 });
 

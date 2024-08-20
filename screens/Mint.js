@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import * as Clipboard from 'expo-clipboard';
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity, Share } from "react-native";
+import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity, Share, ActivityIndicator, TouchableWithoutFeedback } from "react-native";
 import { Component_Max_Width } from "../Constant";
 import { logout, shortenAddress } from "../Utils";
 import { useAuth } from "../components/AuthProvider";
 import DownloadHelper from "../utils/DownloadHelper";
 import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
+import { LinearGradient } from "expo-linear-gradient";
+import { StatusBar } from "react-native";
 
 const Mint = () => {
   const { api, getUser } = useAuth();
@@ -21,9 +23,12 @@ const Mint = () => {
   const [showReceive, setShowReceive] = useState(false);
   const [showAddressCopied, setShowAddressCopied] = useState(false);
   const [showSuccessMint, setShowSuccessMint] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hash, setHash] = useState();
 
   useEffect(() => {
     getUser().then((data) => {
+      console.log(data)
       setUserInfo(data);
       if (data?.owned_nfts?.length > 0) {
         let ownedNft = data?.owned_nfts[0];
@@ -60,6 +65,41 @@ const Mint = () => {
     }
   }
 
+  useEffect(() => {
+    const checkMintStatus = async () => {
+      try {
+          let checkUrl = `/nft/mintStatus?op_hash=${hash}`
+          let checkStatus = await api.get(checkUrl);
+          let response = checkStatus.data;
+          if(response?.status == "SUCCESS"){            
+            getUser().then((data) => {
+              setUserInfo(data);
+              if (data?.owned_nfts?.length > 0) {
+                let ownedNft = data?.owned_nfts[0];
+                if (ownedNft?.token_ids?.length > 0) {
+                  setNft(ownedNft.token_ids[0]);
+                  setShowSuccessMint(!showSuccessMint);
+                  setIsLoading(false);
+                }
+              }
+            });
+          }
+          else{
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+            await checkMintStatus();
+          }
+      } catch (error) {
+        setIsLoading(false);
+        console.error('Error fetching mint status:', error);
+        // Anda bisa menangani error di sini, misalnya dengan menunjukkan pesan error ke pengguna
+      }
+    };
+
+    if(hash){
+      checkMintStatus();
+    }
+  }, [hash]);
+
   const doMint = async () => {
     try {
       // setShowSuccessMint(!showSuccessMint);
@@ -77,6 +117,15 @@ const Mint = () => {
         );
         return;
       }
+      // let url = `/user/mintNft`;
+      // let body = {
+      //   "nft_address": nftInfo.nft_address,
+      //   "quantity": totalNft,
+      //   "eth_value": "0"
+      // };
+      // let resp = await api.post(url, body);
+      // let data = resp.data;
+      // setShowSuccessMint(!showSuccessMint);
       let url = `/user/mintNft`;
       let body = {
         "nft_address": nftInfo.nft_address,
@@ -85,7 +134,9 @@ const Mint = () => {
       };
       let resp = await api.post(url, body);
       let data = resp.data;
-      setShowSuccessMint(!showSuccessMint);
+      let hash = data.transaction_hash;
+      setHash(hash);
+      setIsLoading(true);
     } catch (error) {
       if (error.isSessionExpired) {
         await logout(navigation);
@@ -179,172 +230,228 @@ const Mint = () => {
     }
   }
 
-  return (
-    <View style={styles.container}>
-      <Image
-        style={styles.imgBackground}
-        contentFit="cover"
-        source={require("../assets/group-865.png")}
-      />
-      <Text style={[styles.txtTitle, styles.txtStyle]}>
-        Neonrabbits NFT
-      </Text>
-      <Text style={[styles.txtTitle2, styles.txtStyle]}>
-        {Number(nftInfo?.mint_price).toFixed(2)} ETH
-      </Text>
-      <Image
-        style={styles.imgNft}
-        contentFit="cover"
-        source={require("../assets/ic_nft_default.png")}
-      />
-      <View style={styles.frameGroup}>
-        <Pressable onPress={doTotalNftMin}>
-          <View style={[styles.wrapper, styles.wrapperFlexBox]}>
-            <Text style={[totalNft == 0 ? styles.text : styles.text1, styles.textTypo]}>-</Text>
-          </View>
-        </Pressable>
-        <View style={[styles.container2, styles.wrapperFlexBox]}>
-          <Text style={[styles.text1, styles.textTypo]}>{totalNft}</Text>
-        </View>
-        <Pressable onPress={doTotalNftAdd}>
-          <View style={[styles.wrapper, styles.wrapperFlexBox]}>
-            <Text style={[totalNft == 2 ? styles.text : styles.text1, styles.textTypo]}>+</Text>
-          </View>
-        </Pressable>
+  const LoadingScreen = () => {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#ff0099" />
+        <Text style={styles.loadingText}>Loading...</Text>
       </View>
-      {totalNft == 2 ? (
-        <Text style={[styles.theMaximumNumber, styles.textTypo]}>
-          The maximum number of mints is 2.
-        </Text>
-      ) : ""}
+    );
+  };
 
-      {/* Section Wallet Info */}
-      <View style={[styles.frameParentWallet]}>
-        <View style={styles.walletBalance0EthWalletAParent}>
-          <View style={styles.walletBalance0Container}>
-            <View style={styles.row}>
-              <Text style={[styles.walletBalance, styles.walletTypo]}>Wallet Balance: </Text>
-              <Text style={[styles.eth1Typo, styles.walletTypo]}>{userInfo?.wallet_balance ? Number(userInfo.wallet_balance).toFixed(2) : '0.00'} ETH</Text>
+  const handleOutsidePress = () => {
+    console.log("outside press")
+    if(showSuccessMint){
+      if (userInfo?.owned_nfts?.length == 0) {
+        //navigation.navigate("Mint");
+        setShowSuccessMint(!showSuccessMint);
+      }
+      else {
+        navigation.replace("Main");
+      }
+    }
+  };
+
+  const handleInsideSuccessMint = () => {
+    console.log("inside success mint")
+  }
+
+  if(isLoading){
+    return <LoadingScreen/>
+  }
+
+  return (
+    <TouchableWithoutFeedback onPress={handleOutsidePress}>
+    <View style={styles.container}>
+    
+      <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
+        <Image
+          style={styles.imgBackground}
+          contentFit="cover"
+          source={require("../assets/group-865.png")}
+        />
+        <Text style={[styles.txtTitle, styles.txtStyle]}>
+          Neonrabbits NFT
+        </Text>
+        <Text style={[styles.txtTitle2, styles.txtStyle]}>
+          {Number(nftInfo?.mint_price).toFixed(2)} ETH
+        </Text>
+        <Image
+          style={styles.imgNft}
+          contentFit="cover"
+          source={require("../assets/ic_nft_default.png")}
+        />
+        <View style={styles.frameGroup}>
+          <Pressable onPress={doTotalNftMin}>
+            <View style={[styles.wrapper, styles.wrapperFlexBox]}>
+              <Text style={[totalNft == 0 ? styles.text : styles.text1, styles.textTypo]}>-</Text>
             </View>
-            <View style={styles.row}>
-              <Text style={[styles.walletBalance, styles.walletTypo]}>Wallet Address: </Text>
-              <Text style={[styles.eth1Typo, styles.walletTypo]}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
-            </View>
+          </Pressable>
+          <View style={[styles.container2, styles.wrapperFlexBox]}>
+            <Text style={[styles.text1, styles.textTypo]}>{totalNft}</Text>
           </View>
-          <Pressable
-            style={[styles.topUpWalletWrapper, styles.buttonBorder]}
-            onPress={() => setShowReceive(!showReceive)}
-          >
-            <Text style={[styles.topUpWallet, styles.walletTypo]}>
-              Top up wallet
-            </Text>
+          <Pressable onPress={doTotalNftAdd}>
+            <View style={[styles.wrapper, styles.wrapperFlexBox]}>
+              <Text style={[totalNft == 2 ? styles.text : styles.text1, styles.textTypo]}>+</Text>
+            </View>
           </Pressable>
         </View>
-        <Pressable
-          style={styles.button}
-          onPress={() => doMint()}
-        >
-          <Text style={[styles.buttonLabel, styles.eth1Typo]}>
-            Mint Neonrabbits
+        {totalNft == 2 ? (
+          <Text style={[styles.theMaximumNumber, styles.textTypo]}>
+            The maximum number of mints is 2.
           </Text>
-        </Pressable>
-      </View>
+        ) : ""}
 
-      {/* View Receive/Top Up Wallet */}
-      <View style={[styles.frameParent, !showReceive && { display: "none" }]}>
-        <Pressable
-          style={[styles.svgrepoLayout]}
-          onPress={() => setShowReceive(!showReceive)}
-        >
-          <Image
-            style={[styles.icon1, styles.iconLayout]}
-            contentFit="cover"
-            source={require("../assets/ic_close_white.png")}
-          />
-        </Pressable>
-        <View style={styles.deposit002EthParent}>
-          <Text style={[styles.deposit002Eth, styles.deposit002EthTypo]}>
-            Deposit 0.02 ETH
-          </Text>
-          <Text style={styles.mintANeonrabbitTypo}>Ethereum network</Text>
+        {/* Section Wallet Info */}
+        <View style={[styles.frameParentWallet]}>
+          <View style={styles.walletBalance0EthWalletAParent}>
+            <View style={styles.walletBalance0Container}>
+              <View style={styles.row}>
+                <Text style={[styles.walletBalance, styles.walletTypo]}>Wallet Balance: </Text>
+                <Text style={[styles.eth1Typo, styles.walletTypo]}>{userInfo?.wallet_balance ? Number(userInfo.wallet_balance).toFixed(2) : '0.00'} ETH</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={[styles.walletBalance, styles.walletTypo]}>Wallet Address: </Text>
+                <Text style={[styles.eth1Typo, styles.walletTypo]}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
+              </View>
+            </View>
+
+            {/* <LinearGradient
+              colors={['#FC00A7', '#65EDE3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.gradientBorder}
+            >
+            <View style={styles.buttonInner}> */}
+              <Pressable
+                style={[styles.topUpWalletWrapper, styles.buttonBorder]}
+                onPress={() => setShowReceive(!showReceive)}
+              >
+                <Text style={[styles.topUpWallet, styles.walletTypo]}>
+                  Top up wallet
+                </Text>
+              </Pressable>
+              {/* </View>
+            </LinearGradient> */}
+          </View>
+
+          <LinearGradient
+            colors={['#FC00A7', '#65EDE3']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.gradientBorder}
+          >
+          <View style={styles.buttonInner}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => doMint()}
+            >
+            <Text style={[styles.buttonLabel, styles.eth1Typo]}>
+              Mint Neonrabbits
+            </Text>
+          </TouchableOpacity>
+          </View>
+        </LinearGradient>
         </View>
-        <View style={styles.screenshot20231216At421Parent}>
-          <Image
-            style={styles.screenshot20231216At421}
-            contentFit="cover"
-            source={require("../assets/ic_barcode.png")}
-          />
-          <View style={styles.xedhvParent}>
-            <Text style={styles.xedhv}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
-            <Pressable onPress={doCopyWallet}>
-              <Image
-                style={styles.copySvgrepoCom1Icon}
-                contentFit="cover"
-                source={require("../assets/ic_copy.png")}
-              />
-            </Pressable>
+
+        {/* View Receive/Top Up Wallet */}
+        <View style={[styles.frameParent, !showReceive && { display: "none" }]}>
+          <Pressable
+            style={[styles.svgrepoLayout]}
+            onPress={() => setShowReceive(!showReceive)}
+          >
+            <Image
+              style={[styles.icon1, styles.iconLayout]}
+              contentFit="cover"
+              source={require("../assets/ic_close_white.png")}
+            />
+          </Pressable>
+          <View style={styles.deposit002EthParent}>
+            <Text style={[styles.deposit002Eth, styles.deposit002EthTypo]}>
+              Deposit 0.02 ETH
+            </Text>
+            <Text style={styles.mintANeonrabbitTypo}>Ethereum network</Text>
+          </View>
+          <View style={styles.screenshot20231216At421Parent}>
+            <Image
+              style={styles.screenshot20231216At421}
+              contentFit="cover"
+              source={require("../assets/ic_barcode.png")}
+            />
+            <View style={styles.xedhvParent}>
+              <Text style={styles.xedhv}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
+              <Pressable onPress={doCopyWallet}>
+                <Image
+                  style={styles.copySvgrepoCom1Icon}
+                  contentFit="cover"
+                  source={require("../assets/ic_copy.png")}
+                />
+              </Pressable>
+            </View>
           </View>
         </View>
-      </View>
 
-      {/* View Pop Up Copy Address */}
-      <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
-        <Image
-          style={styles.checkSvgrepoCom1Icon}
-          contentFit="cover"
-          source={require("../assets/ic_check.png")}
-        />
-        <Text style={styles.walletAddressCopied}>
-          Wallet address copied to clipboard
-        </Text>
-      </View>
-
-      {/* View Success Mint */}
-      <View style={[styles.postModal, !showSuccessMint && { display: "none" }]}>
-        {nft?.image ? (
+        {/* View Pop Up Copy Address */}
+        <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
           <Image
-            style={styles.mintItemLayout}
+            style={styles.checkSvgrepoCom1Icon}
             contentFit="cover"
-            source={nft?.image}
+            source={require("../assets/ic_check.png")}
           />
-        ) : (
-          <Image
-            style={styles.mintItemLayout}
-            contentFit="cover"
-            source={require("../assets/ic_nft_default.png")}
-          />
-        )}
-        <View style={styles.buttonParentSpaceBlock}>
-          <Text style={[styles.congratulations, styles.eth1Typo]}>
-            Congratulations!
-          </Text>
-          <Text style={[styles.youAre287, styles.youAre287Typo]}>
-            You are #{nft?.token_id} Neonrabbit
+          <Text style={styles.walletAddressCopied}>
+            Wallet address copied to clipboard
           </Text>
         </View>
-        <View style={[styles.buttonParent, styles.buttonParentSpaceBlock]}>
-          <TouchableOpacity
-            style={[styles.button1, styles.buttonBorder2]}
-            // onPress={() => navigation.replace("Main")}
-            onPress={doShareOnX}
-          >
-            <Text style={[styles.buttonLabel, styles.eth1Typo]}>
-              Share on X
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button2, styles.buttonBorder2]}
-            // onPress={() => setShowSuccessMint(!showSuccessMint)}
-            disabled={downloading}
-            onPress={doDownloadImage}
-          >
-            <Text style={[styles.buttonLabel, styles.eth1Typo]}>
-              {downloading ? "Download ..." : "Download Original Image"}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+
+        {/* View Success Mint */}
+        <TouchableWithoutFeedback onPress={handleInsideSuccessMint}>
+          <View style={[styles.postModal, !showSuccessMint && { display: "none" }]}>
+            {nft?.image ? (
+              <Image
+                style={styles.mintItemLayout}
+                contentFit="cover"
+                source={nft?.image}
+              />
+            ) : (
+              <Image
+                style={styles.mintItemLayout}
+                contentFit="cover"
+                source={require("../assets/ic_nft_default.png")}
+              />
+            )}
+            <View style={styles.buttonParentSpaceBlock}>
+              <Text style={[styles.congratulations, styles.eth1Typo]}>
+                Congratulations!
+              </Text>
+              <Text style={[styles.youAre287, styles.youAre287Typo]}>
+                You are #{nft?.token_id} Neonrabbit
+              </Text>
+            </View>
+            <View style={[styles.buttonParent, styles.buttonParentSpaceBlock]}>
+              <TouchableOpacity
+                style={[styles.button1, styles.buttonBorder2]}
+                // onPress={() => navigation.replace("Main")}
+                onPress={doShareOnX}
+              >
+                <Text style={[styles.buttonLabel, styles.eth1Typo]}>
+                  Share on X
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button2, styles.buttonBorder2]}
+                // onPress={() => setShowSuccessMint(!showSuccessMint)}
+                disabled={downloading}
+                onPress={doDownloadImage}
+              >
+                <Text style={[styles.buttonLabel, styles.eth1Typo]}>
+                  {downloading ? "Download ..." : "Download Original Image"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -356,6 +463,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: "center",
     backgroundColor: Color.colorGray_100,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1c1c1c',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: '#FFFFFF',
   },
   imgBackground: {
     height: "100%",
@@ -380,7 +498,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   imgNft: {
-    marginTop: -178,
+    marginTop: -168,
     top: "50%",
     height: 272,
     borderRadius: Border.br_5xs,
@@ -388,7 +506,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   frameGroup: {
-    top: 540,
+    top: 480,
     flexDirection: "row",
     borderRadius: Border.br_5xs,
     position: "absolute",
@@ -423,7 +541,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   theMaximumNumber: {
-    top: 588,
+    top: 520,
     fontSize: FontSize.size_xs,
     // display: "none",
     width: 264,
@@ -458,7 +576,7 @@ const styles = StyleSheet.create({
   },
   walletTypo: {
     textAlign: 'left',
-    fontSize: FontSize.labelLarge_size,
+    fontSize: FontSize.size_sm,
     color: Color.darkInk,
   },
   walletBalance: {
@@ -485,18 +603,37 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.clashGrotesk,
     fontWeight: "500",
   },
+  buttonInner: {
+    // width: 100,
+    // marginTop: -111,
+    // top: "50%",
+    // width:"100%",
+    // backgroundColor: '#1c1c1c', // Warna background tombol
+    // borderRadius: 10,
+    // borderColor:"red",
+    // borderWidth:2
+  },
+  gradientBorder: {
+    // borderColor:'red',
+    // borderWidth:5,
+    padding: 2, // Lebar border gradien
+    borderRadius: 10,
+    width:"100%",
+    marginTop:24
+  },
   button: {
-    borderWidth: 3,
-    width: "95%",
-    maxWidth: Component_Max_Width,
-    height: 54,
+    // borderWidth: 3,
+    // width: "95%",
+    // maxWidth: Component_Max_Width,
+    // height: 54,
     paddingHorizontal: Padding.p_5xl,
     paddingVertical: Padding.p_xs,
-    marginTop: 24,
-    borderColor: Color.colorDeeppink,
-    borderStyle: "solid",
+    borderRadius:10,
+    // marginTop: 24,
+    // borderColor: Color.colorDeeppink,
+    // borderStyle: "solid",
     flexDirection: "row",
-    borderRadius: Border.br_5xs,
+    // borderRadius: Border.br_5xs,
     backgroundColor: Color.colorGray_100,
     justifyContent: "center",
     alignItems: "center",

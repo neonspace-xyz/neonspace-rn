@@ -5,6 +5,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import api from '../utils/ApiHandler';
 import { API_URL, REFERAL_CODE } from '../Constant';
 import { logout } from '../Utils';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const ReferralCodeScreen = () => {
   const navigation = useNavigation();
@@ -74,13 +75,24 @@ const ReferralCodeScreen = () => {
         value={referralCode}
         onChangeText={setReferralCode}
       />
-      <TouchableOpacity
-        style={styles.verifyButton}
-        onPress={handleVerify}
-        disabled={loading || preparing}
-      >
-        <Text style={styles.verifyButtonText}>{loading ? "Verifing" : "Verify"}</Text>
-      </TouchableOpacity>
+      <LinearGradient
+          colors={['#FC00A7', '#65EDE3']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.gradientBorder}
+        >
+          <View style={styles.buttonInner}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={handleVerify}
+              disabled={loading || preparing}
+            >
+              
+              <Text style={styles.buttonText}>{loading ? "Verifing" : "Verify"}</Text>
+            
+            </TouchableOpacity>
+          </View>
+      </LinearGradient>
     </View>
   );
 };
@@ -110,15 +122,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 20,
   },
-  verifyButton: {
-    width: '80%',
-    height: 50,
-    backgroundColor: '#22222A',
-    justifyContent: 'center',
+  buttonInner: {
+    width: 150,
+    backgroundColor: '#1c1c1c', // Warna background tombol
+    borderRadius: 10,
+  },
+  buttonContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     alignItems: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#444450',
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  gradientBorder: {
+    padding: 2, // Lebar border gradien
+    borderRadius: 10,
+  },
+  gradientBackground: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  verifyButton: {
+    // width: '80%',
+    // height: 50,
+    // backgroundColor: '#22222A',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // borderRadius: 5,
+    // borderWidth: 1,
+    // borderColor: '#444450',
+    borderRadius: 10,
+    overflow: 'hidden',
   },
   verifyButtonText: {
     color: '#FFFFFF',
