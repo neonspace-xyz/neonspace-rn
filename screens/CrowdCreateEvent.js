@@ -8,8 +8,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../components/AuthProvider";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { Component_Max_Width, MAX_CHAR_DETAIL } from "../Constant";
+import { formatEventTime } from "../Utils";
 
-const CrowdCreateHiring = () => {
+const CrowdCreateEvent = () => {
   const route = useRoute();
   const { tab, item } = route.params;
   const navigation = useNavigation();
@@ -99,13 +100,13 @@ const CrowdCreateHiring = () => {
               />
             </View>
             <View style={styles.frameChild}>
-              <Text style={styles.txtTitle}>Company/Project</Text>
+              <Text style={styles.txtTitle}>Host</Text>
               <TextInput
                 style={[styles.textInput]}
-                placeholder="Company/Project"
+                placeholder="Host"
                 placeholderTextColor={Color.colorGray_500}
-                value={input?.company}
-                onChangeText={(value) => handleInputChange('company', value)}
+                value={input?.host}
+                onChangeText={(value) => handleInputChange('host', value)}
               />
             </View>
             <View style={styles.frameChild}>
@@ -119,21 +120,31 @@ const CrowdCreateHiring = () => {
               />
             </View>
             <View style={styles.frameChild}>
-              <Text style={styles.txtTitle}>Salary range (option)</Text>
+              <Text style={styles.txtTitle}>Date</Text>
               <TextInput
                 style={[styles.textInput]}
-                placeholder="Salary range"
+                placeholder="Date"
                 placeholderTextColor={Color.colorGray_500}
-                value={input?.salary}
-                onChangeText={(value) => handleInputChange('salary', value)}
+                value={formatEventTime(input?.date)}
+                onChangeText={(value) => handleInputChange('date', value)}
               />
             </View>
             <View style={styles.frameChild}>
-              <Text style={styles.txtTitle}>Job description</Text>
+              <Text style={styles.txtTitle}>Event Link</Text>
+              <TextInput
+                style={[styles.textInput]}
+                placeholder="Event Link"
+                placeholderTextColor={Color.colorGray_500}
+                value={input?.link}
+                onChangeText={(value) => handleInputChange('link', value)}
+              />
+            </View>
+            <View style={styles.frameChild}>
+              <Text style={styles.txtTitle}>Event intro</Text>
               <View style={styles.frameDetail}>
                 <TextInput
                   style={[styles.textDetail]}
-                  placeholder="Job description"
+                  placeholder="Event intro"
                   placeholderTextColor={Color.colorGray_500}
                   value={input?.detail}
                   onChangeText={(text) => onChangeDetail(text)}
@@ -276,4 +287,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CrowdCreateHiring;
+export default CrowdCreateEvent;

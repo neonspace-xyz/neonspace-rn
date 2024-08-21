@@ -101,11 +101,11 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
         screen_name: '@FimoTex96172',//`@username${i}`,
         image: IMG_PROFILE[getRandomNumber(0, 4)],
         title: `Title${i}`,
-        company: `Company${i}`,
+        host: `Host${i}`,
         location: `Location${i}`,
         link: 'https://neonrabbits.io',
-        detail: getRandomTimestamp(10),
-        text: 'Event details lorem ipsum neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic part lorem ipsum long text here example lorem ipsum.',
+        date: getRandomTimestamp(10),
+        detail: 'Event details lorem ipsum neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic part lorem ipsum long text here example lorem ipsum.',
         view: view,
         like: like,
         datetime: getRandomTimestamp(30),
@@ -171,8 +171,7 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
   };
 
   const handleEdit = () => {
-    const selectedItem = items[selectedItemIndex];
-    // navigation.navigate('EditScreen', { item: selectedItem });
+    navigation.push(`CrowdCreateEvent${tab}`, { tab, item: items[selectedItemIndex] });
     setSelectedItemIndex(null);
   };
 
@@ -201,6 +200,7 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
   };
 
   const doCreate = () => {
+    navigation.push(`CrowdCreateEvent${tab}`, { tab });
   }
 
   return (

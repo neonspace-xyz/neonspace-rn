@@ -47,15 +47,15 @@ const CrowdSectionEvent = ({ tab, isDetail, index, userInfo, item, onPress, onMo
           <View style={styles.detailsContainer}>
             <View style={styles.titleDetailContainer}>
               <Text style={[styles.titleText, styles.textStyle]}>{item?.title}</Text>
-              <Text style={[styles.detailText, styles.textStyle]}>{formatEventTime(item?.detail)}</Text>
+              <Text style={[styles.detailText, styles.textStyle]}>{formatEventTime(item?.date)}</Text>
             </View>
-            <Text style={[styles.companyText, styles.textStyle]}>{item?.company}</Text>
+            <Text style={[styles.companyText, styles.textStyle]}>{item?.host}</Text>
             <Text style={[styles.locationText, styles.textStyle]}>{item?.location}</Text>
             <Text style={[styles.linkText, styles.textStyle]}>{item?.link}</Text>
           </View>
 
           <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
-            {isDetail ? item?.text : truncateString(item?.text, 150)}
+            {isDetail ? item?.detail : truncateString(item?.detail, 150)}
           </Text>
           <View style={[styles.frameContainer, isDetail ? styles.imSoExcitedSpaceBlock1 : styles.imSoExcitedSpaceBlock2]}>
             {isDetail ? (

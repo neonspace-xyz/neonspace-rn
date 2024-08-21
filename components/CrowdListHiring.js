@@ -103,8 +103,8 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
         title: `Title${i}`,
         company: `Company${i}`,
         location: `Location${i}`,
-        detail: `80k-120k`,
-        text: 'Are you passionate about lorem ipsum tect Neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic partners, and source new partnerships lorem ipsum.\n\nAbout\n\nBrinc is a global lorem ipsum I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! ',
+        salary: `80k-120k`,
+        detail: 'Are you passionate about lorem ipsum tect Neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic partners, and source new partnerships lorem ipsum.\n\nAbout\n\nBrinc is a global lorem ipsum I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! ',
         view: view,
         like: like,
         datetime: getRandomTimestamp(30),
@@ -170,8 +170,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
   };
   
   const handleEdit = () => {
-    const selectedItem = items[selectedItemIndex];
-    // navigation.navigate('EditScreen', { item: selectedItem });
+    navigation.push(`CrowdCreateHiring${tab}`, { tab, item: items[selectedItemIndex] });
     setSelectedItemIndex(null);
   };
 
@@ -200,7 +199,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
   };
 
   const doCreate = () => {
-    // navigation.push(`CrowdCreateHiring${tab}`, { tab, item: items[0] });
+    navigation.push(`CrowdCreateHiring${tab}`, { tab });
   }
 
   return (

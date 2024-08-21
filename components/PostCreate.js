@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TextInput, Platform, KeyboardAvoidingView, Alert, TouchableOpacity } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
-import { API_URL, Component_Max_Width, POST_MAX_CHAR } from "../Constant";
+import { API_URL, Component_Max_Width, MAX_CHAR_POST } from "../Constant";
 import { useAuth } from "./AuthProvider";
 
 const PostCreate = ({ usersession, setIsShowCreate }) => {
@@ -44,7 +44,7 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
   }
 
   const onChangeMessage = (input) => {
-    if (input.length == POST_MAX_CHAR) return;
+    if (input.length == MAX_CHAR_POST) return;
     setMessage(input);
   }
 
@@ -102,7 +102,7 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
           <Text style={[styles.thePostPreview, styles.postClr]}>
             The post preview will show the first 280 letters
           </Text>
-          <Text style={[styles.thePostPreview, styles.postClr]}>{message?.length}/500</Text>
+          <Text style={[styles.thePostPreview, styles.postClr]}>{message?.length}/{MAX_CHAR_POST - 1}</Text>
         </View>
         <TouchableOpacity
           disabled={loading}
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     overflow: "hidden",
     color: Color.darkInk,
-    fontWeight:"400",
+    fontWeight: "400",
     fontFamily: getFontFamily("400"),
   },
   thePostPreviewWillShowTheParent: {
@@ -223,8 +223,8 @@ const styles = StyleSheet.create({
     color: Color.colorGray_700,
     textAlign: "right",
     fontSize: FontSize.size_xs,
-    fontWeight:"400",
-    fontFamily:getFontFamily("400")
+    fontWeight: "400",
+    fontFamily: getFontFamily("400")
   },
   btnPost: {
     borderRadius: Border.br_5xs,

@@ -53,7 +53,7 @@ const CrowdSectionQuest = ({ tab, isDetail, index, userInfo, item, onPress, onMo
           </View>
 
           <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
-            {isDetail ? item?.text : truncateString(item?.text, 150)}
+            {isDetail ? item?.detail : truncateString(item?.detail, 150)}
           </Text>
           <View style={[styles.frameContainer, isDetail ? styles.imSoExcitedSpaceBlock1 : styles.imSoExcitedSpaceBlock2]}>
             {isDetail ? (

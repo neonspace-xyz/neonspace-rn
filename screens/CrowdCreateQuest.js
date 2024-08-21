@@ -9,7 +9,7 @@ import { useAuth } from "../components/AuthProvider";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { Component_Max_Width, MAX_CHAR_DETAIL } from "../Constant";
 
-const CrowdCreateHiring = () => {
+const CrowdCreateQuest = () => {
   const route = useRoute();
   const { tab, item } = route.params;
   const navigation = useNavigation();
@@ -77,7 +77,7 @@ const CrowdCreateHiring = () => {
           />
         </Pressable>
         <Text style={[StyleHeaderTitle]}>
-          {item ? "Edit Hiring" : "Create Hiring"}
+          {item ? "Edit Quest" : "Create Quest"}
         </Text>
       </View>
       <KeyboardAvoidingView behavior="padding" style={{ width: "100%", flex: 1 }}>
@@ -89,51 +89,41 @@ const CrowdCreateHiring = () => {
         >
           <View style={styles.frameParent}>
             <View style={styles.frameChild}>
-              <Text style={styles.txtTitle}>Job title</Text>
+              <Text style={styles.txtTitle}>Quest name</Text>
               <TextInput
                 style={[styles.textInput]}
-                placeholder="Job title"
+                placeholder="Quest name"
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.title}
                 onChangeText={(value) => handleInputChange('title', value)}
               />
             </View>
             <View style={styles.frameChild}>
-              <Text style={styles.txtTitle}>Company/Project</Text>
+              <Text style={styles.txtTitle}>Company/Project Name</Text>
               <TextInput
                 style={[styles.textInput]}
-                placeholder="Company/Project"
+                placeholder="Company/Project Name"
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.company}
                 onChangeText={(value) => handleInputChange('company', value)}
               />
             </View>
             <View style={styles.frameChild}>
-              <Text style={styles.txtTitle}>Location</Text>
+              <Text style={styles.txtTitle}>Quest Link</Text>
               <TextInput
                 style={[styles.textInput]}
-                placeholder="Location"
+                placeholder="Quest Link"
                 placeholderTextColor={Color.colorGray_500}
-                value={input?.location}
-                onChangeText={(value) => handleInputChange('location', value)}
+                value={input?.link}
+                onChangeText={(value) => handleInputChange('link', value)}
               />
             </View>
             <View style={styles.frameChild}>
-              <Text style={styles.txtTitle}>Salary range (option)</Text>
-              <TextInput
-                style={[styles.textInput]}
-                placeholder="Salary range"
-                placeholderTextColor={Color.colorGray_500}
-                value={input?.salary}
-                onChangeText={(value) => handleInputChange('salary', value)}
-              />
-            </View>
-            <View style={styles.frameChild}>
-              <Text style={styles.txtTitle}>Job description</Text>
-              <View style={styles.frameDetail}>
+              <Text style={styles.txtTitle}>Quest Detail</Text>
+              <View style={styles.frameDesc}>
                 <TextInput
-                  style={[styles.textDetail]}
-                  placeholder="Job description"
+                  style={[styles.textDesc]}
+                  placeholder="Quest Detail"
                   placeholderTextColor={Color.colorGray_500}
                   value={input?.detail}
                   onChangeText={(text) => onChangeDetail(text)}
@@ -141,9 +131,9 @@ const CrowdCreateHiring = () => {
                   numberOfLines={numberOfLines}
                   scrollEnabled={input?.detail?.split('\n').length > 4}
                 />
-                <View style={styles.frameSubDetail}>
-                  <Text style={styles.textSubDetailLeft}>The post preview will show the first 280 letters</Text>
-                  <Text style={styles.textSubDetailRight}>{input?.detail?.length}/{MAX_CHAR_DETAIL - 1}</Text>
+                <View style={styles.frameSubDesc}>
+                  <Text style={styles.textSubDescLeft}>The post preview will show the first 280 letters</Text>
+                  <Text style={styles.textSubDescRight}>{input?.detail?.length}/{MAX_CHAR_DETAIL - 1}</Text>
                 </View>
               </View>
             </View>
@@ -202,12 +192,12 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontFamily: getFontFamily("400"),
   },
-  frameDetail: {
+  frameDesc: {
     marginTop: 8,
     borderRadius: Border.br_3xs,
     backgroundColor: Color.colorDarkslategray_400,
   },
-  textDetail: {
+  textDesc: {
     height: 150,
     textAlign: "left",
     alignSelf: "stretch",
@@ -218,19 +208,19 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontFamily: getFontFamily("400"),
   },
-  frameSubDetail: {
+  frameSubDesc: {
     paddingHorizontal: Padding.p_xs,
     marginBottom: Padding.p_sm,
     flexDirection: "row",
     justifyContent: 'space-between'
   },
-  textSubDetailLeft: {
+  textSubDescLeft: {
     color: Color.colorGray_700,
     fontSize: FontSize.size_xs,
     fontWeight: "400",
     fontFamily: getFontFamily("400"),
   },
-  textSubDetailRight: {
+  textSubDescRight: {
     color: Color.colorGray_700,
     fontSize: FontSize.size_xs,
     fontWeight: "400",
@@ -276,4 +266,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CrowdCreateHiring;
+export default CrowdCreateQuest;

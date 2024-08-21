@@ -5,6 +5,8 @@ import CrowdDetailHiring from './CrowdDetailHiring';
 import CrowdDetailEvent from './CrowdDetailEvent';
 import CrowdDetailQuest from './CrowdDetailQuest';
 import CrowdCreateHiring from './CrowdCreateHiring';
+import CrowdCreateEvent from './CrowdCreateEvent';
+import CrowdCreateQuest from './CrowdCreateQuest';
 import PostLikeList from './PostLikeList';
 import ChatList from './ChatList';
 import ChatView from './ChatView';
@@ -25,6 +27,8 @@ function CrowdsourceStackNavigator() {
       <Stack.Screen name="CrowdDetailEvent5" component={CrowdDetailEvent} initialParams={dataToSend} />
       <Stack.Screen name="CrowdDetailQuest5" component={CrowdDetailQuest} initialParams={dataToSend} />
       <Stack.Screen name="CrowdCreateHiring5" component={CrowdCreateHiring} initialParams={dataToSend} />
+      <Stack.Screen name="CrowdCreateEvent5" component={CrowdCreateEvent} initialParams={dataToSend} />
+      <Stack.Screen name="CrowdCreateQuest5" component={CrowdCreateQuest} initialParams={dataToSend} />
       <Stack.Screen name="PostLikeList5" component={PostLikeList} initialParams={dataToSend} />
       <Stack.Screen name="ChatList5" component={ChatList} initialParams={dataToSend} />
       <Stack.Screen name="ChatView5" component={ChatView} initialParams={dataToSend} />

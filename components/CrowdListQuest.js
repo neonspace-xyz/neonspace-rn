@@ -103,7 +103,7 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
         title: `Title${i}`,
         company: `Company${i}`,
         link: 'https://neonrabbits.io',
-        text: 'Event details lorem ipsum neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic part lorem ipsum long text here example lorem ipsum.',
+        detail: 'Event details lorem ipsum neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic part lorem ipsum long text here example lorem ipsum.',
         view: view,
         like: like,
         datetime: getRandomTimestamp(30),
@@ -169,8 +169,7 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
   };
 
   const handleEdit = () => {
-    const selectedItem = items[selectedItemIndex];
-    // navigation.navigate('EditScreen', { item: selectedItem });
+    navigation.push(`CrowdCreateQuest${tab}`, { tab, item: items[selectedItemIndex] });
     setSelectedItemIndex(null);
   };
 
@@ -199,6 +198,7 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
   };
 
   const doCreate = () => {
+    navigation.push(`CrowdCreateQuest${tab}`, { tab });
   }
 
   return (

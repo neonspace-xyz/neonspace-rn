@@ -7,7 +7,8 @@ export const REFERAL_CODE = "7hR4f3PHxk9H@4tK";
 export const OAUTH_TOKEN = "0uLCZwAAAAABtNzEAAABkUB2AB4";
 export const OAUTH_VERIFER = "tUtRt5jagT25Cw9olTC6P0ISXuZhxk2B";
 
-export const POST_MAX_CHAR = 501;
+export const MAX_CHAR_POST = 501;
+export const MAX_CHAR_DETAIL = 3001;
 
 export const CHAT_OFFSET = 0;
 
