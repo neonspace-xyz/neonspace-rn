@@ -4,13 +4,14 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
-import CrowdSectionHiring from "./CrowdSectionHiring";
 import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
+import CrowdSectionHiring from "./CrowdSectionHiring";
 import PopupOption from "./PopupOption";
+import ButtonFAB from "./ButtonFAB";
 
-const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }) => {
+const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
   const { api } = useAuth();
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
@@ -114,7 +115,6 @@ const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate 
   };
 
   const handleDetail = (item) => {
-    if (isShowCreate) return;
     navigation.push(`CrowdDetailHiring${tab}`, { tab, item });
   };
 
@@ -165,9 +165,6 @@ const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate 
       newTop = newTop - (windowDimensions.height / 2) + 100;
     }
 
-    console.log("pageY", pageY, "pageX", pageX);
-    console.log("top", newTop, "left", newLeft);
-
     setMenuPosition({ top: newTop, left: newLeft });
     setSelectedItemIndex(index);
   };
@@ -202,9 +199,14 @@ const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate 
     );
   };
 
+  const doCreate = () => {
+    // navigation.push(`CrowdCreateHiring${tab}`, { tab, item: items[0] });
+  }
+
   return (
-    <View style={[isProfile ? styles.containerListProfile : styles.containerList, isShowSearch && { display: "none" }]}>
+    <View style={[isProfile ? styles.containerListProfile : styles.containerList]}>
       <FlatList
+        ref={flatListRef}
         style={styles.flat}
         data={items}
         onScroll={onScroll}
@@ -244,6 +246,11 @@ const CrowdListHiring = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate 
         handleEdit={handleEdit}
         handleDelete={confirmDelete}
       />
+      {usersession?.user_info?.user_id == userInfo?.user_id && (
+        <ButtonFAB
+          doCreate={doCreate}
+        />
+      )}
     </View>
   );
 };

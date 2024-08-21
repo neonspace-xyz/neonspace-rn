@@ -9,65 +9,77 @@ import CrowdListEvent from '../components/CrowdListEvent';
 import CrowdListQuest from '../components/CrowdListQuest';
 import { Color } from '../GlobalStyles';
 import { CROWD } from '../Constant';
+import { getSession } from '../Utils';
 
 const FirstRoute = ({ route }) => {
-  const { getUser } = useAuth();
+  const { getUser, getSession } = useAuth();
   const [userInfo, setUserInfo] = useState();
+  const [usersession, setUsersession] = useState();
 
   useEffect(() => {
     getUser().then((user) => {
       setUserInfo(user);
     });
+    getSession().then((item) => {
+      setUsersession(item)
+    })
   }, [])
 
   return (userInfo &&
     <View style={styles.containerTab} >
       <CrowdListHiring
         tab={route.tab}
-        userInfo={userInfo}
         isProfile={false}
-        isShowSearch={false}
-        isShowCreate={false} />
+        usersession={usersession}
+        userInfo={userInfo} />
     </View>)
 };
 
 const SecondRoute = ({ route }) => {
-  const { getUser } = useAuth();
+  const { getUser, getSession } = useAuth();
   const [userInfo, setUserInfo] = useState();
+  const [usersession, setUsersession] = useState();
 
   useEffect(() => {
     getUser().then((user) => {
       setUserInfo(user);
     });
+    getSession().then((item) => {
+      setUsersession(item)
+    })
   }, [])
+
   return (userInfo &&
     <View style={styles.containerTab} >
       <CrowdListEvent
         tab={route.tab}
-        userInfo={userInfo}
         isProfile={false}
-        isShowSearch={false}
-        isShowCreate={false} />
+        usersession={usersession}
+        userInfo={userInfo} />
     </View>)
 };
 
 const ThirdRoute = ({ route }) => {
-  const { getUser } = useAuth();
+  const { getUser, getSession } = useAuth();
   const [userInfo, setUserInfo] = useState();
+  const [usersession, setUsersession] = useState();
 
   useEffect(() => {
     getUser().then((user) => {
       setUserInfo(user);
     });
+    getSession().then((item) => {
+      setUsersession(item)
+    })
   }, [])
+
   return (userInfo &&
     <View style={styles.containerTab} >
       <CrowdListQuest
         tab={route.tab}
-        userInfo={userInfo}
         isProfile={false}
-        isShowSearch={false}
-        isShowCreate={false} />
+        usersession={usersession}
+        userInfo={userInfo} />
     </View>)
 };
 const renderScene = SceneMap({

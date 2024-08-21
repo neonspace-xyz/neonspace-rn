@@ -9,8 +9,10 @@ import { convertTimestamp, getRandomNumber, logout } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
 import PopupOption from "./PopupOption";
+import ButtonFAB from "./ButtonFAB";
+import PostCreate from "./PostCreate";
 
-const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowCreate }) => {
+const PostList = ({ tab, isProfile, usersession, userInfo }) => {
   const { api } = useAuth();
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
@@ -23,6 +25,8 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowC
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const flatListRef = useRef(null);
+
+  const [isShowCreate, setIsShowCreate] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -132,9 +136,6 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowC
       newTop = newTop - (windowDimensions.height / 2) + 100;
     }
 
-    console.log("pageY", pageY, "pageX", pageX);
-    console.log("top", newTop, "left", newLeft);
-
     setMenuPosition({ top: newTop, left: newLeft });
     setSelectedItemIndex(index);
   };
@@ -163,8 +164,12 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowC
     );
   };
 
+  const doCreate = () => {
+    setIsShowCreate(true);
+  }
+
   return (
-    <View style={[isProfile ? styles.containerListProfile : styles.containerList, isShowSearch && { display: "none" }]}>
+    <View style={[isProfile ? styles.containerListProfile : styles.containerList]}>
       <FlatList
         ref={flatListRef}
         style={styles.flat}
@@ -205,6 +210,16 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch, isShowC
         menuPosition={menuPosition}
         handleDelete={confirmDelete}
       />
+      {isShowCreate && (
+        <PostCreate
+          usersession={usersession}
+          setIsShowCreate={setIsShowCreate} />
+      )}
+      {!isShowCreate && usersession?.user_info?.user_id == userInfo?.user_id && (
+        <ButtonFAB
+          doCreate={doCreate}
+        />
+      )}
     </View>
   );
 };

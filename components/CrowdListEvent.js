@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
@@ -9,8 +9,9 @@ import { IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
 import CrowdSectionEvent from "./CrowdSectionEvent";
 import PopupOption from "./PopupOption";
+import ButtonFAB from "./ButtonFAB";
 
-const CrowdListEvent = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }) => {
+const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
   const { api } = useAuth();
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
@@ -115,7 +116,6 @@ const CrowdListEvent = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }
   };
 
   const handleDetail = (item) => {
-    if (isShowCreate) return;
     navigation.push(`CrowdDetailEvent${tab}`, { tab, item });
   };
 
@@ -166,9 +166,6 @@ const CrowdListEvent = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }
       newTop = newTop - (windowDimensions.height / 2) + 100;
     }
 
-    console.log("pageY", pageY, "pageX", pageX);
-    console.log("top", newTop, "left", newLeft);
-
     setMenuPosition({ top: newTop, left: newLeft });
     setSelectedItemIndex(index);
   };
@@ -203,9 +200,13 @@ const CrowdListEvent = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }
     );
   };
 
+  const doCreate = () => {
+  }
+
   return (
-    <View style={[isProfile ? styles.containerListProfile : styles.containerList, isShowSearch && { display: "none" }]}>
+    <View style={[isProfile ? styles.containerListProfile : styles.containerList]}>
       <FlatList
+        ref={flatListRef}
         style={styles.flat}
         data={items}
         onScroll={onScroll}
@@ -245,6 +246,11 @@ const CrowdListEvent = ({ userInfo, tab, isProfile, isShowSearch, isShowCreate }
         handleEdit={handleEdit}
         handleDelete={confirmDelete}
       />
+      {usersession?.user_info?.user_id == userInfo?.user_id && (
+        <ButtonFAB
+          doCreate={doCreate}
+        />
+      )}
     </View>
   );
 };

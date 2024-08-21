@@ -1,10 +1,8 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { StyleSheet, View, Pressable, Alert } from "react-native";
-import { Color, FontFamily, FontSize } from "../GlobalStyles";
-import PostCreate from "../components/PostCreate";
+import { StyleSheet } from "react-native";
+import { Color } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { useAuth } from "../components/AuthProvider";
 import Header from "../components/Header";
@@ -13,7 +11,6 @@ const PostHome = ({ route }) => {
   const { getSession } = useAuth();
   const { tab } = route?.params;
   const [usersession, setUsersession] = useState();
-  const [isShowCreate, setIsShowCreate] = useState(false);
   const [isShowSearch, setIsShowSearch] = useState(false);
 
   useEffect(() => {
@@ -21,10 +18,6 @@ const PostHome = ({ route }) => {
       setUsersession(data);
     });
   }, []);
-
-  const doPostCreate = () => {
-    setIsShowCreate(true);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,22 +31,7 @@ const PostHome = ({ route }) => {
         tab={tab}
         isProfile={false}
         usersession={usersession}
-        userInfo={usersession?.user_info}
-        isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} />
-
-      {isShowCreate && (
-        <PostCreate
-          usersession={usersession}
-          setIsShowCreate={setIsShowCreate} />
-      )}
-      {!isShowCreate && (
-        <View style={styles.containerFAB}>
-          <Pressable style={styles.FAB} onPress={doPostCreate}>
-            <Icon name="add" size={45} color={Color.colorBlack} />
-          </Pressable>
-        </View>
-      )}
+        userInfo={usersession?.user_info} />
     </SafeAreaView>
   );
 };
