@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   containerFAB: {
     position: 'absolute',
     zIndex: 1,
-    bottom: 50,
-    right: 50,
+    bottom: 80,
+    right: 20,
   },
   FAB: {
     backgroundColor: Color.darkInk, // Adjust color as needed

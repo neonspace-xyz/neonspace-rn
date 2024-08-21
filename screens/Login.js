@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image } from "expo-image";
 import { Alert, View, TextInput, Modal, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
-import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
+import { Color, FontFamily, FontSize, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { Component_Max_Width, REFERAL_CODE as REFERRAL_CODE, TWITTER_OAUTH } from "../Constant";
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -26,7 +26,7 @@ const Login = () => {
       console.log("doLogin-token", _oauthToken);
       if (_oauthToken) {
         console.log("link", `${TWITTER_OAUTH}${_oauthToken}`)
-        // setModalVisible(true);
+        setModalVisible(true);
         setOauthToken(_oauthToken);
         openOAuthURL(_oauthToken);
         // navigation.replace("Mint");
@@ -242,23 +242,25 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
   },
-  txtStyle: {
-    textAlign: "center",
-    color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
-  },
   txtTitle: {
     top: 140,
     fontSize: FontSize.size_13xl,
     fontWeight: "600",
     position: "absolute",
+    textAlign: "center",
+    color: Color.darkInk,
+    fontFamily: getFontFamily("600"),
   },
   txtDesc: {
     top: 199,
     fontSize: FontSize.size_sm,
     position: "absolute",
     width: "80%",
+    fontFamily: getFontFamily("400"),
+    fontWeight: "400",    
     maxWidth: Component_Max_Width,
+    textAlign: "center",
+    color: Color.darkInk,
   },
   imgLogo: {
     marginTop: -111,
@@ -294,8 +296,8 @@ const styles = StyleSheet.create({
     fontSize: FontSize.labelLarge_size,
     lineHeight: 24,
     fontWeight: "600",
+    fontFamily: getFontFamily("600"),
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
   },
 
   modalBackground: {

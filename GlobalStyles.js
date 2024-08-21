@@ -1,9 +1,43 @@
 /* fonts */
 export const FontFamily = {
   clashGrotesk: "Clash Grotesk",
+  cgBold: "ClashGrotesk-Bold",
+  cgExtraLight: "ClashGrotesk-ExtraLight",
+  cgLight: "ClashGrotesk-Light",
+  cgMedium: "ClashGrotesk-Medium",
+  cgRegular: "ClashGrotesk-Regular",
+  cgSemiBold: "ClashGrotesk-Semibold",
+  cgVariable: "ClashGrotesk-Variable",
   labelLarge: "Satoshi",
   sFProText: "SF Pro Text",
 };
+
+export const getFontFamily = (fontWeight) => {
+  switch (fontWeight) {
+    case '100':
+      return 'ClashGrotesk-Extralight'; // Extralight digunakan untuk font-weight 100
+    case '200':
+      return 'ClashGrotesk-Extralight'; // Extralight juga bisa digunakan untuk font-weight 200
+    case '300':
+      return 'ClashGrotesk-Light'; // Light untuk font-weight 300
+    case '400':
+      return 'ClashGrotesk-Regular'; // Regular untuk font-weight 400
+    case '500':
+      return 'ClashGrotesk-Medium'; // Medium untuk font-weight 500
+    case '600':
+      return 'ClashGrotesk-Semibold'; // Semibold untuk font-weight 600
+    case '700':
+      return 'ClashGrotesk-Bold'; // Bold untuk font-weight 700
+    case '800':
+      return 'ClashGrotesk-Bold'; // Bold digunakan juga untuk font-weight 800
+    case '900':
+      return 'ClashGrotesk-Bold'; // Bold digunakan juga untuk font-weight 900
+    default:
+      return 'ClashGrotesk-Regular'; // Default jika font-weight tidak dikenal
+  }
+};
+
+
 /* font sizes */
 export const FontSize = {
   size_xs: 12,

@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, View, Pressable, TextInput, StatusBar, Alert, FlatList } from "react-native";
-import { Color, FontFamily, FontSize } from "../GlobalStyles";
+import { Color, FontFamily, FontSize, getFontFamily } from "../GlobalStyles";
 import { useAuth } from "../components/AuthProvider";
 import UserSearchSection from "./UserSearchSection";
 
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: Color.darkInk,
     textAlign: "left",
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("500"),
     fontWeight: "500",
     fontSize: FontSize.labelLarge_size,
   },

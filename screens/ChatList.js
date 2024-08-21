@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useRoute } from '@react-navigation/core';
-import { Color, FontFamily, FontSize } from "../GlobalStyles";
+import { Color, FontFamily, FontSize, getFontFamily } from "../GlobalStyles";
 import { logout } from "../Utils";
 import PostCreate from "../components/PostCreate";
 import ChatSection from "../components/ChatSection";
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: Color.darkInk,
     textAlign: "left",
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("500"),
     fontWeight: "500",
     fontSize: FontSize.labelLarge_size,
   },

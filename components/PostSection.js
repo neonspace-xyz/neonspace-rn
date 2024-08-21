@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
-import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { formatPostTimestamp, getFormattedPostTimestamp } from "../Utils";
 import { useNavigation } from "@react-navigation/core";
 
@@ -21,7 +21,7 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
             />
             <View style={[styles.frameFlexBox]}>
               <View style={styles.frameFlexBox}>
-                <Text style={[styles.name, styles.nameTypo]}>{item?.name}</Text>
+                <Text style={[styles.name]}>{item?.name}</Text>
                 <Text style={[styles.endlessmeee, styles.nameTypo]}>
                   {item?.screen_name}
                 </Text>
@@ -31,7 +31,7 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
                 contentFit="cover"
                 source={require("../assets/ic_dot_white.png")}
               />
-              <Text style={[styles.txtDateTime, styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
+              <Text style={[styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
             </View>
             {`@${userInfo?.screen_name}` == item?.screen_name && (
               <TouchableOpacity onPress={(event) => onMore(event, index)} style={styles.viewImgMore}>
@@ -96,8 +96,8 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
             )}
           </View>
         </View>
-      </Pressable >
-    </View >
+      </Pressable>
+    </View>
   );
 };
 
@@ -132,24 +132,25 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: "500",
+    fontFamily: getFontFamily("500"),
     textAlign: "left",
     fontSize: FontSize.labelLarge_size,
-  },
-  nameTypo: {
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
-    textAlign: "left",
   },
   endlessmeee: {
+    fontWeight: "400",
+    fontFamily: getFontFamily("400"),
     marginLeft: 6,
     textAlign: "left",
     fontSize: FontSize.labelLarge_size,
+    color: Color.darkInk,
   },
   imSoExcited: {
     fontSize: FontSize.size_sm,
     textAlign: "left",
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
+    fontWeight:"400",
+    fontFamily: getFontFamily("400"),
   },
   imSoExcitedSpaceBlock: {
     marginTop: 16,
@@ -164,7 +165,8 @@ const styles = StyleSheet.create({
     color: Color.colorGray_400,
     fontSize: FontSize.size_xs,
     textAlign: "left",
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("400"),
+    fontWeight:"400"
   },
   frameItem: {
     width: 3,
@@ -189,9 +191,12 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   txtDefault: {
+    marginLeft: 12,
+    textAlign: "left",
+    fontWeight: "400",
     fontSize: FontSize.size_xs,
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("400"),
   },
   viewImgMore: {
     width: 25,

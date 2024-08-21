@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TextInput, Platform, KeyboardAvoidingView, Alert, TouchableOpacity } from "react-native";
-import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { API_URL, Component_Max_Width, POST_MAX_CHAR } from "../Constant";
 import { useAuth } from "./AuthProvider";
 
@@ -89,6 +89,8 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
             multiline={true}
             numberOfLines={numberOfLines}
             scrollEnabled={message.split('\n').length > 4}
+            textAlignVertical="top"
+
           />
         </View>
         <View
@@ -180,15 +182,15 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontWeight: "500",
     fontSize: FontSize.labelLarge_size,
+    color: Color.darkInk,
+    fontFamily: getFontFamily("500")
   },
   endlessmeee: {
+    color: Color.darkInk,
+    fontFamily: getFontFamily("400"),
     marginLeft: 6,
     textAlign: "left",
     fontSize: FontSize.labelLarge_size,
-  },
-  timeClr: {
-    color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
   },
   frameChild: {
     height: 32,
@@ -210,19 +212,19 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     overflow: "hidden",
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
-  },
-  postClr: {
-    color: Color.colorGray_700,
-    fontFamily: FontFamily.clashGrotesk,
+    fontWeight:"400",
+    fontFamily: getFontFamily("400"),
   },
   thePostPreviewWillShowTheParent: {
     marginTop: 12,
     alignSelf: "stretch",
   },
   thePostPreview: {
+    color: Color.colorGray_700,
     textAlign: "right",
     fontSize: FontSize.size_xs,
+    fontWeight:"400",
+    fontFamily:getFontFamily("400")
   },
   btnPost: {
     borderRadius: Border.br_5xs,
@@ -262,6 +264,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: "center",
     fontWeight: "600",
+    fontFamily: getFontFamily("600"),
     fontSize: FontSize.labelLarge_size,
   },
   buttonLabelEnable: {

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TouchableOpacity, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
+import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
 import CrowdListEvent from "./CrowdListEvent";
 import CrowdListHiring from "./CrowdListHiring";
@@ -82,12 +82,12 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
         )}
         <View style={styles.frameParent10}>
           <View style={styles.nameParent4}>
-            <Text style={[styles.name6, styles.timeTypo]}>{userInfo?.name ? userInfo.name : "Name"}</Text>
-            <Text style={[styles.endlessmeee6, styles.nameTypo]}>
+            <Text style={[styles.name6]}>{userInfo?.name ? userInfo.name : "Name"}</Text>
+            <Text style={[styles.endlessmeee6]}>
               {userInfo?.screen_name ? `@${userInfo.screen_name}` : "@endlessmeee"}
             </Text>
           </View>
-          <Text style={[styles.theBioText, styles.textTypo]}>
+          <Text style={[styles.theBioText]}>
             {userInfo?.bio ? truncateString(userInfo.bio, 100) : "The bio text will be here. The maximum number of lines is 2 and that means max. characters is 100."}
           </Text>
         </View>
@@ -100,14 +100,14 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
           onPress={() => navigation.navigate(`EditProfile${tab}`)}
         >
-          <Text style={[styles.editProfile, styles.editProfileTypo]}>
+          <Text style={[styles.editProfile]}>
             Edit profile
           </Text>
         </TouchableOpacity>
         <View
           style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock]}
         >
-          <Text style={[styles.editProfile, styles.editProfileTypo]}>
+          <Text style={[styles.editProfile]}>
             Share profile
           </Text>
         </View>
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
   },
   timeTypo: {
     fontWeight: "600",
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("600"),
   },
   profileWrapperSpaceBlock: {
     // paddingVertical: Padding.p_3xs,
@@ -475,16 +475,23 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: Color.darkInk,
     fontSize: FontSize.labelLarge_size,
+    fontWeight:"600",
+    fontFamily:getFontFamily("600")
   },
   endlessmeee6: {
     textAlign: "left",
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
+    fontSize: FontSize.labelLarge_size,
+    fontWeight:"400",
+    fontFamily:getFontFamily("400")
   },
   nameParent4: {
     justifyContent: "center",
   },
   theBioText: {
+    color: Color.darkInk,
+    fontWeight:"400",
+    fontFamily:getFontFamily("400"),
     marginTop: 8,
     textAlign: "left",
     alignSelf: "stretch",
@@ -493,7 +500,8 @@ const styles = StyleSheet.create({
   frameParent10: {
     // borderColor:"red", borderWidth:2,
     width: 260,
-    padding: 10
+    padding: 10,
+    marginTop:10
     // justifyContent: "center",
   },
   myProfileItem: {
@@ -504,6 +512,10 @@ const styles = StyleSheet.create({
   },
   editProfile: {
     fontWeight: "500",
+    fontSize: FontSize.size_sm,
+    textAlign: "left",
+    color: Color.darkInk,
+    fontFamily: getFontFamily("500")
   },
   editProfileWrapper: {
     borderWidth: 1.5,
@@ -544,7 +556,8 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   walletAddress: {
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("400"),
+    fontWeight:"400"
   },
   walletAddress0xedhvContainer: {
     // top: 258,

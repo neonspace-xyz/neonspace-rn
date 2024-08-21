@@ -1,7 +1,7 @@
 import React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 
 const UserSearchSection = ({ isDetail, item, onPress }) => {
 
@@ -15,13 +15,13 @@ const UserSearchSection = ({ isDetail, item, onPress }) => {
         />
         <View style={styles.frameGroup}>
           <View style={styles.nameParentFlexBox}>
-            <Text style={[styles.name, styles.nameTypo]}>{item.name}</Text>
-            <Text style={[styles.endlessmeee, styles.nameTypo]}>
-              {item.screen_name}
+            <Text style={[styles.name]}>{item.name}</Text>
+            <Text style={[styles.endlessmeee]}>
+              @{item.screen_name}
             </Text>
           </View>
           <View style={[styles.nameOfNftParent, styles.nameParentFlexBox]}>
-            <Text style={[styles.nameOfNft, styles.nameTypo]}>
+            <Text style={[styles.nameOfNft]}>
               Name of NFT
             </Text>
             <Image
@@ -29,7 +29,7 @@ const UserSearchSection = ({ isDetail, item, onPress }) => {
               contentFit="cover"
               source={require("../assets/ic_dot_white.png")}
             />
-            <Text style={[styles.price04Eth, styles.nameTypo]}>
+            <Text style={[styles.price04Eth]}>
               Price: {item.price} ETH
             </Text>
           </View>
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   frameChildLayout: {
     width: 32,
     height: 32,
+    borderRadius:50
   },
   frameChild: {
     height: 32,
@@ -70,25 +71,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   name: {
+    fontFamily: getFontFamily("500"),
     fontWeight: "500",
     fontSize: FontSize.labelLarge_size,
     textAlign: "left",
-  },
-  nameTypo: {
-    textAlign: "left",
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
   },
   endlessmeee: {
+    color: Color.darkInk,
+    fontFamily: getFontFamily("400"),
+    fontWeight: "400",
     marginLeft: 6,
     fontSize: FontSize.labelLarge_size,
     textAlign: "left",
   },
   price04Eth: {
+    color: Color.darkInk,
+    fontFamily: getFontFamily("400"),
+    fontWeight: "400",
     fontSize: FontSize.size_xs,
     marginLeft: 10,
   },
   nameOfNft: {
+    color: Color.darkInk,
+    fontFamily: getFontFamily("400"),
+    fontWeight: "400",
     fontSize: FontSize.size_sm,
   },
   nameOfNftParent: {
