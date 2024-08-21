@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, StatusBar, Switch, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
+import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
@@ -66,13 +66,13 @@ const EditProfile = () => {
           </Pressable>
           
           <Text style={
-            [styles.editProfile, styles.timeTypo]
+            [styles.editProfile]
             // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
             }>Edit Profile</Text>
             
           <Pressable
             onPress={() => editProfile()}>
-            <Text style={[styles.save1, styles.save1Typo]}>Save</Text>
+            <Text style={[styles.save1]}>Save</Text>
           </Pressable>
       </View> 
 
@@ -95,10 +95,9 @@ backgroundColor: Color.colorGray_100,
         <View
           style={[
             styles.showMyWalletAddressParent,
-            styles.statusBarIphoneFlexBox,
           ]}
         >
-          <Text style={[styles.showMyWallet, styles.theBioTextTypo]}>
+          <Text style={[styles.showMyWallet]}>
             Show my wallet address
           </Text>
           <View style={styles.groupLayout}>
@@ -120,7 +119,7 @@ backgroundColor: Color.colorGray_100,
         </View>
         <View style={styles.frameItem} />
         <View style={styles.bioParent}>
-          <Text style={[styles.showMyWallet, styles.theBioTextTypo]}>Bio</Text>
+          <Text style={[styles.showMyWallet]}>Bio</Text>
 
           <TextInput
             style={[styles.bioInput]}
@@ -177,7 +176,8 @@ const styles = StyleSheet.create({
     alignItems:"flex-start",
     width:"90%",
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("400"),
+    fontWeight:"400"
   },
   iconLayout1: {
     maxHeight: "100%",
@@ -363,15 +363,20 @@ const styles = StyleSheet.create({
     fontSize: FontSize.labelLarge_size,
     // marginLeft: 14,
     // flex: 1,
-    flexGrow:1, color:"white", 
+    flexGrow:1, 
     textAlign:"center", 
     paddingTop:3, 
     alignItems:"center",
     color: Color.darkInk,
     fontWeight: "600",
+    fontFamily: getFontFamily("600")
   },
   save1: {
     fontSize: FontSize.labelLarge_size,
+    textAlign: "center",
+    color: Color.colorCornflowerblue_100,
+    fontFamily: getFontFamily("500"),
+    fontWeight: "500",
   },
   save: {
     marginLeft: 14,
@@ -400,8 +405,11 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   showMyWallet: {
+    textAlign: "left",
+    color: Color.darkInk,
     fontSize: FontSize.labelLarge_size,
     fontWeight: "500",
+    fontFamily:getFontFamily("500"),
     textAlign: "left",
   },
   groupChild: {
@@ -418,6 +426,10 @@ const styles = StyleSheet.create({
   },
   showMyWalletAddressParent: {
     width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+
   },
   frameItem: {
     borderColor: Color.colorDarkslategray_400,
