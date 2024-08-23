@@ -26,7 +26,7 @@ const Login = () => {
       console.log("doLogin-token", _oauthToken);
       if (_oauthToken) {
         console.log("link", `${TWITTER_OAUTH}${_oauthToken}`)
-        setModalVisible(true);
+        // setModalVisible(true);
         setOauthToken(_oauthToken);
         openOAuthURL(_oauthToken);
         // navigation.replace("Mint");
