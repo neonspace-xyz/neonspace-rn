@@ -33,7 +33,7 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
               />
               <Text style={[styles.txtDateTime, styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
             </View>
-            {`@${userInfo?.screen_name}` == item?.screen_name && (
+            {userInfo?.user_id == item?.user_id && (
               <TouchableOpacity onPress={(event) => onMore(event, index)} style={styles.viewImgMore}>
                 <Image
                   style={styles.imgMore}
@@ -47,14 +47,14 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
           <View style={styles.detailsContainer}>
             <View style={styles.titleDetailContainer}>
               <Text style={[styles.titleText, styles.textStyle]}>{item?.title}</Text>
-              <Text style={[styles.detailText, styles.textStyle]}>{item?.salary}</Text>
+              <Text style={[styles.detailText, styles.textStyle]}>{item?.salary_range}</Text>
             </View>
             <Text style={[styles.companyText, styles.textStyle]}>{item?.company}</Text>
             <Text style={[styles.locationText, styles.textStyle]}>{item?.location}</Text>
           </View>
 
           <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
-            {isDetail ? item?.detail : truncateString(item?.detail, 150)}
+            {isDetail ? item?.description : truncateString(item?.description, 150)}
           </Text>
           <View style={[styles.frameContainer, isDetail ? styles.imSoExcitedSpaceBlock1 : styles.imSoExcitedSpaceBlock2]}>
             {isDetail ? (

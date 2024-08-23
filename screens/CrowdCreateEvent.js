@@ -67,6 +67,11 @@ const CrowdCreateEvent = () => {
     handleInputChange('detail', input)
   }
 
+  let input2Ref = null;
+  let input3Ref = null;
+  let input4Ref = null;
+  let input5Ref = null;
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={StyleHeaderView}>
@@ -78,7 +83,7 @@ const CrowdCreateEvent = () => {
           />
         </Pressable>
         <Text style={[StyleHeaderTitle]}>
-          {item ? "Edit Hiring" : "Create Hiring"}
+          {item ? "Edit Event" : "Create Event"}
         </Text>
       </View>
       <KeyboardAvoidingView behavior="padding" style={{ width: "100%", flex: 1 }}>
@@ -97,6 +102,12 @@ const CrowdCreateEvent = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.title}
                 onChangeText={(value) => handleInputChange('title', value)}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input2Ref) {
+                    input2Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -107,6 +118,13 @@ const CrowdCreateEvent = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.host}
                 onChangeText={(value) => handleInputChange('host', value)}
+                ref={(ref) => { input2Ref = ref; }}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input3Ref) {
+                    input3Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -117,6 +135,13 @@ const CrowdCreateEvent = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.location}
                 onChangeText={(value) => handleInputChange('location', value)}
+                ref={(ref) => { input3Ref = ref; }}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input4Ref) {
+                    input4Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -127,6 +152,13 @@ const CrowdCreateEvent = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={formatEventTime(input?.date)}
                 onChangeText={(value) => handleInputChange('date', value)}
+                ref={(ref) => { input4Ref = ref; }}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input5Ref) {
+                    input5Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -137,6 +169,7 @@ const CrowdCreateEvent = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.link}
                 onChangeText={(value) => handleInputChange('link', value)}
+                ref={(ref) => { input5Ref = ref; }}
               />
             </View>
             <View style={styles.frameChild}>

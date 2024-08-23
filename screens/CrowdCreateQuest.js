@@ -66,6 +66,10 @@ const CrowdCreateQuest = () => {
     handleInputChange('detail', input)
   }
 
+  let input2Ref = null;
+  let input3Ref = null;
+  let input4Ref = null;
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={StyleHeaderView}>
@@ -96,6 +100,12 @@ const CrowdCreateQuest = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.title}
                 onChangeText={(value) => handleInputChange('title', value)}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input2Ref) {
+                    input2Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -106,6 +116,13 @@ const CrowdCreateQuest = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.company}
                 onChangeText={(value) => handleInputChange('company', value)}
+                ref={(ref) => { input2Ref = ref; }}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input3Ref) {
+                    input3Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -116,6 +133,13 @@ const CrowdCreateQuest = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.link}
                 onChangeText={(value) => handleInputChange('link', value)}
+                ref={(ref) => { input3Ref = ref; }}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input4Ref) {
+                    input4Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -130,6 +154,7 @@ const CrowdCreateQuest = () => {
                   multiline={true}
                   numberOfLines={numberOfLines}
                   scrollEnabled={input?.detail?.split('\n').length > 4}
+                  ref={(ref) => { input4Ref = ref; }}
                 />
                 <View style={styles.frameSubDesc}>
                   <Text style={styles.textSubDescLeft}>The post preview will show the first 280 letters</Text>

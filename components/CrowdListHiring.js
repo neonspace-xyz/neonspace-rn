@@ -5,21 +5,21 @@ import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
 import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
-import { IMG_PROFILE } from "../Constant";
+import { API_URL, IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
 import CrowdSectionHiring from "./CrowdSectionHiring";
 import PopupOption from "./PopupOption";
 import ButtonFAB from "./ButtonFAB";
 
 const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
-  const { api } = useAuth();
+  const { api, getOtherUser } = useAuth();
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  
+
   const windowDimensions = Dimensions.get('window');
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
@@ -35,43 +35,59 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
     fetchItems();
   }, [userInfo]);
 
-  const fetchItemsNew = async () => {
+  const fetchItems = async () => {
     if (!userInfo) return;
     try {
-      let url = `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
+      let url = `/crowdsource/hiring/list?page=${page}`//&user=${userInfo.user_id};
       let resp = await api.get(url);
-      let posts = resp.data.posts;
+      let jobs = resp.data.jobs;
 
-      let _posts = [];
-      for (const key in posts) {
-        if (Object.hasOwnProperty.call(posts, key)) {
-          let like = getRandomNumber(0, 7);
-          let itemLikes = [];
-          for (let j = 0; j < like; j++) {
-            itemLikes.push({
-              name: `Name${j}`,
-              username: `@username${j}`,
-              image: IMG_PROFILE[getRandomNumber(0, 4)],
-              bio: `Founder at ChainCredit. #DYOR ${j}`,
-            })
-          }
+      let _jobs = [];
+      let _users = {};
+      for (const job of jobs) {
+        if (_users[job.user_id]) continue;
 
-          const post = posts[key];
-          let item = {
-            id: key,
-            name: userInfo.name,
-            username: `@${userInfo.screen_name}`,
-            image: userInfo.profile_image,
-            text: post.post,
-            view: getRandomNumber(0, 100),
-            like: like,
-            datetime: convertTimestamp(post.published_timestamp),
-            itemLikes: itemLikes
-          }
-          _posts.push(item);
-        }
+        let otherUser = await getOtherUser(job.user_id);
+        _users[job.user_id] = {
+          name: otherUser.name,
+          screen_name: otherUser.screen_name,
+          profile_image: otherUser.profile_image,
+        };
       }
-      setItems(_posts);
+
+      for (const job of jobs) {
+        let like = getRandomNumber(0, 7);
+        let itemLikes = [];
+        for (let j = 0; j < like; j++) {
+          itemLikes.push({
+            name: `Name${j}`,
+            username: `@username${j}`,
+            image: IMG_PROFILE[getRandomNumber(0, 4)],
+            bio: `Founder at ChainCredit. #DYOR ${j}`,
+          })
+        }
+
+        let _user = _users[job.user_id];
+
+        let item = {
+          id: job.id,
+          name: _user?.name,
+          username: `@${_user?.screen_name}`,
+          image: _user?.profile_image,
+          user_id: job.user_id,
+          title: job.title,
+          company: job.company,
+          location: job.location,
+          salary_range: job.salary_range,
+          description: job.description,
+          view: getRandomNumber(0, 100),
+          like: like,
+          datetime: job.posted_at,
+          itemLikes: itemLikes
+        }
+        _jobs.push(item);
+      }
+      setItems(_jobs);
     } catch (error) {
       if (error.isSessionExpired) {
         await logout(navigation);
@@ -81,7 +97,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
     }
   }
 
-  const fetchItems = async () => {
+  const fetchItemsa = async () => {
     let data = [];
     for (let i = 1; i < getRandomNumber(); i++) {
       let like = getRandomNumber(0, 7);
@@ -103,8 +119,8 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
         title: `Title${i}`,
         company: `Company${i}`,
         location: `Location${i}`,
-        salary: `80k-120k`,
-        detail: 'Are you passionate about lorem ipsum tect Neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic partners, and source new partnerships lorem ipsum.\n\nAbout\n\nBrinc is a global lorem ipsum I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! ',
+        salary_range: `80k-120k`,
+        description: 'Are you passionate about lorem ipsum tect Neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic partners, and source new partnerships lorem ipsum.\n\nAbout\n\nBrinc is a global lorem ipsum I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!!',
         view: view,
         like: like,
         datetime: getRandomTimestamp(30),
@@ -168,15 +184,34 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
     setMenuPosition({ top: newTop, left: newLeft });
     setSelectedItemIndex(index);
   };
-  
+
   const handleEdit = () => {
     navigation.push(`CrowdCreateHiring${tab}`, { tab, item: items[selectedItemIndex] });
     setSelectedItemIndex(null);
   };
 
-  const handleDelete = () => {
-    console.log(`Deleting item ${selectedItemIndex}`);
-    setSelectedItemIndex(null);
+  const handleDelete = async () => {
+    if (!userInfo) return;
+    try {
+      let item = items[selectedItemIndex];
+      let url = API_URL + `/crowdsource/hiring/delete`;
+      let body = {
+        id: item.id
+      }
+      let resp = await api.post(url, body);
+      if (resp.status == 200) {
+        Alert.alert("Your post has been deleted!");
+        fetchItems();
+      }
+    } catch (error) {
+      if (error.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.error("handleDelete-error", error)
+      }
+    } finally {
+      setSelectedItemIndex(null);
+    }
   };
 
   const confirmDelete = () => {

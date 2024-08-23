@@ -4922,7 +4922,7 @@ neo-async@^2.5.0:
     expo-status-bar "~1.12.1"
     moment "^2.30.1"
     moment-duration-format "^2.3.2"
-    neonspace-app "file:../../../../Library/Caches/Yarn/v6/npm-neonspace-app-1.0.0-065dc568-51dd-4cf8-a891-3af5a8c76eeb-1724245283426/node_modules/neonspace-app"
+    neonspace-app "file:../../../../Library/Caches/Yarn/v6/npm-neonspace-app-1.0.0-8109c0b2-ec8f-4bbe-8ccb-0683b3de6d19-1724429481366/node_modules/neonspace-app"
     react "18.2.0"
     react-dom "18.2.0"
     react-native "0.74.5"

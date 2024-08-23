@@ -7,7 +7,8 @@ import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHead
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../components/AuthProvider";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
-import { Component_Max_Width, MAX_CHAR_DETAIL } from "../Constant";
+import { API_URL, Component_Max_Width, MAX_CHAR_DETAIL } from "../Constant";
+import api from "../utils/ApiHandler";
 
 const CrowdCreateHiring = () => {
   const route = useRoute();
@@ -39,7 +40,28 @@ const CrowdCreateHiring = () => {
   };
 
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    try {
+      if (!userInfo) return;
+      setLoading(true);
+      console.log("input", input);
+
+      let url = API_URL + `/crowdsource/hiring/new`;
+      if(input.id) {
+        url = API_URL + `/crowdsource/hiring/edit`;
+      }
+      const resp = await api.post(url, input);
+      if (resp.status == 200) {
+        Alert.alert("Your post has been published successfully!")
+        navigation.goBack();
+        setLoading(false);
+      }
+    } catch (error) {
+      Alert.alert("Failed", error.message);
+      console.error('Post-doPost', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const doSave = () => {
@@ -63,8 +85,13 @@ const CrowdCreateHiring = () => {
 
   const onChangeDetail = (input) => {
     if (input.length == MAX_CHAR_DETAIL) return;
-    handleInputChange('detail', input)
+    handleInputChange('description', input)
   }
+
+  let input2Ref = null;
+  let input3Ref = null;
+  let input4Ref = null;
+  let input5Ref = null;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -96,6 +123,12 @@ const CrowdCreateHiring = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.title}
                 onChangeText={(value) => handleInputChange('title', value)}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input2Ref) {
+                    input2Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -106,6 +139,13 @@ const CrowdCreateHiring = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.company}
                 onChangeText={(value) => handleInputChange('company', value)}
+                ref={(ref) => { input2Ref = ref; }}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input3Ref) {
+                    input3Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -116,6 +156,13 @@ const CrowdCreateHiring = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={input?.location}
                 onChangeText={(value) => handleInputChange('location', value)}
+                ref={(ref) => { input3Ref = ref; }}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input4Ref) {
+                    input4Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -124,8 +171,15 @@ const CrowdCreateHiring = () => {
                 style={[styles.textInput]}
                 placeholder="Salary range"
                 placeholderTextColor={Color.colorGray_500}
-                value={input?.salary}
-                onChangeText={(value) => handleInputChange('salary', value)}
+                value={input?.salary_range}
+                onChangeText={(value) => handleInputChange('salary_range', value)}
+                ref={(ref) => { input4Ref = ref; }}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  if (input5Ref) {
+                    input5Ref.focus();
+                  }
+                }}
               />
             </View>
             <View style={styles.frameChild}>
@@ -135,15 +189,16 @@ const CrowdCreateHiring = () => {
                   style={[styles.textDetail]}
                   placeholder="Job description"
                   placeholderTextColor={Color.colorGray_500}
-                  value={input?.detail}
+                  value={input?.description}
                   onChangeText={(text) => onChangeDetail(text)}
                   multiline={true}
                   numberOfLines={numberOfLines}
-                  scrollEnabled={input?.detail?.split('\n').length > 4}
+                  scrollEnabled={input?.description?.split('\n').length > 4}
+                  ref={(ref) => { input5Ref = ref; }}
                 />
                 <View style={styles.frameSubDetail}>
                   <Text style={styles.textSubDetailLeft}>The post preview will show the first 280 letters</Text>
-                  <Text style={styles.textSubDetailRight}>{input?.detail?.length}/{MAX_CHAR_DETAIL - 1}</Text>
+                  <Text style={styles.textSubDetailRight}>{input?.description?.length}/{MAX_CHAR_DETAIL - 1}</Text>
                 </View>
               </View>
             </View>

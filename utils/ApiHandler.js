@@ -14,7 +14,7 @@ api.interceptors.request.use(
       usersession = JSON.parse(usersession)
       if (usersession) {
         let token = usersession.jwt_token;
-        // console.log("token", token)
+        console.log("token", token)
         if (token) {
           config.headers['Authorization'] = `Bearer ${token}`;
         }
