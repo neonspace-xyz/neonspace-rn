@@ -36,11 +36,11 @@ const MyProfile = ({ route }) => {
         tab={tab}
         userInfo={userInfo}
         isShowSearch={isShowSearch} />
-      <PostList
+      {/* <PostList
         tab={tab}
         isProfile={true}
         usersession={usersession}
-        userInfo={userInfo} />
+        userInfo={userInfo} /> */}
     </SafeAreaView>
   );
 };

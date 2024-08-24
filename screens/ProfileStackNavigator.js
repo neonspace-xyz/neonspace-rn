@@ -12,6 +12,10 @@ import Wallet from './Wallet';
 import MyAssets from './MyAssets';
 import MyProfile from './MyProfile';
 import EditProfile from './EditProfile';
+import Experience from './Experience';
+import ExperienceForm from './ExperienceForm';
+import SkillForm from './SkillForm';
+import Skill from './Skill';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +34,13 @@ function ProfileStackNavigator() {
 
       <Stack.Screen name="ChatList4" component={ChatList} initialParams={dataToSend} />
       <Stack.Screen name="ChatView4" component={ChatView} initialParams={dataToSend} />
+
+      <Stack.Screen name="Experience4" component={Experience} initialParams={dataToSend} />
+      <Stack.Screen name="ExperienceForm4" component={ExperienceForm} initialParams={dataToSend} />
+
+      <Stack.Screen name="Skill4" component={Skill} initialParams={dataToSend} />
+      <Stack.Screen name="SkillForm4" component={SkillForm} initialParams={dataToSend} />
+
 
       {/* <Stack.Screen name="MyAssets3" component={MyAssets} initialParams={dataToSend} />       */}
     </Stack.Navigator>
