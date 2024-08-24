@@ -8,6 +8,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CrowdSectionEvent from "../components/CrowdSectionEvent";
 import { useAuth } from "../components/AuthProvider";
 import PopupOption from "../components/PopupOption";
+import { API_URL } from "../Constant";
+import api from "../utils/ApiHandler";
+import { logout } from "../Utils";
 
 const CrowdDetailEvent = () => {
   const route = useRoute();
@@ -45,13 +48,31 @@ const CrowdDetailEvent = () => {
   };
 
   const handleEdit = () => {
-    // navigation.navigate('EditScreen', { item });
+    navigation.push(`CrowdCreateEvent${tab}`, { tab, item, isDetail: true });
     setSelectedItemIndex(null);
   };
 
-  const handleDelete = () => {
-    console.log(`Deleting item ${selectedItemIndex}`);
-    setSelectedItemIndex(null);
+  const handleDelete = async () => {
+    if (!userInfo) return;
+    try {
+      let url = API_URL + `/crowdsource/event/delete`;
+      let body = {
+        id: item.id
+      }
+      let resp = await api.post(url, body);
+      if (resp.status == 200) {
+        Alert.alert("Your post has been deleted!");
+        navigation.goBack();
+      }
+    } catch (error) {
+      if (error.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.error("handleDelete-error", error)
+      }
+    } finally {
+      setSelectedItemIndex(null);
+    }
   };
 
   const confirmDelete = () => {

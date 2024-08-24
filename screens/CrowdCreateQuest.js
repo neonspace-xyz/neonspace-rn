@@ -7,11 +7,12 @@ import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHead
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../components/AuthProvider";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
-import { Component_Max_Width, MAX_CHAR_DETAIL } from "../Constant";
+import { API_URL, Component_Max_Width, MAX_CHAR_DETAIL } from "../Constant";
+import api from "../utils/ApiHandler";
 
 const CrowdCreateQuest = () => {
   const route = useRoute();
-  const { tab, item } = route.params;
+  const { tab, item, isDetail } = route.params;
   const navigation = useNavigation();
 
   const { getUser } = useAuth();
@@ -39,7 +40,32 @@ const CrowdCreateQuest = () => {
   };
 
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    try {
+      if (!userInfo) return;
+      setLoading(true);
+      console.log("input", input);
+
+      let url = API_URL + `/crowdsource/quest/new`;
+      if (input.id) {
+        url = API_URL + `/crowdsource/quest/edit`;
+      }
+      const resp = await api.post(url, input);
+      if (resp.status == 200) {
+        Alert.alert("Your post has been published successfully!")
+        if (input.id && isDetail) {
+          navigation.pop(1);
+        } {
+          navigation.goBack();
+        }
+        setLoading(false);
+      }
+    } catch (error) {
+      Alert.alert("Failed", error.message);
+      console.error('Post-doPost', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const doSave = () => {
@@ -81,7 +107,8 @@ const CrowdCreateQuest = () => {
           />
         </Pressable>
         <Text style={[StyleHeaderTitle]}>
-          {item ? "Edit Quest" : "Create Quest"}
+          Quest
+          {/* {item ? "Edit Quest" : "Create Quest"} */}
         </Text>
       </View>
       <KeyboardAvoidingView behavior="padding" style={{ width: "100%", flex: 1 }}>

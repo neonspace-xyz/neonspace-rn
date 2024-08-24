@@ -35,10 +35,20 @@ const ChatDetail = () => {
   }, []);
 
   useEffect(() => {
-    if(!userInfo?.to?.user_id) return;
-    getOtherUser(userInfo.to.user_id).then((user) => {
-      setUserInfo2(user);
-    })
+    if (userInfo?.to?.user_id) {
+      setUserInfo2(userInfo.to);
+      getOtherUser(userInfo.to.user_id).then((user) => {
+        setUserInfo2(user);
+      })
+    }
+    else if (userInfo?.user_id) {
+      setUserInfo2(userInfo);
+      getOtherUser(userInfo.user_id).then((user) => {
+        setUserInfo2(user);
+      })
+    } else {
+      return;
+    }
   }, [userInfo]);
 
   useEffect(() => {
@@ -117,6 +127,7 @@ const ChatDetail = () => {
       setInput('');
     }
   }
+  // console.log("userInfo2", userInfo2)
 
   return (
     <SafeAreaView style={styles.container} keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>

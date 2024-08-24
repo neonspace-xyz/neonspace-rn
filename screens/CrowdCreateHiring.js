@@ -12,7 +12,7 @@ import api from "../utils/ApiHandler";
 
 const CrowdCreateHiring = () => {
   const route = useRoute();
-  const { tab, item } = route.params;
+  const { tab, item, isDetail } = route.params;
   const navigation = useNavigation();
 
   const { getUser } = useAuth();
@@ -47,13 +47,17 @@ const CrowdCreateHiring = () => {
       console.log("input", input);
 
       let url = API_URL + `/crowdsource/hiring/new`;
-      if(input.id) {
+      if (input.id) {
         url = API_URL + `/crowdsource/hiring/edit`;
       }
       const resp = await api.post(url, input);
       if (resp.status == 200) {
         Alert.alert("Your post has been published successfully!")
-        navigation.goBack();
+        if (input.id && isDetail) {
+          navigation.pop(1);
+        } {
+          navigation.goBack();
+        }
         setLoading(false);
       }
     } catch (error) {
@@ -104,7 +108,8 @@ const CrowdCreateHiring = () => {
           />
         </Pressable>
         <Text style={[StyleHeaderTitle]}>
-          {item ? "Edit Hiring" : "Create Hiring"}
+          Hiring
+          {/* {item ? "Edit Hiring" : "Create Hiring"} */}
         </Text>
       </View>
       <KeyboardAvoidingView behavior="padding" style={{ width: "100%", flex: 1 }}>

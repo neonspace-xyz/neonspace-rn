@@ -88,8 +88,8 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
       }
       let resp = await api.post('/user/updateVerification', body)
       Alert.alert("Verify Success");
-      await doRefreshUserInfo();
       setIsVerified(!isVerified);
+      await doRefreshUserInfo();
     } catch (error) {
       Alert.alert("Verify failed", error)
       console.error("doVerify", error);
@@ -158,28 +158,48 @@ const OtherProfileDetail = ({ tab, userInfo }) => {
               onPress={doVerify}
             >
               <Text style={[styles.verify, styles.verifyTypo]}>
-                {loadingVerify ? isVerified ? "Undo..." : "Verifying..." : isVerified ? "Undo Verification" : "Verify"}
+                {loadingVerify ? isVerified ? "Unverifying..." : "Verifying..." : isVerified ? "Unverify" : "Verify"}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
-              onPress={() => {
-                navigation.push(`ChatView${tab}`, { tab, userInfo: userInfo2 })
-              }}
+              // onPress={() => {
+              //   navigation.push(`ChatView${tab}`, { tab, userInfo: userInfo2 })
+              // }}
             >
               <Text style={[styles.editProfile, styles.editProfileTypo]}>
-                Send message
+                Full Bio
               </Text>
             </TouchableOpacity>
           </>
         )}
-
         <TouchableOpacity
-          style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock]}
+          style={{
+            borderWidth: 1.5, borderColor: 'transparent', marginHorizontal: 5
+          }}
+          onPress={() => {
+            navigation.push(`ChatView${tab}`, { tab, userInfo: userInfo2 })
+          }}
         >
-          <Text style={[styles.editProfile, styles.editProfileTypo]}>
-            Share profile
-          </Text>
+          <Image
+            style={{
+              width: 25, height: 25,
+
+            }}
+            source={require("../assets/ic_chat.png")}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={{
+          borderWidth: 1.5, borderColor: 'transparent', marginLeft: 5, marginRight: 10
+        }}>
+          <Image
+            style={{
+              width: 25, height: 25,
+
+            }}
+            source={require("../assets/share.png")}
+          />
         </TouchableOpacity>
       </View>
 
@@ -290,36 +310,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Color.colorGray_100,
   },
-
-  // verify: {
-  //   color: Color.colorGray_100,
-  //   fontWeight: "500",
-  // },
-  // verifyWrapper: {
-  //   borderWidth: 1.5,
-  //   borderRadius: Border.br_5xs,
-  //   paddingVertical: Padding.p_9xs,
-  //   borderColor: Color.darkInk,
-  //   borderStyle: "solid",
-  //   flexDirection: "row",
-  //   paddingHorizontal: Padding.p_xs,
-  //   alignItems: "center",
-  //   flex: 1,
-  //   backgroundColor: "red",
-  // },
-  // verifyTypo: {
-  //   fontSize: FontSize.size_sm,
-  //   textAlign: "left",
-  //   fontFamily: FontFamily.clashGrotesk,
-  // },
   verify: {
-    color: Color.colorGray_100,
+    color: Color.colorBlack,
     fontWeight: "500",
   },
   verifyTypo: {
     fontSize: FontSize.size_sm,
     textAlign: "left",
-    color: Color.darkInk,
     fontFamily: FontFamily.clashGrotesk,
   },
   verifyWrapper: {
@@ -369,8 +366,8 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.clashGrotesk,
   },
   profileWrapperSpaceBlock: {
-    // paddingVertical: Padding.p_3xs,
     justifyContent: "center",
+    marginHorizontal: 5,
   },
   editProfileTypo: {
     fontSize: FontSize.size_sm,
@@ -533,20 +530,6 @@ const styles = StyleSheet.create({
   },
   editProfile: {
     fontWeight: "500",
-  },
-  verify: {
-    fontWeight: "500",
-  },
-  verifyWrapper: {
-    borderWidth: 1.5,
-    borderRadius: Border.br_5xs,
-    paddingVertical: Padding.p_9xs,
-    borderColor: Color.darkInk,
-    borderStyle: "solid",
-    flexDirection: "row",
-    paddingHorizontal: Padding.p_xs,
-    alignItems: "center",
-    flex: 1,
   },
   editProfileWrapper: {
     borderWidth: 1.5,

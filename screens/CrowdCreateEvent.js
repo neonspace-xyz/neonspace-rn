@@ -7,12 +7,13 @@ import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHead
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../components/AuthProvider";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
-import { Component_Max_Width, MAX_CHAR_DETAIL } from "../Constant";
+import { API_URL, Component_Max_Width, MAX_CHAR_DETAIL } from "../Constant";
 import { formatEventTime } from "../Utils";
+import api from "../utils/ApiHandler";
 
 const CrowdCreateEvent = () => {
   const route = useRoute();
-  const { tab, item } = route.params;
+  const { tab, item, isDetail } = route.params;
   const navigation = useNavigation();
 
   const { getUser } = useAuth();
@@ -40,7 +41,32 @@ const CrowdCreateEvent = () => {
   };
 
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    try {
+      if (!userInfo) return;
+      setLoading(true);
+      console.log("input", input);
+
+      let url = API_URL + `/crowdsource/event/new`;
+      if (input.id) {
+        url = API_URL + `/crowdsource/event/edit`;
+      }
+      const resp = await api.post(url, input);
+      if (resp.status == 200) {
+        Alert.alert("Your post has been published successfully!")
+        if (input.id && isDetail) {
+          navigation.pop(1);
+        } {
+          navigation.goBack();
+        }
+        setLoading(false);
+      }
+    } catch (error) {
+      Alert.alert("Failed", error.message);
+      console.error('Post-doPost', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const doSave = () => {
@@ -83,7 +109,8 @@ const CrowdCreateEvent = () => {
           />
         </Pressable>
         <Text style={[StyleHeaderTitle]}>
-          {item ? "Edit Event" : "Create Event"}
+          Event
+          {/* {item ? "Edit Event" : "Create Event"} */}
         </Text>
       </View>
       <KeyboardAvoidingView behavior="padding" style={{ width: "100%", flex: 1 }}>

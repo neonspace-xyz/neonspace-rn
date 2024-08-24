@@ -41,7 +41,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
       }
     } catch (error) {
       Alert.alert("User not found");
-      console.error("fetchSearchItems", error)
+      console.error("fetchSearchItems", error?.message)
     } finally {
       setSearchItems(data);
     }
