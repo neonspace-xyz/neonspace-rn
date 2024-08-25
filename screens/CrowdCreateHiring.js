@@ -62,7 +62,7 @@ const CrowdCreateHiring = () => {
       }
     } catch (error) {
       Alert.alert("Failed", error.message);
-      console.error('Post-doPost', error);
+      console.error('Hiring-handleSave', error);
     } finally {
       setLoading(false);
     }

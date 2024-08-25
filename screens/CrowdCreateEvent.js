@@ -46,6 +46,7 @@ const CrowdCreateEvent = () => {
       if (!userInfo) return;
       setLoading(true);
       console.log("input", input);
+      input['date'] = "2020-12-09T16:09:53+00:00";
 
       let url = API_URL + `/crowdsource/event/new`;
       if (input.id) {
@@ -63,7 +64,7 @@ const CrowdCreateEvent = () => {
       }
     } catch (error) {
       Alert.alert("Failed", error.message);
-      console.error('Post-doPost', error);
+      console.error('Event-handleSave', error);
     } finally {
       setLoading(false);
     }
@@ -90,7 +91,7 @@ const CrowdCreateEvent = () => {
 
   const onChangeDetail = (input) => {
     if (input.length == MAX_CHAR_DETAIL) return;
-    handleInputChange('detail', input)
+    handleInputChange('description', input)
   }
 
   let input2Ref = null;
@@ -122,13 +123,13 @@ const CrowdCreateEvent = () => {
         >
           <View style={styles.frameParent}>
             <View style={styles.frameChild}>
-              <Text style={styles.txtTitle}>Job title</Text>
+              <Text style={styles.txtTitle}>Event Name</Text>
               <TextInput
                 style={[styles.textInput]}
-                placeholder="Job title"
+                placeholder="Event Name"
                 placeholderTextColor={Color.colorGray_500}
-                value={input?.title}
-                onChangeText={(value) => handleInputChange('title', value)}
+                value={input?.name}
+                onChangeText={(value) => handleInputChange('name', value)}
                 returnKeyType="next"
                 onSubmitEditing={() => {
                   if (input2Ref) {
@@ -179,6 +180,17 @@ const CrowdCreateEvent = () => {
                 placeholderTextColor={Color.colorGray_500}
                 value={formatEventTime(input?.date)}
                 onChangeText={(value) => handleInputChange('date', value)}
+                disabled={true}
+              />
+            </View>
+            <View style={styles.frameChild}>
+              <Text style={styles.txtTitle}>Event Link</Text>
+              <TextInput
+                style={[styles.textInput]}
+                placeholder="Event Link"
+                placeholderTextColor={Color.colorGray_500}
+                value={input?.event_link}
+                onChangeText={(value) => handleInputChange('event_link', value)}
                 ref={(ref) => { input4Ref = ref; }}
                 returnKeyType="next"
                 onSubmitEditing={() => {
@@ -189,28 +201,18 @@ const CrowdCreateEvent = () => {
               />
             </View>
             <View style={styles.frameChild}>
-              <Text style={styles.txtTitle}>Event Link</Text>
-              <TextInput
-                style={[styles.textInput]}
-                placeholder="Event Link"
-                placeholderTextColor={Color.colorGray_500}
-                value={input?.link}
-                onChangeText={(value) => handleInputChange('link', value)}
-                ref={(ref) => { input5Ref = ref; }}
-              />
-            </View>
-            <View style={styles.frameChild}>
               <Text style={styles.txtTitle}>Event intro</Text>
               <View style={styles.frameDetail}>
                 <TextInput
                   style={[styles.textDetail]}
                   placeholder="Event intro"
                   placeholderTextColor={Color.colorGray_500}
-                  value={input?.detail}
+                  value={input?.description}
                   onChangeText={(text) => onChangeDetail(text)}
                   multiline={true}
                   numberOfLines={numberOfLines}
-                  scrollEnabled={input?.detail?.split('\n').length > 4}
+                  scrollEnabled={input?.description?.split('\n').length > 4}
+                  ref={(ref) => { input5Ref = ref; }}
                 />
                 <View style={styles.frameSubDetail}>
                   <Text style={styles.textSubDetailLeft}>The post preview will show the first 280 letters</Text>

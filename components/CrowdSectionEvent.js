@@ -21,7 +21,7 @@ const CrowdSectionEvent = ({ tab, isDetail, index, userInfo, item, onPress, onMo
             />
             <View style={[styles.frameFlexBox]}>
               <View style={styles.frameFlexBox}>
-                <Text style={[styles.name, styles.nameTypo]}>{item?.name}</Text>
+                <Text style={[styles.name, styles.nameTypo]}>{item?.fullname}</Text>
                 <Text style={[styles.endlessmeee, styles.nameTypo]}>
                   {item?.screen_name}
                 </Text>
@@ -46,16 +46,16 @@ const CrowdSectionEvent = ({ tab, isDetail, index, userInfo, item, onPress, onMo
           {/* Added Title, Company, Location, and Detail */}
           <View style={styles.detailsContainer}>
             <View style={styles.titleDetailContainer}>
-              <Text style={[styles.titleText, styles.textStyle]}>{item?.title}</Text>
+              <Text style={[styles.titleText, styles.textStyle]}>{item?.name}</Text>
               <Text style={[styles.detailText, styles.textStyle]}>{formatEventTime(item?.date)}</Text>
             </View>
             <Text style={[styles.companyText, styles.textStyle]}>{item?.host}</Text>
             <Text style={[styles.locationText, styles.textStyle]}>{item?.location}</Text>
-            <Text style={[styles.linkText, styles.textStyle]}>{item?.link}</Text>
+            <Text style={[styles.linkText, styles.textStyle]}>{item?.event_link}</Text>
           </View>
 
           <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
-            {isDetail ? item?.detail : truncateString(item?.detail, 150)}
+            {isDetail ? item?.description : truncateString(item?.description, 150)}
           </Text>
           <View style={[styles.frameContainer, isDetail ? styles.imSoExcitedSpaceBlock1 : styles.imSoExcitedSpaceBlock2]}>
             {isDetail ? (

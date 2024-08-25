@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
-import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
+import { getRandomNumber, getRandomTimestamp, logout } from "../Utils";
 import { API_URL, IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
 import CrowdSectionHiring from "./CrowdSectionHiring";
@@ -48,6 +48,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
         if (_users[job.user_id]) continue;
 
         let otherUser = await getOtherUser(job.user_id);
+        if(!otherUser) continue;
         _users[job.user_id] = {
           name: otherUser.name,
           screen_name: otherUser.screen_name,
@@ -71,8 +72,8 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
 
         let item = {
           id: job.id,
-          name: _user?.name,
-          username: `@${_user?.screen_name}`,
+          fullname: _user?.name,
+          screen_name: `@${_user?.screen_name}`,
           image: _user?.profile_image,
           user_id: job.user_id,
           title: job.title,
@@ -92,7 +93,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
       if (error.isSessionExpired) {
         await logout(navigation);
       } else {
-        console.error("PostList-fetchItems-error", error)
+        console.error("HiringList-fetchItems-error", error)
       }
     }
   }
@@ -113,7 +114,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
       let view = getRandomNumber(0, 2);
       data.push({
         id: i,
-        name: `Name${i}`,
+        fullname: `Name${i}`,
         screen_name: '@FimoTex96172',//`@username${i}`,
         image: IMG_PROFILE[getRandomNumber(0, 4)],
         title: `Title${i}`,

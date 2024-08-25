@@ -4,15 +4,15 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
-import { convertTimestamp, getRandomNumber, getRandomTimestamp, logout } from "../Utils";
-import { IMG_PROFILE } from "../Constant";
+import { getRandomNumber, getRandomTimestamp, logout } from "../Utils";
+import { API_URL, IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
 import CrowdSectionEvent from "./CrowdSectionEvent";
 import PopupOption from "./PopupOption";
 import ButtonFAB from "./ButtonFAB";
 
 const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
-  const { api } = useAuth();
+  const { api, getOtherUser } = useAuth();
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
@@ -35,53 +35,70 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
     fetchItems();
   }, [userInfo]);
 
-  const fetchItemsNew = async () => {
+  const fetchItems = async () => {
     if (!userInfo) return;
     try {
-      let url = `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
+      let url = `/crowdsource/event/list?page=${page}`//&user=${userInfo.user_id};
       let resp = await api.get(url);
-      let posts = resp.data.posts;
+      let _items = resp.data.events;
 
-      let _posts = [];
-      for (const key in posts) {
-        if (Object.hasOwnProperty.call(posts, key)) {
-          let like = getRandomNumber(0, 7);
-          let itemLikes = [];
-          for (let j = 0; j < like; j++) {
-            itemLikes.push({
-              name: `Name${j}`,
-              username: `@username${j}`,
-              image: IMG_PROFILE[getRandomNumber(0, 4)],
-              bio: `Founder at ChainCredit. #DYOR ${j}`,
-            })
-          }
+      let data = [];
+      let _users = {};
+      for (const _item of _items) {
+        if (_users[_item.owner_id]) continue;
 
-          const post = posts[key];
-          let item = {
-            id: key,
-            name: userInfo.name,
-            username: `@${userInfo.screen_name}`,
-            image: userInfo.profile_image,
-            text: post.post,
-            view: getRandomNumber(0, 100),
-            like: like,
-            datetime: convertTimestamp(post.published_timestamp),
-            itemLikes: itemLikes
-          }
-          _posts.push(item);
-        }
+        let otherUser = await getOtherUser(_item.owner_id);
+        if(!otherUser) continue;
+        _users[_item.owner_id] = {
+          name: otherUser.name,
+          screen_name: otherUser.screen_name,
+          profile_image: otherUser.profile_image,
+        };
       }
-      setItems(_posts);
+
+      for (const _item of _items) {
+        let like = getRandomNumber(0, 7);
+        let itemLikes = [];
+        for (let j = 0; j < like; j++) {
+          itemLikes.push({
+            name: `Name${j}`,
+            username: `@username${j}`,
+            image: IMG_PROFILE[getRandomNumber(0, 4)],
+            bio: `Founder at ChainCredit. #DYOR ${j}`,
+          })
+        }
+
+        let _user = _users[_item.owner_id];
+        let item = {
+          id: _item.id,
+          fullname: _user?.name,
+          screen_name: `@${_user?.screen_name}`,
+          image: _user?.profile_image,
+          user_id: _item.owner_id,
+          name: _item.name,
+          host: _item.host,
+          location: _item.location,
+          date: _item.date,
+          event_link: _item.event_link,
+          description: _item.description,
+          view: getRandomNumber(0, 100),
+          like: like,
+          datetime: _item.created_at,
+          itemLikes: itemLikes
+        }
+        data.push(item);
+      }
+      setItems(data);
     } catch (error) {
       if (error.isSessionExpired) {
         await logout(navigation);
       } else {
-        console.error("PostList-fetchItems-error", error)
+        console.error("EventList-fetchItems-error", error)
       }
     }
   }
 
-  const fetchItems = async () => {
+  const fetchItemsa = async () => {
     let data = [];
     for (let i = 1; i < getRandomNumber(); i++) {
       let like = getRandomNumber(0, 7);
@@ -97,15 +114,15 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
       let view = getRandomNumber(0, 100);
       data.push({
         id: i,
-        name: `Name${i}`,
+        fullname: `Name${i}`,
         screen_name: '@FimoTex96172',//`@username${i}`,
         image: IMG_PROFILE[getRandomNumber(0, 4)],
-        title: `Title${i}`,
+        name: `Title${i}`,
         host: `Host${i}`,
         location: `Location${i}`,
-        link: 'https://neonrabbits.io',
+        event_link: 'https://neonrabbits.io',
         date: getRandomTimestamp(10),
-        detail: 'Event details lorem ipsum neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic part lorem ipsum long text here example lorem ipsum.',
+        description: 'Event details lorem ipsum neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic part lorem ipsum long text here example lorem ipsum.',
         view: view,
         like: like,
         datetime: getRandomTimestamp(30),
@@ -175,9 +192,28 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
     setSelectedItemIndex(null);
   };
 
-  const handleDelete = () => {
-    console.log(`Deleting item ${selectedItemIndex}`);
-    setSelectedItemIndex(null);
+  const handleDelete = async () => {
+    if (!userInfo) return;
+    try {
+      let item = items[selectedItemIndex];
+      let url = API_URL + `/crowdsource/event/delete`;
+      let body = {
+        id: item.id
+      }
+      let resp = await api.post(url, body);
+      if (resp.status == 200) {
+        Alert.alert("Your post has been deleted!");
+        fetchItems();
+      }
+    } catch (error) {
+      if (error.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.error("handleDelete-error", error)
+      }
+    } finally {
+      setSelectedItemIndex(null);
+    }
   };
 
   const confirmDelete = () => {

@@ -62,7 +62,7 @@ const CrowdCreateQuest = () => {
       }
     } catch (error) {
       Alert.alert("Failed", error.message);
-      console.error('Post-doPost', error);
+      console.error('Quest-handleSave', error);
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,7 @@ const CrowdCreateQuest = () => {
 
   const onChangeDetail = (input) => {
     if (input.length == MAX_CHAR_DETAIL) return;
-    handleInputChange('detail', input)
+    handleInputChange('description', input)
   }
 
   let input2Ref = null;
@@ -125,8 +125,8 @@ const CrowdCreateQuest = () => {
                 style={[styles.textInput]}
                 placeholder="Quest name"
                 placeholderTextColor={Color.colorGray_500}
-                value={input?.title}
-                onChangeText={(value) => handleInputChange('title', value)}
+                value={input?.name}
+                onChangeText={(value) => handleInputChange('name', value)}
                 returnKeyType="next"
                 onSubmitEditing={() => {
                   if (input2Ref) {
@@ -176,16 +176,16 @@ const CrowdCreateQuest = () => {
                   style={[styles.textDesc]}
                   placeholder="Quest Detail"
                   placeholderTextColor={Color.colorGray_500}
-                  value={input?.detail}
+                  value={input?.description}
                   onChangeText={(text) => onChangeDetail(text)}
                   multiline={true}
                   numberOfLines={numberOfLines}
-                  scrollEnabled={input?.detail?.split('\n').length > 4}
+                  scrollEnabled={input?.description?.split('\n').length > 4}
                   ref={(ref) => { input4Ref = ref; }}
                 />
                 <View style={styles.frameSubDesc}>
                   <Text style={styles.textSubDescLeft}>The post preview will show the first 280 letters</Text>
-                  <Text style={styles.textSubDescRight}>{input?.detail?.length}/{MAX_CHAR_DETAIL - 1}</Text>
+                  <Text style={styles.textSubDescRight}>{input?.description?.length}/{MAX_CHAR_DETAIL - 1}</Text>
                 </View>
               </View>
             </View>

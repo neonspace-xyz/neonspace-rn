@@ -21,7 +21,7 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
             />
             <View style={[styles.frameFlexBox]}>
               <View style={styles.frameFlexBox}>
-                <Text style={[styles.name, styles.nameTypo]}>{item?.name}</Text>
+                <Text style={[styles.name, styles.nameTypo]}>{item?.fullname}</Text>
                 <Text style={[styles.endlessmeee, styles.nameTypo]}>
                   {item?.screen_name}
                 </Text>

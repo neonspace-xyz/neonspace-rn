@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { StyleSheet, Text, View, Pressable, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Pressable, Dimensions, Alert } from "react-native";
 import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle } from "../GlobalStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CrowdSectionEvent from "../components/CrowdSectionEvent";
