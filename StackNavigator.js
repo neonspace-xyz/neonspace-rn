@@ -8,9 +8,9 @@ import ReferralCode from './screens/ReferralCode';
 import { AuthProvider } from './components/AuthProvider';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {Button, Image, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Color } from './GlobalStyles';
+import {Color, getFontFamily} from './GlobalStyles';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -55,6 +55,7 @@ const StackNavigator = () => {
   const CustomDrawerContent = (props) => {
     
     const navigation = useNavigation();
+    const [modalVisible, setModalVisible] = useState(false);
 
     return (
     <SafeAreaView style={styles.drawerContent}>
@@ -79,11 +80,11 @@ const StackNavigator = () => {
         <Text style={{color:"white"}}>Wallet Address: 0xe...dhv</Text>
 
         <View style={{marginTop:50}}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            setModalVisible(true)
+          }
+          }>
             <Text style={styles.drawerMenu}>Post Crowdsource</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.drawerMenu}>My Full Bio</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
             navigation.navigate('Profile', {
@@ -91,7 +92,18 @@ const StackNavigator = () => {
               params: {
                 reset: true,
               },
-            })
+            });
+          }
+          }>
+            <Text style={styles.drawerMenu}>My Full Bio</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            navigation.navigate('Wallet', {
+              screen: 'Wallet3',
+              params: {
+                reset: true,
+              },
+            });
           }
           }>
             <Text style={styles.drawerMenu}>Wallet</Text>
@@ -101,6 +113,68 @@ const StackNavigator = () => {
         <Button title="Home" onPress={() => props.navigation.navigate('Home')} />
         <Button title="Profile" onPress={() => props.navigation.navigate('Profile')} /> */}
       </View>
+
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setModalVisible(!modalVisible);
+          }}>
+        <View style={modalStyles.centeredView}>
+          <View style={modalStyles.modalView}>
+
+            <Text style={modalStyles.title}>Please choose{"\n"}Crowdsource type</Text>
+
+            <View style={{alignSelf:"center", gap:10, width:"100%"}}>
+            <TouchableOpacity style={modalStyles.button} onPress={() => {
+              navigation.navigate('Crowdsource', {
+                screen: 'CrowdCreateHiring5',
+                params: {
+                  reset: true,
+                },
+              });
+              setModalVisible(false);
+            }
+            }>
+              <Text style={modalStyles.buttonText}>Hiring</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={modalStyles.button} onPress={() => {
+              navigation.navigate('Crowdsource', {
+                screen: 'CrowdCreateEvent5',
+                params: {
+                  reset: true,
+                },
+              });
+              setModalVisible(false);
+            }
+            }>
+              <Text style={modalStyles.buttonText}>Event</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={modalStyles.button} onPress={() => {
+              navigation.navigate('Crowdsource', {
+                screen: 'CrowdCreateQuest5',
+                params: {
+                  reset: true,
+                },
+              });
+              setModalVisible(false);
+            }
+            }>
+              <Text style={modalStyles.buttonText}>Quest</Text>
+            </TouchableOpacity>
+            </View>
+            {/*<Pressable*/}
+            {/*    style={[modalStyles.button, modalStyles.buttonClose]}*/}
+            {/*    onPress={() => setModalVisible(!modalVisible)}>*/}
+            {/*  <Text style={modalStyles.textStyle}>Hide Modal</Text>*/}
+            {/*</Pressable>*/}
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   )};
 
@@ -141,6 +215,73 @@ const StackNavigator = () => {
   );
 }
 
+const modalStyles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    backgroundColor: Color.colorGray_100, // Dark background color
+    margin: 20,
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  title: {
+    fontSize: 20,
+    fontWeight: "600",
+    fontFamily: getFontFamily("600"),
+    color: '#FFFFFF', // White text color
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  button: {
+    // borderWidth: 2,
+    // borderColor:"red",
+    backgroundColor: Color.colorDarkslategray_400, // Button color
+    paddingVertical: 15,
+    paddingHorizontal: 100,
+    // marginBottom: 10,
+    borderRadius: 10,
+    width: '100%',
+    height: 54,
+    alignItems: 'center',
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: "600",
+    fontFamily: getFontFamily("600"),
+    color: '#FFFFFF', // White text color
+  },
+});
+
+
 const styles = StyleSheet.create({
   drawerMenu:{
     color:"white", fontWeight: "900", marginTop: 20
@@ -148,7 +289,7 @@ const styles = StyleSheet.create({
   drawerContent: {
     flex: 1,
     padding: 16,
-    backgroundColor: Color.colorDarkslategray_100,
+    backgroundColor: Color.colorDarkslategray_400,
   },
   drawerSection: {
     marginVertical: 16,
@@ -168,6 +309,7 @@ const styles = StyleSheet.create({
     // margin: 10,
     borderRadius: 50
   },
+
 });
 
 
