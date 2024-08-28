@@ -48,7 +48,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
         if (_users[job.user_id]) continue;
 
         let otherUser = await getOtherUser(job.user_id);
-        if(!otherUser) continue;
+        if (!otherUser) continue;
         _users[job.user_id] = {
           name: otherUser.name,
           screen_name: otherUser.screen_name,
@@ -283,6 +283,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
       />
       {usersession?.user_info?.user_id == userInfo?.user_id && (
         <ButtonFAB
+          isTab={true}
           doCreate={doCreate}
         />
       )}

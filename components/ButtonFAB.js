@@ -2,9 +2,9 @@ import { Pressable, StyleSheet, View } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Color } from "../GlobalStyles"
 
-const ButtonFAB = ({ doCreate }) => {
+const ButtonFAB = ({ isTab, doCreate }) => {
   return (
-    <View style={styles.containerFAB}>
+    <View style={[styles.containerFAB, { bottom: isTab ? 20 : 40 }]}>
       <Pressable style={styles.FAB} onPress={doCreate}>
         <Icon name="add" size={45} color={Color.colorBlack} />
       </Pressable>
@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
   containerFAB: {
     position: 'absolute',
     zIndex: 1,
-    bottom: 80,
     right: 20,
   },
   FAB: {

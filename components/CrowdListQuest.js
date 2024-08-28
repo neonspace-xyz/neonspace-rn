@@ -48,7 +48,7 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
         if (_users[_item.user_id]) continue;
 
         let otherUser = await getOtherUser(_item.user_id);
-        if(!otherUser) continue;
+        if (!otherUser) continue;
         _users[_item.user_id] = {
           name: otherUser.name,
           screen_name: otherUser.screen_name,
@@ -281,6 +281,7 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
       />
       {usersession?.user_info?.user_id == userInfo?.user_id && (
         <ButtonFAB
+          isTab={true}
           doCreate={doCreate}
         />
       )}

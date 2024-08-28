@@ -1,4 +1,4 @@
-import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, useWindowDimensions, StatusBar } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { useAuth } from '../components/AuthProvider';
 import React, { useEffect, useState } from 'react';
@@ -163,7 +163,7 @@ export default function CrowdsourceView({ route }) {
         onIndexChange={setIndex}
         renderTabBar={renderTabBar}
         initialLayout={{ width: layout.width }}
-        style={{ flex: 1 }}
+        style={{ marginBottom: -40 }}
       />
     </SafeAreaView>
   );

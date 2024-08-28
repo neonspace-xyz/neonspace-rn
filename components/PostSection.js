@@ -69,7 +69,7 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
                   </View>
                   <Pressable
                     style={[styles.heartSvgrepoCom1Parent, styles.frameViewFlexBox]}
-                    onPress={() => navigation.push(`PostLikeList${tab}`, { tab, itemLikes: item?.itemLikes })}
+                    onPress={() => navigation.push(`PostLike${tab}`, { tab, itemLikes: item?.itemLikes })}
                   >
                     <Image
                       style={styles.eyeSvgrepoCom11}
