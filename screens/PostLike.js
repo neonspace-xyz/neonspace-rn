@@ -5,8 +5,9 @@ import { StyleSheet, Text, View, Pressable, FlatList } from "react-native";
 import { Color, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle } from "../GlobalStyles";
 import PostLikeSection from "../components/PostLikeSection";
 import { SafeAreaView } from "react-native-safe-area-context";
+import PostLikeList from "../components/PostLikeList";
 
-const PostLikeList = () => {
+const PostLike = () => {
   const route = useRoute();
   const { tab, itemLikes } = route.params;
   const navigation = useNavigation();
@@ -25,7 +26,10 @@ const PostLikeList = () => {
           Liked By
         </Text>
       </View>
-      <View style={[styles.containerList]}>
+      <PostLikeList
+        tab={tab}
+        itemLikes={itemLikes} />
+      {/* <View style={[styles.containerList]}>
         <FlatList
           style={styles.flat}
           data={itemLikes}
@@ -38,7 +42,7 @@ const PostLikeList = () => {
             )
           }}
         />
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };
@@ -63,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostLikeList;
+export default PostLike;

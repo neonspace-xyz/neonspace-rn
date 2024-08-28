@@ -108,6 +108,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
 
   const handleDetail = (item) => {
     if (isShowCreate) return;
+    console.log(`PostDetail${tab}`)
     navigation.push(`PostDetail${tab}`, { tab, item });
   };
 
@@ -217,6 +218,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
       )}
       {!isShowCreate && usersession?.user_info?.user_id == userInfo?.user_id && (
         <ButtonFAB
+          isTab={false}
           doCreate={doCreate}
         />
       )}
@@ -233,7 +235,7 @@ const styles = StyleSheet.create({
   },
   containerListProfile: {
     width: "100%",
-    height: "55%",
+    height: "100%",
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
   },

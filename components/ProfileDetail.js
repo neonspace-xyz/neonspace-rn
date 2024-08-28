@@ -4,12 +4,15 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TouchableOpacity, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
-import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
+import { getRandomNumber, processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
 import CrowdListEvent from "./CrowdListEvent";
 import CrowdListHiring from "./CrowdListHiring";
 import { useAuth } from "./AuthProvider";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import FullBio from "./FullBio";
+import PostList from "./PostList";
+import PostLikeList from "./PostLikeList";
+import { IMG_PROFILE } from "../Constant";
 
 const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const navigation = useNavigation();
@@ -23,15 +26,19 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const [isFullBio, setIsFullBio] = useState(false);
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
-    { key: 'second', title: 'Likes' },
+    { key: 'second', title: 'Crowdsource' },
+    { key: 'third', title: 'Minting' },
+    { key: 'forth', title: 'Likes' },
   ]);
   const [isShowCreate, setIsShowCreate] = useState(false);
-  
+
   const renderScene = SceneMap({
     first: FirstRoute,
     second: SecondRoute,
+    third: ThirdRoute,
+    forth: ForthRoute,
   });
-   
+
   const renderTabBar = (props) => (
     <TabBar
       {...props}
@@ -66,9 +73,9 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
     <View style={[styles.myProfile, isShowSearch && { display: "none" }]}>
       <View style={{
         // borderWidth:2, borderColor:'red',
-        flex:1, 
+        flex: 1,
         backgroundColor: Color.colorGray_100
-        }}>
+      }}>
         <View style={{
           // borderWidth:2, borderColor:"red",
           flex: 1, flexDirection: "row", maxHeight: 120,
@@ -104,7 +111,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           // borderColor:"red", borderWidth:2,
         }}>
           <TouchableOpacity
-            style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock, {marginLeft:10}]}
+            style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock, { marginLeft: 10 }]}
             onPress={() => navigation.navigate(`EditProfile${tab}`)}
           >
             <Text style={[styles.editProfile]}>
@@ -113,22 +120,22 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock, 
+            style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock,
             ]}
             onPress={() => setIsFullBio(!isFullBio)}
           >
             <Text style={[styles.editProfile]}>
-              { isFullBio ? "Default Bio" : "Full Bio" }
+              {isFullBio ? "Default Bio" : "Full Bio"}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={{
-            borderWidth:1.5, borderColor: 'transparent', marginRight:10
-            }}>
+            borderWidth: 1.5, borderColor: 'transparent', marginRight: 10
+          }}>
             <Image
               style={{
-                width:25, height:25,
-              
+                width: 25, height: 25,
+
               }}
               source={require("../assets/share.png")}
             />
@@ -140,9 +147,9 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           // flex: 1, padding: 10, gap: 8
           // flex:1,
           // flexGrow:0,
-          padding:10
+          padding: 10
         }}>
-      
+
           <Text
             style={[
               styles.walletAddress0xedhvContainer,
@@ -153,48 +160,49 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           </Text>
 
           <TouchableOpacity
-            style={{      
-              marginTop:15
-            // borderWidth:2, borderColor:"red"
+            style={{
+              marginTop: 15
+              // borderWidth:2, borderColor:"red"
             }}
-            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user:userInfo })}
+            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user: userInfo })}
           >
-          <Text
-            style={[
-              styles.walletAddress0xedhvContainer,
-            ]}
-          >
-            <Text style={styles.walletAddress}>{`Verified by: `}</Text>
+            <Text
+              style={[
+                styles.walletAddress0xedhvContainer,
+              ]}
+            >
+              <Text style={styles.walletAddress}>{`Verified by: `}</Text>
 
-            <View style={{flexDirection:"row", alignItems:"center"}}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
 
-                  {userVerifiedByImages[0] && 
-                    <CircularImage source={userVerifiedByImages[0]}></CircularImage>
-                  }
-                  {userVerifiedByImages[1] && 
-                <View style={[styles.imageContainer, {
-                  // borderColor:'red',
-                  // borderWidth:2,
-                  position: 'absolute',
-                  top: 0,
-                  left: 20,
-                }]}>
-                  <Image source={userVerifiedByImages[1]} style={styles.image} />
-                </View>
-                  }
-                <Text style={[styles.samPolymathAnd, styles.textTypo, {marginLeft:15}]}>
+                {userVerifiedByImages[0] &&
+                  <CircularImage source={userVerifiedByImages[0]}></CircularImage>
+                }
+                {userVerifiedByImages[1] &&
+                  <View style={[styles.imageContainer, {
+                    // borderColor:'red',
+                    // borderWidth:2,
+                    position: 'absolute',
+                    top: 0,
+                    left: 20,
+                  }]}>
+                    <Image source={userVerifiedByImages[1]} style={styles.image} />
+                  </View>
+                }
+                <Text style={[styles.samPolymathAnd, styles.textTypo, { marginLeft: 15 }]}>
                   {userVerifiedByNames}
                 </Text>
-            </View>
-          </Text>
+              </View>
+            </Text>
           </TouchableOpacity>
-          
+
           <TouchableOpacity
-          style={{flexDirection:"row", 
-          marginTop:10
-          //  borderWidth:2, borderColor:"red"
-          }}
-            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, user:userInfo })}
+            style={{
+              flexDirection: "row",
+              marginTop: 10
+              //  borderWidth:2, borderColor:"red"
+            }}
+            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, user: userInfo })}
           >
             <Text
               style={[
@@ -203,23 +211,23 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
             >
               <Text style={styles.walletAddress}>{`Verified: `}</Text>
 
-              <View style={{flexDirection:"row", alignItems:"center"}}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
 
-                  {userVerifiedImages[0] && 
-                    <CircularImage source={userVerifiedImages[0]}></CircularImage>
-                  }
-                  {userVerifiedImages[1] && 
-                <View style={[styles.imageContainer, {
-                  // borderColor:'red',
-                  // borderWidth:2,
-                  position: 'absolute',
-                  top: 0,
-                  left: 20
-                }]}>
-                  <Image source={userVerifiedImages[1]} style={styles.image} />
-                </View>
-                  }
-                <Text style={[styles.samPolymathAnd, styles.textTypo, {marginLeft:15}]}>
+                {userVerifiedImages[0] &&
+                  <CircularImage source={userVerifiedImages[0]}></CircularImage>
+                }
+                {userVerifiedImages[1] &&
+                  <View style={[styles.imageContainer, {
+                    // borderColor:'red',
+                    // borderWidth:2,
+                    position: 'absolute',
+                    top: 0,
+                    left: 20
+                  }]}>
+                    <Image source={userVerifiedImages[1]} style={styles.image} />
+                  </View>
+                }
+                <Text style={[styles.samPolymathAnd, styles.textTypo, { marginLeft: 15 }]}>
                   {userVerifiedNames}
                 </Text>
               </View>
@@ -232,22 +240,22 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           </TouchableOpacity>
         </View>
       </View>
-      
+
       <View style={[styles.frameParent8]}>
 
-      {
-        !isFullBio ? 
-          <TabView
-            navigationState={{ index, routes, tab, isShowSearch, isShowCreate }}        
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            renderTabBar={renderTabBar}
-            style={{backgroundColor:  Color.colorGray_100}}
-            initialLayout={{ width: layout.width}}
-          />
-            : 
-          <FullBio/>
-      }
+        {
+          !isFullBio ?
+            <TabView
+              navigationState={{ index, routes, tab, isShowSearch, isShowCreate }}
+              renderScene={renderScene}
+              onIndexChange={setIndex}
+              renderTabBar={renderTabBar}
+              style={{ backgroundColor: Color.colorGray_100, marginBottom: -40 }}
+              initialLayout={{ width: layout.width }}
+            />
+            :
+            <FullBio />
+        }
         {/* <View
           style={styles.verifiedWrapperFlexBox}
         >
@@ -261,52 +269,130 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           </Text>
         </View> */}
       </View>
-      
+
     </View>
   );
 };
 
-const FirstRoute = ({index, routes, tab, isShowSearch, isShowCreate}) => {
-  const { getUser } = useAuth();
+const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
+  const { getUser, getSession } = useAuth();
   const [userInfo, setUserInfo] = useState();
+  const [usersession, setUsersession] = useState();
 
   useEffect(() => {
     getUser().then((user) => {
-      // console.log(user)
       setUserInfo(user);
     });
+    getSession().then((user) => {
+      setUsersession(user);
+    })
   }, [])
 
   return (userInfo &&
     <View>
-        <CrowdListHiring
-          tab={tab}
-          userInfo={userInfo}
-          isProfile={false}
-          isShowSearch={isShowSearch}
-          isShowCreate={isShowCreate} />
+      <PostList
+        tab={4}
+        isProfile={false}
+        usersession={usersession}
+        userInfo={userInfo} />
+      {/* <CrowdListHiring
+        tab={4}
+        userInfo={userInfo}
+        isProfile={false}
+        isShowSearch={isShowSearch}
+        isShowCreate={isShowCreate} /> */}
     </View>)
-  
+
 };
 
-const SecondRoute = ({index, routes, tab, isShowSearch, isShowCreate}) => {
-  const { getUser } = useAuth();
+const SecondRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
+  const { getUser, getSession } = useAuth();
   const [userInfo, setUserInfo] = useState();
+  const [usersession, setUsersession] = useState();
 
   useEffect(() => {
     getUser().then((user) => {
-      // console.log(user)
       setUserInfo(user);
     });
+    getSession().then((user) => {
+      setUsersession(user);
+    })
+  }, [])
+
+  return (userInfo &&
+    <View>
+      <CrowdListHiring
+        tab={4}
+        userInfo={userInfo}
+        isProfile={false}
+        isShowSearch={isShowSearch}
+        isShowCreate={isShowCreate} />
+    </View>)
+
+};
+
+const ThirdRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
+  const { getUser, getSession } = useAuth();
+  const [userInfo, setUserInfo] = useState();
+  const [usersession, setUsersession] = useState();
+
+  useEffect(() => {
+    getUser().then((user) => {
+      setUserInfo(user);
+    });
+    getSession().then((user) => {
+      setUsersession(user);
+    })
+  }, [])
+
+  return (userInfo &&
+    <View>
+      <CrowdListHiring
+        tab={4}
+        userInfo={userInfo}
+        isProfile={false}
+        isShowSearch={isShowSearch}
+        isShowCreate={isShowCreate} />
+    </View>)
+
+};
+
+const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
+  const { getUser } = useAuth();
+  const [userInfo, setUserInfo] = useState();
+  const [itemLikes, setItemLikes] = useState();
+
+  useEffect(() => {
+    getUser().then((user) => {
+      setUserInfo(user);
+    });
+
+    const setLikes = () => {
+      let like = getRandomNumber(10, 15);
+      let itemLikes = [];
+      for (let j = 0; j < like; j++) {
+        itemLikes.push({
+          name: `Name${j}`,
+          username: `@username${j}`,
+          image: IMG_PROFILE[getRandomNumber(0, 4)],
+          bio: `Founder at ChainCredit. #DYOR ${j}`,
+        })
+      }
+      setItemLikes(itemLikes);
+    };
+    setLikes();
   }, [])
   return (userInfo &&
-    <View style={{ flex: 1}} >
-        <CrowdListEvent
-          tab={tab}
-          userInfo={userInfo}
-          isProfile={false}
-          isShowSearch={isShowSearch}
-          isShowCreate={isShowCreate} />
+    <View style={{ flex: 1 }} >
+      {/* <CrowdListEvent
+        tab={4}
+        userInfo={userInfo}
+        isProfile={false}
+        isShowSearch={isShowSearch}
+        isShowCreate={isShowCreate} /> */}
+      <PostLikeList
+        tab={4}
+        itemLikes={itemLikes} />
     </View>)
 };
 
@@ -489,23 +575,23 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: Color.darkInk,
     fontSize: FontSize.labelLarge_size,
-    fontWeight:"600",
-    fontFamily:getFontFamily("600")
+    fontWeight: "600",
+    fontFamily: getFontFamily("600")
   },
   endlessmeee6: {
     textAlign: "left",
     color: Color.darkInk,
     fontSize: FontSize.labelLarge_size,
-    fontWeight:"400",
-    fontFamily:getFontFamily("400")
+    fontWeight: "400",
+    fontFamily: getFontFamily("400")
   },
   nameParent4: {
     justifyContent: "center",
   },
   theBioText: {
     color: Color.darkInk,
-    fontWeight:"400",
-    fontFamily:getFontFamily("400"),
+    fontWeight: "400",
+    fontFamily: getFontFamily("400"),
     marginTop: 8,
     textAlign: "left",
     alignSelf: "stretch",
@@ -515,7 +601,7 @@ const styles = StyleSheet.create({
     // borderColor:"red", borderWidth:2,
     width: 260,
     padding: 10,
-    marginTop:10
+    marginTop: 10
     // justifyContent: "center",
   },
   myProfileItem: {
@@ -571,7 +657,7 @@ const styles = StyleSheet.create({
   },
   walletAddress: {
     fontFamily: getFontFamily("400"),
-    fontWeight:"400"
+    fontWeight: "400"
   },
   walletAddress0xedhvContainer: {
     // top: 258,
@@ -792,7 +878,7 @@ const styles = StyleSheet.create({
   myProfile: {
     // width: "100%",
     // height: "100%",
-    flex:1, 
+    flex: 1,
     // paddingHorizontal: 12,
     backgroundColor: Color.colorGray_200,
     // borderColor:'red',
@@ -802,7 +888,7 @@ const styles = StyleSheet.create({
     // borderWidth:2,
     // borderColor:'red',
     // height:200,
-    flexGrow:1.3
+    flexGrow: 1.3
     // borderColor:"blue",
     // borderWidth:2,
     // top: 101,
@@ -847,14 +933,14 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   tabBar: {
-      backgroundColor:   Color.colorGray_100, // Background color of the tab bar
-    },
-    indicator: {
-      backgroundColor: '#ff4081', // Color of the selected tab indicator
-    },
-    label: {
-      color: '#ffffff', // Color of the tab labels
-    },
+    backgroundColor: Color.colorGray_100, // Background color of the tab bar
+  },
+  indicator: {
+    backgroundColor: '#ff4081', // Color of the selected tab indicator
+  },
+  label: {
+    color: '#ffffff', // Color of the tab labels
+  },
 });
 
 export default ProfileDetail;

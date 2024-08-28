@@ -19,7 +19,7 @@ function WalletStackNavigator() {
       
 
       {/* <Stack.Screen name="PostDetail1" component={PostDetail} initialParams={dataToSend} />
-      <Stack.Screen name="PostLikeList1" component={PostLikeList} initialParams={dataToSend} />
+      <Stack.Screen name="PostLike1" component={PostLike} initialParams={dataToSend} />
       <Stack.Screen name="ChatList1" component={ChatList} initialParams={dataToSend} />
       <Stack.Screen name="ChatView1" component={ChatView} initialParams={dataToSend} />
       <Stack.Screen name="OtherProfile1" component={OtherProfile} initialParams={dataToSend} />

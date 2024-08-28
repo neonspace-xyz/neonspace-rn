@@ -3,7 +3,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PostHome from './PostHome';
 import PostDetail from './PostDetail';
-import PostLikeList from './PostLikeList';
+import PostLike from './PostLike';
 import ChatList from './ChatList';
 import ChatView from './ChatView';
 import OtherProfile from './OtherProfile';
@@ -16,6 +16,12 @@ import Experience from './Experience';
 import ExperienceForm from './ExperienceForm';
 import SkillForm from './SkillForm';
 import Skill from './Skill';
+import CrowdDetailHiring from './CrowdDetailHiring';
+import CrowdDetailEvent from './CrowdDetailEvent';
+import CrowdDetailQuest from './CrowdDetailQuest';
+import CrowdCreateHiring from './CrowdCreateHiring';
+import CrowdCreateEvent from './CrowdCreateEvent';
+import CrowdCreateQuest from './CrowdCreateQuest';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +36,7 @@ function ProfileStackNavigator() {
       <Stack.Screen name="OtherProfile4" component={OtherProfile} initialParams={dataToSend} />
 
       <Stack.Screen name="PostDetail4" component={PostDetail} initialParams={dataToSend} />
-      <Stack.Screen name="PostLikeList4" component={PostLikeList} initialParams={dataToSend} />
+      <Stack.Screen name="PostLike4" component={PostLike} initialParams={dataToSend} />
 
       <Stack.Screen name="ChatList4" component={ChatList} initialParams={dataToSend} />
       <Stack.Screen name="ChatView4" component={ChatView} initialParams={dataToSend} />
@@ -40,6 +46,13 @@ function ProfileStackNavigator() {
 
       <Stack.Screen name="Skill4" component={Skill} initialParams={dataToSend} />
       <Stack.Screen name="SkillForm4" component={SkillForm} initialParams={dataToSend} />
+
+      <Stack.Screen name="CrowdDetailHiring4" component={CrowdDetailHiring} initialParams={dataToSend} />
+      <Stack.Screen name="CrowdDetailEvent4" component={CrowdDetailEvent} initialParams={dataToSend} />
+      <Stack.Screen name="CrowdDetailQuest4" component={CrowdDetailQuest} initialParams={dataToSend} />
+      <Stack.Screen name="CrowdCreateHiring4" component={CrowdCreateHiring} initialParams={dataToSend} />
+      <Stack.Screen name="CrowdCreateEvent4" component={CrowdCreateEvent} initialParams={dataToSend} />
+      <Stack.Screen name="CrowdCreateQuest4" component={CrowdCreateQuest} initialParams={dataToSend} />
 
 
       {/* <Stack.Screen name="MyAssets3" component={MyAssets} initialParams={dataToSend} />       */}

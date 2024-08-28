@@ -3,7 +3,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PostHome from './PostHome';
 import PostDetail from './PostDetail';
-import PostLikeList from './PostLikeList';
+import PostLike from './PostLike';
 import ChatList from './ChatList';
 import ChatView from './ChatView';
 import OtherProfile from './OtherProfile';
@@ -30,7 +30,7 @@ function NotificationStackNavigator() {
       <Stack.Screen name="Verified2" component={Verified} />
 
       <Stack.Screen name="PostDetail2" component={PostDetail} initialParams={dataToSend} />
-      <Stack.Screen name="PostLikeList2" component={PostLikeList} initialParams={dataToSend} />
+      <Stack.Screen name="PostLike2" component={PostLike} initialParams={dataToSend} />
 
       {/* <Stack.Screen name="MyAssets3" component={MyAssets} initialParams={dataToSend} />       */}
     </Stack.Navigator>
