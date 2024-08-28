@@ -12,6 +12,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image } from "expo-image";
 
 const Main = () => {
   // Create the bottom tab navigator
@@ -64,11 +65,16 @@ const Main = () => {
           return <Icon name={iconName} size={size} color={color} />;
         },
         headerShown: false,
-        tabBarActiveTintColor: 'tomato',
+
+        tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'gray',
-        tabBarStyle: {
-          backgroundColor: Color.colorDarkslategray_400, // Change this to your desired background color
-        }
+        tabBarStyle: { backgroundColor: Color.colorGray_100, paddingBottom: 5 },
+        tabBarLabelStyle: { fontSize: 10 },
+        // tabBarActiveTintColor: 'tomato',
+        // tabBarInactiveTintColor: 'gray',
+        // tabBarStyle: {
+        //   backgroundColor: Color.colorDarkslategray_400, // Change this to your desired background color
+        // }
       })}
     >
       <Tab.Screen name="Home" component={PostStackNavigator}
@@ -145,25 +151,53 @@ const Main = () => {
           let iconName;
 
           if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Notification') {
-            iconName = focused ? 'notifications' : 'notifications-outline';
-          } else if (route.name === 'Wallet') {
-            iconName = focused ? 'wallet' : 'wallet-outline';
-          } else if (route.name === 'Profile') {
-            iconName = focused ? 'person' : 'person-outline';
-          } else if (route.name === 'Crowdsource') {
-            iconName = focused ? 'logo-usd' : 'logo-usd';
+            return <Image
+              style={{width:32, height:32, opacity:focused? 1 : 0.32}}
+              source={require('../assets/icon-home.png')}
+            />
           } 
-
-          return <Icon name={iconName} size={size} color={color} />;
+          else if (route.name === 'Notification') {
+            return <Image
+              style={{width:32, height:32, opacity:focused? 1 : 0.32}}
+              source={require('../assets/icon-notification.png')}
+            />
+          } else if (route.name === 'Wallet') {
+            return <Image
+              style={{width:32, height:32, opacity:focused? 1 : 0.32}}
+              source={require('../assets/icon-wallet.png')}
+            />
+          } else if (route.name === 'Profile') {
+            return <Image
+              style={{width:32, height:32, opacity:focused? 1 : 0.32}}
+              source={require('../assets/icon-profile.png')}
+            />
+          } else if (route.name === 'Crowdsource') {
+            return <Image
+              style={{width:32, height:32, opacity:focused? 1 : 0.32}}
+              source={require('../assets/icon-crowdsource.png')}
+            />
+          } 
+          // return <Icon name={iconName} size={size} color={color} />;
+          // return <Text>TESTS</Text>
         },
         headerShown: false,
-        tabBarActiveTintColor: 'tomato',
+
+        tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'gray',
-        tabBarStyle: {
-          backgroundColor: Color.colorDarkslategray_400, // Change this to your desired background color
-        }
+        tabBarStyle: { backgroundColor: Color.colorGray_100, 
+        // height: 50
+        // paddingTop:12,
+        // paddingBottom:24,
+        // paddingLeft:26,
+        // paddingRight:24
+        
+         },
+        tabBarLabelStyle: { fontSize: 10 },
+        // tabBarActiveTintColor: 'tomato',
+        // tabBarInactiveTintColor: 'gray',
+        // tabBarStyle: {
+        //   backgroundColor: Color.colorDarkslategray_400, // Change this to your desired background color
+        // }
       })}
     >
       <Tab.Screen name="Home" component={PostStackNavigator}
