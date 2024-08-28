@@ -112,7 +112,7 @@ const Login = () => {
       console.log('URL received:', url);
 
       // Check if the URL matches the expected callback pattern
-      if (url.startsWith('exp://neonspace.blockleader.io')) {
+      if (url.startsWith('exp://neonspace.blockleader.io') || url.startsWith('com.neonspace.app://')) {
         // Parse the URL and extract the oauth_token and oauth_verifier
         const regex = /[?&]([^=#]+)=([^&#]*)/g;
         let params = {};
@@ -134,10 +134,10 @@ const Login = () => {
       }
     };
 
-  //   // Listen for URL callback
+    //   // Listen for URL callback
     Linking.addEventListener('url', handleOpenURL);
 
-  //   // Cleanup the event listener on unmount
+    //   // Cleanup the event listener on unmount
     return () => {
       Linking.removeAllListeners('url', handleOpenURL);
     };
@@ -178,23 +178,23 @@ const Login = () => {
       />
 
       <LinearGradient
-          colors={['#FC00A7', '#65EDE3']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.gradientBorder}
-        >
-         <View style={styles.buttonInner}>
-            <TouchableOpacity
-              style={[styles.buttonContainer]}
-              disabled={loading}
-              onPress={doLogin}
-            // onPress={() => navigation.replace("Mint")}
-            >
-              <Text style={[styles.buttonLabel, styles.txtStyle]}>
-                {loading ? "Loading..." : "Login with X"}
-              </Text>
-            </TouchableOpacity>
-          </View>
+        colors={['#FC00A7', '#65EDE3']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradientBorder}
+      >
+        <View style={styles.buttonInner}>
+          <TouchableOpacity
+            style={[styles.buttonContainer]}
+            disabled={loading}
+            onPress={doLogin}
+          // onPress={() => navigation.replace("Mint")}
+          >
+            <Text style={[styles.buttonLabel, styles.txtStyle]}>
+              {loading ? "Loading..." : "Login with X"}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </LinearGradient>
       <Modal
         visible={modalVisible}
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "80%",
     fontFamily: getFontFamily("400"),
-    fontWeight: "400",    
+    fontWeight: "400",
     maxWidth: Component_Max_Width,
     textAlign: "center",
     color: Color.darkInk,
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     // borderWidth:5,
     padding: 2, // Lebar border gradien
     borderRadius: 10,
-    
+
     position: "absolute",
     top: "75%",
     // borderRadius: Border.br_5xs,
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     // width: 100,
     // marginTop: -111,
     // top: "50%",
-    width:"100%",
+    width: "100%",
     backgroundColor: '#1c1c1c', // Warna background tombol
     borderRadius: 10,
   },

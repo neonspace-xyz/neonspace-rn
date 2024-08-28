@@ -65,9 +65,11 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
             name: userInfo.name,
             screen_name: `@${userInfo.screen_name}`,
             image: userInfo.profile_image,
+            post_id: post.post_id,
             text: post.post,
-            view: getRandomNumber(0, 100),
-            like: like,
+            view: post.views,
+            like: post.likes,
+            liked_by_user: post.liked_by_user,
             datetime: convertTimestamp(post.published_timestamp),
             itemLikes: itemLikes
           }
