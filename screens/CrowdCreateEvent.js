@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { StyleSheet, Text, View, Pressable, Alert, Platform, KeyboardAvoidingView, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Pressable, Alert, Platform, KeyboardAvoidingView, TouchableOpacity, Button } from "react-native";
 import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle, Padding, Border, getFontFamily } from "../GlobalStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../components/AuthProvider";
@@ -10,11 +10,29 @@ import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { API_URL, Component_Max_Width, MAX_CHAR_DETAIL } from "../Constant";
 import { formatEventTime } from "../Utils";
 import api from "../utils/ApiHandler";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const CrowdCreateEvent = () => {
   const route = useRoute();
   const { tab, item, isDetail } = route.params;
   const navigation = useNavigation();
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    console.log(date)
+    console.warn("A date has been picked: ", date);
+    handleInputChange("date", date)
+    hideDatePicker();
+  };
 
   const { getUser } = useAuth();
   const [userInfo, setUserInfo] = useState();
@@ -46,7 +64,7 @@ const CrowdCreateEvent = () => {
       if (!userInfo) return;
       setLoading(true);
       console.log("input", input);
-      input['date'] = "2020-12-09T16:09:53+00:00";
+      // input['date'] = "2020-12-09T16:09:53+00:00";
 
       let url = API_URL + `/crowdsource/event/new`;
       if (input.id) {
@@ -98,7 +116,7 @@ const CrowdCreateEvent = () => {
   let input3Ref = null;
   let input4Ref = null;
   let input5Ref = null;
-
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={StyleHeaderView}>
@@ -174,14 +192,26 @@ const CrowdCreateEvent = () => {
             </View>
             <View style={styles.frameChild}>
               <Text style={styles.txtTitle}>Date</Text>
+
               <TextInput
+                style={[styles.textInput]}
+                 placeholder="Date"
+                placeholderTextColor={Color.colorGray_500}
+                value={formatEventTime(input?.date)}
+                onChangeText={(value) => handleInputChange('date', value)}
+                onFocus={showDatePicker} 
+                // readOnly={true}
+              />
+              {/* <Button 
+                title=""
                 style={[styles.textInput]}
                 placeholder="Date"
                 placeholderTextColor={Color.colorGray_500}
                 value={formatEventTime(input?.date)}
                 onChangeText={(value) => handleInputChange('date', value)}
+                onPress={showDatePicker} 
                 disabled={true}
-              />
+              /> */}
             </View>
             <View style={styles.frameChild}>
               <Text style={styles.txtTitle}>Event Link</Text>
@@ -234,6 +264,14 @@ const CrowdCreateEvent = () => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
+      
     </SafeAreaView>
   );
 };
