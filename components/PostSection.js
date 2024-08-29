@@ -4,11 +4,32 @@ import { StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-nativ
 import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { formatPostTimestamp, getFormattedPostTimestamp } from "../Utils";
 import { useNavigation } from "@react-navigation/core";
+import { useAuth } from "./AuthProvider";
 
 const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) => {
   const navigation = useNavigation();
+  const { api } = useAuth();
+  const [likes, setLikes] = useState(item?.like);
+  const [isLikedByUser, setIsLikedByUser] = useState(item.liked_by_user);
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
-  
+
+
+  const toggleLike = async (item) => {
+    console.log(`Trigger toggle like for item ${item.post_id}`)
+    let url = `/user/toggleLikesForPost`;
+    let body = {
+      post_id: item.post_id
+    }
+    let resp = await api.post(url, body);
+    if (resp.status == 200) {
+      setIsLikedByUser(!isLikedByUser)
+      if (!isLikedByUser) {
+        setLikes(likes + 1)
+      } else {
+        setLikes(likes - 1)
+      }
+    }
+  }
   return (
     <View style={styles.frame}>
       <Pressable index={item?.id} onPress={() => isDetail ? null : onPress()}>
@@ -74,9 +95,9 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
                     <Image
                       style={styles.eyeSvgrepoCom11}
                       contentFit="cover"
-                      source={require("../assets/ic_heart_fill.png")}
+                      source={!isLikedByUser ? require("../assets/ic_heart_empty.png") : require("../assets/ic_heart_fill.png")}
                     />
-                    <Text style={[styles.text1, styles.txtDefault]}>{item?.like}</Text>
+                    <Text style={[styles.text1, styles.txtDefault]}>{likes}</Text>
                   </Pressable>
                 </View>
               </>
@@ -84,13 +105,14 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
               <View style={[styles.frameViewFlexBox, {}]}>
                 <Pressable
                   style={[styles.heartSvgrepoCom1Parent, styles.frameViewFlexBox]}
+                  onPress={() => toggleLike(item)}
                 >
                   <Image
                     style={styles.eyeSvgrepoCom11}
                     contentFit="cover"
-                    source={item.like == 0 ? require("../assets/ic_heart_empty.png") : require("../assets/ic_heart_fill.png")}
+                    source={!isLikedByUser ? require("../assets/ic_heart_empty.png") : require("../assets/ic_heart_fill.png")}
                   />
-                  <Text style={[styles.text1, styles.txtDefault]}>{item.like}</Text>
+                  <Text style={[styles.text1, styles.txtDefault]}>{likes}</Text>
                 </Pressable>
               </View>
             )}
@@ -149,7 +171,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_sm,
     textAlign: "left",
     color: Color.darkInk,
-    fontWeight:"400",
+    fontWeight: "400",
     fontFamily: getFontFamily("400"),
   },
   imSoExcitedSpaceBlock: {
@@ -166,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_xs,
     textAlign: "left",
     fontFamily: getFontFamily("400"),
-    fontWeight:"400"
+    fontWeight: "400"
   },
   frameItem: {
     width: 3,
