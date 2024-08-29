@@ -67,7 +67,7 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
           <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
             {item?.text}
           </Text>
-          <View style={[styles.frameContainer, isDetail ? styles.imSoExcitedSpaceBlock : styles.imSoExcitedSpaceBlock2]}>
+          <View style={[styles.frameContainer, isDetail ? styles.imSoExcitedSpaceBlock1 : styles.imSoExcitedSpaceBlock2]}>
             {isDetail ? (
               <>
                 <View style={styles.frameFlexBox}>
@@ -178,8 +178,10 @@ const styles = StyleSheet.create({
     marginTop: 16,
     alignSelf: "stretch",
   },
+  imSoExcitedSpaceBlock1: {
+    alignSelf: "stretch",
+  },
   imSoExcitedSpaceBlock2: {
-    marginTop: 16,
     alignSelf: "stretch",
     justifyContent: "flex-end",
   },
@@ -202,6 +204,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     flexDirection: "row",
+    paddingVertical: 5,
+    paddingRight: 2,
   },
   eyeSvgrepoCom11: {
     width: 14,
