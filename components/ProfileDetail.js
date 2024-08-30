@@ -24,21 +24,20 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const [userVerifiedNames, setUserVerifiedNames] = useState('');
   const [index, setIndex] = React.useState(0);
   const [isFullBio, setIsFullBio] = useState(false);
+  const [isShowCreate, setIsShowCreate] = useState(false);
+
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
     { key: 'second', title: 'Crowdsource' },
     { key: 'third', title: 'Minting' },
     { key: 'forth', title: 'Likes' },
   ]);
-  const [isShowCreate, setIsShowCreate] = useState(false);
-
   const renderScene = SceneMap({
     first: FirstRoute,
     second: SecondRoute,
     third: ThirdRoute,
     forth: ForthRoute,
   });
-
   const renderTabBar = (props) => (
     <TabBar
       {...props}
@@ -47,6 +46,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       labelStyle={styles.label}
     />
   );
+  
   const CircularImage = ({ source }) => {
     return (
       <View style={styles.imageContainer}>
@@ -242,7 +242,6 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       </View>
 
       <View style={[styles.frameParent8]}>
-
         {
           !isFullBio ?
             <TabView
@@ -269,7 +268,6 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           </Text>
         </View> */}
       </View>
-
     </View>
   );
 };

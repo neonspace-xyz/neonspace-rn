@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
 import OtherProfileDetail from "../components/OtherProfileDetail";
 import { useAuth } from "../components/AuthProvider";
+import ProfileDetail2 from "../components/ProfileDetail2";
 
 const OtherProfile = () => {
   const route = useRoute();
@@ -45,17 +46,23 @@ const OtherProfile = () => {
 
       {userInfo &&
         <>
-          <OtherProfileDetail
+          <ProfileDetail2
             tab={tab}
-            userInfo={userInfo} />
+            userInfo={userInfo}
+            usersession={usersession?.user_info}
+            isShowSearch={isShowSearch} />
+          {/* <OtherProfileDetail
+            tab={tab}
+            userInfo={userInfo}
+            isShowSearch={isShowSearch} /> */}
 
-          <PostList
+          {/* <PostList
             tab={tab}
             isProfile={true}
             usersession={usersession}
             userInfo={userInfo}
             isShowSearch={isShowSearch}
-            isShowCreate={isShowCreate} />
+            isShowCreate={isShowCreate} /> */}
         </>
       }
     </SafeAreaView>
@@ -67,8 +74,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     overflow: "hidden",
-    flexDirection: "column",
-    alignItems: "center",
+    // flexDirection: "column",
+    // alignItems: "center",
     backgroundColor: Color.colorGray_100,
   }
 });
