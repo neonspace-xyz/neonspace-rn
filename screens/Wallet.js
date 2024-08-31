@@ -3,15 +3,17 @@ import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
-import { Color, FontSize, Border, FontFamily, Padding } from "../GlobalStyles";
+import { Color, FontSize, Border, FontFamily, Padding, getFontFamily } from "../GlobalStyles";
 import { Component_Max_Width } from "../Constant";
 import { useAuth } from "../components/AuthProvider";
 import WalletHeader from "../components/WalletHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
+import DropdownExample from "../components/DropdownExample";
+import CustomDropdown from "../components/CustomDropdown";
 
 const Wallet = ({ route }) => {
   const { tab } = route?.params;
-  
   const navigation = useNavigation();
   const {getUser} = useAuth();
 
@@ -65,8 +67,9 @@ const Wallet = ({ route }) => {
 
   const doSendBack = () => {
     if (showSendInput) {
-      setShowSend(!showSend);
       setShowSendInput(!showSendInput);
+      setShowSend(!showSend);
+      setShowTransferAction(true);
     }
     else if (showSendConfirm) {
       setShowSendInput(!showSendInput);
@@ -92,7 +95,7 @@ const Wallet = ({ route }) => {
       />
 
 
-      <Text style={[styles.txtTitle, styles.txtStyle]}>
+      <Text style={[styles.txtTitle]}>
         {userData && userData?.owned_nfts[0]?.token_ids[0]?.name}
       </Text>
 
@@ -112,54 +115,94 @@ const Wallet = ({ route }) => {
       }
       
       <View style={styles.frameGroup}>
-        <Pressable
-          style={styles.button}
-          onPress={() => setShowSuccessMint(!showSuccessMint)}
+
+        <LinearGradient
+          colors={['#FC00A7', '#65EDE3']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.gradientBorder}
         >
-          <Text style={[styles.buttonLabel, styles.eth1Typo]}>
-            Share on X
-          </Text>
-        </Pressable>
-        <Pressable
-          style={styles.buttonDownload}
-          onPress={() => setShowSuccessMint(!showSuccessMint)}
+          <Pressable
+            style={styles.button}
+            onPress={() => setShowSuccessMint(!showSuccessMint)}
+          >
+            <Text style={[styles.buttonLabel]}>
+              Share on X
+            </Text>
+          </Pressable>
+        </LinearGradient>
+
+        <LinearGradient
+          colors={['#FC00A7', '#65EDE3']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.gradientBorder}
         >
-          <Text style={[styles.buttonLabel, styles.eth1Typo]}>
-            Download Original Image
-          </Text>
-        </Pressable>
+          <Pressable
+            style={styles.button}
+            onPress={() => setShowSuccessMint(!showSuccessMint)}
+          >
+            <Text style={[styles.buttonLabel]}>
+              Download Original Image
+            </Text>
+          </Pressable>
+        </LinearGradient>
       </View>
 
       {/* Section Wallet Info */}
       <View style={[styles.frameParentWallet]}>
         <View style={styles.walletBalance0EthWalletAParent}>
-          <View style={styles.walletBalance0Container}>
+          <View style={[styles.walletBalance0Container]}>
             <View style={styles.row}>
-              <Text style={[styles.walletBalance, styles.walletTypo]}>Wallet Balance: </Text>
-              <Text style={[styles.eth1Typo, styles.walletTypo]}>0.02 ETH</Text>
+              <Text style={[styles.walletBalance]}>Wallet Balance: </Text>
+              <Text style={[styles.eth1Typo]}>0.02 ETH</Text>
             </View>
             <View style={styles.row}>
-              <Text style={[styles.walletBalance, styles.walletTypo]}>Wallet Address: </Text>
-              <Text style={[styles.eth1Typo, styles.walletTypo]}>0xe...dhv</Text>
+              <Text style={[styles.walletBalance]}>Wallet Address: </Text>
+              <Text style={[styles.eth1Typo]}>0xe...dhv</Text>
             </View>
           </View>
           <View>
-            <Pressable
-              style={[styles.topUpWalletWrapper, styles.buttonBorder]}
-              onPress={() => setShowTransferAction(!showTransferAction)}
+            <LinearGradient
+              colors={['#FC00A7', '#65EDE3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.gradientBorder]}
             >
-              <Text style={[styles.topUpWallet, styles.walletTypo]}>
-                Transfer
-              </Text>
-            </Pressable>
-            <Pressable
-              style={[styles.topUpWalletWrapper, styles.buttonBorder, styles.btnMyAssets]}
-              onPress={() => navigation.navigate(`MyAssets${tab}`)}
+            <View style={{backgroundColor:"#000000", borderRadius: Border.br_5xs,
+    borderTopLeftRadius: Border.br_5xs,
+    borderTopRightRadius: Border.br_5xs}}>
+              <Pressable
+                style={[styles.topUpWalletWrapper]}
+                onPress={() => setShowTransferAction(!showTransferAction)}
+              >
+                
+                <Text style={[styles.topUpWallet]}>
+                  Transfer
+                </Text>                
+              </Pressable>
+              </View>
+            </LinearGradient>
+
+            <LinearGradient
+              colors={['#FC00A7', '#65EDE3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.gradientBorder, {marginTop:10}]}
             >
-              <Text style={[styles.topUpWallet, styles.walletTypo]}>
-                My assets
-              </Text>
-            </Pressable>
+            <View style={{backgroundColor:"#000000", borderRadius: Border.br_5xs,
+    borderTopLeftRadius: Border.br_5xs,
+    borderTopRightRadius: Border.br_5xs}}>
+              <Pressable
+                style={[styles.topUpWalletWrapper]}
+                onPress={() => navigation.navigate(`MyAssets${tab}`)}
+              >
+                <Text style={[styles.topUpWallet]}>
+                  My assets
+                </Text>
+              </Pressable>
+              </View>
+            </LinearGradient>
           </View>
         </View>
       </View>
@@ -177,23 +220,11 @@ const Wallet = ({ route }) => {
           />
         </Pressable>
         <View style={styles.selectActionWrapper}>
-          <Text style={[styles.selectAction, styles.eth1Typo]}>
+          <Text style={[styles.selectAction]}>
             Select action
           </Text>
         </View>
-        <Pressable
-          style={[styles.button2, styles.buttonLayout]}
-          onPress={doSendNext}
-        >
-          <Image
-            style={styles.home1SvgrepoComIcon}
-            contentFit="cover"
-            source={require("../assets/ic_send.png")}
-          />
-          <Text style={[styles.sendCrypto, styles.eth1Typo]}>
-            Send crypto
-          </Text>
-        </Pressable>
+        
         <Pressable
           style={[styles.button2, styles.buttonLayout]}
           onPress={() => {
@@ -206,8 +237,21 @@ const Wallet = ({ route }) => {
             contentFit="cover"
             source={require("../assets/ic_receive.png")}
           />
-          <Text style={[styles.sendCrypto, styles.eth1Typo]}>
-            Receive or deposit crypto
+          <Text style={[styles.sendCrypto]}>
+            Receive
+          </Text>
+        </Pressable>
+        <Pressable
+          style={[styles.button2, styles.buttonLayout]}
+          onPress={doSendNext}
+        >
+          <Image
+            style={styles.home1SvgrepoComIcon}
+            contentFit="cover"
+            source={require("../assets/ic_send.png")}
+          />
+          <Text style={[styles.sendCrypto]}>
+            Send
           </Text>
         </Pressable>
       </View>
@@ -216,18 +260,21 @@ const Wallet = ({ route }) => {
       <View style={[styles.frameParentReceive, !showReceive && { display: "none" }]}>
         <View style={styles.frameView}>
           <View style={styles.baseNetworkWrapper}>
-            <Text style={[styles.baseNetwork, styles.ethTypo]}>
+            <Text style={[styles.baseNetwork]}>
               BASE Network
             </Text>
           </View>
-          <Text style={[styles.thisIsYour, styles.walletContainerTypo]}>
+          <Text style={[styles.thisIsYour]}>
             This is your BASE Network wallet address for receiving onchain
             assets.
           </Text>
         </View>
         <Pressable
           style={styles.containerBack}
-          onPress={() => setShowReceive(!showReceive)}
+          onPress={() => {
+            setShowReceive(!showReceive)
+            setShowTransferAction(true)
+            }}
         >
           <Image
             style={[styles.icon2]}
@@ -242,7 +289,7 @@ const Wallet = ({ route }) => {
             source={require("../assets/ic_barcode.png")}
           />
           <View style={styles.xedhvParent}>
-            <Text style={[styles.xedhv1, styles.walletContainerTypo]}>
+            <Text style={[styles.xedhv1]}>
               0xe...dhv
             </Text>
             <Pressable onPress={() => setShowAddressCopied(!showAddressCopied)}>
@@ -319,16 +366,20 @@ const Wallet = ({ route }) => {
         <View style={[styles.frameView, !showSendInput && { display: "none" }]}>
           <View style={styles.frameView}>
             <View style={styles.baseNetworkParent}>
-              <Text style={[styles.baseNetwork, styles.ethTypo]}>
+              <Text style={[styles.baseNetwork]}>
                 BASE Network
               </Text>
-              <View
+
+            </View>
+            <CustomDropdown/>
+
+              {/* <View
                 style={[
                   styles.selectCryptocurrencyParent,
                   styles.parentSpaceBlock1,
                 ]}
               >
-                <Text style={[styles.selectCryptocurrency, styles.eth1Typo]}>
+                <Text style={[styles.selectCryptocurrency]}>
                   Select cryptocurrency
                 </Text>
                 <View style={[styles.ellipseParent, styles.parentSpaceBlock]}>
@@ -344,9 +395,8 @@ const Wallet = ({ route }) => {
                     source={require("../assets/ic_arrow_down_white.png")}
                   />
                 </View>
-              </View>
-            </View>
-            <View style={[styles.frameParent1, styles.parentSpaceBlock]}>
+              </View> */}
+            {/* <View style={[styles.frameParent1, styles.parentSpaceBlock]}>
               <View style={styles.frameView}>
                 <View style={[styles.parent, styles.parentLayout]}>
                   <Text style={[styles.text, styles.ethTypo]}>0.1</Text>
@@ -359,7 +409,7 @@ const Wallet = ({ route }) => {
                 contentFit="cover"
                 source={require("../assets/ic_arrow_double_white.png")}
               />
-            </View>
+            </View> */}
           </View>
           <View style={styles.frameParent3}>
             <View style={styles.sendToParent}>
@@ -526,7 +576,7 @@ const Wallet = ({ route }) => {
               style={[styles.button2Confirm, styles.buttonBorderConfirm]}
               onPress={doSendNext}
             >
-              <Text style={[styles.buttonLabel, styles.ethTypo1]}>Send</Text>
+              <Text style={[styles.buttonLabel, styles.ethTypo1]}>Close</Text>
             </Pressable>
           </View>
         </View>
@@ -570,10 +620,12 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.clashGrotesk,
   },
   txtTitle: {
-    top: 70,
-    fontSize: FontSize.size_13xl,
-    fontWeight: "600",
-    position: "absolute",
+    marginTop: 20,
+    fontSize: FontSize.size_9xl,
+    fontWeight: "500",
+    fontFamily: getFontFamily("500"),
+    color: Color.darkInk,
+    // position: "absolute",
   },
   txtTitle2: {
     top: 60,
@@ -585,20 +637,24 @@ const styles = StyleSheet.create({
   imgNft: {
     // marginTop: -178,
     // top: "50%",
-    top:130,
+    marginTop: 20,
+    // top:130,
     height: 272,
     borderRadius: Border.br_5xs,
     width: 272,
-    position: "absolute",
+    // position: "absolute",
   },
   frameGroup: {
-    top: 390,
-    height: 160,
-    width: "100%",
-    alignItems: "center",
-    borderRadius: Border.br_5xs,
-    position: "absolute",
-    overflow: "hidden",
+    flex:1,
+    gap:10,
+    marginTop:20,
+    // top: 420,
+    // height: 160,
+    width: "85%",
+    // alignItems: "center",
+    // borderRadius: Border.br_5xs,
+    // position: "absolute",
+    // overflow: "hidden",
   },
   wrapper: {
     paddingHorizontal: Padding.p_base,
@@ -650,7 +706,7 @@ const styles = StyleSheet.create({
     paddingTop: Padding.p_xl,
     paddingBottom: Padding.p_13xl,
     width: "100%",
-    position: "absolute",
+    // position: "absolute",
   },
   walletBalance0EthWalletAParent: {
     alignSelf: "stretch",
@@ -671,11 +727,18 @@ const styles = StyleSheet.create({
     color: Color.darkInk,
   },
   walletBalance: {
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("400"),
+    fontWeight: "400",
+    textAlign: 'left',
+    fontSize: FontSize.labelLarge_size,
+    color: Color.darkInk,
   },
   eth1Typo: {
-    fontWeight: '600',
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("600"),
+    fontWeight: "600",
+    textAlign: 'left',
+    fontSize: FontSize.labelLarge_size,
+    color: Color.darkInk,
   },
   buttonBorder: {
     borderWidth: 3,
@@ -690,41 +753,34 @@ const styles = StyleSheet.create({
     marginTop: 8
   },
   topUpWalletWrapper: {
-    borderWidth: 1,
+    backgroundColor: Color.colorWhitesmoke_100,
     justifyContent: "center",
     alignItems: "flex-end",
     paddingVertical: Padding.p_9xs,
-    marginLeft: 20,
     paddingHorizontal: Padding.p_base,
+    borderRadius: Border.br_5xs,
+    borderTopLeftRadius: Border.br_5xs,
+    borderTopRightRadius: Border.br_5xs,
+    justifyContent: "center",
+    alignItems: "center",
+
   },
   topUpWallet: {
-    fontFamily: FontFamily.clashGrotesk,
+    textAlign: 'left',
+    fontSize: FontSize.labelLarge_size,
+    color: Color.darkInk,
+    fontFamily: getFontFamily("500"),
     fontWeight: "500",
   },
   button: {
-    borderWidth: 3,
-    width: "87%",
+    // borderWidth: 3,
+    // width: "87%",
     height: 54,
     paddingHorizontal: Padding.p_5xl,
     paddingVertical: Padding.p_xs,
-    marginTop: 32,
-    borderColor: Color.colorDeeppink,
-    borderStyle: "solid",
-    flexDirection: "row",
-    borderRadius: Border.br_5xs,
-    backgroundColor: Color.colorGray_100,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonDownload: {
-    borderWidth: 3,
-    width: "87%",
-    height: 54,
-    paddingHorizontal: Padding.p_5xl,
-    paddingVertical: Padding.p_xs,
-    marginTop: 12,
-    borderColor: Color.colorDeeppink,
-    borderStyle: "solid",
+    // marginTop: 32,
+    // borderColor: Color.colorDeeppink,
+    // borderStyle: "solid",
     flexDirection: "row",
     borderRadius: Border.br_5xs,
     backgroundColor: Color.colorGray_100,
@@ -733,6 +789,8 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     lineHeight: 24,
+    fontFamily: getFontFamily("600"),
+    fontWeight: "600",
     fontSize: FontSize.labelLarge_size,
     textAlign: "center",
     color: Color.darkInk,
@@ -760,7 +818,7 @@ const styles = StyleSheet.create({
   xedhvParent: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 4,
+    marginTop: 10,
   },
   xedhv: {
     fontSize: FontSize.labelLarge_size,
@@ -795,6 +853,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   baseNetwork: {
+    fontWeight: "600",
+    fontFamily: getFontFamily("600"),
     fontSize: FontSize.size_5xl,
     textAlign: "center",
     color: Color.darkInk,
@@ -813,6 +873,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
     fontFamily: FontFamily.clashGrotesk,
+    fontWeight: "400",
+    fontFamily: getFontFamily("400"),
+    fontSize: FontSize.labelLarge_size,
+    color: Color.darkInk,
   },
   walletContainerTypo: {
     fontSize: FontSize.labelLarge_size,
@@ -858,8 +922,10 @@ const styles = StyleSheet.create({
   },
   xedhv1: {
     textAlign: "center",
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("500"),
     fontWeight: "500",
+    fontSize: FontSize.labelLarge_size,
+    color: Color.darkInk
   },
   frameParentTransferAction: {
     shadowColor: "rgba(0, 0, 0, 0.08)",
@@ -901,6 +967,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   selectAction: {
+    fontSize: FontSize.size_lg,
+    color: Color.darkInk,
+    fontFamily: getFontFamily("600"),
+    fontWeight: "600",
     fontSize: FontSize.size_xl,
     width: 297,
     color: Color.darkInk,
@@ -937,6 +1007,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     lineHeight: 24,
     fontWeight: "600",
+    fontFamily: getFontFamily("600"),
     fontSize: FontSize.labelLarge_size,
     textAlign: "center",
     color: Color.darkInk,
@@ -1036,6 +1107,10 @@ const styles = StyleSheet.create({
   selectCryptocurrency: {
     width: 322,
     textAlign: "center",
+    fontSize: FontSize.size_lg,
+    color: Color.darkInk,
+    fontFamily: getFontFamily("500"),
+    fontWeight: "500",
   },
   ellipseParent: {
     borderTopLeftRadius: Border.br_9xs,
@@ -1127,7 +1202,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   sendToParent: {
-    marginTop: 120,
+    // marginTop: 120,
     alignSelf: "stretch",
     justifyContent: "center",
     alignItems: "center",
@@ -1193,7 +1268,7 @@ const styles = StyleSheet.create({
     color: Color.darkInk,
     fontFamily: FontFamily.clashGrotesk,
     fontWeight: "500",
-    flex: 1,
+    // flex: 1,
   },
   x37e5385aba3592d75436127c7184dWrapper: {
     backgroundColor: Color.colorDarkslategray_400,
@@ -1311,6 +1386,10 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorGray_100,
   },
   // Send Confirm
+  gradientBorder: {
+    padding: 2, // Lebar border gradien
+    borderRadius: 10,
+  },
 });
 
 export default Wallet;
