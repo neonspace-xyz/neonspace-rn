@@ -59,12 +59,17 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       if (!userInfo) return;
 
       let { names: names1, images: images1 } = processUserVerifiedList(userInfo?.verified_by);
+
       setUserVerifiedByNames(names1);
       setUserVerifiedByImages(images1);
-
+      // setUserVerifiedByNames("billy, agus")
+      // setUserVerifiedByImages([require("../assets/photo.png"), require("../assets/photo.png"), require("../assets/photo.png"), require("../assets/photo.png")])
       let { names: names2, images: images2 } = processUserVerifiedList(userInfo?.verified);
       setUserVerifiedNames(names2);
       setUserVerifiedImages(images2);
+      // setUserVerifiedNames("billy, agus")
+      // setUserVerifiedImages([require("../assets/photo.png"), require("../assets/photo.png"), require("../assets/photo.png"), require("../assets/photo.png")])
+
     }
 
     check();
@@ -171,25 +176,28 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                 styles.walletAddress0xedhvContainer,
               ]}
             >
-              <Text style={styles.walletAddress}>{`Verified by: `}</Text>
-
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-
-                {userVerifiedByImages[0] &&
-                  <CircularImage source={userVerifiedByImages[0]}></CircularImage>
-                }
-                {userVerifiedByImages[1] &&
-                  <View style={[styles.imageContainer, {
-                    // borderColor:'red',
-                    // borderWidth:2,
-                    position: 'absolute',
-                    top: 0,
-                    left: 20,
-                  }]}>
-                    <Image source={userVerifiedByImages[1]} style={styles.image} />
-                  </View>
-                }
-                <Text style={[styles.samPolymathAnd, styles.textTypo, { marginLeft: 15 }]}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap:5, flex:1  }}>
+                <Text style={[styles.walletAddress, { color:'white'}]}>{`Verified by: `}</Text>
+              
+                
+                <View style={{
+                  // borderColor:'red', 
+                  // borderWidth:2, 
+                  width:userVerifiedByImages.length*23, 
+                  height:32,
+                  position:'relative'}}>
+                  {
+                    userVerifiedByImages.map((e, index) => {
+                      return (
+                          <Image key={index} source={userVerifiedByImages[1]} style={[styles.image, {
+                            zIndex:9999-index,
+                          position:'absolute',left:20*index
+                          }]} />
+                      )
+                    })
+                  }
+                </View>
+                <Text style={[styles.samPolymathAnd, styles.textTypo, {paddingLeft:4}]}>
                   {userVerifiedByNames}
                 </Text>
               </View>
@@ -198,44 +206,41 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
 
           <TouchableOpacity
             style={{
-              flexDirection: "row",
-              marginTop: 10
-              //  borderWidth:2, borderColor:"red"
+              marginTop: 15
+              // borderWidth:2, borderColor:"red"
             }}
-            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, user: userInfo })}
+            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user: userInfo })}
           >
             <Text
               style={[
                 styles.walletAddress0xedhvContainer,
               ]}
             >
-              <Text style={styles.walletAddress}>{`Verified: `}</Text>
-
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-
-                {userVerifiedImages[0] &&
-                  <CircularImage source={userVerifiedImages[0]}></CircularImage>
-                }
-                {userVerifiedImages[1] &&
-                  <View style={[styles.imageContainer, {
-                    // borderColor:'red',
-                    // borderWidth:2,
-                    position: 'absolute',
-                    top: 0,
-                    left: 20
-                  }]}>
-                    <Image source={userVerifiedImages[1]} style={styles.image} />
-                  </View>
-                }
-                <Text style={[styles.samPolymathAnd, styles.textTypo, { marginLeft: 15 }]}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap:5, flex:1 }}>
+                <Text style={[styles.walletAddress, { color:'white'}]}>{`Verified: `}</Text>
+              
+                
+                <View style={{
+                  // borderColor:'red', 
+                  // borderWidth:2, 
+                  width:userVerifiedImages.length*23, 
+                  height:32,
+                  position:'relative'}}>
+                  {
+                    userVerifiedImages.map((e, index) => {
+                      return (
+                          <Image key={index} source={e} style={[styles.image, {
+                            zIndex:9999-index,
+                          position:'absolute',left:20*index
+                          }]} />
+                      )
+                    })
+                  }
+                </View>
+                <Text style={[styles.samPolymathAnd, styles.textTypo, {paddingLeft:4}]}>
                   {userVerifiedNames}
                 </Text>
               </View>
-              {/* <Image
-                style={styles.groupIcon}
-                contentFit="cover"
-                source={require("../assets/photo-duo.png")}
-              /> */}
             </Text>
           </TouchableOpacity>
         </View>
@@ -655,7 +660,10 @@ const styles = StyleSheet.create({
   },
   walletAddress: {
     fontFamily: getFontFamily("400"),
-    fontWeight: "400"
+    fontWeight: "400",
+    
+    color: Color.darkInk,
+    fontSize: FontSize.labelLarge_size,
   },
   walletAddress0xedhvContainer: {
     // top: 258,

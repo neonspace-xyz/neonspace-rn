@@ -19,18 +19,9 @@ const NotificationList = ({ route }) => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [isShowSearch, setIsShowSearch] = useState(false);
-  
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     fetchItems();
-  //   }, [])
-  // );
 
   useEffect(() => {
-    getItems();
-  }, [])
-
-  useEffect(() => {
+    console.log("Consume notification")
     const eventSource = new EventSource(`${API_URL}/event/stream`);
 
     eventSource.onmessage = (event) => {
@@ -49,9 +40,6 @@ const NotificationList = ({ route }) => {
     };
   }, []);
 
-  const getItems = async () => {
-  };
-
   const fetchItems = async () => {
     let data = [];
     for (let i = 1; i < getRandomNumber(); i++) {
@@ -66,16 +54,16 @@ const NotificationList = ({ route }) => {
   };
 
   const onRefresh = async () => {
-    setRefreshing(true);
-    await fetchItems(); // Fetch fresh data
-    setRefreshing(false);
+    //setRefreshing(true);
+    //await fetchItems(); // Fetch fresh data
+    //setRefreshing(false);
   };
 
   const onLoadMore = () => {
     if (!loadingMore && hasMore) {
-      setLoadingMore(true);
-      fetchItems(); // Fetch more data
-      setLoadingMore(false);
+      //setLoadingMore(true);
+      //fetchItems(); // Fetch more data
+      //setLoadingMore(false);
     }
   };
 

@@ -84,7 +84,6 @@ export const AuthProvider = ({ children }) => {
     lastCalled = now;
 
     try {
-      console.log("START GET USER")
       let _usersession = await getSession();
       let url = `/user/getUser?userId=${_usersession.user_info.user_id}`;
       let resp = await api.get(url);

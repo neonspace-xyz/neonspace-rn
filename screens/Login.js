@@ -62,6 +62,7 @@ const Login = () => {
   const getTwitterAccessToken = async (oauthToken, oauthVerifer) => {
     try {
       console.log("getTwitterAccessToken-called");
+      showLoading();
       const body = {
         "oauth_token": oauthToken,
         "oauth_verifier": oauthVerifer,
@@ -102,6 +103,7 @@ const Login = () => {
         navigation.navigate("Mint");
       }
       else {
+        hideLoading();
         navigation.replace("Main");
       }
     } catch (err) {
@@ -133,8 +135,6 @@ const Login = () => {
         const { oauth_token, oauth_verifier } = params;
 
         if (oauth_token && oauth_verifier) {
-          console.log("fallback", oauth_token, oauth_verifier);
-          showLoading();
           await getTwitterAccessToken(oauth_token, oauth_verifier);
         } else {
           Alert.alert('Login Failed', 'OAuth token or verifier not found!');
