@@ -189,7 +189,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                   {
                     userVerifiedByImages.map((e, index) => {
                       return (
-                          <Image key={index} source={userVerifiedByImages[1]} style={[styles.image, {
+                          <Image key={index} source={e} style={[styles.image, {
                             zIndex:9999-index,
                           position:'absolute',left:20*index
                           }]} />
