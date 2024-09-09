@@ -23,29 +23,6 @@ const NFTList = ({tab, itemsData}) => {
 
   const [isShowCreate, setIsShowCreate] = useState(false);
 
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     header: () =>
-  //       <>
-  //         <SafeAreaView style={styles.header}>
-  //           <View style={styles.header}>
-  //             <TextInput
-  //               style={styles.searchInput}
-  //               placeholder="Search by X handle"
-  //               placeholderTextColor={Color.colorGray_500}
-  //               value={searchValue}
-  //               onChangeText={(text) => setSearchValue(text)}
-  //             />
-  //             <Image
-  //               source={require("../assets/ic_chat.png")}
-  //               style={styles.headerImage}
-  //             />
-  //           </View>
-  //         </SafeAreaView>
-  //       </>,
-  //   });
-  // }, [navigation]);
-
   useFocusEffect(
     React.useCallback(() => {
       fetchItems();
@@ -105,7 +82,7 @@ const NFTList = ({tab, itemsData}) => {
     navigation.navigate("PostDetail", { item });
   };
 
-  const Accordion = ({ title, children }) => {
+  const Accordion = ({ title, image, children }) => {
     const [expanded, setExpanded] = useState(false);
   
     return (
@@ -117,7 +94,7 @@ const NFTList = ({tab, itemsData}) => {
             <Image
                 style={styles.rectangleIcon}
                 contentFit="cover"
-                source={require("../assets/rectangle-photo.png")}
+                source={image}
               />
             <Text style={styles.accordionTitle}>{title}</Text>
           </View>
@@ -173,7 +150,7 @@ const NFTList = ({tab, itemsData}) => {
         }
         renderItem={({ item }) => {
           return (
-            <Accordion title="Section 1">
+            <Accordion title={item.token_ids[0].name} image={item.token_ids[0].image}>
               
               {item.token_ids.map((item2, index) => (
               <Pressable style={styles.rectangleFlexBox} key={index} onPress={() => {

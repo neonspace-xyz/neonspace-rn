@@ -319,12 +319,12 @@ const SecondRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
 
   return (userInfo &&
     <View>
-      <CrowdListHiring
+      {/* <CrowdListHiring
         tab={4}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} />
+        isShowCreate={isShowCreate} /> */}
     </View>)
 
 };
@@ -345,12 +345,12 @@ const ThirdRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
 
   return (userInfo &&
     <View>
-      <CrowdListHiring
+      {/* <CrowdListHiring
         tab={4}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} />
+        isShowCreate={isShowCreate} /> */}
     </View>)
 
 };

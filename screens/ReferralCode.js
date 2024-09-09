@@ -6,16 +6,19 @@ import api from '../utils/ApiHandler';
 import { API_URL, REFERAL_CODE } from '../Constant';
 import { logout } from '../Utils';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useLoading } from '../components/LoadingContext';
 
 const ReferralCodeScreen = () => {
   const navigation = useNavigation();
   const [preparing, setPreparing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [referralCode, setReferralCode] = useState(REFERAL_CODE);
+  const { showLoading, hideLoading } = useLoading();
 
   const handleVerify = async () => {
     try {
       setLoading(true);
+      showLoading();
       // Handle the referral code verification here
       const response = await fetch(`${API_URL}/user/verify?inviteCode=${referralCode}`);
       const json = await response.json();
@@ -26,6 +29,7 @@ const ReferralCodeScreen = () => {
       console.error("handleVerify", error);
     } finally {
       setLoading(false);
+      hideLoading();
     }
   };
 

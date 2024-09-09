@@ -20,11 +20,11 @@ const NotificationList = ({ route }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isShowSearch, setIsShowSearch] = useState(false);
   
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchItems();
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchItems();
+  //   }, [])
+  // );
 
   useEffect(() => {
     getItems();
@@ -36,7 +36,7 @@ const NotificationList = ({ route }) => {
     eventSource.onmessage = (event) => {
       const newData = JSON.parse(event.data);
       console.log("newData", newData)
-      // setData((prevData) => [...prevData, newData]);
+      setData((prevData) => [...prevData, newData]);
     };
 
     eventSource.onerror = (error) => {

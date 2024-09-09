@@ -10,6 +10,7 @@ import { API_URL } from '../Constant';
 import api from '../utils/ApiHandler';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useLoading } from '../components/LoadingContext';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -17,11 +18,11 @@ const Login = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [oauthToken, setOauthToken] = useState('');
   const [oauthVerifier, setOAuthVerifier] = useState('');
-
+  const { showLoading, hideLoading } = useLoading();
   const doLogin = async () => {
-    console.log("doLogin-called");
     try {
       setLoading(true);
+      showLoading();
       const _oauthToken = await getTwitterRequestToken();
       console.log("doLogin-token", _oauthToken);
       if (_oauthToken) {
@@ -39,6 +40,7 @@ const Login = () => {
       Alert.alert("Login Failed", error);
     } finally {
       setLoading(false);
+      hideLoading();
     }
   };
 
@@ -73,15 +75,17 @@ const Login = () => {
       if (resp.status === 200 && resp?.data) {
         let accessToken = resp.data;
         await AsyncStorage.setItem("usersession", JSON.stringify(accessToken));
-        await getUser(accessToken);
+        await  getUser(accessToken); 
       }
       else {
         Alert.alert("Login Failed", "Failed to get access token");
+        hideLoading();
       }
     } catch (error) {
       setOAuthVerifier('');
       Alert.alert("Login Failed", "Failed to get access token");
       console.error("getTwitterAccessToken-error", error);
+      hideLoading();
       return null;
     }
   };
@@ -91,7 +95,10 @@ const Login = () => {
       let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
       let resp = await api.get(url);
       let data = resp.data;
+      await AsyncStorage.setItem("user", JSON.stringify(data));
+
       if (data?.owned_nfts?.length == 0) {
+        hideLoading();
         navigation.navigate("Mint");
       }
       else {
@@ -99,8 +106,10 @@ const Login = () => {
       }
     } catch (err) {
       if (err.isSessionExpired) {
+        hideLoading();
         await logout(navigation);
       } else {
+        hideLoading();
         console.error("checkLoginStatus-getUser-error", err)
       }
     }
@@ -125,6 +134,7 @@ const Login = () => {
 
         if (oauth_token && oauth_verifier) {
           console.log("fallback", oauth_token, oauth_verifier);
+          showLoading();
           await getTwitterAccessToken(oauth_token, oauth_verifier);
         } else {
           Alert.alert('Login Failed', 'OAuth token or verifier not found!');

@@ -11,6 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {Button, Image, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {Color, getFontFamily} from './GlobalStyles';
+import { LoadingProvider } from './components/LoadingContext';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -177,11 +178,11 @@ const StackNavigator = () => {
       </Modal>
     </SafeAreaView>
   )};
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer linking={linking}>
         <AuthProvider>
+        <LoadingProvider>
           {/* {StackNavigatorComponent()} */}
           {/* <StackNavigatorComponent/> */}
           <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
@@ -209,6 +210,7 @@ const StackNavigator = () => {
               options={{ headerShown: false }} />
 
           </Stack.Navigator> */}
+          </LoadingProvider>
         </AuthProvider>
       </NavigationContainer>
     </GestureHandlerRootView>
