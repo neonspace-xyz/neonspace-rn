@@ -150,7 +150,7 @@ const NFTList = ({tab, itemsData}) => {
         }
         renderItem={({ item }) => {
           return (
-            <Accordion title={item.token_ids[0].name} image={item.token_ids[0].image}>
+            <Accordion title={item.name} image={item.token_ids[0].image}>
               
               {item.token_ids.map((item2, index) => (
               <Pressable style={styles.rectangleFlexBox} key={index} onPress={() => {
