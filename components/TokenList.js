@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/core';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
+import { Color, FontFamily, FontSize, getFontFamily, Padding } from "../GlobalStyles";
 import PostSection from "./PostSection";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "./PostCreate";
@@ -15,7 +15,7 @@ import { IMG_PROFILE } from "../Constant";
 const TokenList = ({itemsData}) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
-  const [items, setItems] = useState(itemsData);
+  const [items, setItems] = useState([{},{}]);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -109,6 +109,9 @@ const TokenList = ({itemsData}) => {
     <View style={[styles.containerList]}>
       <FlatList
         data={items}
+        style={[{
+          //borderWidth:2, borderColor:'yellow',
+         paddingLeft:10, paddingRight:10, paddingTop:10}]}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -135,23 +138,22 @@ const TokenList = ({itemsData}) => {
               <View style={{justifyContent: "center", flex:1}}>
                 <Text style={{
                   fontWeight: "500",
-                  fontFamily: FontFamily.clashGrotesk,
+                  fontFamily: getFontFamily("500"),
                   textAlign: "left",
                   color: Color.darkInk,
                   alignSelf: "stretch",
                   fontSize: FontSize.labelLarge_size,
-                  color: Color.darkInk
                 }}>
                   Bitcoin
                 </Text>
                 <Text style={{
-                  fontWeight: "500",
-                  fontFamily: FontFamily.clashGrotesk,
+                  fontWeight: "400",
+                  fontFamily: getFontFamily("400"),
+                  opacity:0.7,
                   textAlign: "left",
                   color: Color.darkInk,
                   alignSelf: "stretch",
                   fontSize: FontSize.labelLarge_size,
-                  color: Color.darkInk
                 }}>
                   0.02 Bitcoin
                 </Text>
@@ -159,7 +161,7 @@ const TokenList = ({itemsData}) => {
               <Text style={{
                 textAlign: "right",
                 fontWeight: "500",
-                fontFamily: FontFamily.clashGrotesk,
+                fontFamily: getFontFamily("500"),
                 color: Color.darkInk,
                 fontSize: FontSize.labelLarge_size,
               }}>$100</Text>
@@ -182,6 +184,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     alignSelf: "stretch",
+    gap:10
     // borderColor:"red",
     // borderWidth:2
   },

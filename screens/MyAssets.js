@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
+import { StyleSheet, Text, View, Pressable, StatusBar, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
+import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
@@ -11,6 +11,8 @@ import NFTList from "../components/NFTList";
 import { useAuth } from "../components/AuthProvider";
 import React, { useEffect, useState } from "react";
 import { shortenAddress } from "../Utils";
+import { LinearGradient } from "expo-linear-gradient";
+import * as Clipboard from 'expo-clipboard';
 
 const MyAssets = () => {
   const route = useRoute();
@@ -20,13 +22,35 @@ const MyAssets = () => {
   const [isTokenList, setIsTokenList] = useState(true)
   const {getUser} = useAuth();
   const [userData, setUserData] = useState();
-  
+  const [showAddressCopied, setShowAddressCopied] = useState(false);
+
   useEffect(() => {
     getUser().then((user) => {
       console.log(user)
       setUserData(user);
     });
   }, []);
+
+  useEffect(() => {
+    if (setShowAddressCopied) {
+      const timer = setTimeout(() => {
+        setShowAddressCopied(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAddressCopied]);
+
+  const doCopyWallet = async () => {
+    try {
+      if (userData?.wallet_address) {
+        await Clipboard.setStringAsync(userData?.wallet_address);
+      }
+      setShowAddressCopied(!showAddressCopied);
+    } catch (error) {
+      console.error("doCopyWallet", error);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
     <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
@@ -82,7 +106,7 @@ const MyAssets = () => {
 
         <View style={styles.frameWrapper}>
           <View style={styles.neonrabbit287Parent}>
-            <Text style={[styles.neonrabbit287, styles.ethTypo]}>
+            <Text style={[styles.neonrabbit287]}>
             {userData && userData?.owned_nfts[0]?.token_ids[0]?.name}
             </Text>
             <View style={styles.walletAddress0xedhvGroup}>
@@ -93,36 +117,83 @@ const MyAssets = () => {
                 ]}
               >
                 <Text style={styles.walletBalance}>{`Wallet Address: `}</Text>
-                <Text style={styles.ethTypo}>{userData && shortenAddress(userData?.wallet_address)}</Text>
+                <Text style={styles.walletAddress}>{userData && shortenAddress(userData?.wallet_address)}</Text>
               </Text>
-              <Image
-                style={styles.copySvgrepoCom1Icon}
-                contentFit="cover"
-                source={require("../assets/copy.png")}
-              />
+
+              <TouchableOpacity
+                onPress={() => {
+                  doCopyWallet();
+                }}>
+                <Image
+                  style={styles.copySvgrepoCom1Icon}
+                  contentFit="cover"
+                  source={require("../assets/copy.png")}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </View>        
       </View>
 
       <View style={{flexDirection: "row", backgroundColor: Color.colorGray_100}}>
+      <LinearGradient
+        colors={['#FC00A7', '#65EDE3']}
+        style={[styles.wrapperFlexBox]}
+        start={{ x: 0, y: 0.5 }} // Left side
+        end={{ x: 1, y: 0.5 }}   // Right side
+      >
         <Pressable
-          style={[isTokenList ? styles.tokenWrapper : null, styles.wrapperFlexBox]}
           onPress={() => {setIsTokenList(true)}}
+          style={[{
+            width:"100%",
+            height:"100%",
+            marginBottom:isTokenList ? 3 : 0,
+            justifyContent: "center",    
+            alignItems: "center",
+            flexDirection: "row",
+            color:Color.darkInk, backgroundColor:Color.colorGray_100}]}
         >
+          
               <Text style={styles.token}>Token</Text>
+             
         </Pressable>
+      </LinearGradient>
+      
+      <LinearGradient
+        colors={['#FC00A7', '#65EDE3']}
+        style={[styles.wrapperFlexBox]}
+        start={{ x: 0, y: 0.5 }} // Left side
+        end={{ x: 1, y: 0.5 }}   // Right side
+      >
         <Pressable
-          onPress={() => {setIsTokenList(false)}}
-          style={[!isTokenList ? styles.tokenWrapper : null, styles.wrapperFlexBox]}
-        >
-            <Text style={styles.token}>NFT</Text>
+            onPress={() => {setIsTokenList(false)}}
+            style={[{
+            width:"100%",
+            height:"100%",
+            marginBottom:!isTokenList ? 3 : 0,
+            justifyContent: "center",    
+            alignItems: "center",
+            flexDirection: "row",
+            color:Color.darkInk, backgroundColor:Color.colorGray_100}]}
+          >
+              <Text style={styles.token}>NFT</Text>
         </Pressable>
+      </LinearGradient>
       </View>
 
       {isTokenList && userData && <TokenList itemsData={userData.owned_tokens}/>}
       {!isTokenList && userData && <NFTList tab={tab} itemsData={userData.owned_nfts}/>}
       
+      <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
+          <Image
+            style={styles.checkSvgrepoCom1Icon}
+            contentFit="cover"
+            source={require("../assets/ic_check.png")}
+          />
+          <Text style={styles.walletAddressCopied}>
+            Wallet address copied to clipboard
+          </Text>
+        </View>
     </SafeAreaView>
   )
 };
@@ -514,11 +585,12 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   wrapperFlexBox: {
-    paddingVertical: Padding.p_7xs,
-    paddingHorizontal: Padding.p_xs,
-    justifyContent: "center",
+    // paddingVertical: Padding.p_7xs,
+    // paddingHorizontal: Padding.p_xs,
+    justifyContent: "center",    
     alignItems: "center",
     flexDirection: "row",
+    height:30,
     flex: 1,
   },
   textSpaceBlock: {
@@ -544,8 +616,16 @@ const styles = StyleSheet.create({
     color: Color.darkInk,
   },
   walletBalance: {
-    fontFamily: FontFamily.clashGrotesk,
+    fontSize: FontSize.labelLarge_size,
+    fontFamily: getFontFamily("400"),
+    fontWeight:"400"
   },
+  walletAddress: {
+    fontSize: FontSize.labelLarge_size,
+    fontFamily: getFontFamily("600"),
+    fontWeight:"600"
+  },
+
   walletBalance01Container: {
     textAlign: "left",
     color: Color.darkInk,
@@ -760,6 +840,8 @@ const styles = StyleSheet.create({
     borderRadius: 50
   },
   neonrabbit287: {
+    fontWeight: "600",
+    fontFamily: getFontFamily("600"),
     fontSize: FontSize.size_xl,
     textAlign: "left",
     color: Color.darkInk,
@@ -783,15 +865,15 @@ const styles = StyleSheet.create({
   token: {
     fontSize: FontSize.size_sm,
     fontWeight: "500",
-    fontFamily: FontFamily.clashGrotesk,
-    textAlign: "left",
+    fontFamily: getFontFamily("500"),
+    textAlign: "center",
     color: Color.darkInk,
   },
   tokenWrapper: {
-    borderBottomWidth: 2,
-    borderColor: Color.colorDeeppink,
-    borderStyle: "solid",
-    paddingHorizontal: Padding.p_xs,
+    // borderBottomWidth: 2,
+    // borderColor: Color.colorDeeppink,
+    // borderStyle: "solid",
+    // paddingHorizontal: Padding.p_xs,
   },
   frameContainer: {
     flexDirection: "row",
@@ -883,6 +965,31 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: "100%",
     flex: 1,
+  },
+
+  alert: {
+    bottom: 40,
+    borderRadius: Border.br_3xs,
+    backgroundColor: Color.colorAquamarine,
+    width: 354,
+    padding: Padding.p_xs,
+    alignItems: "center",
+    flexDirection: "row",
+    position: "absolute",
+  },
+  checkSvgrepoCom1Icon: {
+    width: 16,
+    height: 16,
+    overflow: "hidden",
+  },
+  walletAddressCopied: {
+    fontSize: FontSize.size_sm,
+    color: Color.colorSeagreen,
+    marginLeft: 8,
+    textAlign: "left",
+    flex: 1,
+    fontFamily: getFontFamily("500"),
+    fontWeight: "500",
   },
 });
 export default MyAssets;
