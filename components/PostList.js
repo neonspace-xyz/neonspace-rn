@@ -221,6 +221,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
       {!isShowCreate && usersession?.user_info?.user_id == userInfo?.user_id && (
         <ButtonFAB
           isTab={false}
+          isProfile={isProfile}
           doCreate={doCreate}
         />
       )}

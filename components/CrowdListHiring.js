@@ -284,6 +284,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
       {usersession?.user_info?.user_id == userInfo?.user_id && (
         <ButtonFAB
           isTab={true}
+          isProfile={false}
           doCreate={doCreate}
         />
       )}

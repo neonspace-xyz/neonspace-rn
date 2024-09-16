@@ -376,7 +376,7 @@ const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
     <View>
       <PostList
         tab={4}
-        isProfile={false}
+        isProfile={true}
         usersession={usersession}
         userInfo={userInfo} />
       {/* <CrowdListHiring

@@ -1,10 +1,11 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Color } from "../GlobalStyles"
 
-const ButtonFAB = ({ isTab, doCreate }) => {
+const ButtonFAB = ({ isTab, isProfile, doCreate }) => {
+
   return (
-    <View style={[styles.containerFAB, { bottom: isTab ? 20 : 40 }]}>
+    <View style={[styles.containerFAB, { bottom: Platform.OS == "ios" ? isTab ? 20 : isProfile ? 20 : 40 : isTab ? 60 : isProfile ? 60 : 80 }]}>
       <Pressable style={styles.FAB} onPress={doCreate}>
         <Icon name="add" size={45} color={Color.colorBlack} />
       </Pressable>

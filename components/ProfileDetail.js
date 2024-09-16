@@ -216,18 +216,18 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
               ]}
             >
               <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-                <Text style={[styles.walletAddress, { color: 'white' }]}>{`Verified by: `}</Text>
+                <Text style={[styles.walletAddress, { color: 'white' }]}>{`Verified: `}</Text>
 
 
                 <View style={{
                   // borderColor:'red', 
                   // borderWidth:2, 
-                  width: userVerifiedByImages.length * 23,
+                  width: userVerifiedImages.length * 23,
                   height: 32,
                   position: 'relative'
                 }}>
                   {
-                    userVerifiedByImages.map((e, index) => {
+                    userVerifiedImages.map((e, index) => {
                       return (
                         <Image key={index} source={e} style={[styles.image, {
                           zIndex: 9999 - index,
@@ -295,7 +295,7 @@ const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
     <View>
       <PostList
         tab={4}
-        isProfile={false}
+        isProfile={true}
         usersession={usersession}
         userInfo={userInfo} />
       {/* <CrowdListHiring
@@ -326,6 +326,7 @@ const SecondRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
     <View>
       <CrowdListHiring
         tab={4}
+        usersession={usersession}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
@@ -352,6 +353,7 @@ const ThirdRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
     <View>
       <CrowdListHiring
         tab={4}
+        usersession={usersession}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
@@ -604,7 +606,7 @@ const styles = StyleSheet.create({
     // borderColor:"red", borderWidth:2,
     width: 260,
     padding: 10,
-    marginTop: 10
+    marginTop: 4
     // justifyContent: "center",
   },
   myProfileItem: {

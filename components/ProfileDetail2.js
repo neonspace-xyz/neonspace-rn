@@ -55,7 +55,7 @@ const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
     <View>
       <PostList
         tab={4}
-        isProfile={false}
+        isProfile={true}
         usersession={usersession}
         userInfo={userInfo} />
       {/* <CrowdListHiring
@@ -365,7 +365,7 @@ const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
                 styles.walletAddress0xedhvContainer,
               ]}
             >
-              <View style={{ flexDirection: "row", alignItems: "center", gap:5, flex:1  }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap:5  }}>
                 <Text style={[styles.walletAddress, { color:'white'}]}>{`Verified by: `}</Text>
               
                 
@@ -405,7 +405,7 @@ const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
                 styles.walletAddress0xedhvContainer,
               ]}
             >
-              <View style={{ flexDirection: "row", alignItems: "center", gap:5, flex:1 }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap:5 }}>
                 <Text style={[styles.walletAddress, { color:'white'}]}>{`Verified: `}</Text>
               
                 
@@ -671,7 +671,7 @@ const styles = StyleSheet.create({
     // borderColor:"red", borderWidth:2,
     width: 260,
     padding: 10,
-    marginTop: 10
+    marginTop: 4,
     // justifyContent: "center",
   },
   myProfileItem: {
