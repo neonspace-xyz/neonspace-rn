@@ -46,7 +46,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       labelStyle={styles.label}
     />
   );
-  
+
   const CircularImage = ({ source }) => {
     return (
       <View style={styles.imageContainer}>
@@ -59,17 +59,12 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       if (!userInfo) return;
 
       let { names: names1, images: images1 } = processUserVerifiedList(userInfo?.verified_by);
-
       setUserVerifiedByNames(names1);
       setUserVerifiedByImages(images1);
-      // setUserVerifiedByNames("billy, agus")
-      // setUserVerifiedByImages([require("../assets/photo.png"), require("../assets/photo.png"), require("../assets/photo.png"), require("../assets/photo.png")])
+
       let { names: names2, images: images2 } = processUserVerifiedList(userInfo?.verified);
       setUserVerifiedNames(names2);
       setUserVerifiedImages(images2);
-      // setUserVerifiedNames("billy, agus")
-      // setUserVerifiedImages([require("../assets/photo.png"), require("../assets/photo.png"), require("../assets/photo.png"), require("../assets/photo.png")])
-
     }
 
     check();
@@ -176,28 +171,32 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                 styles.walletAddress0xedhvContainer,
               ]}
             >
-              <View style={{ flexDirection: "row", alignItems: "center", gap:5, flex:1  }}>
-                <Text style={[styles.walletAddress, { color:'white'}]}>{`Verified by: `}</Text>
-              
-                
-                <View style={{
-                  // borderColor:'red', 
-                  // borderWidth:2, 
-                  width:userVerifiedByImages.length*23, 
-                  height:32,
-                  position:'relative'}}>
-                  {
-                    userVerifiedByImages.map((e, index) => {
-                      return (
+              <Text style={styles.walletAddress}>{`Verified by: `}</Text>
+
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+
+                {userVerifiedByImages[0] &&
+                  <CircularImage source={userVerifiedByImages[0]}></CircularImage>
+                }
+                {userVerifiedByImages[1] &&
+                  <View style={[styles.imageContainer, {
+                    width: userVerifiedByImages.length * 23,
+                    height: 32,
+                    position: 'relative'
+                  }]}>
+                    {
+                      userVerifiedByImages.map((e, index) => {
+                        return (
                           <Image key={index} source={e} style={[styles.image, {
-                            zIndex:9999-index,
-                          position:'absolute',left:20*index
+                            zIndex: 9999 - index,
+                            position: 'absolute', left: 20 * index
                           }]} />
-                      )
-                    })
-                  }
-                </View>
-                <Text style={[styles.samPolymathAnd, styles.textTypo, {paddingLeft:4}]}>
+                        )
+                      })
+                    }
+                  </View>
+                }
+                <Text style={[styles.samPolymathAnd, styles.textTypo, { paddingLeft: 4 }]}>
                   {userVerifiedByNames}
                 </Text>
               </View>
@@ -207,37 +206,38 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           <TouchableOpacity
             style={{
               marginTop: 15
-              // borderWidth:2, borderColor:"red"
+              //  borderWidth:2, borderColor:"red"
             }}
-            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user: userInfo })}
+            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, user: userInfo })}
           >
             <Text
               style={[
                 styles.walletAddress0xedhvContainer,
               ]}
             >
-              <View style={{ flexDirection: "row", alignItems: "center", gap:5, flex:1 }}>
-                <Text style={[styles.walletAddress, { color:'white'}]}>{`Verified: `}</Text>
-              
-                
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                <Text style={[styles.walletAddress, { color: 'white' }]}>{`Verified by: `}</Text>
+
+
                 <View style={{
                   // borderColor:'red', 
                   // borderWidth:2, 
-                  width:userVerifiedImages.length*23, 
-                  height:32,
-                  position:'relative'}}>
+                  width: userVerifiedByImages.length * 23,
+                  height: 32,
+                  position: 'relative'
+                }}>
                   {
-                    userVerifiedImages.map((e, index) => {
+                    userVerifiedByImages.map((e, index) => {
                       return (
-                          <Image key={index} source={e} style={[styles.image, {
-                            zIndex:9999-index,
-                          position:'absolute',left:20*index
-                          }]} />
+                        <Image key={index} source={e} style={[styles.image, {
+                          zIndex: 9999 - index,
+                          position: 'absolute', left: 20 * index
+                        }]} />
                       )
                     })
                   }
                 </View>
-                <Text style={[styles.samPolymathAnd, styles.textTypo, {paddingLeft:4}]}>
+                <Text style={[styles.samPolymathAnd, styles.textTypo, { paddingLeft: 4 }]}>
                   {userVerifiedNames}
                 </Text>
               </View>
@@ -324,12 +324,12 @@ const SecondRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
 
   return (userInfo &&
     <View>
-      {/* <CrowdListHiring
+      <CrowdListHiring
         tab={4}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} /> */}
+        isShowCreate={isShowCreate} />
     </View>)
 
 };
@@ -350,12 +350,12 @@ const ThirdRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
 
   return (userInfo &&
     <View>
-      {/* <CrowdListHiring
+      <CrowdListHiring
         tab={4}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} /> */}
+        isShowCreate={isShowCreate} />
     </View>)
 
 };
@@ -660,10 +660,7 @@ const styles = StyleSheet.create({
   },
   walletAddress: {
     fontFamily: getFontFamily("400"),
-    fontWeight: "400",
-    
-    color: Color.darkInk,
-    fontSize: FontSize.labelLarge_size,
+    fontWeight: "400"
   },
   walletAddress0xedhvContainer: {
     // top: 258,
