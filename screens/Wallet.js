@@ -15,7 +15,7 @@ import CustomDropdown from "../components/CustomDropdown";
 const Wallet = ({ route }) => {
   const { tab } = route?.params;
   const navigation = useNavigation();
-  const {getUser} = useAuth();
+  const { getUser } = useAuth();
 
   const [showTransferAction, setShowTransferAction] = useState(false);
   const [showSend, setShowSend] = useState(false);
@@ -28,7 +28,7 @@ const Wallet = ({ route }) => {
   const [showSuccessMint, setShowSuccessMint] = useState(false);
   const [userData, setUserData] = useState();
 
-  
+
   useEffect(() => {
     getUser().then((user) => {
       console.log(user)
@@ -84,38 +84,42 @@ const Wallet = ({ route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
-      
+
       <WalletHeader
         tab={tab}
         isHideList={false}
         isShowSearch={false}
       />
-      <Image
-        style={styles.imgBackground}
-        contentFit="cover"
-        source={require("../assets/group-865.png")}
-      />
+
+      <View style={styles.container}>
+
+        <Image
+          style={styles.imgBackground}
+          contentFit="cover"
+          source={require("../assets/group-865.png")}
+        />
+
 
 
       <Text style={[styles.txtTitle]}>
         {userData && userData?.owned_nfts[0]?.token_ids[0]?.name}
       </Text>
 
-      { 
-        userData?.owned_nfts[0]?.token_ids[0]?.image ? 
+      {
+        userData?.owned_nfts[0]?.token_ids[0]?.image ?
           <Image
             style={styles.imgNft}
             contentFit="cover"
             source={userData?.owned_nfts[0]?.token_ids[0]?.image}
-          /> 
-        :
+          />
+          :
           <Image
             style={styles.imgNft}
             contentFit="cover"
             source={require("../assets/ic_nft_default.png")}
-          /> 
+          />
       }
-      
+
       <View style={styles.frameGroup}>
 
         <LinearGradient
@@ -155,11 +159,11 @@ const Wallet = ({ route }) => {
       <View style={[styles.frameParentWallet]}>
         <View style={styles.walletBalance0EthWalletAParent}>
           <View style={[styles.walletBalance0Container]}>
-            <View style={styles.row}>
+            <View style={[styles.row, styles.row1]}>
               <Text style={[styles.walletBalance]}>Wallet Balance: </Text>
               <Text style={[styles.eth1Typo]}>0.02 ETH</Text>
             </View>
-            <View style={styles.row}>
+            <View style={[styles.row, styles.row2]}>
               <Text style={[styles.walletBalance]}>Wallet Address: </Text>
               <Text style={[styles.eth1Typo]}>0xe...dhv</Text>
             </View>
@@ -171,18 +175,20 @@ const Wallet = ({ route }) => {
               end={{ x: 1, y: 1 }}
               style={[styles.gradientBorder]}
             >
-            <View style={{backgroundColor:"#000000", borderRadius: Border.br_5xs,
-    borderTopLeftRadius: Border.br_5xs,
-    borderTopRightRadius: Border.br_5xs}}>
-              <Pressable
-                style={[styles.topUpWalletWrapper]}
-                onPress={() => setShowTransferAction(!showTransferAction)}
-              >
-                
-                <Text style={[styles.topUpWallet]}>
-                  Transfer
-                </Text>                
-              </Pressable>
+              <View style={{
+                backgroundColor: "#000000", borderRadius: Border.br_5xs,
+                borderTopLeftRadius: Border.br_5xs,
+                borderTopRightRadius: Border.br_5xs
+              }}>
+                <Pressable
+                  style={[styles.topUpWalletWrapper]}
+                  onPress={() => setShowTransferAction(!showTransferAction)}
+                >
+
+                  <Text style={[styles.topUpWallet]}>
+                    Transfer
+                  </Text>
+                </Pressable>
               </View>
             </LinearGradient>
 
@@ -190,19 +196,21 @@ const Wallet = ({ route }) => {
               colors={['#FC00A7', '#65EDE3']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
-              style={[styles.gradientBorder, {marginTop:10}]}
+              style={[styles.gradientBorder, { marginTop: 10 }]}
             >
-            <View style={{backgroundColor:"#000000", borderRadius: Border.br_5xs,
-    borderTopLeftRadius: Border.br_5xs,
-    borderTopRightRadius: Border.br_5xs}}>
-              <Pressable
-                style={[styles.topUpWalletWrapper]}
-                onPress={() => navigation.navigate(`MyAssets${tab}`)}
-              >
-                <Text style={[styles.topUpWallet]}>
-                  My assets
-                </Text>
-              </Pressable>
+              <View style={{
+                backgroundColor: "#000000", borderRadius: Border.br_5xs,
+                borderTopLeftRadius: Border.br_5xs,
+                borderTopRightRadius: Border.br_5xs
+              }}>
+                <Pressable
+                  style={[styles.topUpWalletWrapper]}
+                  onPress={() => navigation.navigate(`MyAssets${tab}`)}
+                >
+                  <Text style={[styles.topUpWallet]}>
+                    My assets
+                  </Text>
+                </Pressable>
               </View>
             </LinearGradient>
           </View>
@@ -226,7 +234,7 @@ const Wallet = ({ route }) => {
             Select action
           </Text>
         </View>
-        
+
         <Pressable
           style={[styles.button2, styles.buttonLayout]}
           onPress={() => {
@@ -276,7 +284,7 @@ const Wallet = ({ route }) => {
           onPress={() => {
             setShowReceive(!showReceive)
             setShowTransferAction(true)
-            }}
+          }}
         >
           <Image
             style={[styles.icon2]}
@@ -373,9 +381,9 @@ const Wallet = ({ route }) => {
               </Text>
 
             </View>
-            <CustomDropdown/>
+            <CustomDropdown />
 
-              {/* <View
+            {/* <View
                 style={[
                   styles.selectCryptocurrencyParent,
                   styles.parentSpaceBlock1,
@@ -439,13 +447,13 @@ const Wallet = ({ route }) => {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={[styles.gradientBorder, styles.buttonSendConfirm]}
-              
+
             >
               <Pressable
                 style={[{
                   backgroundColor: Color.colorGray_100,
-                  height:54,borderRadius:8,
-                  flex:1, alignItems:'center', justifyContent:'center'
+                  height: 54, borderRadius: 8,
+                  flex: 1, alignItems: 'center', justifyContent: 'center'
                 }]}
                 onPress={doSendNext}
               >
@@ -547,23 +555,23 @@ const Wallet = ({ route }) => {
             </View>
           </View>
           <View style={styles.buttonWrapper}>
-          <LinearGradient
+            <LinearGradient
               colors={['#FC00A7', '#65EDE3']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={[styles.gradientBorder, styles.buttonSendConfirm]}
-              
+
             >
-            <Pressable
-            style={[{
+              <Pressable
+                style={[{
                   backgroundColor: Color.colorGray_100,
-                  height:54,borderRadius:8,
-                  flex:1, alignItems:'center', justifyContent:'center'
+                  height: 54, borderRadius: 8,
+                  flex: 1, alignItems: 'center', justifyContent: 'center'
                 }]}
-              onPress={doSendNext}
-            >
-              <Text style={[styles.buttonLabel]}>Send</Text>
-            </Pressable>
+                onPress={doSendNext}
+              >
+                <Text style={[styles.buttonLabel]}>Send</Text>
+              </Pressable>
             </LinearGradient>
           </View>
         </View>
@@ -600,23 +608,23 @@ const Wallet = ({ route }) => {
           </View>
           <View style={styles.buttonWrapper}>
 
-          <LinearGradient
+            <LinearGradient
               colors={['#FC00A7', '#65EDE3']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={[styles.gradientBorder, styles.buttonSendConfirm]}
-              
+
             >
-            <Pressable
-              style={[{
+              <Pressable
+                style={[{
                   backgroundColor: Color.colorGray_100,
-                  height:54,borderRadius:8,
-                  flex:1, alignItems:'center', justifyContent:'center'
+                  height: 54, borderRadius: 8,
+                  flex: 1, alignItems: 'center', justifyContent: 'center'
                 }]}
-              onPress={doSendNext}
-            >
-              <Text style={[styles.buttonLabel, styles.ethTypo1]}>Close</Text>
-            </Pressable>
+                onPress={doSendNext}
+              >
+                <Text style={[styles.buttonLabel, styles.ethTypo1]}>Close</Text>
+              </Pressable>
             </LinearGradient>
           </View>
         </View>
@@ -634,6 +642,7 @@ const Wallet = ({ route }) => {
           Wallet address copied to clipboard
         </Text>
       </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -650,7 +659,7 @@ const styles = StyleSheet.create({
     // borderWidth:2
   },
   imgBackground: {
-    position:"absolute",
+    position: "absolute",
     height: "100%",
     width: "100%",
   },
@@ -685,9 +694,9 @@ const styles = StyleSheet.create({
     // position: "absolute",
   },
   frameGroup: {
-    flex:1,
-    gap:10,
-    marginTop:20,
+    flex: 1,
+    gap: 10,
+    marginTop: 20,
     // top: 420,
     // height: 160,
     width: "85%",
@@ -744,7 +753,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorWhitesmoke_100,
     paddingHorizontal: Padding.p_sm,
     paddingTop: Padding.p_xl,
-    paddingBottom: Padding.p_13xl,
+    paddingBottom: Padding.p_xl,
     width: "100%",
     // position: "absolute",
   },
@@ -759,7 +768,13 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    // marginBottom: 10,
+  },
+  row1: {
     marginBottom: 5,
+  },
+  row2: {
+    marginTop: 5,
   },
   walletTypo: {
     textAlign: 'left',
@@ -1264,7 +1279,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.labelLarge_size,
     fontFamily: getFontFamily("500"),
     fontWeight: "500",
-    opacity:0.4
+    opacity: 0.4
   },
 
   // Send Confirm
@@ -1302,7 +1317,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  youAreSending: {    
+  youAreSending: {
     fontSize: FontSize.size_lg,
     fontWeight: "500",
     fontFamily: getFontFamily("500"),
@@ -1351,8 +1366,8 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_sm,
     fontWeight: "500"
   },
-  total:{
-    fontSize:FontSize.labelLarge_size
+  total: {
+    fontSize: FontSize.labelLarge_size
   },
   totalTypo: {
     width: 160,
