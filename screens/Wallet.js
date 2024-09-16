@@ -415,7 +415,7 @@ const Wallet = ({ route }) => {
           </View>
           <View style={styles.frameParent3}>
             <View style={styles.sendToParent}>
-              <Text style={[styles.selectCryptocurrency, styles.eth1Typo]}>
+              <Text style={[styles.selectCryptocurrency]}>
                 Send to
               </Text>
               <View
@@ -433,12 +433,25 @@ const Wallet = ({ route }) => {
                 />
               </View>
             </View>
-            <Pressable
-              style={[styles.buttonSendConfirm, styles.buttonBorder]}
-              onPress={doSendNext}
+
+            <LinearGradient
+              colors={['#FC00A7', '#65EDE3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.gradientBorder, styles.buttonSendConfirm]}
+              
             >
-              <Text style={[styles.buttonLabel, styles.ethTypo]}>Confirm</Text>
-            </Pressable>
+              <Pressable
+                style={[{
+                  backgroundColor: Color.colorGray_100,
+                  height:54,borderRadius:8,
+                  flex:1, alignItems:'center', justifyContent:'center'
+                }]}
+                onPress={doSendNext}
+              >
+                <Text style={[styles.buttonLabel]}>Confirm</Text>
+              </Pressable>
+            </LinearGradient>
           </View>
         </View>
         {/* Send Input Wallet Address */}
@@ -447,7 +460,7 @@ const Wallet = ({ route }) => {
         <View style={[styles.frameView, !showSendConfirm && { display: "none" }]}>
           <View>
             <View style={styles.sendParent1}>
-              <Text style={[styles.send, styles.ethTypo1]}>Send</Text>
+              <Text style={[styles.send]}>Send</Text>
               <View style={styles.youAreSending367WorthOfWrapper}>
                 <Text style={styles.youAreSendingContainer}>
                   <Text
@@ -470,7 +483,7 @@ const Wallet = ({ route }) => {
                   styles.frameParent2SpaceBlock,
                 ]}
               >
-                <Text style={styles.x37e5385aba3592d75436127c7184d}>
+                <Text style={styles.walletAddress}>
                   0x37E5385AbA3592D75436127C7184dA175574398e
                 </Text>
               </View>
@@ -507,7 +520,7 @@ const Wallet = ({ route }) => {
               <View style={[styles.frameChild, styles.borderBorder]} />
               <View style={styles.frameParent4}>
                 <View style={styles.totalParent}>
-                  <Text style={[styles.total, styles.totalTypo]}>Total</Text>
+                  <Text style={[styles.total, styles.total1Typo]}>Total</Text>
                   <View style={styles.walletBalance01EthParent}>
                     <Text style={[styles.total, styles.ethTypoConfirm]}>
                       0.1000123 ETH
@@ -534,12 +547,24 @@ const Wallet = ({ route }) => {
             </View>
           </View>
           <View style={styles.buttonWrapper}>
+          <LinearGradient
+              colors={['#FC00A7', '#65EDE3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.gradientBorder, styles.buttonSendConfirm]}
+              
+            >
             <Pressable
-              style={[styles.button2Confirm, styles.buttonBorderConfirm]}
+            style={[{
+                  backgroundColor: Color.colorGray_100,
+                  height:54,borderRadius:8,
+                  flex:1, alignItems:'center', justifyContent:'center'
+                }]}
               onPress={doSendNext}
             >
-              <Text style={[styles.buttonLabel, styles.ethTypo1]}>Send</Text>
+              <Text style={[styles.buttonLabel]}>Send</Text>
             </Pressable>
+            </LinearGradient>
           </View>
         </View>
         {/* Send Confirm Transaction */}
@@ -567,19 +592,32 @@ const Wallet = ({ route }) => {
                   styles.frameParent2SpaceBlock,
                 ]}
               >
-                <Text style={styles.x37e5385aba3592d75436127c7184d}>
+                <Text style={styles.walletAddress}>
                   0x37E5385AbA3592D75436127C7184dA175574398e
                 </Text>
               </View>
             </View>
           </View>
           <View style={styles.buttonWrapper}>
+
+          <LinearGradient
+              colors={['#FC00A7', '#65EDE3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.gradientBorder, styles.buttonSendConfirm]}
+              
+            >
             <Pressable
-              style={[styles.button2Confirm, styles.buttonBorderConfirm]}
+              style={[{
+                  backgroundColor: Color.colorGray_100,
+                  height:54,borderRadius:8,
+                  flex:1, alignItems:'center', justifyContent:'center'
+                }]}
               onPress={doSendNext}
             >
               <Text style={[styles.buttonLabel, styles.ethTypo1]}>Close</Text>
             </Pressable>
+            </LinearGradient>
           </View>
         </View>
         {/* Send Confirm Transaction */}
@@ -986,7 +1024,6 @@ const styles = StyleSheet.create({
   buttonSendConfirm: {
     marginTop: 50,
     alignSelf: "stretch",
-    paddingVertical: Padding.p_xs,
   },
   buttonLayout: {
     paddingVertical: Padding.p_xs,
@@ -1225,8 +1262,9 @@ const styles = StyleSheet.create({
     textAlign: "left",
     flex: 1,
     fontSize: FontSize.labelLarge_size,
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("500"),
     fontWeight: "500",
+    opacity:0.4
   },
 
   // Send Confirm
@@ -1239,20 +1277,24 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     textAlign: "center",
     color: Color.darkInk,
+    fontWeight: "600",
+    fontFamily: getFontFamily("600"),
+
   },
   ethTypo1: {
     fontWeight: "600",
     fontFamily: FontFamily.clashGrotesk,
   },
   textConfirm: {
+    fontSize: FontSize.size_lg,
     fontWeight: "700",
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("700"),
   },
   youAreSendingContainer: {
     fontSize: FontSize.size_lg,
     width: 322,
     textAlign: "center",
-    color: Color.darkInk,
+    color: Color.darkInk
   },
   youAreSending367WorthOfWrapper: {
     marginTop: 30,
@@ -1260,15 +1302,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  youAreSending: {
-    fontFamily: FontFamily.clashGrotesk,
+  youAreSending: {    
+    fontSize: FontSize.size_lg,
     fontWeight: "500",
+    fontFamily: getFontFamily("500"),
   },
-  x37e5385aba3592d75436127c7184d: {
+  walletAddress: {
     textAlign: "center",
     fontSize: FontSize.labelLarge_size,
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("500"),
     fontWeight: "500",
     // flex: 1,
   },
@@ -1306,26 +1349,35 @@ const styles = StyleSheet.create({
   },
   estimatedGasFee: {
     fontSize: FontSize.size_sm,
-    fontWeight: "500",
+    fontWeight: "500"
+  },
+  total:{
+    fontSize:FontSize.labelLarge_size
   },
   totalTypo: {
     width: 160,
     textAlign: "left",
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("500"),
+  },
+  total1Typo: {
+    width: 160,
+    textAlign: "left",
+    color: Color.darkInk,
+    fontFamily: getFontFamily("700"),
   },
   ethTypoConfirm: {
     width: 138,
     textAlign: "left",
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("500"),
   },
   textTypoConfirm: {
     opacity: 0.7,
     width: 138,
     textAlign: "left",
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("500"),
     fontWeight: "500",
   },
   text3: {
@@ -1390,7 +1442,7 @@ const styles = StyleSheet.create({
   // Send Confirm
   gradientBorder: {
     padding: 2, // Lebar border gradien
-    borderRadius: 10,
+    borderRadius: 8,
   },
 });
 

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/core';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
+import { Color, FontFamily, FontSize, getFontFamily, Padding } from "../GlobalStyles";
 import PostSection from "./PostSection";
 import { getRandomNumber, getRandomTimestamp, shortenAddress } from "../Utils";
 import PostCreate from "./PostCreate";
@@ -153,7 +153,7 @@ const NFTList = ({tab, itemsData}) => {
             <Accordion title={item.name} image={item.token_ids[0].image}>
               
               {item.token_ids.map((item2, index) => (
-              <Pressable style={styles.rectangleFlexBox} key={index} onPress={() => {
+              <TouchableOpacity style={styles.rectangleFlexBox} key={index} onPress={() => {
                 let url = `https://testnets.opensea.io/assets/sepolia/${item.contract_address}/${item2.token_id}`;
                 // let url = `https://testnets.opensea.io/assets/sepolia/0x063aa9f317f3c90a2c35c516bdb926ad346a07b7/131`;
                 // console.log(url)
@@ -173,7 +173,8 @@ const NFTList = ({tab, itemsData}) => {
                     fontWeight: "500",
                     textAlign: "left",
                     color: Color.darkInk,
-                    fontFamily: FontFamily.clashGrotesk,
+                    fontSize: FontSize.labelLarge_size,
+                    fontFamily: getFontFamily("500"),
                   }}>
                     {item2.name}
                   </Text>
@@ -188,7 +189,8 @@ const NFTList = ({tab, itemsData}) => {
                       fontSize: FontSize.size_xs,
                       textAlign: "left",
                       color: Color.darkInk,
-                      fontFamily: FontFamily.clashGrotesk,
+                      fontFamily: getFontFamily("400"),
+                      fontWeight: "400"
                     }}>{`Token Standard: `}</Text>
                     <Text style={{
                       
@@ -196,7 +198,8 @@ const NFTList = ({tab, itemsData}) => {
                       fontSize: FontSize.size_xs,
                       textAlign: "left",
                       color: Color.darkInk,
-                      fontFamily: FontFamily.clashGrotesk,
+                      fontFamily: getFontFamily("600"),
+                      fontWeight: "600"
                     
                     }}>ERC721</Text>
                   </View>
@@ -211,21 +214,24 @@ const NFTList = ({tab, itemsData}) => {
                       fontSize: FontSize.size_xs,
                       textAlign: "left",
                       color: Color.darkInk,
-                      fontFamily: FontFamily.clashGrotesk,
-                    }}>Contract Address:</Text>
+                       fontFamily: getFontFamily("400"),
+                      fontWeight: "400"
+                    }}>Contract Address: </Text>
                     <Text style={{
                       lineHeight: 12,
                       fontSize: FontSize.size_xs,
                       textAlign: "left",
                       color: Color.darkInk,
-                      fontFamily: FontFamily.clashGrotesk,
+                       fontFamily: getFontFamily("600"),
+                       textDecorationLine:"underline",
+                      fontWeight: "600"
                     }}>
                       {shortenAddress(item.contract_address)}
                     </Text>
                   </View>
 
                 </View>
-              </Pressable>
+              </TouchableOpacity>
               ))}
             </Accordion>
           )
@@ -260,8 +266,9 @@ const styles = StyleSheet.create({
   },
   accordionTitle: {
     paddingLeft:10,
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: FontSize.size_lg,
+    fontFamily: getFontFamily("500"),    
+    fontWeight: '500',
     color:"white",
     alignSelf:"center"
   },

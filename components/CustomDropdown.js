@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // for the dropdown arrow icon
-import { Color, getFontFamily } from '../GlobalStyles';
+import { Color, FontSize, getFontFamily } from '../GlobalStyles';
 
 export default function CustomDropdown() {
   const [selectedCurrency, setSelectedCurrency] = useState('ETH');
@@ -9,13 +9,13 @@ export default function CustomDropdown() {
   const [swapCurrency, setSwapCurrency] = useState(false);
 
   const currencyOptions = [
-    { label: 'Bitcoin', value: 'BTC', tokenValue:'0.02', displayValue: '$100' },
-    { label: 'ETH', value: 'ETH', tokenValue:'0.02', displayValue: '$24' },
-    { label: 'USDT', value: 'USDT', tokenValue:'0.02', displayValue: '$37' },
-    { label: 'BNB', value: 'BNB', tokenValue:'0.02', displayValue: '$37' },
-    { label: 'AVAX', value: 'AVAX', tokenValue:'0.02', displayValue: '$37' },
-    { label: 'FTM', value: 'FTM', tokenValue:'0.02', displayValue: '$37' },
-    { label: 'XRP', value: 'XRP', tokenValue:'0.02', displayValue: '$37' },
+    { label: 'Bitcoin', value: 'BTC', tokenValue:'0.02', displayValue: '100' },
+    { label: 'ETH', value: 'ETH', tokenValue:'0.02', displayValue: '24' },
+    { label: 'USDT', value: 'USDT', tokenValue:'0.02', displayValue: '37' },
+    { label: 'BNB', value: 'BNB', tokenValue:'0.02', displayValue: '37' },
+    { label: 'AVAX', value: 'AVAX', tokenValue:'0.02', displayValue: '37' },
+    { label: 'FTM', value: 'FTM', tokenValue:'0.02', displayValue: '37' },
+    { label: 'XRP', value: 'XRP', tokenValue:'0.02', displayValue: '37' },
     // Add more options as needed
   ];
 
@@ -27,10 +27,16 @@ export default function CustomDropdown() {
   const PrintValue = () => {
     let option = currencyOptions.find(option => option.value === selectedCurrency);
     
-    let value = swapCurrency ? (option?.tokenValue +" "+option?.value) : option?.displayValue
+    //let value = swapCurrency ? (option?.tokenValue +" "+option?.value) : option?.displayValue
 
     return <>
-        {value}
+        {swapCurrency ? <><Text>{option?.tokenValue} </Text><Text style={[{opacity:0.6}]}>{option?.value}</Text></> : 
+        <>
+          <Text style={[{opacity:0.6
+}]}>$ </Text>
+          <Text style={[{opacity:0.6}]}>{option?.displayValue}</Text>
+        </>
+        }
     </>
   }
 
@@ -38,6 +44,15 @@ export default function CustomDropdown() {
     let option = currencyOptions.find(option => option.value === selectedCurrency);
     
     let value = swapCurrency ? option?.displayValue : (option?.tokenValue +" "+option?.value)
+
+    return <>
+        {swapCurrency ? <>
+          <Text style={[{opacity:0.6}]}>$ </Text>
+          <Text>{option?.displayValue}</Text>
+        </> : 
+        <><Text>{option?.tokenValue} </Text><Text style={[{opacity:0.6}]}>{option?.value}</Text></>
+        }
+    </>
 
     return <>
         {value}
@@ -175,10 +190,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   currencyValue: {
-    fontWeight:"600",
-    fontFamily: getFontFamily("600"),
+    fontWeight:"500",
+    fontFamily: getFontFamily("500"),
     color: '#FFFFFF',
-    fontSize: 28,
+    fontSize: FontSize.size_9xl,
     textAlign: "center"
   },
 });
