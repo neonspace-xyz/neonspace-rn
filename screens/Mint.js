@@ -132,6 +132,7 @@ const Mint = () => {
         "quantity": totalNft,
         "eth_value": "0"
       };
+      console.log("body", body)
       let resp = await api.post(url, body);
       let data = resp.data;
       let hash = data.transaction_hash;
@@ -506,7 +507,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   frameGroup: {
-    top: 480,
+    top: "60%",
     flexDirection: "row",
     borderRadius: Border.br_5xs,
     position: "absolute",
