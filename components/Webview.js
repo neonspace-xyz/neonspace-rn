@@ -1,62 +1,66 @@
-import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { Padding, FontSize, Color, FontFamily, Border } from "../GlobalStyles";
-import PostList from "./PostList";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SearchBar from "./SearchBar";
-import ProfileDetail from "./ProfileDetail";
-import TokenList from "./TokenList";
-import NFTList from "./NFTList";
-import { useAuth } from "./AuthProvider";
-import React, { useEffect, useState } from "react";
-import { shortenAddress } from "../Utils";
-import WebView from "react-native-webview";
+import React, { useState } from 'react';
+import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { WebView } from 'react-native-webview';
 
-const Webview = () => {
-  const route = useRoute();
-  const { url } = route.params;
-  const navigation = useNavigation();
+const WebViewModal = () => {
+  const [modalVisible, setModalVisible] = useState(true);
+
+  const handleClose = () => {
+    setModalVisible(false);
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-    <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
-    
-      <View style={styles.header}>
-          <Pressable
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../assets/back.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>          
-      </View>   
+    <Modal visible={modalVisible} animationType="slide" transparent={true}>
+      <View style={styles.modalContainer}>
+        <View style={styles.popup}>
+          {/* Close button */}
+          <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+            <Text style={styles.closeText}>X</Text>
+          </TouchableOpacity>
 
-      <WebView 
-        source={{ uri: url }} 
-        style={{ marginTop: 20 }} 
-      />
-    </SafeAreaView>
-  )
+          {/* WebView */}
+          <WebView 
+            source={{ uri: 'https://example.com' }} 
+            style={styles.webview} 
+          />
+        </View>
+      </View>
+    </Modal>
+  );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  modalContainer: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Modal background with opacity
   },
-  header: {
-    // marginTop: 60,
-    width: "100%",
-    // flex:1,
-    flexDirection: 'row',
-    // alignSelf:"flex-",
-    padding: 14,
-    backgroundColor: Color.colorGray_100,
+  popup: {
+    width: '100%',
+    height: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    overflow: 'hidden',
   },
-  headerImage: {
-    width: 30,
-    height: 30,
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 10,
+    backgroundColor: '#ff5c5c',
+    padding: 5,
+    borderRadius: 15,
+  },
+  closeText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  webview: {
+    flex: 1,
+    marginTop: 40,
   },
 });
 
-export default Webview;
+export default WebViewModal;

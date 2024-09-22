@@ -68,7 +68,7 @@ const WalletHeader = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
           onPress={() => navigation.navigate(`QrCamera${tab}`, { tab })}>
           <Image
             source={require("../assets/qr.png")}
-            style={styles.headerImageChat}
+            style={styles.headerImageQR}
           />
         </Pressable>
       </View>
@@ -96,7 +96,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     flexGrow:1,
     color:"white",
-    textAlign:"center"
+    textAlign:"center",
+    fontFamily: FontFamily.helvetica,
   },
   headerIcon: {
   },
@@ -118,6 +119,11 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   headerImageChat: {
+    width: 30,
+    height: 45,
+    marginLeft: 10,
+  },
+  headerImageQR: {
     width: 30,
     height: 30,
     marginLeft: 10,

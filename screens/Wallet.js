@@ -31,7 +31,6 @@ const Wallet = ({ route }) => {
 
   useEffect(() => {
     getUser().then((user) => {
-      console.log(user)
       setUserData(user);
     })
   }, [])
@@ -649,8 +648,9 @@ const Wallet = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     width: "100%",
+    height: "100%",
     overflow: "hidden",
     // justifyContent: 'center',
     alignItems: "center",
@@ -747,7 +747,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   frameParentWallet: {
-    bottom: 0,
+    bottom: "5%",
     borderTopLeftRadius: Border.br_5xs,
     borderTopRightRadius: Border.br_5xs,
     backgroundColor: Color.colorWhitesmoke_100,

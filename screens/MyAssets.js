@@ -26,7 +26,6 @@ const MyAssets = () => {
 
   useEffect(() => {
     getUser().then((user) => {
-      console.log(user)
       setUserData(user);
     });
   }, []);

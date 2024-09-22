@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, TextInput, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, StatusBar } from "react-native";
+import { StyleSheet, Text, View, Linking, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,7 +12,7 @@ import { getRandomNumber, getRandomTimestamp, shortenAddress } from "../Utils";
 import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
 
-const NFTList = ({tab, itemsData}) => {
+const NFTList = ({ tab, itemsData }) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState(itemsData);
@@ -22,6 +22,7 @@ const NFTList = ({tab, itemsData}) => {
   const [hasMore, setHasMore] = useState(true);
 
   const [isShowCreate, setIsShowCreate] = useState(false);
+  const [url, setUrl] = useState('');
 
   useFocusEffect(
     React.useCallback(() => {
@@ -33,19 +34,30 @@ const NFTList = ({tab, itemsData}) => {
     getChats();
   }, [])
 
+  useEffect(() => {
+    openLink();
+  }, [url])
+
+  const openLink = () => {
+    if (url == '') return;
+    Linking.canOpenURL(url).then((supported) => {
+      supported && Linking.openURL(url);
+    })
+  }
+
   const getChats = async () => {
   };
 
   const fetchItems = async () => {
     let data = [];
     for (let i = 1; i < getRandomNumber(); i++) {
-      let like = getRandomNumber(0,7);
+      let like = getRandomNumber(0, 7);
       let itemLikes = [];
       for (let j = 0; j < like; j++) {
         itemLikes.push({
           name: `Name${j}`,
           username: `@username${j}`,
-          image: IMG_PROFILE[getRandomNumber(0,4)],
+          image: IMG_PROFILE[getRandomNumber(0, 4)],
           bio: `Founder at ChainCredit. #DYOR ${j}`,
         })
       }
@@ -53,9 +65,9 @@ const NFTList = ({tab, itemsData}) => {
         id: i,
         name: `Name${i}`,
         username: `@username${i}`,
-        image: IMG_PROFILE[getRandomNumber(0,4)],
+        image: IMG_PROFILE[getRandomNumber(0, 4)],
         text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
-        view: getRandomNumber(0,100),
+        view: getRandomNumber(0, 100),
         like: like,
         datetime: getRandomTimestamp(),
         itemLikes: itemLikes
@@ -84,18 +96,18 @@ const NFTList = ({tab, itemsData}) => {
 
   const Accordion = ({ title, image, children }) => {
     const [expanded, setExpanded] = useState(false);
-  
+
     return (
       <View style={styles.accordionContainer}>
-        <TouchableOpacity onPress={() => setExpanded(!expanded)} 
+        <TouchableOpacity onPress={() => setExpanded(!expanded)}
           style={styles.accordionHeader}>
 
-          <View style={{flexDirection:"row"}}>
+          <View style={{ flexDirection: "row" }}>
             <Image
-                style={styles.rectangleIcon}
-                contentFit="cover"
-                source={image}
-              />
+              style={styles.rectangleIcon}
+              contentFit="cover"
+              source={image}
+            />
             <Text style={styles.accordionTitle}>{title}</Text>
           </View>
           <Image
@@ -151,87 +163,89 @@ const NFTList = ({tab, itemsData}) => {
         renderItem={({ item }) => {
           return (
             <Accordion title={item.name} image={item.token_ids[0].image}>
-              
-              {item.token_ids.map((item2, index) => (
-              <TouchableOpacity style={styles.rectangleFlexBox} key={index} onPress={() => {
-                let url = `https://testnets.opensea.io/assets/sepolia/${item.contract_address}/${item2.token_id}`;
-                // let url = `https://testnets.opensea.io/assets/sepolia/0x063aa9f317f3c90a2c35c516bdb926ad346a07b7/131`;
-                // console.log(url)
-                navigation.push(`Webview${tab}`, { tab, url:url });
-              }}>
-                <Image
-                  style={styles.nftIcon}
-                  contentFit="cover"
-                  source={item2.image}
-                />
-                <View style={{
-                  justifyContent: "center",
-                  flex: 1
-                }}>
-                  <Text style={{
-                    alignSelf: "stretch",
-                    fontWeight: "500",
-                    textAlign: "left",
-                    color: Color.darkInk,
-                    fontSize: FontSize.labelLarge_size,
-                    fontFamily: getFontFamily("500"),
-                  }}>
-                    {item2.name}
-                  </Text>
-                  
-                  <View style={{
-                    marginTop: 2,
-                    alignSelf: "stretch",
-                    flexDirection: "row",
-                  }}>
-                    <Text style={{
-                      lineHeight: 12,
-                      fontSize: FontSize.size_xs,
-                      textAlign: "left",
-                      color: Color.darkInk,
-                      fontFamily: getFontFamily("400"),
-                      fontWeight: "400"
-                    }}>{`Token Standard: `}</Text>
-                    <Text style={{
-                      
-                      lineHeight: 12,
-                      fontSize: FontSize.size_xs,
-                      textAlign: "left",
-                      color: Color.darkInk,
-                      fontFamily: getFontFamily("600"),
-                      fontWeight: "600"
-                    
-                    }}>ERC721</Text>
-                  </View>
-                  
-                  <View style={{
-                    marginTop: 2,
-                    alignSelf: "stretch",
-                    flexDirection: "row",
-                  }}>
-                    <Text style={{
-                      lineHeight: 12,
-                      fontSize: FontSize.size_xs,
-                      textAlign: "left",
-                      color: Color.darkInk,
-                       fontFamily: getFontFamily("400"),
-                      fontWeight: "400"
-                    }}>Contract Address: </Text>
-                    <Text style={{
-                      lineHeight: 12,
-                      fontSize: FontSize.size_xs,
-                      textAlign: "left",
-                      color: Color.darkInk,
-                       fontFamily: getFontFamily("600"),
-                       textDecorationLine:"underline",
-                      fontWeight: "600"
-                    }}>
-                      {shortenAddress(item.contract_address)}
-                    </Text>
-                  </View>
 
-                </View>
-              </TouchableOpacity>
+              {item.token_ids.map((item2, index) => (
+                <TouchableOpacity style={styles.rectangleFlexBox} key={index} onPress={() => {
+                  let url = `https://testnets.opensea.io/assets/sepolia/${item.contract_address}/${item2.token_id}`;
+                  // let url = `https://testnets.opensea.io/assets/sepolia/0x063aa9f317f3c90a2c35c516bdb926ad346a07b7/131`;
+                  // console.log(url)
+                  // navigation.push(`Webview${tab}`, { tab, url: url });
+
+                  setUrl(url);
+                }}>
+                  <Image
+                    style={styles.nftIcon}
+                    contentFit="cover"
+                    source={item2.image}
+                  />
+                  <View style={{
+                    justifyContent: "center",
+                    flex: 1
+                  }}>
+                    <Text style={{
+                      alignSelf: "stretch",
+                      fontWeight: "500",
+                      textAlign: "left",
+                      color: Color.darkInk,
+                      fontSize: FontSize.labelLarge_size,
+                      fontFamily: getFontFamily("500"),
+                    }}>
+                      {item2.name}
+                    </Text>
+
+                    <View style={{
+                      marginTop: 2,
+                      alignSelf: "stretch",
+                      flexDirection: "row",
+                    }}>
+                      <Text style={{
+                        lineHeight: 12,
+                        fontSize: FontSize.size_xs,
+                        textAlign: "left",
+                        color: Color.darkInk,
+                        fontFamily: getFontFamily("400"),
+                        fontWeight: "400"
+                      }}>{`Token Standard: `}</Text>
+                      <Text style={{
+
+                        lineHeight: 12,
+                        fontSize: FontSize.size_xs,
+                        textAlign: "left",
+                        color: Color.darkInk,
+                        fontFamily: getFontFamily("600"),
+                        fontWeight: "600"
+
+                      }}>ERC721</Text>
+                    </View>
+
+                    <View style={{
+                      marginTop: 2,
+                      alignSelf: "stretch",
+                      flexDirection: "row",
+                    }}>
+                      <Text style={{
+                        lineHeight: 12,
+                        fontSize: FontSize.size_xs,
+                        textAlign: "left",
+                        color: Color.darkInk,
+                        fontFamily: getFontFamily("400"),
+                        fontWeight: "400"
+                      }}>Contract Address: </Text>
+                      <Text style={{
+                        lineHeight: 12,
+                        fontSize: FontSize.size_xs,
+                        textAlign: "left",
+                        color: Color.darkInk,
+                        fontFamily: getFontFamily("600"),
+                        textDecorationLine: "underline",
+                        fontWeight: "600"
+                      }}>
+                        {shortenAddress(item.contract_address)}
+                      </Text>
+                    </View>
+
+                  </View>
+                </TouchableOpacity>
               ))}
             </Accordion>
           )
@@ -247,7 +261,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
   },
   frameInner: {
-    alignSelf:"center",
+    alignSelf: "center",
     // justifyContent:"ce",
     width: 14,
     height: 7,
@@ -255,22 +269,22 @@ const styles = StyleSheet.create({
   },
   accordionHeader: {
     justifyContent: "space-between",
-    padding:15,
-    gap:10,
-    textAlign:"center",
+    padding: 15,
+    gap: 10,
+    textAlign: "center",
     flexDirection: "row",
-    width:"100%",
+    width: "100%",
     backgroundColor: Color.colorDarkslategray_100,
     // borderWidth: 1,
     // borderColor: '#ddd',
   },
   accordionTitle: {
-    paddingLeft:10,
+    paddingLeft: 10,
     fontSize: FontSize.size_lg,
-    fontFamily: getFontFamily("500"),    
+    fontFamily: getFontFamily("500"),
     fontWeight: '500',
-    color:"white",
-    alignSelf:"center"
+    color: "white",
+    alignSelf: "center"
   },
   rectangleIcon: {
     height: 36,
@@ -318,11 +332,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorGray_100,
   },
   containerList: {
-    flex:1,
+    flex: 1,
     width: "100%",
-    paddingLeft:10,
-    paddingRight:10,
-    paddingTop:10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 10,
     // height: "60%",
     // alignItems: "center",
     backgroundColor: Color.colorGray_200,
@@ -365,11 +379,11 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
   },
-  rectangleFlexBox:{
-    padding:5,
+  rectangleFlexBox: {
+    padding: 5,
     alignItems: "center",
     flexDirection: "row",
-    gap:10
+    gap: 10
   }
 });
 

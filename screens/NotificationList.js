@@ -5,7 +5,7 @@ import EventSource from 'react-native-event-source';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/core';
 import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator } from "react-native";
-import { API_URL } from "../Constant";
+import { API_URL, WS_URL } from "../Constant";
 import { Color } from "../GlobalStyles";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import NotificationSection from "../components/NotificationSection";
@@ -25,17 +25,19 @@ const NotificationList = ({ route }) => {
     const eventSource = new EventSource(`${API_URL}/event/stream`);
 
     eventSource.onmessage = (event) => {
+      console.log("notif-event", event);
       const newData = JSON.parse(event.data);
-      console.log("newData", newData)
+      console.log("notif-newData", newData)
       setData((prevData) => [...prevData, newData]);
     };
 
     eventSource.onerror = (error) => {
-      console.error('SSE error:', error);
+      console.error('notif-SSE error:', error);
       eventSource.close(); // Close the connection on error
     };
 
     return () => {
+      console.log("notif-close");
       eventSource.close(); // Clean up the connection when the component unmounts
     };
   }, []);
