@@ -212,7 +212,7 @@ const Main = () => {
             });
           }
         })} />
-        <Tab.Screen name="Crowdsource" component={CrowdsourceStackNavigator}
+        {/* <Tab.Screen name="Crowdsource" component={CrowdsourceStackNavigator}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             navigation.navigate('Crowdsource', {
@@ -222,7 +222,7 @@ const Main = () => {
               },
             });
           }
-        })} />
+        })} /> */}
       <Tab.Screen name="Notification" component={NotificationStackNavigator}
         listeners={({ navigation }) => ({
           tabPress: (e) => {

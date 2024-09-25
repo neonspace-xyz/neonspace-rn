@@ -31,7 +31,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
 
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
-    { key: 'second', title: 'Crowdsource' },
+    // { key: 'second', title: 'Crowdsource' },
     { key: 'third', title: 'Minting' },
     { key: 'forth', title: 'Likes' },
   ]);

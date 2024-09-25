@@ -113,7 +113,7 @@ export default function CrowdsourceView({ route }) {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Color.colorGray_100,
+      backgroundColor: Color.colorBlack,
     },
     text: {
       fontSize: 20,
