@@ -40,6 +40,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
 
   const fetchItems = async () => {
     if (!userInfo) return;
+    setLoadingMore(true);
     try {
       let url = `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
       let resp = await api.get(url);
@@ -83,6 +84,8 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
       } else {
         console.error("PostList-fetchItems-error", error)
       }
+    } finally {
+      setLoadingMore(false);
     }
   }
 

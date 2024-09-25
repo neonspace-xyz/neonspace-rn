@@ -44,30 +44,37 @@ const NFTList = ({ tab, itemsData }) => {
 
   const fetchItems = async () => {
     let data = [];
-    for (let i = 1; i < getRandomNumber(); i++) {
-      let like = getRandomNumber(0, 7);
-      let itemLikes = [];
-      for (let j = 0; j < like; j++) {
-        itemLikes.push({
-          name: `Name${j}`,
-          username: `@username${j}`,
+    setLoadingMore(true);
+    try {
+      for (let i = 1; i < getRandomNumber(); i++) {
+        let like = getRandomNumber(0, 7);
+        let itemLikes = [];
+        for (let j = 0; j < like; j++) {
+          itemLikes.push({
+            name: `Name${j}`,
+            username: `@username${j}`,
+            image: IMG_PROFILE[getRandomNumber(0, 4)],
+            bio: `Founder at ChainCredit. #DYOR ${j}`,
+          })
+        }
+        data.push({
+          id: i,
+          name: `Name${i}`,
+          username: `@username${i}`,
           image: IMG_PROFILE[getRandomNumber(0, 4)],
-          bio: `Founder at ChainCredit. #DYOR ${j}`,
-        })
+          text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
+          view: getRandomNumber(0, 100),
+          like: like,
+          datetime: getRandomTimestamp(),
+          itemLikes: itemLikes
+        });
       }
-      data.push({
-        id: i,
-        name: `Name${i}`,
-        username: `@username${i}`,
-        image: IMG_PROFILE[getRandomNumber(0, 4)],
-        text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
-        view: getRandomNumber(0, 100),
-        like: like,
-        datetime: getRandomTimestamp(),
-        itemLikes: itemLikes
-      });
+      // setItems(data);
+    } catch (error) {
+      console.error("NFTList", error)
+    } finally {
+      setLoadingMore(false);
     }
-    // setItems(data);
   };
 
   const onRefresh = async () => {

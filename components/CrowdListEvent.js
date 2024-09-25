@@ -37,6 +37,7 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
 
   const fetchItems = async () => {
     if (!userInfo) return;
+    setLoadingMore(true);
     try {
       let url = `/crowdsource/event/list?page=${page}`//&user=${userInfo.user_id};
       let resp = await api.get(url);
@@ -95,6 +96,8 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
       } else {
         console.error("EventList-fetchItems-error", error)
       }
+    } finally {
+      setLoadingMore(false);
     }
   }
 

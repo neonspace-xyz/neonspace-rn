@@ -37,6 +37,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
 
   const fetchItems = async () => {
     if (!userInfo) return;
+    setLoadingMore(true);
     try {
       let url = `/crowdsource/hiring/list?page=${page}`//&user=${userInfo.user_id};
       let resp = await api.get(url);
@@ -95,6 +96,8 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
       } else {
         console.error("HiringList-fetchItems-error", error)
       }
+    } finally {
+      setLoadingMore(false);
     }
   }
 

@@ -12,10 +12,10 @@ import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
 
-const TokenList = ({itemsData}) => {
+const TokenList = ({ itemsData }) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
-  const [items, setItems] = useState([{},{}]);
+  const [items, setItems] = useState([{}, {}]);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -61,30 +61,37 @@ const TokenList = ({itemsData}) => {
 
   const fetchItems = async () => {
     let data = [];
-    for (let i = 1; i < getRandomNumber(); i++) {
-      let like = getRandomNumber(0,7);
-      let itemLikes = [];
-      for (let j = 0; j < like; j++) {
-        itemLikes.push({
-          name: `Name${j}`,
-          username: `@username${j}`,
-          image: IMG_PROFILE[getRandomNumber(0,4)],
-          bio: `Founder at ChainCredit. #DYOR ${j}`,
-        })
+    setLoadingMore(true);
+    try {
+      for (let i = 1; i < getRandomNumber(); i++) {
+        let like = getRandomNumber(0, 7);
+        let itemLikes = [];
+        for (let j = 0; j < like; j++) {
+          itemLikes.push({
+            name: `Name${j}`,
+            username: `@username${j}`,
+            image: IMG_PROFILE[getRandomNumber(0, 4)],
+            bio: `Founder at ChainCredit. #DYOR ${j}`,
+          })
+        }
+        data.push({
+          id: i,
+          name: `Name${i}`,
+          username: `@username${i}`,
+          image: IMG_PROFILE[getRandomNumber(0, 4)],
+          text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
+          view: getRandomNumber(0, 100),
+          like: like,
+          datetime: getRandomTimestamp(),
+          itemLikes: itemLikes
+        });
       }
-      data.push({
-        id: i,
-        name: `Name${i}`,
-        username: `@username${i}`,
-        image: IMG_PROFILE[getRandomNumber(0,4)],
-        text: 'I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this community! I love Neonrabbits!! I’m so excited to be on this app and in this comm...',
-        view: getRandomNumber(0,100),
-        like: like,
-        datetime: getRandomTimestamp(),
-        itemLikes: itemLikes
-      });
+      // setItems(data);
+    } catch (error) {
+      console.error("TokenList-error", error)
+    } finally {
+      setLoadingMore(false);
     }
-    // setItems(data);
   };
 
   const onRefresh = async () => {
@@ -111,7 +118,8 @@ const TokenList = ({itemsData}) => {
         data={items}
         style={[{
           //borderWidth:2, borderColor:'yellow',
-         paddingLeft:10, paddingRight:10, paddingTop:10}]}
+          paddingLeft: 10, paddingRight: 10, paddingTop: 10
+        }]}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -135,7 +143,7 @@ const TokenList = ({itemsData}) => {
                 contentFit="cover"
                 source={require("../assets/photo.png")}
               />
-              <View style={{justifyContent: "center", flex:1}}>
+              <View style={{ justifyContent: "center", flex: 1 }}>
                 <Text style={{
                   fontWeight: "500",
                   fontFamily: getFontFamily("500"),
@@ -149,7 +157,7 @@ const TokenList = ({itemsData}) => {
                 <Text style={{
                   fontWeight: "400",
                   fontFamily: getFontFamily("400"),
-                  opacity:0.7,
+                  opacity: 0.7,
                   textAlign: "left",
                   color: Color.darkInk,
                   alignSelf: "stretch",
@@ -184,7 +192,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     alignSelf: "stretch",
-    gap:10
+    gap: 10
     // borderColor:"red",
     // borderWidth:2
   },
@@ -204,7 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorGray_100,
   },
   containerList: {
-    flex:1,
+    flex: 1,
     width: "100%",
     // height: "60%",
     // alignItems: "center",

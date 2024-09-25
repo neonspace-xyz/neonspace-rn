@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState, useRef } from "react";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, View, Pressable, TextInput, StatusBar, Alert, FlatList } from "react-native";
+import { StyleSheet, View, Pressable, TextInput, StatusBar, Alert, FlatList, ActivityIndicator } from "react-native";
 import { Color, FontFamily, FontSize, getFontFamily } from "../GlobalStyles";
 import { useAuth } from "../components/AuthProvider";
 import UserSearchSection from "./UserSearchSection";
@@ -12,6 +12,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [searchItems, setSearchItems] = useState([]);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const textInputRef = useRef(null);
   const handleBlurTextInput = () => {
@@ -25,6 +26,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
   const fetchSearchItems = async () => {
     if (searchValue == '') return;
     let data = [];
+    setLoadingMore(true);
     try {
       let url = `/twitter/getUser`;
       let body = {
@@ -44,6 +46,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
       console.error("fetchSearchItems", error?.message)
     } finally {
       setSearchItems(data);
+      setLoadingMore(false);
     }
   };
 
@@ -97,6 +100,9 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
         <FlatList
           style={[styles.flat, !isShowSearch && { display: "none" }]}
           data={searchItems}
+          ListFooterComponent={() =>
+            loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
+          }
           renderItem={({ item }) => {
             return (
               <UserSearchSection
