@@ -1,20 +1,16 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Linking, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, StatusBar } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/core';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { Color, FontFamily, FontSize, getFontFamily, Padding } from "../GlobalStyles";
-import PostSection from "./PostSection";
 import { getRandomNumber, getRandomTimestamp, shortenAddress } from "../Utils";
-import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
+import * as WebBrowser from 'expo-web-browser';
 
 const NFTList = ({ tab, itemsData }) => {
   const navigation = useNavigation();
-  const [searchValue, setSearchValue] = useState('');
   const [items, setItems] = useState(itemsData);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
@@ -38,11 +34,9 @@ const NFTList = ({ tab, itemsData }) => {
     openLink();
   }, [url])
 
-  const openLink = () => {
+  const openLink = async () => {
     if (url == '') return;
-    Linking.canOpenURL(url).then((supported) => {
-      supported && Linking.openURL(url);
-    })
+    await WebBrowser.openBrowserAsync(url);
   }
 
   const getChats = async () => {
