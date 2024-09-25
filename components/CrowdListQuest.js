@@ -37,6 +37,7 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
 
   const fetchItems = async () => {
     if (!userInfo) return;
+    setLoadingMore(true);
     try {
       let url = `/crowdsource/quest/list?page=${page}`//&user=${userInfo.user_id};
       let resp = await api.get(url);
@@ -94,6 +95,8 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
       } else {
         console.error("QuestList-fetchItems-error", error)
       }
+    } finally {
+      setLoadingMore(false);
     }
   }
 

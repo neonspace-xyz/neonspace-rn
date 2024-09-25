@@ -51,6 +51,7 @@ const ChatList = () => {
   };
 
   const fetchItems = async () => {
+    setLoadingMore(true);
     try {
       let url = `/chat/history?page=${page}`;
       let resp = await api.get(url);
@@ -67,6 +68,8 @@ const ChatList = () => {
       } else {
         console.error("ChatList-fetchItems-error", error)
       }
+    } finally {
+      setLoadingMore(false);
     }
   }
   
