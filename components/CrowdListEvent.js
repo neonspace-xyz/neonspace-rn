@@ -10,6 +10,7 @@ import { useAuth } from "./AuthProvider";
 import CrowdSectionEvent from "./CrowdSectionEvent";
 import PopupOption from "./PopupOption";
 import ButtonFAB from "./ButtonFAB";
+import EmptyView from "./EmptyView";
 
 const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
   const { api, getOtherUser } = useAuth();
@@ -261,6 +262,9 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
         }
         onEndReached={onLoadMore}
         onEndReachedThreshold={0.1}
+        ListEmptyComponent={() => {
+          return <EmptyView loadingMore={loadingMore} />
+        }}
         ListFooterComponent={() =>
           loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
         }

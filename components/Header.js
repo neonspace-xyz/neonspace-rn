@@ -6,6 +6,7 @@ import { StyleSheet, View, Pressable, TextInput, StatusBar, Alert, FlatList, Act
 import { Color, FontFamily, FontSize, getFontFamily } from "../GlobalStyles";
 import { useAuth } from "../components/AuthProvider";
 import UserSearchSection from "./UserSearchSection";
+import EmptyView from "./EmptyView";
 
 const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
   const { api } = useAuth();
@@ -42,7 +43,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
         }
       }
     } catch (error) {
-      Alert.alert("User not found");
+      // Alert.alert("User not found");
       console.error("fetchSearchItems", error?.message)
     } finally {
       setSearchItems(data);
@@ -100,6 +101,9 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
         <FlatList
           style={[styles.flat, !isShowSearch && { display: "none" }]}
           data={searchItems}
+          ListEmptyComponent={() => {
+            return <EmptyView loadingMore={loadingMore} />
+          }}
           ListFooterComponent={() =>
             loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
           }

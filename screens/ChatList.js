@@ -11,6 +11,7 @@ import PostCreate from "../components/PostCreate";
 import ChatSection from "../components/ChatSection";
 import UserSearchSection from "../components/UserSearchSection";
 import { useAuth } from "../components/AuthProvider";
+import EmptyView from "../components/EmptyView";
 
 const ChatList = () => {
   const { api } = useAuth();
@@ -56,7 +57,7 @@ const ChatList = () => {
       let url = `/chat/history?page=${page}`;
       let resp = await api.get(url);
       let _data = [];
-      for(let item of resp.data) {
+      for (let item of resp.data) {
         let mess = item.last_message.message;
         item['last_message']['message'] = JSON.parse(mess);
         _data.push(item);
@@ -72,7 +73,7 @@ const ChatList = () => {
       setLoadingMore(false);
     }
   }
-  
+
   const fetchSearchItems = async () => {
     if (searchValue == '') return;
     let data = [];
@@ -149,6 +150,9 @@ const ChatList = () => {
         <FlatList
           style={[styles.flat, !isShowSearch && { display: "none" }]}
           data={searchItems}
+          ListEmptyComponent={() => {
+            return <EmptyView loadingMore={loadingMore} />
+          }}
           // refreshControl={
           //   <RefreshControl
           //     refreshing={refreshing}
@@ -196,6 +200,9 @@ const ChatList = () => {
           }
           onEndReached={onLoadMore}
           onEndReachedThreshold={0.1}
+          ListEmptyComponent={() => {
+            return <EmptyView loadingMore={loadingMore} />
+          }}
           ListFooterComponent={() =>
             loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
           }

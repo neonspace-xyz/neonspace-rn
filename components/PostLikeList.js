@@ -1,6 +1,7 @@
 import * as React from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { Color } from "../GlobalStyles";
+import EmptyView from "./EmptyView";
 import PostLikeSection from "./PostLikeSection";
 
 const PostLikeList = ({ tab, itemLikes }) => {
@@ -10,6 +11,9 @@ const PostLikeList = ({ tab, itemLikes }) => {
       <FlatList
         style={styles.flat}
         data={itemLikes}
+        ListEmptyComponent={() => {
+          return <EmptyView loadingMore={false} />
+        }}
         renderItem={({ item }) => {
           return (
             <PostLikeSection

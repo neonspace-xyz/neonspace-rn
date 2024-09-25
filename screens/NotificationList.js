@@ -10,6 +10,7 @@ import { Color } from "../GlobalStyles";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import NotificationSection from "../components/NotificationSection";
 import Header from "../components/Header";
+import EmptyView from "../components/EmptyView";
 
 const NotificationList = ({ route }) => {
   const { tab } = route.params;
@@ -96,6 +97,9 @@ const NotificationList = ({ route }) => {
           }
           onEndReached={onLoadMore}
           onEndReachedThreshold={0.1}
+          ListEmptyComponent={() => {
+            return <EmptyView loadingMore={loadingMore} />
+          }}
           ListFooterComponent={() =>
             loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
           }

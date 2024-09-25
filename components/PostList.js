@@ -11,6 +11,7 @@ import { useAuth } from "./AuthProvider";
 import PopupOption from "./PopupOption";
 import ButtonFAB from "./ButtonFAB";
 import PostCreate from "./PostCreate";
+import EmptyView from "./EmptyView";
 
 const PostList = ({ tab, isProfile, usersession, userInfo }) => {
   const { api } = useAuth();
@@ -193,6 +194,9 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
         }
         onEndReached={onLoadMore}
         onEndReachedThreshold={0.1}
+        ListEmptyComponent={() => {
+          return <EmptyView loadingMore={loadingMore} />
+        }}
         ListFooterComponent={() =>
           loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
         }

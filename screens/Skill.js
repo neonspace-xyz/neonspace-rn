@@ -10,6 +10,7 @@ import { useAuth } from "../components/AuthProvider";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import EmptyView from "../components/EmptyView";
 
 const Skill = () => {
   const navigation = useNavigation();
@@ -20,7 +21,7 @@ const Skill = () => {
     { id: '2', name: 'Financial modeling' },
     { id: '3', name: 'Applied Mathematics' },
   ];
-  
+
   const Item = ({ name }) => (
     <View style={styles.itemContainer}>
       <Text style={styles.name}>{name}</Text>
@@ -40,51 +41,54 @@ const Skill = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-          <Pressable
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../assets/back.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>
-          
-          <Text style={
-            [styles.title]
-            // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
-            }>Skill</Text>
-            
-          
-          <TouchableOpacity
-            onPress={() => {
-              navigation.push(`SkillForm${tab}`, { tab });
-            }}>
-            <Image
-              source={require("../assets/add.png")}
-              style={styles.headerImage}
-              
-            />
-          </TouchableOpacity>
-      </View> 
+        <Pressable
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={require("../assets/back.png")}
+            style={styles.headerImage}
+          />
+        </Pressable>
+
+        <Text style={
+          [styles.title]
+          // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
+        }>Skill</Text>
+
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.push(`SkillForm${tab}`, { tab });
+          }}>
+          <Image
+            source={require("../assets/add.png")}
+            style={styles.headerImage}
+
+          />
+        </TouchableOpacity>
+      </View>
 
       <FlatList
         data={data}
+        ListEmptyComponent={() => {
+          return <EmptyView loadingMore={false} />
+        }}
         renderItem={({ item }) => <Item name={item.name} />}
         keyExtractor={(item) => item.id}
       />
-      
-      
+
+
     </SafeAreaView>
   )
 };
 
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     // backgroundColor: Color.colorGray_100,
     backgroundColor: Color.colorBlack,
-    width:"100%",
-    height:"100%",
-    flex:1
+    width: "100%",
+    height: "100%",
+    flex: 1
   },
   header: {
     // marginTop: 60,
@@ -99,7 +103,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
-  
+
   itemContainer: {
     backgroundColor: '#2b2b2b', // Background color similar to the image
     padding: 20,
@@ -136,14 +140,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'flex-end',
   },
-  title:{
+  title: {
     fontSize: FontSize.labelLarge_size,
     // marginLeft: 14,
     // flex: 1,
-    flexGrow:1, 
-    textAlign:"center", 
-    paddingTop:3, 
-    alignItems:"center",
+    flexGrow: 1,
+    textAlign: "center",
+    paddingTop: 3,
+    alignItems: "center",
     color: Color.darkInk,
     fontWeight: "600",
     fontFamily: getFontFamily("600")

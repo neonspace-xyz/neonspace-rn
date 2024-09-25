@@ -10,6 +10,7 @@ import { useAuth } from "../components/AuthProvider";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import EmptyView from "../components/EmptyView";
 
 const Experience = () => {
   const navigation = useNavigation();
@@ -72,7 +73,7 @@ const Experience = () => {
     },
     // Add more items as needed
   ];
-  
+
   const Item = ({ role, company, duration, description, verifiedBy }) => (
     <View style={styles.itemContainer}>
       <Text style={styles.role}>{role}</Text>
@@ -91,59 +92,62 @@ const Experience = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-          <Pressable
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../assets/back.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>
-          
-          <Text style={
-            [styles.experience]
-            // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
-            }>Experience</Text>
-            
-          
-          <TouchableOpacity
-            onPress={() => {
-              navigation.push(`ExperienceForm${tab}`, { tab });
-            }}>
-            <Image
-              source={require("../assets/add.png")}
-              style={styles.headerImage}
-              
-            />
-          </TouchableOpacity>
-      </View> 
+        <Pressable
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={require("../assets/back.png")}
+            style={styles.headerImage}
+          />
+        </Pressable>
+
+        <Text style={
+          [styles.experience]
+          // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
+        }>Experience</Text>
+
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.push(`ExperienceForm${tab}`, { tab });
+          }}>
+          <Image
+            source={require("../assets/add.png")}
+            style={styles.headerImage}
+
+          />
+        </TouchableOpacity>
+      </View>
 
       <FlatList
-      data={data}
-      renderItem={({ item }) => (
-        <Item
-          role={item.role}
-          company={item.company}
-          duration={item.duration}
-          description={item.description}
-          verifiedBy={item.verifiedBy}
-        />
-      )}
-      keyExtractor={(item) => item.id}
-    />
-      
-      
+        data={data}
+        ListEmptyComponent={() => {
+          return <EmptyView loadingMore={false} />
+        }}
+        renderItem={({ item }) => (
+          <Item
+            role={item.role}
+            company={item.company}
+            duration={item.duration}
+            description={item.description}
+            verifiedBy={item.verifiedBy}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+      />
+
+
     </SafeAreaView>
   )
 };
 
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     // backgroundColor: Color.colorGray_100,
     backgroundColor: Color.colorBlack,
-    width:"100%",
-    height:"100%",
-    flex:1
+    width: "100%",
+    height: "100%",
+    flex: 1
   },
   header: {
     // marginTop: 60,
@@ -158,7 +162,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
-  
+
   itemContainer: {
     backgroundColor: '#2b2b2b', // Background color similar to the image
     padding: 20,
@@ -195,14 +199,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'flex-end',
   },
-  experience:{
+  experience: {
     fontSize: FontSize.labelLarge_size,
     // marginLeft: 14,
     // flex: 1,
-    flexGrow:1, 
-    textAlign:"center", 
-    paddingTop:3, 
-    alignItems:"center",
+    flexGrow: 1,
+    textAlign: "center",
+    paddingTop: 3,
+    alignItems: "center",
     color: Color.darkInk,
     fontWeight: "600",
     fontFamily: getFontFamily("600")

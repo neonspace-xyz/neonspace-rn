@@ -19,8 +19,8 @@ export default function App() {
     'Satoshi': require('./assets/fonts/Satoshi.ttf'),
     // 'SF Pro Text': require('./assets/fonts/SfProText.OTF')
   });
-  
-   useEffect(() => {
+
+  useEffect(() => {
     if (error) {
       console.error('Error loading fonts', error);
       throw error;

@@ -8,6 +8,7 @@ import { Color, FontFamily, FontSize, getFontFamily, Padding } from "../GlobalSt
 import { getRandomNumber, getRandomTimestamp, shortenAddress } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 import * as WebBrowser from 'expo-web-browser';
+import EmptyView from "./EmptyView";
 
 const NFTList = ({ tab, itemsData }) => {
   const navigation = useNavigation();
@@ -158,6 +159,9 @@ const NFTList = ({ tab, itemsData }) => {
         }
         onEndReached={onLoadMore}
         onEndReachedThreshold={0.1}
+        ListEmptyComponent={() => {
+          return <EmptyView loadingMore={loadingMore} />
+        }}
         ListFooterComponent={() =>
           loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
         }

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
+import EmptyView from "./EmptyView";
 import VerifiedListSection from "./VerifiedListSection";
 
 const VerifiedList = ({ tab, data }) => {
@@ -9,6 +10,9 @@ const VerifiedList = ({ tab, data }) => {
     <View style={[styles.containerList]}>
       <FlatList
         data={data}
+        ListEmptyComponent={() => {
+          return <EmptyView loadingMore={false} />
+        }}
         renderItem={({ item }) => {
           return (
             <VerifiedListSection

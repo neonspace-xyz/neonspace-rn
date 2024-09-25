@@ -11,6 +11,7 @@ import PostSection from "./PostSection";
 import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
+import EmptyView from "./EmptyView";
 
 const TokenList = ({ itemsData }) => {
   const navigation = useNavigation();
@@ -132,6 +133,9 @@ const TokenList = ({ itemsData }) => {
         }
         onEndReached={onLoadMore}
         onEndReachedThreshold={0.1}
+        ListEmptyComponent={() => {
+          return <EmptyView loadingMore={loadingMore} />
+        }}
         ListFooterComponent={() =>
           loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
         }

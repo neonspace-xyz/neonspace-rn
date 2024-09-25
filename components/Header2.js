@@ -6,6 +6,7 @@ import { StyleSheet, View, Pressable, TextInput, StatusBar, Alert, FlatList, Act
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
 import { useAuth } from "./AuthProvider";
 import UserSearchSection from "./UserSearchSection";
+import EmptyView from "./EmptyView";
 
 const Header2 = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
   const { api } = useAuth();
@@ -100,6 +101,9 @@ const Header2 = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
         <FlatList
           style={[styles.flat, !isShowSearch && { display: "none" }]}
           data={searchItems}
+          ListEmptyComponent={() => {
+            return <EmptyView loadingMore={loadingMore} />
+          }}
           ListFooterComponent={() =>
             loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
           }
