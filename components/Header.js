@@ -12,6 +12,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
   const { api } = useAuth();
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
+  const [emptyText, setEmptyText] = useState('');
   const [searchItems, setSearchItems] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
 
@@ -28,18 +29,28 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
     if (searchValue == '') return;
     let data = [];
     setLoadingMore(true);
+    setEmptyText('');
     try {
       let url = `/twitter/getUser`;
       let body = {
         "screen_name": searchValue
       };
+      console.log("Header-search-url", url)
+      console.log("Header-search-input", body)
       let resp = await api.post(url, body);
       if (resp.data) {
         let user = resp.data;
+        console.log("Header-search-resp", user);
         url = `/user/getUser?userId=${user.id}`;
-        resp = await api.get(url);
-        if (resp.data) {
-          data.push(resp.data);
+
+        try {
+          resp = await api.get(url);
+          if (resp.data) {
+            data.push(resp.data);
+          }
+        } catch (e) {
+          if(e.response.data.error) setEmptyText(e.response.data.error);
+          console.error("fetchSearchItems-getUser", e.response.data.error)
         }
       }
     } catch (error) {
@@ -102,7 +113,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
           style={[styles.flat, !isShowSearch && { display: "none" }]}
           data={searchItems}
           ListEmptyComponent={() => {
-            return <EmptyView loadingMore={loadingMore} />
+            return <EmptyView loadingMore={loadingMore} text={emptyText} />
           }}
           ListFooterComponent={() =>
             loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />

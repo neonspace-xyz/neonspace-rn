@@ -1,11 +1,11 @@
 import * as React from "react";
 import { StyleSheet, View, Text } from "react-native";
 
-const EmptyView = ({ loadingMore }) => {
+const EmptyView = ({ loadingMore, text }) => {
   return (
     <View style={styles.emptyContainer}>
       {!loadingMore && (
-        <Text style={styles.emptyText}>No data available</Text>
+        <Text style={styles.emptyText}>{text ? text : 'No data available'}</Text>
       )}
     </View>
   );
