@@ -36,117 +36,117 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
     { key: 'forth', title: 'Likes' },
   ]);
 
-  
-const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
-  const { getUser, getSession } = useAuth();
-  // const [userInfo, setUserInfo] = useState();
-  const [usersession, setUsersession] = useState();
 
-  useEffect(() => {
-    // getUser().then((user) => {
-    //   setUserInfo(user);
-    // });
-    getSession().then((user) => {
-      setUsersession(user);
-    })
-  }, [])
+  const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
+    const { getUser, getSession } = useAuth();
+    // const [userInfo, setUserInfo] = useState();
+    const [usersession, setUsersession] = useState();
 
-  return (userInfo &&
-    <View>
-      <PostList
-        tab={4}
-        isProfile={true}
-        usersession={usersession}
-        userInfo={userInfo} />
-      {/* <CrowdListHiring
-        tab={4}
-        userInfo={userInfo}
-        isProfile={false}
-        isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} /> */}
-    </View>)
+    useEffect(() => {
+      // getUser().then((user) => {
+      //   setUserInfo(user);
+      // });
+      getSession().then((user) => {
+        setUsersession(user);
+      })
+    }, [])
 
-};
-
-const SecondRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
-  const { getUser, getSession } = useAuth();
-  const [usersession, setUsersession] = useState();
-
-  useEffect(() => {
-    
-    getSession().then((user) => {
-      setUsersession(user);
-    })
-  }, [])
-
-  return (userInfo &&
-    <View>
-      {/* <CrowdListHiring
+    return (userInfo &&
+      <View>
+        <PostList
+          tab={4}
+          isProfile={true}
+          usersession={usersession}
+          userInfo={userInfo} />
+        {/* <CrowdListHiring
         tab={4}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} /> */}
-    </View>)
+      </View>)
 
-};
+  };
 
-const ThirdRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
-  const { getUser, getSession } = useAuth();
-  const [usersession, setUsersession] = useState();
+  const SecondRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
+    const { getUser, getSession } = useAuth();
+    const [usersession, setUsersession] = useState();
 
-  useEffect(() => {
-   
-    getSession().then((user) => {
-      setUsersession(user);
-    })
-  }, [])
+    useEffect(() => {
 
-  return (userInfo &&
-    <View>
-      {/* <CrowdListHiring
+      getSession().then((user) => {
+        setUsersession(user);
+      })
+    }, [])
+
+    return (userInfo &&
+      <View>
+        {/* <CrowdListHiring
         tab={4}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} /> */}
-    </View>)
+      </View>)
 
-};
+  };
 
-const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
-  const { getUser } = useAuth();
-  const [itemLikes, setItemLikes] = useState();
+  const ThirdRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
+    const { getUser, getSession } = useAuth();
+    const [usersession, setUsersession] = useState();
 
-  useEffect(() => {
-    const setLikes = () => {
-      let like = getRandomNumber(10, 15);
-      let itemLikes = [];
-      for (let j = 0; j < like; j++) {
-        itemLikes.push({
-          name: `Name${j}`,
-          username: `@username${j}`,
-          image: IMG_PROFILE[getRandomNumber(0, 4)],
-          bio: `Founder at ChainCredit. #DYOR ${j}`,
-        })
-      }
-      setItemLikes(itemLikes);
-    };
-    setLikes();
-  }, [])
-  return (userInfo &&
-    <View style={{ flex: 1 }} >
-      {/* <CrowdListEvent
+    useEffect(() => {
+
+      getSession().then((user) => {
+        setUsersession(user);
+      })
+    }, [])
+
+    return (userInfo &&
+      <View>
+        {/* <CrowdListHiring
         tab={4}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} /> */}
-      <PostLikeList
+      </View>)
+
+  };
+
+  const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
+    const { getUser } = useAuth();
+    const [itemLikes, setItemLikes] = useState();
+
+    useEffect(() => {
+      const setLikes = () => {
+        let like = getRandomNumber(10, 15);
+        let itemLikes = [];
+        for (let j = 0; j < like; j++) {
+          itemLikes.push({
+            name: `Name${j}`,
+            username: `@username${j}`,
+            image: IMG_PROFILE[getRandomNumber(0, 4)],
+            bio: `Founder at ChainCredit. #DYOR ${j}`,
+          })
+        }
+        setItemLikes(itemLikes);
+      };
+      setLikes();
+    }, [])
+    return (userInfo &&
+      <View style={{ flex: 1 }} >
+        {/* <CrowdListEvent
         tab={4}
-        itemLikes={itemLikes} />
-    </View>)
-};
+        userInfo={userInfo}
+        isProfile={false}
+        isShowSearch={isShowSearch}
+        isShowCreate={isShowCreate} /> */}
+        <PostLikeList
+          tab={4}
+          itemLikes={itemLikes} />
+      </View>)
+  };
 
   const renderScene = SceneMap({
     first: FirstRoute,
@@ -159,11 +159,24 @@ const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
       {...props}
       style={styles.tabBar}
       indicatorStyle={styles.indicator}
-      labelStyle={styles.label}
+      // labelStyle={styles.label}
+      renderLabel={({ route, focused, color }) => {
+        // Conditionally apply a style based on the route title or index
+        const customLabelStyle =
+          route.key === 'second' // or use `route.title === 'Specific Tab'` or route index
+            ? styles.labelSmall
+            : styles.label;
+
+        return (
+          <Text style={[customLabelStyle, { color }]}>
+            {route.title}
+          </Text>
+        );
+      }}
     />
   );
 
-  
+
 
   useEffect(() => {
     const check = async () => {
@@ -266,9 +279,10 @@ const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
+                onPress={() => setIsFullBio(!isFullBio)}
               >
                 <Text style={[styles.editProfile, styles.editProfileTypo]}>
-                  Full Bio
+                  {isFullBio ? "Default Bio" : "Full Bio"}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity style={{
@@ -296,12 +310,10 @@ const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
-              // onPress={() => {
-              //   navigation.push(`ChatView${tab}`, { tab, userInfo: userInfo })
-              // }}
+                onPress={() => setIsFullBio(!isFullBio)}
               >
                 <Text style={[styles.editProfile, styles.editProfileTypo]}>
-                  Full Bio
+                  {isFullBio ? "Default Bio" : "Full Bio"}
                 </Text>
               </TouchableOpacity>
             </>
@@ -365,28 +377,29 @@ const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
                 styles.walletAddress0xedhvContainer,
               ]}
             >
-              <View style={{ flexDirection: "row", alignItems: "center", gap:5  }}>
-                <Text style={[styles.walletAddress, { color:'white'}]}>{`Verified by: `}</Text>
-              
-                
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                <Text style={[styles.walletAddress, { color: 'white' }]}>{`Verified by: `}</Text>
+
+
                 <View style={{
                   // borderColor:'red', 
                   // borderWidth:2, 
-                  width:userVerifiedByImages.length*23, 
-                  height:32,
-                  position:'relative'}}>
+                  width: userVerifiedByImages.length * 23,
+                  height: 32,
+                  position: 'relative'
+                }}>
                   {
                     userVerifiedByImages.map((e, index) => {
                       return (
-                          <Image key={index} source={e} style={[styles.image, {
-                            zIndex:9999-index,
-                          position:'absolute',left:20*index
-                          }]} />
+                        <Image key={index} source={e} style={[styles.image, {
+                          zIndex: 9999 - index,
+                          position: 'absolute', left: 20 * index
+                        }]} />
                       )
                     })
                   }
                 </View>
-                <Text style={[styles.samPolymathAnd, styles.textTypo, {paddingLeft:4}]}>
+                <Text style={[styles.samPolymathAnd, styles.textTypo, { paddingLeft: 4 }]}>
                   {userVerifiedByNames}
                 </Text>
               </View>
@@ -405,28 +418,29 @@ const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
                 styles.walletAddress0xedhvContainer,
               ]}
             >
-              <View style={{ flexDirection: "row", alignItems: "center", gap:5 }}>
-                <Text style={[styles.walletAddress, { color:'white'}]}>{`Verified: `}</Text>
-              
-                
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                <Text style={[styles.walletAddress, { color: 'white' }]}>{`Verified: `}</Text>
+
+
                 <View style={{
                   // borderColor:'red', 
                   // borderWidth:2, 
-                  width:userVerifiedImages.length*23, 
-                  height:32,
-                  position:'relative'}}>
+                  width: userVerifiedImages.length * 23,
+                  height: 32,
+                  position: 'relative'
+                }}>
                   {
                     userVerifiedImages.map((e, index) => {
                       return (
-                          <Image key={index} source={e} style={[styles.image, {
-                            zIndex:9999-index,
-                          position:'absolute',left:20*index
-                          }]} />
+                        <Image key={index} source={e} style={[styles.image, {
+                          zIndex: 9999 - index,
+                          position: 'absolute', left: 20 * index
+                        }]} />
                       )
                     })
                   }
                 </View>
-                <Text style={[styles.samPolymathAnd, styles.textTypo, {paddingLeft:4}]}>
+                <Text style={[styles.samPolymathAnd, styles.textTypo, { paddingLeft: 4 }]}>
                   {userVerifiedNames}
                 </Text>
               </View>
@@ -1022,6 +1036,13 @@ const styles = StyleSheet.create({
   },
   label: {
     color: '#ffffff', // Color of the tab labels
+    fontSize: 18,
+    fontWeight: "600"
+  },
+  labelSmall: {
+    color: '#ffffff', // Color of the tab labels
+    fontSize: 12,
+    fontWeight: "600"
   },
 });
 

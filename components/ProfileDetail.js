@@ -44,6 +44,19 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       style={styles.tabBar}
       indicatorStyle={styles.indicator}
       labelStyle={styles.label}
+      renderLabel={({ route, focused, color }) => {
+        // Conditionally apply a style based on the route title or index
+        const customLabelStyle =
+          route.key === 'second' // or use `route.title === 'Specific Tab'` or route index
+            ? styles.labelSmall
+            : styles.label;
+    
+        return (
+          <Text style={[customLabelStyle, { color }]}>
+            {route.title}
+          </Text>
+        );
+      }}
     />
   );
 
@@ -945,6 +958,11 @@ const styles = StyleSheet.create({
   },
   label: {
     color: '#ffffff', // Color of the tab labels
+    fontSize: 18
+  },
+  labelSmall: {
+    color: '#ffffff', // Color of the tab labels
+    fontSize: 12
   },
 });
 
