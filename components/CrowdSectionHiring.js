@@ -11,7 +11,7 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
 
   return (
     <View style={styles.frame}>
-      <Pressable index={item?.id} onPress={() => isDetail ? null : onPress()}>
+      <Pressable index={`hiring${item?.id}`} onPress={() => isDetail ? null : onPress()}>
         <View style={styles.frameParent}>
           <View style={styles.frameFlexBox}>
             <Image

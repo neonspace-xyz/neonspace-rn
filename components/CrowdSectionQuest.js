@@ -11,7 +11,7 @@ const CrowdSectionQuest = ({ tab, isDetail, index, userInfo, item, onPress, onMo
 
   return (
     <View style={styles.frame}>
-      <Pressable index={item?.id} onPress={() => isDetail ? null : onPress()}>
+      <Pressable index={`quest${item?.id}`} onPress={() => isDetail ? null : onPress()}>
         <View style={styles.frameParent}>
           <View style={styles.frameFlexBox}>
             <Image

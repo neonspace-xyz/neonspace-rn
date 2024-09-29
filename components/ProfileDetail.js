@@ -1,18 +1,17 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, TouchableOpacity, useWindowDimensions } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
-import { getRandomNumber, processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
-import CrowdListEvent from "./CrowdListEvent";
+import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
 import CrowdListHiring from "./CrowdListHiring";
 import { useAuth } from "./AuthProvider";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import FullBio from "./FullBio";
 import PostList from "./PostList";
-import PostLikeList from "./PostLikeList";
-import { IMG_PROFILE } from "../Constant";
+import ProfileListLikes from "./ProfileListLikes";
+import ProfileListCrowdSource from "./ProfileListCrowdSource";
 
 const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const navigation = useNavigation();
@@ -49,7 +48,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
         const customLabelStyle =
           route.key === 'second' // or use `route.title === 'Specific Tab'` or route index
             ? styles.labelSmall
-            : styles.label;
+            : styles.labelSmall;
     
         return (
           <Text style={[customLabelStyle, { color }]}>
@@ -311,12 +310,6 @@ const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
         isProfile={true}
         usersession={usersession}
         userInfo={userInfo} />
-      {/* <CrowdListHiring
-        tab={4}
-        userInfo={userInfo}
-        isProfile={false}
-        isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} /> */}
     </View>)
 
 };
@@ -364,7 +357,7 @@ const ThirdRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
 
   return (userInfo &&
     <View>
-      <CrowdListHiring
+      <ProfileListCrowdSource
         tab={4}
         usersession={usersession}
         userInfo={userInfo}
@@ -372,45 +365,31 @@ const ThirdRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />
     </View>)
-
 };
 
 const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
-  const { getUser } = useAuth();
+  const { getUser, getSession } = useAuth();
   const [userInfo, setUserInfo] = useState();
-  const [itemLikes, setItemLikes] = useState();
+  const [usersession, setUsersession] = useState();
 
   useEffect(() => {
     getUser().then((user) => {
       setUserInfo(user);
     });
-
-    const setLikes = () => {
-      let like = getRandomNumber(10, 15);
-      let itemLikes = [];
-      for (let j = 0; j < like; j++) {
-        itemLikes.push({
-          name: `Name${j}`,
-          username: `@username${j}`,
-          image: IMG_PROFILE[getRandomNumber(0, 4)],
-          bio: `Founder at ChainCredit. #DYOR ${j}`,
-        })
-      }
-      setItemLikes(itemLikes);
-    };
-    setLikes();
+    getSession().then((user) => {
+      setUsersession(user);
+    })
   }, [])
+
   return (userInfo &&
-    <View style={{ flex: 1 }} >
-      {/* <CrowdListEvent
+    <View>
+      <ProfileListLikes
         tab={4}
+        usersession={usersession}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} /> */}
-      <PostLikeList
-        tab={4}
-        itemLikes={itemLikes} />
+        isShowCreate={isShowCreate} />
     </View>)
 };
 

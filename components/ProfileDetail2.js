@@ -165,7 +165,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
         const customLabelStyle =
           route.key === 'second' // or use `route.title === 'Specific Tab'` or route index
             ? styles.labelSmall
-            : styles.label;
+            : styles.labelSmall;
 
         return (
           <Text style={[customLabelStyle, { color }]}>
