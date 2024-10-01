@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, View, Pressable, TextInput, StatusBar } from "react-native";
+import { StyleSheet, Text, View, Pressable, TextInput, StatusBar, KeyboardAvoidingView, Platform } from "react-native";
 import { Color, FontSize, Border, FontFamily, Padding, getFontFamily } from "../GlobalStyles";
 import { Component_Max_Width } from "../Constant";
 import { useAuth } from "../components/AuthProvider";
@@ -11,6 +11,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import DropdownExample from "../components/DropdownExample";
 import CustomDropdown from "../components/CustomDropdown";
+import * as WebBrowser from 'expo-web-browser';
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Wallet = ({ route }) => {
   const { tab } = route?.params;
@@ -89,231 +91,234 @@ const Wallet = ({ route }) => {
         isHideList={false}
         isShowSearch={false}
       />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={[styles.container, { flex: 1 }]}
+      >
+        <View style={styles.container}>
 
-      <View style={styles.container}>
-
-        <Image
-          style={styles.imgBackground}
-          contentFit="cover"
-          source={require("../assets/group-865.png")}
-        />
-
-
-
-      <Text style={[styles.txtTitle]}>
-        {userData && userData?.owned_nfts[0]?.token_ids[0]?.name}
-      </Text>
-
-      {
-        userData?.owned_nfts[0]?.token_ids[0]?.image ?
           <Image
-            style={styles.imgNft}
+            style={styles.imgBackground}
             contentFit="cover"
-            source={userData?.owned_nfts[0]?.token_ids[0]?.image}
+            source={require("../assets/group-865.png")}
           />
-          :
-          <Image
-            style={styles.imgNft}
-            contentFit="cover"
-            source={require("../assets/ic_nft_default.png")}
-          />
-      }
 
-      <View style={styles.frameGroup}>
 
-        <LinearGradient
-          colors={['#FC00A7', '#65EDE3']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.gradientBorder}
-        >
-          <Pressable
-            style={styles.button}
-            onPress={() => setShowSuccessMint(!showSuccessMint)}
-          >
-            <Text style={[styles.buttonLabel]}>
-              Share on X
-            </Text>
-          </Pressable>
-        </LinearGradient>
 
-        <LinearGradient
-          colors={['#FC00A7', '#65EDE3']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.gradientBorder}
-        >
-          <Pressable
-            style={styles.button}
-            onPress={() => setShowSuccessMint(!showSuccessMint)}
-          >
-            <Text style={[styles.buttonLabel]}>
-              Download Original Image
-            </Text>
-          </Pressable>
-        </LinearGradient>
-      </View>
-
-      {/* Section Wallet Info */}
-      <View style={[styles.frameParentWallet]}>
-        <View style={styles.walletBalance0EthWalletAParent}>
-          <View style={[styles.walletBalance0Container]}>
-            <View style={[styles.row, styles.row1]}>
-              <Text style={[styles.walletBalance]}>Wallet Balance: </Text>
-              <Text style={[styles.eth1Typo]}>0.02 ETH</Text>
-            </View>
-            <View style={[styles.row, styles.row2]}>
-              <Text style={[styles.walletBalance]}>Wallet Address: </Text>
-              <Text style={[styles.eth1Typo]}>0xe...dhv</Text>
-            </View>
-          </View>
-          <View>
-            <LinearGradient
-              colors={['#FC00A7', '#65EDE3']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.gradientBorder]}
-            >
-              <View style={{
-                backgroundColor: "#000000", borderRadius: Border.br_5xs,
-                borderTopLeftRadius: Border.br_5xs,
-                borderTopRightRadius: Border.br_5xs
-              }}>
-                <Pressable
-                  style={[styles.topUpWalletWrapper]}
-                  onPress={() => setShowTransferAction(!showTransferAction)}
-                >
-
-                  <Text style={[styles.topUpWallet]}>
-                    Transfer
-                  </Text>
-                </Pressable>
-              </View>
-            </LinearGradient>
-
-            <LinearGradient
-              colors={['#FC00A7', '#65EDE3']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.gradientBorder, { marginTop: 10 }]}
-            >
-              <View style={{
-                backgroundColor: "#000000", borderRadius: Border.br_5xs,
-                borderTopLeftRadius: Border.br_5xs,
-                borderTopRightRadius: Border.br_5xs
-              }}>
-                <Pressable
-                  style={[styles.topUpWalletWrapper]}
-                  onPress={() => navigation.navigate(`MyAssets${tab}`)}
-                >
-                  <Text style={[styles.topUpWallet]}>
-                    My assets
-                  </Text>
-                </Pressable>
-              </View>
-            </LinearGradient>
-          </View>
-        </View>
-      </View>
-
-      {/* View Transfer Action */}
-      <View style={[styles.frameParentTransferAction, styles.bottomNavPosition, , !showTransferAction && { display: "none" }]}>
-        <Pressable
-          style={[styles.svgrepoLayout]}
-          onPress={() => setShowTransferAction(!showTransferAction)}
-        >
-          <Image
-            style={[styles.icon1, styles.iconLayout]}
-            contentFit="cover"
-            source={require("../assets/ic_close_white.png")}
-          />
-        </Pressable>
-        <View style={styles.selectActionWrapper}>
-          <Text style={[styles.selectAction]}>
-            Select action
+          <Text style={[styles.txtTitle]}>
+            {userData && userData?.owned_nfts[0]?.token_ids[0]?.name}
           </Text>
-        </View>
 
-        <Pressable
-          style={[styles.button2, styles.buttonLayout]}
-          onPress={() => {
-            setShowTransferAction(!showTransferAction);
-            setShowReceive(!showReceive);
-          }}
-        >
-          <Image
-            style={styles.home1SvgrepoComIcon}
-            contentFit="cover"
-            source={require("../assets/ic_receive.png")}
-          />
-          <Text style={[styles.sendCrypto]}>
-            Receive
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[styles.button2, styles.buttonLayout]}
-          onPress={doSendNext}
-        >
-          <Image
-            style={styles.home1SvgrepoComIcon}
-            contentFit="cover"
-            source={require("../assets/ic_send.png")}
-          />
-          <Text style={[styles.sendCrypto]}>
-            Send
-          </Text>
-        </Pressable>
-      </View>
-
-      {/* View Receive/Top Up Wallet */}
-      <View style={[styles.frameParentReceive, !showReceive && { display: "none" }]}>
-        <View style={styles.frameView}>
-          <View style={styles.baseNetworkWrapper}>
-            <Text style={[styles.baseNetwork]}>
-              BASE Network
-            </Text>
-          </View>
-          <Text style={[styles.thisIsYour]}>
-            This is your BASE Network wallet address for receiving onchain
-            assets.
-          </Text>
-        </View>
-        <Pressable
-          style={styles.containerBack}
-          onPress={() => {
-            setShowReceive(!showReceive)
-            setShowTransferAction(true)
-          }}
-        >
-          <Image
-            style={[styles.icon2]}
-            contentFit="cover"
-            source={require("../assets/ic_back_white.png")}
-          />
-        </Pressable>
-        <View style={styles.screenshot20231216At421Parent}>
-          <Image
-            style={styles.screenshot20231216At421}
-            contentFit="cover"
-            source={require("../assets/ic_barcode.png")}
-          />
-          <View style={styles.xedhvParent}>
-            <Text style={[styles.xedhv1]}>
-              0xe...dhv
-            </Text>
-            <Pressable onPress={() => setShowAddressCopied(!showAddressCopied)}>
+          {
+            userData?.owned_nfts[0]?.token_ids[0]?.image ?
               <Image
-                style={styles.copySvgrepoCom1Icon}
+                style={styles.imgNft}
                 contentFit="cover"
-                source={require("../assets/ic_copy.png")}
+                source={userData?.owned_nfts[0]?.token_ids[0]?.image}
+              />
+              :
+              <Image
+                style={styles.imgNft}
+                contentFit="cover"
+                source={require("../assets/ic_nft_default.png")}
+              />
+          }
+
+          <View style={styles.frameGroup}>
+
+            <LinearGradient
+              colors={['#FC00A7', '#65EDE3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.gradientBorder}
+            >
+              <Pressable
+                style={styles.button}
+                onPress={() => setShowSuccessMint(!showSuccessMint)}
+              >
+                <Text style={[styles.buttonLabel]}>
+                  Share on X
+                </Text>
+              </Pressable>
+            </LinearGradient>
+
+            <LinearGradient
+              colors={['#FC00A7', '#65EDE3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.gradientBorder}
+            >
+              <Pressable
+                style={styles.button}
+                onPress={() => setShowSuccessMint(!showSuccessMint)}
+              >
+                <Text style={[styles.buttonLabel]}>
+                  Download Original Image
+                </Text>
+              </Pressable>
+            </LinearGradient>
+          </View>
+
+          {/* Section Wallet Info */}
+          <View style={[styles.frameParentWallet]}>
+            <View style={styles.walletBalance0EthWalletAParent}>
+              <View style={[styles.walletBalance0Container]}>
+                <View style={[styles.row, styles.row1]}>
+                  <Text style={[styles.walletBalance]}>Wallet Balance: </Text>
+                  <Text style={[styles.eth1Typo]}>0.02 ETH</Text>
+                </View>
+                <View style={[styles.row, styles.row2]}>
+                  <Text style={[styles.walletBalance]}>Wallet Address: </Text>
+                  <Text style={[styles.eth1Typo]}>0xe...dhv</Text>
+                </View>
+              </View>
+              <View>
+                <LinearGradient
+                  colors={['#FC00A7', '#65EDE3']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={[styles.gradientBorder]}
+                >
+                  <View style={{
+                    backgroundColor: "#000000", borderRadius: Border.br_5xs,
+                    borderTopLeftRadius: Border.br_5xs,
+                    borderTopRightRadius: Border.br_5xs
+                  }}>
+                    <Pressable
+                      style={[styles.topUpWalletWrapper]}
+                      onPress={() => setShowTransferAction(!showTransferAction)}
+                    >
+
+                      <Text style={[styles.topUpWallet]}>
+                        Transfer
+                      </Text>
+                    </Pressable>
+                  </View>
+                </LinearGradient>
+
+                <LinearGradient
+                  colors={['#FC00A7', '#65EDE3']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={[styles.gradientBorder, { marginTop: 10 }]}
+                >
+                  <View style={{
+                    backgroundColor: "#000000", borderRadius: Border.br_5xs,
+                    borderTopLeftRadius: Border.br_5xs,
+                    borderTopRightRadius: Border.br_5xs
+                  }}>
+                    <Pressable
+                      style={[styles.topUpWalletWrapper]}
+                      onPress={() => navigation.navigate(`MyAssets${tab}`)}
+                    >
+                      <Text style={[styles.topUpWallet]}>
+                        My assets
+                      </Text>
+                    </Pressable>
+                  </View>
+                </LinearGradient>
+              </View>
+            </View>
+          </View>
+
+          {/* View Transfer Action */}
+          <View style={[styles.frameParentTransferAction, styles.bottomNavPosition, , !showTransferAction && { display: "none" }]}>
+            <Pressable
+              style={[styles.svgrepoLayout]}
+              onPress={() => setShowTransferAction(!showTransferAction)}
+            >
+              <Image
+                style={[styles.icon1, styles.iconLayout]}
+                contentFit="cover"
+                source={require("../assets/ic_close_white.png")}
               />
             </Pressable>
-          </View>
-        </View>
-      </View>
+            <View style={styles.selectActionWrapper}>
+              <Text style={[styles.selectAction]}>
+                Select action
+              </Text>
+            </View>
 
-      {/* View Send */}
-      {/* <View style={[styles.frameParentSend, styles.bottomNavPosition, !showSend && { display: "none" }]}>
+            <Pressable
+              style={[styles.button2, styles.buttonLayout]}
+              onPress={() => {
+                setShowTransferAction(!showTransferAction);
+                setShowReceive(!showReceive);
+              }}
+            >
+              <Image
+                style={styles.home1SvgrepoComIcon}
+                contentFit="cover"
+                source={require("../assets/ic_receive.png")}
+              />
+              <Text style={[styles.sendCrypto]}>
+                Receive
+              </Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button2, styles.buttonLayout]}
+              onPress={doSendNext}
+            >
+              <Image
+                style={styles.home1SvgrepoComIcon}
+                contentFit="cover"
+                source={require("../assets/ic_send.png")}
+              />
+              <Text style={[styles.sendCrypto]}>
+                Send
+              </Text>
+            </Pressable>
+          </View>
+
+          {/* View Receive/Top Up Wallet */}
+          <View style={[styles.frameParentReceive, !showReceive && { display: "none" }]}>
+            <View style={styles.frameView}>
+              <View style={styles.baseNetworkWrapper}>
+                <Text style={[styles.baseNetwork]}>
+                  BASE Network
+                </Text>
+              </View>
+              <Text style={[styles.thisIsYour]}>
+                This is your BASE Network wallet address for receiving onchain
+                assets.
+              </Text>
+            </View>
+            <Pressable
+              style={styles.containerBack}
+              onPress={() => {
+                setShowReceive(!showReceive)
+                setShowTransferAction(true)
+              }}
+            >
+              <Image
+                style={[styles.icon2]}
+                contentFit="cover"
+                source={require("../assets/ic_back_white.png")}
+              />
+            </Pressable>
+            <View style={styles.screenshot20231216At421Parent}>
+              <Image
+                style={styles.screenshot20231216At421}
+                contentFit="cover"
+                source={require("../assets/ic_barcode.png")}
+              />
+              <View style={styles.xedhvParent}>
+                <Text style={[styles.xedhv1]}>
+                  0xe...dhv
+                </Text>
+                <Pressable onPress={() => setShowAddressCopied(!showAddressCopied)}>
+                  <Image
+                    style={styles.copySvgrepoCom1Icon}
+                    contentFit="cover"
+                    source={require("../assets/ic_copy.png")}
+                  />
+                </Pressable>
+              </View>
+            </View>
+          </View>
+
+          {/* View Send */}
+          {/* <View style={[styles.frameParentSend, styles.bottomNavPosition, !showSend && { display: "none" }]}>
         <Pressable
           style={[styles.svgrepoLayout]}
           onPress={() => setShowSend(!showSend)}
@@ -346,43 +351,43 @@ const Wallet = ({ route }) => {
         </View>
       </View> */}
 
-      <View style={[styles.frameParentSend, styles.bottomNavPosition, !showSend && { display: "none" }]}>
-        {showSendResult ? (
-          <Pressable
-            style={styles.containerSendClose}
-            onPress={doSendBack}
-          >
-            <Image
-              style={[styles.icon2, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/ic_close_white.png")}
-            />
-          </Pressable>
-        ) : (
-          <Pressable
-            style={styles.containerSendBack}
-            onPress={doSendBack}
-          >
-            <Image
-              style={[styles.icon2, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/ic_back_white.png")}
-            />
-          </Pressable>
-        )}
+          <View style={[styles.frameParentSend, styles.bottomNavPosition, !showSend && { display: "none" }]}>
+            {showSendResult ? (
+              <Pressable
+                style={styles.containerSendClose}
+                onPress={doSendBack}
+              >
+                <Image
+                  style={[styles.icon2, styles.iconLayout]}
+                  contentFit="cover"
+                  source={require("../assets/ic_close_white.png")}
+                />
+              </Pressable>
+            ) : (
+              <Pressable
+                style={styles.containerSendBack}
+                onPress={doSendBack}
+              >
+                <Image
+                  style={[styles.icon2, styles.iconLayout]}
+                  contentFit="cover"
+                  source={require("../assets/ic_back_white.png")}
+                />
+              </Pressable>
+            )}
 
-        {/* Send Input Wallet Address */}
-        <View style={[styles.frameView, !showSendInput && { display: "none" }]}>
-          <View style={styles.frameView}>
-            <View style={styles.baseNetworkParent}>
-              <Text style={[styles.baseNetwork]}>
-                BASE Network
-              </Text>
+            {/* Send Input Wallet Address */}
+            <View style={[styles.frameView, !showSendInput && { display: "none" }]}>
+              <View style={styles.frameView}>
+                <View style={styles.baseNetworkParent}>
+                  <Text style={[styles.baseNetwork]}>
+                    BASE Network
+                  </Text>
 
-            </View>
-            <CustomDropdown />
+                </View>
+                <CustomDropdown />
 
-            {/* <View
+                {/* <View
                 style={[
                   styles.selectCryptocurrencyParent,
                   styles.parentSpaceBlock1,
@@ -405,7 +410,7 @@ const Wallet = ({ route }) => {
                   />
                 </View>
               </View> */}
-            {/* <View style={[styles.frameParent1, styles.parentSpaceBlock]}>
+                {/* <View style={[styles.frameParent1, styles.parentSpaceBlock]}>
               <View style={styles.frameView}>
                 <View style={[styles.parent, styles.parentLayout]}>
                   <Text style={[styles.text, styles.ethTypo]}>0.1</Text>
@@ -419,229 +424,234 @@ const Wallet = ({ route }) => {
                 source={require("../assets/ic_arrow_double_white.png")}
               />
             </View> */}
-          </View>
-          <View style={styles.frameParent3}>
-            <View style={styles.sendToParent}>
-              <Text style={[styles.selectCryptocurrency]}>
-                Send to
-              </Text>
-              <View
-                style={[
-                  styles.baseWalletAddressWrapper,
-                  styles.ellipseParentBg,
-                ]}
-              >
-                <TextInput
-                  style={styles.baseWalletAddress}
-                  placeholder="BASE Wallet Address"
-                  placeholderTextColor={Color.colorGray_500}
-                  value={inputSend}
-                  onChangeText={(text) => setInputSend(text)}
-                />
               </View>
-            </View>
-
-            <LinearGradient
-              colors={['#FC00A7', '#65EDE3']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.gradientBorder, styles.buttonSendConfirm]}
-
-            >
-              <Pressable
-                style={[{
-                  backgroundColor: Color.colorGray_100,
-                  height: 54, borderRadius: 8,
-                  flex: 1, alignItems: 'center', justifyContent: 'center'
-                }]}
-                onPress={doSendNext}
-              >
-                <Text style={[styles.buttonLabel]}>Confirm</Text>
-              </Pressable>
-            </LinearGradient>
-          </View>
-        </View>
-        {/* Send Input Wallet Address */}
-
-        {/* Send Confirm Transaction */}
-        <View style={[styles.frameView, !showSendConfirm && { display: "none" }]}>
-          <View>
-            <View style={styles.sendParent1}>
-              <Text style={[styles.send]}>Send</Text>
-              <View style={styles.youAreSending367WorthOfWrapper}>
-                <Text style={styles.youAreSendingContainer}>
-                  <Text
-                    style={styles.youAreSending}
-                  >{`You are sending `}</Text>
-                  <Text style={styles.textConfirm}>$367</Text>
-                  <Text style={styles.youAreSending}> worth of</Text>
-                  <Text style={styles.textConfirm}> 0.1 ETH</Text>
-                  <Text style={styles.youAreSending}>
-                    {" "}
-                    to the following wallet address
-                  </Text>
-                </Text>
-              </View>
-            </View>
-            <View style={[styles.wrapperFlexBox]}>
-              <View
-                style={[
-                  styles.x37e5385aba3592d75436127c7184dWrapper,
-                  styles.frameParent2SpaceBlock,
-                ]}
-              >
-                <Text style={styles.walletAddress}>
-                  0x37E5385AbA3592D75436127C7184dA175574398e
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.frameWrapper2}>
-            <View
-              style={[styles.frameParent2, styles.frameParent2SpaceBlock]}
-            >
               <View style={styles.frameParent3}>
-                <View style={styles.feeParentFlexBox}>
-                  <Text style={[styles.estimatedGasFee, styles.totalTypo]}>
-                    Estimated gas fee
+                <View style={styles.sendToParent}>
+                  <Text style={[styles.selectCryptocurrency]}>
+                    Send to
                   </Text>
-                  <View style={styles.walletBalance01EthParent}>
-                    <Text style={[styles.eth2Confirm, styles.ethTypoConfirm]}>
-                      0.0000023 ETH
-                    </Text>
-                    <Text style={[styles.text1, styles.textTypoConfirm]}>$0.10</Text>
+                  <View
+                    style={[
+                      styles.baseWalletAddressWrapper,
+                      styles.ellipseParentBg,
+                    ]}
+                  >
+                    <TextInput
+                      style={styles.baseWalletAddress}
+                      placeholder="BASE Wallet Address"
+                      placeholderTextColor={Color.colorGray_500}
+                      value={inputSend}
+                      onChangeText={(text) => setInputSend(text)}
+                    />
                   </View>
                 </View>
-                <View style={[styles.maxFeeParent, styles.feeParentFlexBox]}>
-                  <Text style={[styles.estimatedGasFee, styles.totalTypo]}>
-                    Max fee
-                  </Text>
-                  <View style={styles.walletBalance01EthParent}>
-                    <Text style={[styles.eth2Confirm, styles.ethTypoConfirm]}>
-                      0.0000025 ETH
-                    </Text>
-                    <Text style={[styles.text1, styles.textTypoConfirm]}>$0.11</Text>
-                  </View>
-                </View>
-              </View>
-              <View style={[styles.frameChild, styles.borderBorder]} />
-              <View style={styles.frameParent4}>
-                <View style={styles.totalParent}>
-                  <Text style={[styles.total, styles.total1Typo]}>Total</Text>
-                  <View style={styles.walletBalance01EthParent}>
-                    <Text style={[styles.total, styles.ethTypoConfirm]}>
-                      0.1000123 ETH
-                    </Text>
-                    <Text style={[styles.text3, styles.textTypoConfirm]}>
-                      $367.10
-                    </Text>
-                  </View>
-                </View>
-                <View style={[styles.maxFeeParent, styles.feeParentFlexBox]}>
-                  <Text style={[styles.estimatedGasFee, styles.totalTypo]}>
-                    Max amount
-                  </Text>
-                  <View style={styles.walletBalance01EthParent}>
-                    <Text style={[styles.eth2Confirm, styles.ethTypoConfirm]}>
-                      0.1000123 ETH
-                    </Text>
-                    <Text style={[styles.text1, styles.textTypoConfirm]}>
-                      $367.11
-                    </Text>
-                  </View>
-                </View>
+
+                <LinearGradient
+                  colors={['#FC00A7', '#65EDE3']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={[styles.gradientBorder, styles.buttonSendConfirm]}
+
+                >
+                  <Pressable
+                    style={[{
+                      backgroundColor: Color.colorGray_100,
+                      height: 54, borderRadius: 8,
+                      flex: 1, alignItems: 'center', justifyContent: 'center'
+                    }]}
+                    onPress={doSendNext}
+                  >
+                    <Text style={[styles.buttonLabel]}>Confirm</Text>
+                  </Pressable>
+                </LinearGradient>
               </View>
             </View>
-          </View>
-          <View style={styles.buttonWrapper}>
-            <LinearGradient
-              colors={['#FC00A7', '#65EDE3']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.gradientBorder, styles.buttonSendConfirm]}
+            {/* Send Input Wallet Address */}
 
-            >
-              <Pressable
-                style={[{
-                  backgroundColor: Color.colorGray_100,
-                  height: 54, borderRadius: 8,
-                  flex: 1, alignItems: 'center', justifyContent: 'center'
-                }]}
-                onPress={doSendNext}
-              >
-                <Text style={[styles.buttonLabel]}>Send</Text>
-              </Pressable>
-            </LinearGradient>
+            {/* Send Confirm Transaction */}
+            <View style={[styles.frameView, !showSendConfirm && { display: "none" }]}>
+              <View>
+                <View style={styles.sendParent1}>
+                  <Text style={[styles.send]}>Send</Text>
+                  <View style={styles.youAreSending367WorthOfWrapper}>
+                    <Text style={styles.youAreSendingContainer}>
+                      <Text
+                        style={styles.youAreSending}
+                      >{`You are sending `}</Text>
+                      <Text style={styles.textConfirm}>$367</Text>
+                      <Text style={styles.youAreSending}> worth of</Text>
+                      <Text style={styles.textConfirm}> 0.1 ETH</Text>
+                      <Text style={styles.youAreSending}>
+                        {" "}
+                        to the following wallet address
+                      </Text>
+                    </Text>
+                  </View>
+                </View>
+                <View style={[styles.wrapperFlexBox]}>
+                  <View
+                    style={[
+                      styles.x37e5385aba3592d75436127c7184dWrapper,
+                      styles.frameParent2SpaceBlock,
+                    ]}
+                  >
+                    <Text style={styles.walletAddress}>
+                      0x37E5385AbA3592D75436127C7184dA175574398e
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.frameWrapper2}>
+                <View
+                  style={[styles.frameParent2, styles.frameParent2SpaceBlock]}
+                >
+                  <View style={styles.frameParent3}>
+                    <View style={styles.feeParentFlexBox}>
+                      <Text style={[styles.estimatedGasFee, styles.totalTypo]}>
+                        Estimated gas fee
+                      </Text>
+                      <View style={styles.walletBalance01EthParent}>
+                        <Text style={[styles.eth2Confirm, styles.ethTypoConfirm]}>
+                          0.0000023 ETH
+                        </Text>
+                        <Text style={[styles.text1, styles.textTypoConfirm]}>$0.10</Text>
+                      </View>
+                    </View>
+                    <View style={[styles.maxFeeParent, styles.feeParentFlexBox]}>
+                      <Text style={[styles.estimatedGasFee, styles.totalTypo]}>
+                        Max fee
+                      </Text>
+                      <View style={styles.walletBalance01EthParent}>
+                        <Text style={[styles.eth2Confirm, styles.ethTypoConfirm]}>
+                          0.0000025 ETH
+                        </Text>
+                        <Text style={[styles.text1, styles.textTypoConfirm]}>$0.11</Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={[styles.frameChild, styles.borderBorder]} />
+                  <View style={styles.frameParent4}>
+                    <View style={styles.totalParent}>
+                      <Text style={[styles.total, styles.total1Typo]}>Total</Text>
+                      <View style={styles.walletBalance01EthParent}>
+                        <Text style={[styles.total, styles.ethTypoConfirm]}>
+                          0.1000123 ETH
+                        </Text>
+                        <Text style={[styles.text3, styles.textTypoConfirm]}>
+                          $367.10
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={[styles.maxFeeParent, styles.feeParentFlexBox]}>
+                      <Text style={[styles.estimatedGasFee, styles.totalTypo]}>
+                        Max amount
+                      </Text>
+                      <View style={styles.walletBalance01EthParent}>
+                        <Text style={[styles.eth2Confirm, styles.ethTypoConfirm]}>
+                          0.1000123 ETH
+                        </Text>
+                        <Text style={[styles.text1, styles.textTypoConfirm]}>
+                          $367.11
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.buttonWrapper}>
+                <LinearGradient
+                  colors={['#FC00A7', '#65EDE3']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={[styles.gradientBorder, styles.buttonSendConfirm]}
+
+                >
+                  <Pressable
+                    style={[{
+                      backgroundColor: Color.colorGray_100,
+                      height: 54, borderRadius: 8,
+                      flex: 1, alignItems: 'center', justifyContent: 'center'
+                    }]}
+                    onPress={doSendNext}
+                  >
+                    <Text style={[styles.buttonLabel]}>Send</Text>
+                  </Pressable>
+                </LinearGradient>
+              </View>
+            </View>
+            {/* Send Confirm Transaction */}
+
+            {/* Send Confirm Transaction */}
+            <View style={[styles.frameView, !showSendResult && { display: "none" }]}>
+              <View>
+                <View style={styles.sendParent1}>
+                  <Text style={[styles.send, styles.ethTypo1]}>Send</Text>
+                  <View style={styles.youAreSending367WorthOfWrapper}>
+                    <Text style={styles.youAreSendingContainer}>
+                      <Text style={styles.youAreSending}>
+                        Click transaction hash below{'\n'}
+                        to view on basescan
+                      </Text>
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <TouchableOpacity style={styles.frameWrapper3}
+                onPress={() => {
+                  console.log("open")
+                  WebBrowser.openBrowserAsync('https://basescan.org/tx/0xb6ba2a1c09037046bcaffbacf619eba29362f6b0e68b5939b4434607147e3030');
+                }}>
+                <View style={[styles.wrapperFlexBox]}>
+                  <View
+                    style={[
+                      styles.x37e5385aba3592d75436127c7184dWrapper,
+                      styles.frameParent2SpaceBlock,
+                    ]}
+                  >
+                    <Text style={styles.walletAddress}>
+                      0x37E5385AbA3592D75436127C7184dA175574398e
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.buttonWrapper}>
+
+                <LinearGradient
+                  colors={['#FC00A7', '#65EDE3']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={[styles.gradientBorder, styles.buttonSendConfirm]}
+
+                >
+                  <Pressable
+                    style={[{
+                      backgroundColor: Color.colorGray_100,
+                      height: 54, borderRadius: 8,
+                      flex: 1, alignItems: 'center', justifyContent: 'center'
+                    }]}
+                    onPress={doSendNext}
+                  >
+                    <Text style={[styles.buttonLabel, styles.ethTypo1]}>Close</Text>
+                  </Pressable>
+                </LinearGradient>
+              </View>
+            </View>
+            {/* Send Confirm Transaction */}
+          </View>
+
+          {/* View Pop Up Copy Address */}
+          <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
+            <Image
+              style={styles.checkSvgrepoCom1Icon}
+              contentFit="cover"
+              source={require("../assets/ic_check.png")}
+            />
+            <Text style={styles.walletAddressCopied}>
+              Wallet address copied to clipboard
+            </Text>
           </View>
         </View>
-        {/* Send Confirm Transaction */}
-
-        {/* Send Confirm Transaction */}
-        <View style={[styles.frameView, !showSendResult && { display: "none" }]}>
-          <View>
-            <View style={styles.sendParent1}>
-              <Text style={[styles.send, styles.ethTypo1]}>Send</Text>
-              <View style={styles.youAreSending367WorthOfWrapper}>
-                <Text style={styles.youAreSendingContainer}>
-                  <Text style={styles.youAreSending}>
-                    Click transaction hash below{'\n'}
-                    to view on basescan
-                  </Text>
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.frameWrapper3}>
-            <View style={[styles.wrapperFlexBox]}>
-              <View
-                style={[
-                  styles.x37e5385aba3592d75436127c7184dWrapper,
-                  styles.frameParent2SpaceBlock,
-                ]}
-              >
-                <Text style={styles.walletAddress}>
-                  0x37E5385AbA3592D75436127C7184dA175574398e
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.buttonWrapper}>
-
-            <LinearGradient
-              colors={['#FC00A7', '#65EDE3']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.gradientBorder, styles.buttonSendConfirm]}
-
-            >
-              <Pressable
-                style={[{
-                  backgroundColor: Color.colorGray_100,
-                  height: 54, borderRadius: 8,
-                  flex: 1, alignItems: 'center', justifyContent: 'center'
-                }]}
-                onPress={doSendNext}
-              >
-                <Text style={[styles.buttonLabel, styles.ethTypo1]}>Close</Text>
-              </Pressable>
-            </LinearGradient>
-          </View>
-        </View>
-        {/* Send Confirm Transaction */}
-      </View>
-
-      {/* View Pop Up Copy Address */}
-      <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
-        <Image
-          style={styles.checkSvgrepoCom1Icon}
-          contentFit="cover"
-          source={require("../assets/ic_check.png")}
-        />
-        <Text style={styles.walletAddressCopied}>
-          Wallet address copied to clipboard
-        </Text>
-      </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -663,11 +673,6 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
   },
-  txtStyle: {
-    textAlign: "center",
-    color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
-  },
   txtTitle: {
     marginTop: 20,
     fontSize: FontSize.size_9xl,
@@ -675,13 +680,6 @@ const styles = StyleSheet.create({
     fontFamily: getFontFamily("500"),
     color: Color.darkInk,
     // position: "absolute",
-  },
-  txtTitle2: {
-    top: 60,
-    fontWeight: "700",
-    width: 272,
-    fontSize: FontSize.size_9xl,
-    position: "absolute",
   },
   imgNft: {
     // marginTop: -178,
@@ -705,49 +703,17 @@ const styles = StyleSheet.create({
     // position: "absolute",
     // overflow: "hidden",
   },
-  wrapper: {
-    paddingHorizontal: Padding.p_base,
-    backgroundColor: Color.colorGray_100,
-  },
   wrapperFlexBox: {
     width: "100%",
     paddingVertical: Padding.p_3xs,
     justifyContent: "center",
     alignItems: "center",
   },
-  container2: {
-    backgroundColor: Color.colorGray_200,
-    width: 90,
-    paddingHorizontal: Padding.p_21xl,
-  },
-  text: {
-    fontWeight: "600",
-    textAlign: "center",
-    color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
-    fontSize: FontSize.size_9xl,
-  },
   text1: {
     fontSize: FontSize.labelLarge_size,
   },
-  textTypo: {
-    lineHeight: 16,
-    textAlign: "center",
-    color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
-    fontWeight: "500",
-  },
-  theMaximumNumber: {
-    top: 588,
-    fontSize: FontSize.size_xs,
-    // display: "none",
-    width: 264,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-  },
   frameParentWallet: {
-    bottom: "5%",
+    bottom: 0,
     borderTopLeftRadius: Border.br_5xs,
     borderTopRightRadius: Border.br_5xs,
     backgroundColor: Color.colorWhitesmoke_100,
@@ -776,11 +742,6 @@ const styles = StyleSheet.create({
   row2: {
     marginTop: 5,
   },
-  walletTypo: {
-    textAlign: 'left',
-    fontSize: FontSize.labelLarge_size,
-    color: Color.darkInk,
-  },
   walletBalance: {
     fontFamily: getFontFamily("400"),
     fontWeight: "400",
@@ -794,18 +755,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: FontSize.labelLarge_size,
     color: Color.darkInk,
-  },
-  buttonBorder: {
-    borderWidth: 3,
-    borderColor: Color.colorDeeppink,
-    borderStyle: "solid",
-    flexDirection: "row",
-    borderRadius: Border.br_5xs,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  btnMyAssets: {
-    marginTop: 8
   },
   topUpWalletWrapper: {
     backgroundColor: Color.colorWhitesmoke_100,
@@ -875,32 +824,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 10,
   },
-  xedhv: {
-    fontSize: FontSize.labelLarge_size,
-    textAlign: "center",
-    color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
-    fontWeight: "500",
-  },
   copySvgrepoCom1Icon: {
     width: 18,
     height: 18,
     marginLeft: 4,
     overflow: "hidden",
-  },
-  frameContainer: {
-    marginTop: -500,
-    paddingTop: Padding.p_13xl,
-    paddingBottom: Padding.p_101xl,
-    paddingHorizontal: Padding.p_sm,
-    width: 390,
-    borderTopRightRadius: Border.br_5xs,
-    borderTopLeftRadius: Border.br_5xs,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: Color.colorGray_100,
-    top: "50%",
-    position: "absolute",
   },
   frameView: {
     zIndex: 0,
