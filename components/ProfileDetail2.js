@@ -13,6 +13,7 @@ import FullBio from "./FullBio";
 import PostList from "./PostList";
 import PostLikeList from "./PostLikeList";
 import { IMG_PROFILE } from "../Constant";
+import MintingList from "./MintilngList";
 
 const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
   const navigation = useNavigation();
@@ -101,15 +102,15 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
         setUsersession(user);
       })
     }, [])
-
     return (userInfo &&
       <View>
-        {/* <CrowdListHiring
+        <MintingList
         tab={4}
+        usersession={usersession}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} /> */}
+        isShowCreate={isShowCreate} />
       </View>)
 
   };
@@ -1041,7 +1042,7 @@ const styles = StyleSheet.create({
   },
   labelSmall: {
     color: '#ffffff', // Color of the tab labels
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "600"
   },
 });

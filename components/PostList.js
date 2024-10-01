@@ -221,16 +221,9 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
         handleDelete={confirmDelete}
       />
       {isShowCreate && (
-        <Modal
-        visible={isShowCreate}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setIsShowCreate(false)}
-      >
         <PostCreate
           usersession={usersession}
           setIsShowCreate={setIsShowCreate} />
-        </Modal>
       )}
       {!isShowCreate && usersession?.user_info?.user_id == userInfo?.user_id && (
         <ButtonFAB
@@ -239,6 +232,18 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
           doCreate={doCreate}
         />
       )}
+
+      
+      {/* <Modal
+        visible={isShowCreate}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setIsShowCreate(false)}
+      >
+        <PostCreate
+          usersession={usersession}
+          setIsShowCreate={setIsShowCreate} />
+        </Modal> */}
 
 
       
