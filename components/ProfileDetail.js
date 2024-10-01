@@ -12,6 +12,7 @@ import FullBio from "./FullBio";
 import PostList from "./PostList";
 import ProfileListLikes from "./ProfileListLikes";
 import ProfileListCrowdSource from "./ProfileListCrowdSource";
+import MintingList from "./MintilngList";
 
 const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const navigation = useNavigation();
@@ -357,7 +358,8 @@ const ThirdRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
 
   return (userInfo &&
     <View>
-      <ProfileListCrowdSource
+
+      <MintingList
         tab={4}
         usersession={usersession}
         userInfo={userInfo}
@@ -941,7 +943,7 @@ const styles = StyleSheet.create({
   },
   labelSmall: {
     color: '#ffffff', // Color of the tab labels
-    fontSize: 12
+    fontSize: 11
   },
 });
 

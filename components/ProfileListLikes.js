@@ -42,17 +42,17 @@ const ProfileListLikes = ({ tab, isProfile, usersession, userInfo }) => {
     setLoadingMore(true);
     let likes = [];
     try {
-      let _likes = await getItems('post');
+      // let _likes = await getItems('post');
+      // likes = [...likes, ..._likes];
+
+      let _likes = await getItems('hiring');
       likes = [...likes, ..._likes];
 
-      _likes = await getItems('hiring');
-      likes = [...likes, ..._likes];
+      // _likes = await getItems('event');
+      // likes = [...likes, ..._likes];
 
-      _likes = await getItems('event');
-      likes = [...likes, ..._likes];
-
-      _likes = await getItems('quest');
-      likes = [...likes, ..._likes];
+      // _likes = await getItems('quest');
+      // likes = [...likes, ..._likes];
 
       likes.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
 

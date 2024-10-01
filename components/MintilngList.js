@@ -1,20 +1,20 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, TouchableOpacity, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
 import { Color } from "../GlobalStyles";
-import PostSection from "../components/PostSection";
-import { convertTimestamp, getRandomNumber, logout } from "../Utils";
-import { IMG_PROFILE } from "../Constant";
+import { getRandomNumber, getRandomTimestamp, logout } from "../Utils";
+import { API_URL, IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
+import CrowdSectionHiring from "./CrowdSectionHiring";
 import PopupOption from "./PopupOption";
 import ButtonFAB from "./ButtonFAB";
-import PostCreate from "./PostCreate";
 import EmptyView from "./EmptyView";
+import MintingListData from "./MintingListData";
 
-const PostList = ({ tab, isProfile, usersession, userInfo }) => {
-  const { api } = useAuth();
+const MintingList = ({ tab, isProfile, usersession, userInfo }) => {
+  const { api, getOtherUser } = useAuth();
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
@@ -26,8 +26,6 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const flatListRef = useRef(null);
-
-  const [isShowCreate, setIsShowCreate] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -43,52 +41,31 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
     if (!userInfo) return;
     setLoadingMore(true);
     try {
-      let url = `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
-      let resp = await api.get(url);
-      let posts = resp.data.posts;
-
-      let _posts = [];
-      for (const key in posts) {
-        if (Object.hasOwnProperty.call(posts, key)) {
-          let like = getRandomNumber(0, 7);
-          let itemLikes = [];
-          for (let j = 0; j < like; j++) {
-            itemLikes.push({
-              name: `Name${j}`,
-              username: `@username${j}`,
-              image: IMG_PROFILE[getRandomNumber(0, 4)],
-              bio: `Founder at ChainCredit. #DYOR ${j}`,
-            })
-          }
-
-          const post = posts[key];
-          let item = {
-            id: key,
-            name: userInfo.name,
-            screen_name: `@${userInfo.screen_name}`,
-            image: userInfo.profile_image,
-            post_id: post.post_id,
-            text: post.post,
-            view: post.views,
-            like: post.likes,
-            liked_by_user: post.liked_by_user,
-            datetime: convertTimestamp(post.published_timestamp),
-            itemLikes: itemLikes
-          }
-          _posts.push(item);
-        }
-      }
-      setItems(_posts);
+      setItems([
+        {
+          from:"Hao",
+          to:"Budi"
+        },
+        {
+          from:"Andi",
+          to:"Chei"
+        },
+        
+      ])
     } catch (error) {
       if (error.isSessionExpired) {
         await logout(navigation);
       } else {
-        console.error("PostList-fetchItems-error", error)
+        console.error("HiringList-fetchItems-error", error)
       }
     } finally {
       setLoadingMore(false);
     }
   }
+
+  const handleDetail = (item) => {
+    navigation.push(`CrowdDetailHiring${tab}`, { tab, item });
+  };
 
   const onScroll = async () => {
     if (selectedItemIndex) {
@@ -112,12 +89,6 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
     }
   };
 
-  const handleDetail = (item) => {
-    if (isShowCreate) return;
-    console.log(`PostDetail${tab}`)
-    navigation.push(`PostDetail${tab}`, { tab, item });
-  };
-
   const handleMore = (event, index) => {
     if (selectedItemIndex == index) {
       setSelectedItemIndex(null);
@@ -128,7 +99,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
     const menuWidth = 190; // Adjust based on your menu width
     const menuHeight = 81; // Adjust based on your menu height
     let newLeft = pageX;
-    let newTop = pageY - 110; // Position the menu below the button
+    let newTop = pageY - 150; // Position the menu below the button
     let windowHeight = windowDimensions.height - 100;
 
     if (newLeft + menuWidth > windowDimensions.width) {
@@ -136,7 +107,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
     }
 
     if (pageY + menuHeight > windowHeight) {
-      newTop = pageY - 220;
+      newTop = pageY - 280;
     }
 
     if (isProfile) {
@@ -147,9 +118,33 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
     setSelectedItemIndex(index);
   };
 
-  const handleDelete = () => {
-    console.log(`Deleting item ${selectedItemIndex}`);
+  const handleEdit = () => {
+    navigation.push(`CrowdCreateHiring${tab}`, { tab, item: items[selectedItemIndex] });
     setSelectedItemIndex(null);
+  };
+
+  const handleDelete = async () => {
+    if (!userInfo) return;
+    try {
+      let item = items[selectedItemIndex];
+      let url = API_URL + `/crowdsource/hiring/delete`;
+      let body = {
+        id: item.id
+      }
+      let resp = await api.post(url, body);
+      if (resp.status == 200) {
+        Alert.alert("Your post has been deleted!");
+        fetchItems();
+      }
+    } catch (error) {
+      if (error.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.error("handleDelete-error", error)
+      }
+    } finally {
+      setSelectedItemIndex(null);
+    }
   };
 
   const confirmDelete = () => {
@@ -172,11 +167,41 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
   };
 
   const doCreate = () => {
-    setIsShowCreate(true);
+    navigation.push(`CrowdCreateHiring${tab}`, { tab });
   }
+
+  
+  const TabButtons = () => {
+    const [selectedTab, setSelectedTab] = useState('Collected');
+    return (
+      <View style={styles.tabContainer}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            selectedTab === 'Collected' && styles.selectedButton
+          ]}
+          onPress={() => setSelectedTab('Collected')}
+        >
+          <Text style={styles.text}>Collected</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={[
+            styles.button,
+            selectedTab === 'Holders' && styles.selectedButton
+          ]}
+          onPress={() => setSelectedTab('Holders')}
+        >
+          <Text style={styles.text}>Holders</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
 
   return (
     <View style={[isProfile ? styles.containerListProfile : styles.containerList]}>
+      <TabButtons/>
       <FlatList
         ref={flatListRef}
         style={styles.flat}
@@ -202,12 +227,12 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
         }
         renderItem={({ item, index }) => {
           return (
-            <PostSection
+            <MintingListData
               tab={tab}
               isDetail={false}
               index={index}
               item={item}
-              userInfo={usersession?.user_info}
+              userInfo={userInfo}
               onPress={() => handleDetail(item)}
               onMore={handleMore}
             />
@@ -215,38 +240,48 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
         }}
       />
       <PopupOption
-        showEdit={false}
+        showEdit={true}
         selectedItemIndex={selectedItemIndex}
         menuPosition={menuPosition}
+        handleEdit={handleEdit}
         handleDelete={confirmDelete}
       />
-      {isShowCreate && (
-        <Modal
-        visible={isShowCreate}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setIsShowCreate(false)}
-      >
-        <PostCreate
-          usersession={usersession}
-          setIsShowCreate={setIsShowCreate} />
-        </Modal>
-      )}
-      {!isShowCreate && usersession?.user_info?.user_id == userInfo?.user_id && (
+      {usersession?.user_info?.user_id == userInfo?.user_id && (
         <ButtonFAB
-          isTab={false}
-          isProfile={isProfile}
+          isTab={true}
+          isProfile={false}
           doCreate={doCreate}
         />
       )}
-
-
-      
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    marginVertical: 10,
+  },
+  button: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#575767', // Border color similar to the image
+    paddingVertical: 5,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.colorDarkslategray_100, // Darker background for selected button
+  },
+  selectedButton: {
+    backgroundColor: Color.colorBlack, // Background color for unselected button
+  },
+  text: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
   containerList: {
     width: "100%",
     height: "100%",
@@ -255,7 +290,7 @@ const styles = StyleSheet.create({
   },
   containerListProfile: {
     width: "100%",
-    height: "100%",
+    height: "55%",
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
   },
@@ -264,4 +299,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostList;
+export default MintingList;
