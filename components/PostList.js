@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
@@ -221,9 +221,16 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
         handleDelete={confirmDelete}
       />
       {isShowCreate && (
+        <Modal
+        visible={isShowCreate}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setIsShowCreate(false)}
+      >
         <PostCreate
           usersession={usersession}
           setIsShowCreate={setIsShowCreate} />
+        </Modal>
       )}
       {!isShowCreate && usersession?.user_info?.user_id == userInfo?.user_id && (
         <ButtonFAB
@@ -232,6 +239,9 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
           doCreate={doCreate}
         />
       )}
+
+
+      
     </View>
   );
 };
