@@ -10,8 +10,8 @@ const CrowdSectionEvent = ({ tab, isDetail, index, userInfo, item, onPress, onMo
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
 
   return (
-    <View style={styles.frame}>
-      <Pressable index={`event${item?.id}`} onPress={() => isDetail ? null : onPress()}>
+    <View style={styles.frame} index={`event${item?.id}`} >
+      <Pressable onPress={() => isDetail ? null : onPress()}>
         <View style={styles.frameParent}>
           <View style={styles.frameFlexBox}>
             <Image

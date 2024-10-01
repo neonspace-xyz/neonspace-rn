@@ -10,8 +10,8 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
 
   return (
-    <View style={styles.frame}>
-      <Pressable index={`hiring${item?.id}`} onPress={() => isDetail ? null : onPress()}>
+    <View style={styles.frame} index={`hiring${item?.id}`} >
+      <Pressable onPress={() => isDetail ? null : onPress()}>
         <View style={styles.frameParent}>
           <View style={styles.frameFlexBox}>
             <Image
