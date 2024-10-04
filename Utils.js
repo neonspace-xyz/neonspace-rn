@@ -93,21 +93,23 @@ export const processUserVerifiedList = (users) => {
   let names = '-';
   let images = [];
   try {
-    let _verifiedNameArr = [];
-    for (const user of users) {
-      _verifiedNameArr.push(`${truncateString(user.screen_name, 15)}`);
-      images.push(user.profile_image);
-      if (_verifiedNameArr.length == 2) {
-        break;
+    if(users){
+      let _verifiedNameArr = [];
+      for (const user of users) {
+        _verifiedNameArr.push(`${truncateString(user.screen_name, 15)}`);
+        images.push(user.profile_image);
+        if (_verifiedNameArr.length == 2) {
+          break;
+        }
       }
-    }
-    if (users?.length > 2) {
-      let sisa = userInfo.verified.length - 2;
-      _verifiedNameArr.push(`and ${sisa} other${sisa > 1 && 's'}`);
-    }
+      if (users?.length > 2) {
+        let sisa = userInfo.verified.length - 2;
+        _verifiedNameArr.push(`and ${sisa} other${sisa > 1 && 's'}`);
+      }
 
-    if (_verifiedNameArr.length > 0) {
-      names = _verifiedNameArr.join(",");
+      if (_verifiedNameArr.length > 0) {
+        names = _verifiedNameArr.join(",");
+      }
     }
   } catch (error) {
     console.error("processUserVerifiedList", error);

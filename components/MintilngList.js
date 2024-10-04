@@ -239,20 +239,6 @@ const MintingList = ({ tab, isProfile, usersession, userInfo }) => {
           )
         }}
       />
-      <PopupOption
-        showEdit={true}
-        selectedItemIndex={selectedItemIndex}
-        menuPosition={menuPosition}
-        handleEdit={handleEdit}
-        handleDelete={confirmDelete}
-      />
-      {usersession?.user_info?.user_id == userInfo?.user_id && (
-        <ButtonFAB
-          isTab={true}
-          isProfile={false}
-          doCreate={doCreate}
-        />
-      )}
     </View>
   );
 };
@@ -273,10 +259,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.colorDarkslategray_100, // Darker background for selected button
+    backgroundColor: Color.colorBlack, // Darker background for selected button
   },
   selectedButton: {
-    backgroundColor: Color.colorBlack, // Background color for unselected button
+    backgroundColor: Color.colorDarkslategray_100, // Background color for unselected button
   },
   text: {
     color: '#FFFFFF',

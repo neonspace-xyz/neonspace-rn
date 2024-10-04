@@ -13,6 +13,7 @@ import DropdownExample from "../components/DropdownExample";
 import CustomDropdown from "../components/CustomDropdown";
 import * as WebBrowser from 'expo-web-browser';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import * as Clipboard from 'expo-clipboard';
 
 const Wallet = ({ route }) => {
   const { tab } = route?.params;
@@ -30,6 +31,14 @@ const Wallet = ({ route }) => {
   const [showSuccessMint, setShowSuccessMint] = useState(false);
   const [userData, setUserData] = useState();
 
+  const doCopyWallet = async () => {
+    try {
+      await Clipboard.setStringAsync("0x37E5385AbA3592D75436127C7184dA175574398e");
+      setShowAddressCopied(!showAddressCopied);
+    } catch (error) {
+      console.error("doCopyWallet", error);
+    }
+  }
 
   useEffect(() => {
     getUser().then((user) => {
@@ -386,44 +395,6 @@ const Wallet = ({ route }) => {
 
                 </View>
                 <CustomDropdown />
-
-                {/* <View
-                style={[
-                  styles.selectCryptocurrencyParent,
-                  styles.parentSpaceBlock1,
-                ]}
-              >
-                <Text style={[styles.selectCryptocurrency]}>
-                  Select cryptocurrency
-                </Text>
-                <View style={[styles.ellipseParent, styles.parentSpaceBlock]}>
-                  <Image
-                    style={styles.frameChild}
-                    contentFit="cover"
-                    source={require("../assets/ic_circle_white.png")}
-                  />
-                  <Text style={[styles.eth1, styles.eth1Typo]}>ETH</Text>
-                  <Image
-                    style={styles.frameItem}
-                    contentFit="cover"
-                    source={require("../assets/ic_arrow_down_white.png")}
-                  />
-                </View>
-              </View> */}
-                {/* <View style={[styles.frameParent1, styles.parentSpaceBlock]}>
-              <View style={styles.frameView}>
-                <View style={[styles.parent, styles.parentLayout]}>
-                  <Text style={[styles.text, styles.ethTypo]}>0.1</Text>
-                  <Text style={styles.eth2}>ETH</Text>
-                </View>
-                <Text style={[styles.sgd, styles.sgdSpaceBlock]}>$367 SGD</Text>
-              </View>
-              <Image
-                style={styles.frameInner}
-                contentFit="cover"
-                source={require("../assets/ic_arrow_double_white.png")}
-              />
-            </View> */}
               </View>
               <View style={styles.frameParent3}>
                 <View style={styles.sendToParent}>
@@ -489,7 +460,8 @@ const Wallet = ({ route }) => {
                   </View>
                 </View>
                 <View style={[styles.wrapperFlexBox]}>
-                  <View
+                  <Pressable
+                  onPress={doCopyWallet}
                     style={[
                       styles.x37e5385aba3592d75436127c7184dWrapper,
                       styles.frameParent2SpaceBlock,
@@ -498,7 +470,7 @@ const Wallet = ({ route }) => {
                     <Text style={styles.walletAddress}>
                       0x37E5385AbA3592D75436127C7184dA175574398e
                     </Text>
-                  </View>
+                  </Pressable>
                 </View>
               </View>
               <View style={styles.frameWrapper2}>
@@ -834,6 +806,8 @@ const styles = StyleSheet.create({
     zIndex: 0,
     alignSelf: "stretch",
     alignItems: "center",
+    // borderWidth:5,
+    // borderColor:"blue"
   },
   baseNetwork: {
     fontWeight: "600",
@@ -1022,10 +996,12 @@ const styles = StyleSheet.create({
   },
   frameParentSend: {
     shadowColor: "rgba(0, 0, 0, 0.08)",
+    // borderColor:"blue",
+    // borderWidth:5,
     shadowRadius: 24,
     elevation: 24,
     paddingTop: Padding.p_xl,
-    paddingBottom: Padding.p_37xl,
+    paddingBottom: Padding.p_xl,
     paddingHorizontal: Padding.p_sm,
     borderTopRightRadius: Border.br_5xs,
     borderTopLeftRadius: Border.br_5xs,

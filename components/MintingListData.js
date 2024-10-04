@@ -18,7 +18,7 @@ const MintingListData = ({ tab, isDetail, index, userInfo, item, onPress, onMore
               <View style={styles.frameFlexBox}>
                 <Text style={[styles.name, styles.nameTypo]}>{item?.fullname}</Text>
                 <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                  {item?.from} minted {item?.to} bio
+                  {item?.from} minted {item?.to}'s bio
                 </Text>
               </View>             
             </View>

@@ -46,17 +46,17 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
 
       let data = [];
       let _users = {};
-      for (const _item of _items) {
-        if (_users[_item.owner_id]) continue;
+      // for (const _item of _items) {
+      //   if (_users[_item.owner_id]) continue;
 
-        let otherUser = await getOtherUser(_item.owner_id);
-        if (!otherUser) continue;
-        _users[_item.owner_id] = {
-          name: otherUser.name,
-          screen_name: otherUser.screen_name,
-          profile_image: otherUser.profile_image,
-        };
-      }
+      //   let otherUser = await getOtherUser(_item.owner_id);
+      //   if (!otherUser) continue;
+      //   _users[_item.owner_id] = {
+      //     name: otherUser.name,
+      //     screen_name: otherUser.screen_name,
+      //     profile_image: otherUser.profile_image,
+      //   };
+      // }
 
       for (const _item of _items) {
         let like = getRandomNumber(0, 7);
@@ -70,12 +70,12 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
           })
         }
 
-        let _user = _users[_item.owner_id];
+        // let _user = _users[_item.owner_id];
         let item = {
           id: _item.id,
-          fullname: _user?.name,
-          screen_name: `@${_user?.screen_name}`,
-          image: _user?.profile_image,
+          fullname: "Dummy",//_user?.name,
+          screen_name: "Dummy",//`@${_user?.screen_name}`,
+          image: "",//_user?.profile_image,
           user_id: _item.owner_id,
           name: _item.name,
           host: _item.host,

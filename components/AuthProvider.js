@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   api.interceptors.response.use(
     response => response,
     error => {
-      console.error("axios-error.response", error?.config?.url, error)
+      //console.error("axios-error.response", error?.config?.url, error)
       if (
         error.response.status === 500 &&
         (error.response.data.error === 'ExpiredSignature' || error.response.data.error === 'Session expired')
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
     const now = Date.now();
     const cooldown = 30000;
     if (now - lastCalled < cooldown) {
-      console.log("wait at least 30 second.");
+      //console.log("wait at least 30 second.");
       let user = await AsyncStorage.getItem("user");
       return JSON.parse(user);
     }

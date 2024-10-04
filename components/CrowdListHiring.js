@@ -46,17 +46,18 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
 
       let _jobs = [];
       let _users = {};
-      for (const job of jobs) {
-        if (_users[job.user_id]) continue;
+      
+      // for (const job of jobs) {
+      //   if (_users[job.user_id]) continue;
 
-        let otherUser = await getOtherUser(job.user_id);
-        if (!otherUser) continue;
-        _users[job.user_id] = {
-          name: otherUser.name,
-          screen_name: otherUser.screen_name,
-          profile_image: otherUser.profile_image,
-        };
-      }
+      //   let otherUser = await getOtherUser(job.user_id);
+      //   if (!otherUser) continue;
+      //   _users[job.user_id] = {
+      //     name: otherUser.name,
+      //     screen_name: otherUser.screen_name,
+      //     profile_image: otherUser.profile_image,
+      //   };
+      // }
 
       for (const job of jobs) {
         let like = getRandomNumber(0, 7);
@@ -70,13 +71,16 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
           })
         }
 
-        let _user = _users[job.user_id];
+        // let _user = _users[job.user_id];
 
         let item = {
           id: job.id,
-          fullname: _user?.name,
-          screen_name: `@${_user?.screen_name}`,
-          image: _user?.profile_image,
+          fullname:"Dummy",
+          screen_name:"Dummy",
+          image:"",
+          // fullname: _user?.name,
+          // screen_name: `@${_user?.screen_name}`,
+          // image: _user?.profile_image,
           user_id: job.user_id,
           title: job.title,
           company: job.company,

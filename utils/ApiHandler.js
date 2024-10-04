@@ -35,7 +35,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => response,
   error => {
-    console.error("axios-error.response", error.response.data.error)
+    //console.error("axios-error.response", error.response.data.error)
     if (
       error.response.status === 500 &&
       (error.response.data.error === 'ExpiredSignature' || error.response.data.error === 'Session expired')

@@ -82,12 +82,12 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
 
     return (userInfo &&
       <View>
-        {/* <CrowdListHiring
+        <CrowdListHiring
         tab={4}
         userInfo={userInfo}
         isProfile={false}
         isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} /> */}
+        isShowCreate={isShowCreate} />
       </View>)
 
   };
