@@ -163,7 +163,7 @@ export default function CrowdsourceView({ route }) {
         onIndexChange={setIndex}
         renderTabBar={renderTabBar}
         initialLayout={{ width: layout.width }}
-        style={{ marginBottom: -40 }}
+        style={{ marginBottom: -40, backgroundColor: Color.colorBlack }}
       />
     </SafeAreaView>
   );

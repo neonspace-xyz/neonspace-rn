@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, View, Pressable, TextInput, StatusBar, KeyboardAvoidingView, Platform } from "react-native";
+import { StyleSheet, Text, View, Pressable, TextInput, StatusBar, KeyboardAvoidingView, Platform, Keyboard } from "react-native";
 import { Color, FontSize, Border, FontFamily, Padding, getFontFamily } from "../GlobalStyles";
 import { Component_Max_Width } from "../Constant";
 import { useAuth } from "../components/AuthProvider";
@@ -62,6 +62,7 @@ const Wallet = ({ route }) => {
       setShowSendInput(!showSendInput);
     }
     else if (showSendInput) {
+      Keyboard.dismiss();
       setShowSendInput(!showSendInput);
       setShowSendConfirm(!showSendConfirm);
     }

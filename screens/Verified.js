@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
   },
   myProfileVerifiedBy: {
     flexDirection: "column",
-    backgroundColor: Color.colorGray_200,
+    backgroundColor: Color.colorGray_100,
     height: "100%",
     // borderColor:"red",
     // borderWidth:2,
