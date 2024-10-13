@@ -1,7 +1,7 @@
 import React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
 const NotificationSection = ({ item }) => {
@@ -25,7 +25,7 @@ const NotificationSection = ({ item }) => {
               ]}
             >
               <Text
-                style={[styles.notificationTitleHere, styles.notificationClr]}
+                style={[styles.notificationTitleHere]}
               >
                 {item?.title}
               </Text>
@@ -36,12 +36,12 @@ const NotificationSection = ({ item }) => {
               />
             </View>
             <Text
-              style={[styles.notificationDetailsAnd, styles.notificationClr]}
+              style={[styles.notificationDetailsAnd]}
             >
               {item?.description}
             </Text>
           </View>
-          <Text style={[styles.today238Pm, styles.notificationClr]}>
+          <Text style={[styles.today238Pm]}>
             {item?.datetime}
           </Text>
         </View>
@@ -92,7 +92,9 @@ const styles = StyleSheet.create({
   notificationTitleHere: {
     textAlign: "left",
     fontWeight: "500",
+    fontFamily: getFontFamily("500"),
     fontSize: FontSize.labelLarge_size,
+    color: Color.darkInk,
   },
   notificationClr: {
     color: Color.darkInk,
@@ -105,12 +107,18 @@ const styles = StyleSheet.create({
   notificationDetailsAnd: {
     fontSize: FontSize.size_sm,
     marginTop: 4,
+    fontWeight: "400",
+    fontFamily: getFontFamily("400"),
     textAlign: "left",
     alignSelf: "stretch",
+    color: Color.darkInk,
   },
   today238Pm: {
     fontSize: FontSize.size_xs,
     marginTop: 14,
+    fontWeight: "400",
+    fontFamily: getFontFamily("400"),
+    color: Color.darkInk,
     textAlign: "left",
     alignSelf: "stretch",
   },

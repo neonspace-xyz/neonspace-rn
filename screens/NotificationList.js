@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import moment from "moment";
-import EventSource from 'react-native-event-source';
+// import EventSource from 'react-native-event-source';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/core';
 import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator } from "react-native";
@@ -11,6 +11,8 @@ import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import NotificationSection from "../components/NotificationSection";
 import Header from "../components/Header";
 import EmptyView from "../components/EmptyView";
+import EventSource from "react-native-sse";
+import api from "../utils/ApiHandler";
 
 const NotificationList = ({ route }) => {
   const { tab } = route.params;
@@ -21,6 +23,35 @@ const NotificationList = ({ route }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isShowSearch, setIsShowSearch] = useState(false);
 
+  const addItem = (newItem) => {
+    // Use the spread operator to create a new array with the existing items and the new item
+    setItems(prevItems => [newItem, ...prevItems]);
+  };
+
+  const getNotification = async() => {
+    let url = `${API_URL}/event/stream`
+    let resp = await api.get(url);
+
+    let data = [];
+    for (let i = 0; i < resp.data.events.length; i++) {
+      let event = resp.data.events[i]
+      let momentDate = moment(event.created_at)
+      const isToday = momentDate.isSame(moment(), 'day');
+
+      data.push({
+        id: i,
+        title: `Notification `,
+        description: `${event.event_type}`,
+        datetime: isToday ? `Today ${momentDate.format("h:mm A")}` : momentDate.format("DD/MM/YYYY h:mm A"),
+      });
+    }
+    setItems(data);
+  }
+
+  useEffect(() => {
+    getNotification()    
+  })
+  /*
   useEffect(() => {
     console.log("Consume notification")
     const eventSource = new EventSource(`${API_URL}/event/stream`);
@@ -42,6 +73,7 @@ const NotificationList = ({ route }) => {
       eventSource.close(); // Clean up the connection when the component unmounts
     };
   }, []);
+  */
 
   const fetchItems = async () => {
     let data = [];
