@@ -38,10 +38,20 @@ const NotificationList = ({ route }) => {
       let momentDate = moment(event.created_at)
       const isToday = momentDate.isSame(moment(), 'day');
 
+      let eventType = ""
+      if(event.event_type == "user_inserted"){
+        eventType = "New User"
+      }
+      else if(event.event_type == "post_inserted"){
+        eventType = "New Post"
+      }
+      else if(event.event_type == "post_updated"){
+        eventType = "Post updated"
+      }
       data.push({
         id: i,
         title: `Notification `,
-        description: `${event.event_type}`,
+        description: `${eventType}`,
         datetime: isToday ? `Today ${momentDate.format("h:mm A")}` : momentDate.format("DD/MM/YYYY h:mm A"),
       });
     }

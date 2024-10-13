@@ -46,7 +46,7 @@ const NotificationSection = ({ item }) => {
           </Text>
         </View>
       </View>
-    </Pressable >
+    </Pressable>
   );
 };
 
@@ -66,10 +66,15 @@ const styles = StyleSheet.create({
   bellWrapper: {
     borderRadius: Border.br_5xs,
     backgroundColor: Color.colorTurquoise,
-    paddingHorizontal: Padding.p_4xs_8,
-    paddingVertical: Padding.p_7xs_5,
+    // paddingHorizontal: Padding.p_4xs_8,
+    // paddingVertical: Padding.p_7xs_5,
     alignItems: "center",
+    justifyContent: "center",
+    height:35,
+    width:35,
     flexDirection: "row",
+    // borderWidth:2,
+    // borderColor:'red'
   },
   bellIcon: {
     width: 17,
