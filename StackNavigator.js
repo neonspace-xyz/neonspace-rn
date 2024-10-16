@@ -31,15 +31,16 @@ const StackNavigator = () => {
     return (
     <Stack.Navigator>
       <Stack.Screen
-        name="ReferralCode"
-        component={ReferralCode}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
         name="Login"
         component={Login}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="ReferralCode"
+        component={ReferralCode}
+        options={{ headerShown: false }}
+      />
+
       <Stack.Screen
         name="Mint"
         component={Mint}

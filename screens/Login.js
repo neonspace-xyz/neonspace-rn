@@ -15,6 +15,8 @@ import { useLoading } from '../components/LoadingContext';
 const Login = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
+  const [preparing, setPreparing] = useState(false);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [oauthToken, setOauthToken] = useState('');
   const [oauthVerifier, setOAuthVerifier] = useState('');
@@ -104,7 +106,7 @@ const Login = () => {
       }
       else {
         hideLoading();
-        navigation.replace("Main");
+        navigation.replace("ReferralCode");
       }
     } catch (err) {
       if (err.isSessionExpired) {
@@ -152,6 +154,50 @@ const Login = () => {
       Linking.removeAllListeners('url', handleOpenURL);
     };
   }, []);
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        showLoading()
+        // await AsyncStorage.removeItem('usersession');
+        let usersession = await AsyncStorage.getItem("usersession");
+        usersession = JSON.parse(usersession);
+
+        if (usersession != 'undefined' && usersession != null) {
+          try {
+            let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
+            let resp = await api.get(url);
+            let data = resp.data;
+            if (data?.owned_nfts?.length == 0) {
+              navigation.navigate("Mint");
+            }
+            else {
+              if(data.invite_verified){
+                navigation.replace("Main");
+              }
+              else{
+                navigation.replace("ReferralCode");
+
+              }
+            }
+          } catch (err) {
+            if (err.isSessionExpired) {
+              await logout(navigation);
+            } else {
+              console.error("checkLoginStatus-getUser-error", err)
+            }
+          }
+        }
+        // else{
+        //   navigation.navigate("ReferralCode");
+        // }
+      } catch (error) {
+        console.error('checkLoginStatus-error:', error);
+      } finally {
+        hideLoading()
+      }
+    };
+    checkLoginStatus();
+  }, []);
 
   const openOAuthURL = async (oauthToken) => {
     try {
@@ -167,6 +213,7 @@ const Login = () => {
       console.error("openOAuthURL", error);
     }
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <Image

@@ -23,7 +23,7 @@ const ReferralCodeScreen = () => {
       const response = await fetch(`${API_URL}/user/verify?inviteCode=${referralCode}`);
       const json = await response.json();
       if (json.valid) {
-        navigation.replace("Login");
+        navigation.replace("Main");
       }
     } catch (error) {
       console.error("handleVerify", error);
@@ -33,41 +33,41 @@ const ReferralCodeScreen = () => {
     }
   };
 
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        setPreparing(true);
-        // await AsyncStorage.removeItem('usersession');
-        let usersession = await AsyncStorage.getItem("usersession");
-        usersession = JSON.parse(usersession);
+  // useEffect(() => {
+  //   const checkLoginStatus = async () => {
+  //     try {
+  //       setPreparing(true);
+  //       // await AsyncStorage.removeItem('usersession');
+  //       let usersession = await AsyncStorage.getItem("usersession");
+  //       usersession = JSON.parse(usersession);
 
-        if (usersession != 'undefined' && usersession != null) {
-          try {
-            let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
-            let resp = await api.get(url);
-            let data = resp.data;
-            if (data?.owned_nfts?.length == 0) {
-              navigation.navigate("Mint");
-            }
-            else {
-              navigation.replace("Main");
-            }
-          } catch (err) {
-            if (err.isSessionExpired) {
-              await logout(navigation);
-            } else {
-              console.error("checkLoginStatus-getUser-error", err)
-            }
-          }
-        }
-      } catch (error) {
-        console.error('checkLoginStatus-error:', error);
-      } finally {
-        setPreparing(false);
-      }
-    };
-    checkLoginStatus();
-  }, []);
+  //       if (usersession != 'undefined' && usersession != null) {
+  //         try {
+  //           let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
+  //           let resp = await api.get(url);
+  //           let data = resp.data;
+  //           if (data?.owned_nfts?.length == 0) {
+  //             navigation.navigate("Mint");
+  //           }
+  //           else {
+  //             navigation.replace("Main");
+  //           }
+  //         } catch (err) {
+  //           if (err.isSessionExpired) {
+  //             await logout(navigation);
+  //           } else {
+  //             console.error("checkLoginStatus-getUser-error", err)
+  //           }
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error('checkLoginStatus-error:', error);
+  //     } finally {
+  //       setPreparing(false);
+  //     }
+  //   };
+  //   checkLoginStatus();
+  // }, []);
 
   return (
     <View style={styles.container}>
