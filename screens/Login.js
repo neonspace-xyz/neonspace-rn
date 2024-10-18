@@ -106,7 +106,13 @@ const Login = () => {
       }
       else {
         hideLoading();
-        navigation.replace("ReferralCode");
+
+        if(data.invite_verified){
+          navigation.replace("Main");
+        }
+        else{
+          navigation.replace("ReferralCode");
+        }
       }
     } catch (err) {
       if (err.isSessionExpired) {
@@ -176,7 +182,6 @@ const Login = () => {
               }
               else{
                 navigation.replace("ReferralCode");
-
               }
             }
           } catch (err) {

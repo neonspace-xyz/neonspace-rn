@@ -114,7 +114,7 @@ const Main = () => {
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             navigation.navigate('Wallet', {
-              screen: 'Wallet3',
+              screen: 'MyAssets3',
               params: {
                 reset: true,
               },

@@ -7,8 +7,10 @@ import { API_URL, REFERAL_CODE } from '../Constant';
 import { logout } from '../Utils';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLoading } from '../components/LoadingContext';
+import { useAuth } from '../components/AuthProvider';
 
 const ReferralCodeScreen = () => {
+  const { api, getOtherUser } = useAuth();
   const navigation = useNavigation();
   const [preparing, setPreparing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -20,9 +22,9 @@ const ReferralCodeScreen = () => {
       setLoading(true);
       showLoading();
       // Handle the referral code verification here
-      const response = await fetch(`${API_URL}/user/verify?inviteCode=${referralCode}`);
-      const json = await response.json();
-      if (json.valid) {
+      const response = await api.get(`${API_URL}/user/verify?inviteCode=${referralCode}`);
+      // const json = await response.json();
+      if (response.data.valid) {
         navigation.replace("Main");
       }
     } catch (error) {

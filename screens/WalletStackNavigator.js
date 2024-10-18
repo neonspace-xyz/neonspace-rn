@@ -12,7 +12,7 @@ function WalletStackNavigator() {
   const dataToSend = { tab: 3 };
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Wallet3" component={Wallet} initialParams={dataToSend} />
+      {/* <Stack.Screen name="Wallet3" component={Wallet} initialParams={dataToSend} /> */}
       <Stack.Screen name="MyAssets3" component={MyAssets} initialParams={dataToSend} />
       <Stack.Screen name="QrCamera3" component={QrCamera} initialParams={dataToSend} />
       <Stack.Screen name="Webview3" component={Webview} initialParams={dataToSend} />

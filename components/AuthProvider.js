@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
         usersession = JSON.parse(usersession)
         if (usersession) {
           let token = usersession.jwt_token;
-          // console.log("token", token)
           if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
           }
@@ -48,10 +47,12 @@ export const AuthProvider = ({ children }) => {
         (error.response.data.error === 'ExpiredSignature' || error.response.data.error === 'Session expired')
       ) {
         setIsAuthenticated(false);
+        try{
         navigation.reset({
             index: 0,
             routes: [{ name: "Login" }]
           });
+        }catch(e){}
         // Handle the error in the component level
         return Promise.reject({ ...error, isSessionExpired: true });
       }
