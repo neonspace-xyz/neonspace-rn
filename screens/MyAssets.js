@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import { shortenAddress } from "../Utils";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Clipboard from 'expo-clipboard';
+import WalletComponent from "../components/WalletComponent";
 
 const MyAssets = () => {
   const route = useRoute();
@@ -69,7 +70,7 @@ const MyAssets = () => {
             }>Assets</Text>
             
             <Pressable
-            onPress={() => navigation.goBack()}>
+            onPress={() => navigation.navigate(`QrCamera${tab}`, { tab })}>
             <Image
               source={require("../assets/qr.png")}
               style={styles.headerImage}
@@ -193,6 +194,8 @@ const MyAssets = () => {
             Wallet address copied to clipboard
           </Text>
         </View>
+
+        <WalletComponent tab={tab}/>
     </SafeAreaView>
   )
 };

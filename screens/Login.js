@@ -11,6 +11,7 @@ import api from '../utils/ApiHandler';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLoading } from '../components/LoadingContext';
+import { logout } from '../Utils';
 
 const Login = () => {
   const navigation = useNavigation();

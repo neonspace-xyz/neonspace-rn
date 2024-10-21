@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet, View, Pressable } from "react-native";
+import { StyleSheet, View, Pressable, KeyboardAvoidingView, Platform } from "react-native";
 import { Color } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { useAuth } from "../components/AuthProvider";
@@ -23,15 +23,19 @@ const MyProfile = ({ route }) => {
       setUserInfo(user);
     });
   }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <Header
         tab={tab}
+        userInfo={userInfo}
         isHideList={!isShowSearch}
         isShowSearch={isShowSearch}
         setIsShowSearch={setIsShowSearch}
       />
+
+    {/* <KeyboardAvoidingView      
+      behavior="padding" keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    > */}
       <ProfileDetail
         tab={tab}
         userInfo={userInfo}
@@ -41,6 +45,7 @@ const MyProfile = ({ route }) => {
         isProfile={true}
         usersession={usersession}
         userInfo={userInfo} /> */}
+      {/* </KeyboardAvoidingView> */}
     </SafeAreaView>
   );
 };

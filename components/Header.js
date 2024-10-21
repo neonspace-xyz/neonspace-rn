@@ -8,7 +8,7 @@ import { useAuth } from "../components/AuthProvider";
 import UserSearchSection from "./UserSearchSection";
 import EmptyView from "./EmptyView";
 
-const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
+const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) => {
   const { api } = useAuth();
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
@@ -73,6 +73,23 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
     <View style={styles.container}>
       <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
       <View style={styles.header}>
+        <Pressable
+          onPress={() => navigation.openDrawer()} >
+        {userInfo?.profile_image ? (
+            <Image
+              style={[styles.myProfileItem]}
+              contentFit="cover"
+              source={userInfo.profile_image}              
+            />
+          ) : (
+            <Image
+              style={[styles.myProfileItem]}
+              contentFit="cover"
+              source={require("../assets/photo.png")}
+            />
+          )}
+        </Pressable>
+        
         <Pressable
           style={[styles.headerIcon, !isShowSearch && { display: "none" }]}
           onPress={() => handleBlurTextInput()}>
@@ -177,6 +194,12 @@ const styles = StyleSheet.create({
   },
   flat: {
     width: "100%"
+  },
+  myProfileItem: {
+    width: 32,
+    height: 32,
+    margin: 10,
+    borderRadius: 50
   },
 });
 

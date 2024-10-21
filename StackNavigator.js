@@ -8,7 +8,7 @@ import ReferralCode from './screens/ReferralCode';
 import { AuthProvider } from './components/AuthProvider';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import {Button, Image, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable} from 'react-native';
+import {Button, Image, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable, Alert} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {Color, getFontFamily} from './GlobalStyles';
 import { LoadingProvider } from './components/LoadingContext';
@@ -101,7 +101,7 @@ const StackNavigator = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
             navigation.navigate('Wallet', {
-              screen: 'Wallet3',
+              screen: 'MyAssets3',
               params: {
                 reset: true,
               },
