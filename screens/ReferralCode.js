@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import api from '../utils/ApiHandler';
 import { API_URL, REFERAL_CODE } from '../Constant';
 import { logout } from '../Utils';
@@ -29,6 +29,7 @@ const ReferralCodeScreen = () => {
       }
     } catch (error) {
       console.error("handleVerify", error);
+      Alert.alert('Verification Error', 'Invalid referral code').catch(err => console.log(err));
     } finally {
       setLoading(false);
       hideLoading();
@@ -82,22 +83,22 @@ const ReferralCodeScreen = () => {
         onChangeText={setReferralCode}
       />
       <LinearGradient
-          colors={['#FC00A7', '#65EDE3']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.gradientBorder}
-        >
-          <View style={styles.buttonInner}>
-            <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={handleVerify}
-              disabled={loading || preparing}
-            >
-              
-              <Text style={styles.buttonText}>{loading ? "Verifing" : "Verify"}</Text>
-            
-            </TouchableOpacity>
-          </View>
+        colors={['#FC00A7', '#65EDE3']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradientBorder}
+      >
+        <View style={styles.buttonInner}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={handleVerify}
+            disabled={loading || preparing}
+          >
+
+            <Text style={styles.buttonText}>{loading ? "Verifing" : "Verify"}</Text>
+
+          </TouchableOpacity>
+        </View>
       </LinearGradient>
     </View>
   );

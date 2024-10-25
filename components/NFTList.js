@@ -337,8 +337,8 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorGray_100,
   },
   containerList: {
-    flex: 1,
     width: "100%",
+    height: "60%",
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 10,

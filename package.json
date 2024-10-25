@@ -8,11 +8,12 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "build-android": "eas build -p android --profile preview",
-    "prebuild": "expo prebuild",
     "android-signin": "cd android && ./gradlew signinReport && cd ../",
     "android-clean": "cd android && ./gradlew clean && cd ../",
     "android-prebuild": "npx react-native bundle --platform android --dev false --entry-file App.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
-    "android-build": "cd android && ./gradlew assembleDebug && cd ../"
+    "android-build": "cd android && ./gradlew assembleDebug && cd ../",
+    "ios-build": "eas build --platform ios --local --profile production",
+    "submit-ios": "eas submit --platform ios --profile production"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.1",

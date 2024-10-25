@@ -29,7 +29,6 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
     { key: 'second', title: 'Crowdsource' },
-    { key: 'third', title: 'Minting' },
     { key: 'forth', title: 'Likes' },
   ]);
   const renderScene = SceneMap({
@@ -50,7 +49,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           route.key === 'second' // or use `route.title === 'Specific Tab'` or route index
             ? styles.labelSmall
             : styles.labelSmall;
-    
+
         return (
           <Text style={[customLabelStyle, { color }]}>
             {route.title}

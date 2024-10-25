@@ -4,8 +4,6 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SearchBar from "../components/SearchBar";
-import ProfileDetail from "../components/ProfileDetail";
 import TokenList from "../components/TokenList";
 import NFTList from "../components/NFTList";
 import { useAuth } from "../components/AuthProvider";
@@ -14,6 +12,7 @@ import { shortenAddress } from "../Utils";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Clipboard from 'expo-clipboard';
 import WalletComponent from "../components/WalletComponent";
+import Header from "../components/Header";
 
 const MyAssets = () => {
   const route = useRoute();
@@ -21,10 +20,10 @@ const MyAssets = () => {
 
   const navigation = useNavigation();
   const [isTokenList, setIsTokenList] = useState(true)
-  const {getUser} = useAuth();
+  const { getUser } = useAuth();
   const [userData, setUserData] = useState();
   const [showAddressCopied, setShowAddressCopied] = useState(false);
-
+  const [isShowSearch, setIsShowSearch] = useState(false);
   useEffect(() => {
     getUser().then((user) => {
       setUserData(user);
@@ -53,31 +52,14 @@ const MyAssets = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-    <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
-    
-      <View style={styles.header}>
-          <Pressable
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../assets/back.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>
-          
-          <Text style={
-            [styles.editProfile, styles.timeTypo]
-            // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
-            }>Assets</Text>
-            
-            <Pressable
-            onPress={() => navigation.navigate(`QrCamera${tab}`, { tab })}>
-            <Image
-              source={require("../assets/qr.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>
-      </View>   
-
+      <Header
+        tab={tab}
+        userInfo={userData}
+        isHideList={!isShowSearch}
+        isShowSearch={isShowSearch}
+        setIsShowSearch={setIsShowSearch}
+      />
+      <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
       <View style={{
         justifyContent: "space-between",
         alignItems: "center",
@@ -85,29 +67,29 @@ const MyAssets = () => {
         backgroundColor: Color.colorGray_100,
         // borderColor:"red",
         // borderWidth:2,
-        padding:15,
-        gap:15
+        padding: 15,
+        gap: 15
       }}>
-      
-      { 
-        userData && userData?.owned_nfts[0]?.token_ids[0]?.image ? 
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            source={userData?.owned_nfts[0]?.token_ids[0]?.image}
-          /> 
-        :
-          <Image
-            style={styles.frameChild}
-            contentFit="cover"
-            source={require("../assets/photo.png")}
-          /> 
-      }
+
+        {
+          userData && userData?.owned_nfts[0]?.token_ids[0]?.image ?
+            <Image
+              style={styles.frameChild}
+              contentFit="cover"
+              source={userData?.owned_nfts[0]?.token_ids[0]?.image}
+            />
+            :
+            <Image
+              style={styles.frameChild}
+              contentFit="cover"
+              source={require("../assets/photo.png")}
+            />
+        }
 
         <View style={styles.frameWrapper}>
           <View style={styles.neonrabbit287Parent}>
             <Text style={[styles.neonrabbit287]}>
-            {userData && userData?.owned_nfts[0]?.token_ids[0]?.name}
+              {userData && userData?.owned_nfts[0]?.token_ids[0]?.name}
             </Text>
             <View style={styles.walletAddress0xedhvGroup}>
               <Text
@@ -132,70 +114,72 @@ const MyAssets = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>        
-      </View>
-
-      <View style={{flexDirection: "row", backgroundColor: Color.colorGray_100}}>
-      <LinearGradient
-        colors={['#FC00A7', '#65EDE3']}
-        style={[styles.wrapperFlexBox]}
-        start={{ x: 0, y: 0.5 }} // Left side
-        end={{ x: 1, y: 0.5 }}   // Right side
-      >
-        <Pressable
-          onPress={() => {setIsTokenList(true)}}
-          style={[{
-            width:"100%",
-            height:"100%",
-            marginBottom:isTokenList ? 3 : 0,
-            justifyContent: "center",    
-            alignItems: "center",
-            flexDirection: "row",
-            color:Color.darkInk, backgroundColor:Color.colorGray_100}]}
-        >
-          
-              <Text style={styles.token}>Token</Text>
-             
-        </Pressable>
-      </LinearGradient>
-      
-      <LinearGradient
-        colors={['#FC00A7', '#65EDE3']}
-        style={[styles.wrapperFlexBox]}
-        start={{ x: 0, y: 0.5 }} // Left side
-        end={{ x: 1, y: 0.5 }}   // Right side
-      >
-        <Pressable
-            onPress={() => {setIsTokenList(false)}}
-            style={[{
-            width:"100%",
-            height:"100%",
-            marginBottom:!isTokenList ? 3 : 0,
-            justifyContent: "center",    
-            alignItems: "center",
-            flexDirection: "row",
-            color:Color.darkInk, backgroundColor:Color.colorGray_100}]}
-          >
-              <Text style={styles.token}>NFT</Text>
-        </Pressable>
-      </LinearGradient>
-      </View>
-
-      {isTokenList && userData && <TokenList itemsData={userData.owned_tokens}/>}
-      {!isTokenList && userData && <NFTList tab={tab} itemsData={userData.owned_nfts}/>}
-      
-      <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
-          <Image
-            style={styles.checkSvgrepoCom1Icon}
-            contentFit="cover"
-            source={require("../assets/ic_check.png")}
-          />
-          <Text style={styles.walletAddressCopied}>
-            Wallet address copied to clipboard
-          </Text>
         </View>
+      </View>
 
-        <WalletComponent tab={tab}/>
+      <View style={{ flexDirection: "row", backgroundColor: Color.colorGray_100 }}>
+        <LinearGradient
+          colors={['#FC00A7', '#65EDE3']}
+          style={[styles.wrapperFlexBox]}
+          start={{ x: 0, y: 0.5 }} // Left side
+          end={{ x: 1, y: 0.5 }}   // Right side
+        >
+          <Pressable
+            onPress={() => { setIsTokenList(true) }}
+            style={[{
+              width: "100%",
+              height: "100%",
+              marginBottom: isTokenList ? 3 : 0,
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+              color: Color.darkInk, backgroundColor: Color.colorGray_100
+            }]}
+          >
+
+            <Text style={styles.token}>Token</Text>
+
+          </Pressable>
+        </LinearGradient>
+
+        <LinearGradient
+          colors={['#FC00A7', '#65EDE3']}
+          style={[styles.wrapperFlexBox]}
+          start={{ x: 0, y: 0.5 }} // Left side
+          end={{ x: 1, y: 0.5 }}   // Right side
+        >
+          <Pressable
+            onPress={() => { setIsTokenList(false) }}
+            style={[{
+              width: "100%",
+              height: "100%",
+              marginBottom: !isTokenList ? 3 : 0,
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+              color: Color.darkInk, backgroundColor: Color.colorGray_100
+            }]}
+          >
+            <Text style={styles.token}>NFT</Text>
+          </Pressable>
+        </LinearGradient>
+      </View>
+
+      {isTokenList && userData && <TokenList itemsData={userData.owned_tokens} />}
+      {!isTokenList && userData && <NFTList tab={tab} itemsData={userData.owned_nfts} />}
+
+      <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
+        <Image
+          style={styles.checkSvgrepoCom1Icon}
+          contentFit="cover"
+          source={require("../assets/ic_check.png")}
+        />
+        <Text style={styles.walletAddressCopied}>
+          Wallet address copied to clipboard
+        </Text>
+      </View>
+
+      <WalletComponent tab={tab} />
     </SafeAreaView>
   )
 };
@@ -497,12 +481,19 @@ const MyAssets = () => {
 
 
 const styles = StyleSheet.create({
-  container:{
-//     // backgroundColor: Color.colorGray_100,
-    backgroundColor: Color.colorBlack,
-    width:"100%",
-    height:"100%",
-    flex:1
+  container: {
+    flex: 1,
+    width: "100%",
+    overflow: "hidden",
+    // justifyContent: 'center',
+    // alignItems: "center",
+    backgroundColor: Color.colorGray_100,
+  },
+  assetContainer: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    backgroundColor: Color.colorGray_200,
   },
   header: {
     // marginTop: 60,
@@ -521,10 +512,10 @@ const styles = StyleSheet.create({
     fontSize: FontSize.labelLarge_size,
     // marginLeft: 14,
     // flex: 1,
-    flexGrow:1, color:"white", 
-    textAlign:"center", 
-    paddingTop:3, 
-    alignItems:"center",
+    flexGrow: 1, color: "white",
+    textAlign: "center",
+    paddingTop: 3,
+    alignItems: "center",
     color: Color.darkInk,
     fontWeight: "600",
   },
@@ -589,10 +580,10 @@ const styles = StyleSheet.create({
   wrapperFlexBox: {
     // paddingVertical: Padding.p_7xs,
     // paddingHorizontal: Padding.p_xs,
-    justifyContent: "center",    
+    justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    height:30,
+    height: 30,
     flex: 1,
   },
   textSpaceBlock: {
@@ -620,12 +611,12 @@ const styles = StyleSheet.create({
   walletBalance: {
     fontSize: FontSize.labelLarge_size,
     fontFamily: getFontFamily("400"),
-    fontWeight:"400"
+    fontWeight: "400"
   },
   walletAddress: {
     fontSize: FontSize.labelLarge_size,
     fontFamily: getFontFamily("600"),
-    fontWeight:"600"
+    fontWeight: "600"
   },
 
   walletBalance01Container: {

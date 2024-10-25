@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useAuth } from "../components/AuthProvider";
 import moment from "moment";
 // import EventSource from 'react-native-event-source';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,19 +17,26 @@ import api from "../utils/ApiHandler";
 
 const NotificationList = ({ route }) => {
   const { tab } = route.params;
+  const { getUser } = useAuth();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [isShowSearch, setIsShowSearch] = useState(false);
+  const [userInfo, setUserInfo] = useState();
+  useEffect(() => {
+    getUser().then((user) => {
+      setUserInfo(user);
+    });
+  }, []);
 
   const addItem = (newItem) => {
     // Use the spread operator to create a new array with the existing items and the new item
     setItems(prevItems => [newItem, ...prevItems]);
   };
 
-  const getNotification = async() => {
+  const getNotification = async () => {
     let url = `${API_URL}/event/stream`
     let resp = await api.get(url);
 
@@ -39,27 +47,33 @@ const NotificationList = ({ route }) => {
       const isToday = momentDate.isSame(moment(), 'day');
 
       let eventType = ""
-      if(event.event_type == "user_inserted"){
-        eventType = "New User"
+      let notificationTitle = ""
+      if (event.event_type == "user_inserted") {
+        notificationTitle = `New User`
+        eventType = `${event.payload.user.name} joined the community`
       }
-      else if(event.event_type == "post_inserted"){
-        eventType = "New Post"
+      else if (event.event_type == "post_inserted") {
+        notificationTitle = `New Post`
+        eventType = `${event.payload.user.name} created a new post`
       }
-      else if(event.event_type == "post_updated"){
-        eventType = "Post updated"
+      else if (event.event_type == "post_updated") {
+        notificationTitle = `Post Updated`
+        eventType = "Updaed a post"
       }
       data.push({
         id: i,
-        title: `Notification `,
+        title: notificationTitle,
+        name: event.payload.user.name,
         description: `${eventType}`,
         datetime: isToday ? `Today ${momentDate.format("h:mm A")}` : momentDate.format("DD/MM/YYYY h:mm A"),
+        image: event.payload.user.profile_image_url,
       });
     }
     setItems(data);
   }
 
   useEffect(() => {
-    getNotification()    
+    getNotification()
   })
   /*
   useEffect(() => {
@@ -122,6 +136,7 @@ const NotificationList = ({ route }) => {
         isHideList={false}
         isShowSearch={isShowSearch}
         setIsShowSearch={setIsShowSearch}
+        userInfo={userInfo}
       />
       <View style={[styles.containerList, isShowSearch && { display: "none" }]}>
         <FlatList

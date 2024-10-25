@@ -8,14 +8,18 @@ import { useAuth } from "../components/AuthProvider";
 import Header from "../components/Header";
 
 const PostHome = ({ route }) => {
-  const { getSession } = useAuth();
+  const { getSession, getUser } = useAuth();
   const { tab } = route?.params;
   const [usersession, setUsersession] = useState();
+  const [userInfo, setUserInfo] = useState();
   const [isShowSearch, setIsShowSearch] = useState(false);
 
   useEffect(() => {
     getSession().then((data) => {
       setUsersession(data);
+    });
+    getUser().then((user) => {
+      setUserInfo(user);
     });
   }, []);
 
@@ -23,6 +27,7 @@ const PostHome = ({ route }) => {
     <SafeAreaView style={styles.container}>
       <Header
         tab={tab}
+        userInfo={userInfo}
         isHideList={!isShowSearch}
         isShowSearch={isShowSearch}
         setIsShowSearch={setIsShowSearch}

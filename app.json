@@ -13,32 +13,41 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.neonspace.app"
+      "bundleIdentifier": "com.neonspace.app",
+      "buildNumber": "1",
+      "icon": "./assets/ios-icon.png"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/android-adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
       },
-      "package": "com.devlegion.neonspace"
+      "package": "com.neonspace.app",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "icon": "./assets/android-icon.png"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font",
-      ["expo-camera",
+      [
+        "expo-camera",
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
-        }]
+        }
+      ]
     ],
     "extra": {
       "eas": {
-        "projectId": "0b725655-ab3c-452c-90c4-8527afe6c7e2"
+        "projectId": "2992adfe-8afc-4458-972a-b455f7c83318"
       }
     },
-    "owner": "billy93"
+    "owner": "syahrul12345"
   }
 }

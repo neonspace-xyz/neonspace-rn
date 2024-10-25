@@ -79,7 +79,7 @@ const Login = () => {
       if (resp.status === 200 && resp?.data) {
         let accessToken = resp.data;
         await AsyncStorage.setItem("usersession", JSON.stringify(accessToken));
-        await  getUser(accessToken); 
+        await getUser(accessToken);
       }
       else {
         Alert.alert("Login Failed", "Failed to get access token");
@@ -108,10 +108,10 @@ const Login = () => {
       else {
         hideLoading();
 
-        if(data.invite_verified){
+        if (data.invite_verified) {
           navigation.replace("Main");
         }
-        else{
+        else {
           navigation.replace("ReferralCode");
         }
       }
@@ -178,10 +178,10 @@ const Login = () => {
               navigation.navigate("Mint");
             }
             else {
-              if(data.invite_verified){
+              if (data.invite_verified) {
                 navigation.replace("Main");
               }
-              else{
+              else {
                 navigation.replace("ReferralCode");
               }
             }
@@ -237,7 +237,7 @@ const Login = () => {
       <Image
         style={[styles.imgLogo]}
         contentFit="cover"
-        source={require("../assets/ic_logo.png")}
+        source={require("../assets/ios-icon.png")}
       />
 
       <LinearGradient
