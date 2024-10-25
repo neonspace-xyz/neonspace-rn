@@ -265,7 +265,7 @@ const Login = () => {
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalBackground}>
+        {/* <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Enter OAuth Verifier</Text>
             <TextInput
@@ -286,7 +286,7 @@ const Login = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </View> */}
       </Modal>
     </SafeAreaView>
   );

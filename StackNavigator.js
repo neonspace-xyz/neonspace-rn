@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './screens/Login';
@@ -8,16 +8,15 @@ import ReferralCode from './screens/ReferralCode';
 import { AuthProvider } from './components/AuthProvider';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import {Button, Image, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable, Alert} from 'react-native';
+import { Button, Image, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable, Alert, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {Color, getFontFamily} from './GlobalStyles';
+import { Color, getFontFamily } from './GlobalStyles';
 import { LoadingProvider } from './components/LoadingContext';
-
+import { shortenAddress } from './Utils';
+import { useAuth } from './components/AuthProvider';
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Drawer = createDrawerNavigator();
-  const [userInfo, setUserInfo] = useState();
-
   const linking = {
     prefixes: ['exp://192.168.1.4:8081'],
     config: {
@@ -26,191 +25,162 @@ const StackNavigator = () => {
       },
     },
   };
+
   const StackNavigatorComponent = () => {
-    
     return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="ReferralCode"
-        component={ReferralCode}
-        options={{ headerShown: false }}
-      />
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReferralCode"
+          component={ReferralCode}
+          options={{ headerShown: false }}
+        />
 
-      <Stack.Screen
-        name="Mint"
-        component={Mint}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Main"
-        component={Main}
-        options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Mint"
+          component={Mint}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{ headerShown: false }} />
 
-    </Stack.Navigator>
-  )};
+      </Stack.Navigator>
+    )
+  };
 
   const CustomDrawerContent = (props) => {
-    
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
-
+    const [userInfo, setUserInfo] = useState();
+    const { getUser } = useAuth();
+    useEffect(() => {
+      getUser().then((user) => {
+        setUserInfo(user);
+      });
+    }, [])
     return (
-    <SafeAreaView style={styles.drawerContent}>
-      <View style={styles.drawerSection}>
-
-        {userInfo?.profile_image ? (
+      <SafeAreaView style={styles.drawerContent}>
+        <View style={styles.drawerSection}>
           <Image
             style={[styles.myProfileItem]}
             contentFit="cover"
-            source={userInfo.profile_image}
+            source={userInfo?.profile_image ? { uri: userInfo.profile_image } : require("./assets/photo.png")}
           />
-        ) : (
-          <Image
-            style={[styles.myProfileItem]}
-            contentFit="cover"
-            source={require("./assets/photo.png")}
-          />
-        )}
+          <Text style={{ color: "white" }}>{userInfo?.name}</Text>
+          <Text style={{ color: "white" }}>{userInfo?.screen_name}</Text>
+          <Text style={{ color: "white" }}>{userInfo?.wallet_address ? shortenAddress(userInfo.wallet_address) : '0x00'}</Text>
 
-        <Text style={{color:"white"}}>Name</Text>
-        <Text style={{color:"white"}}>@endlessmeeee</Text>
-        <Text style={{color:"white"}}>Wallet Address: 0xe...dhv</Text>
-
-        <View style={{marginTop:50}}>
-          <TouchableOpacity onPress={() => {
-            setModalVisible(true)
-          }
-          }>
-            <Text style={styles.drawerMenu}>Post Crowdsource</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate('Profile', {
-              screen: 'MyProfile4',
-              params: {
-                reset: true,
-              },
-            });
-          }
-          }>
-            <Text style={styles.drawerMenu}>My Full Bio</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate('Wallet', {
-              screen: 'MyAssets3',
-              params: {
-                reset: true,
-              },
-            });
-          }
-          }>
-            <Text style={styles.drawerMenu}>Wallet</Text>
-          </TouchableOpacity>
-        </View>
-        {/* <Text style={styles.title}>Custom Drawer</Text>
+          <View style={{ marginTop: 50 }}>
+            <TouchableOpacity onPress={() => {
+              setModalVisible(true)
+            }
+            }>
+              <Text style={styles.drawerMenu}>Post Crowdsource</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate('Profile', {
+                screen: 'MyProfile4',
+                params: {
+                  reset: true,
+                },
+              });
+            }
+            }>
+              <Text style={styles.drawerMenu}>My Full Bio</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate('Wallet', {
+                screen: 'MyAssets3',
+                params: {
+                  reset: true,
+                },
+              });
+            }
+            }>
+              <Text style={styles.drawerMenu}>Wallet</Text>
+            </TouchableOpacity>
+          </View>
+          {/* <Text style={styles.title}>Custom Drawer</Text>
         <Button title="Home" onPress={() => props.navigation.navigate('Home')} />
         <Button title="Profile" onPress={() => props.navigation.navigate('Profile')} /> */}
-      </View>
+        </View>
 
-      <Modal
+        <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
+            setModalVisible(false);
           }}>
-        <View style={modalStyles.centeredView}>
-          <View style={modalStyles.modalView}>
+          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={modalStyles.centeredView}>
+              <TouchableWithoutFeedback>
+                <View style={modalStyles.modalView}>
+                  <Text style={modalStyles.title}>Please choose{"\n"}Crowdsource type</Text>
 
-            <Text style={modalStyles.title}>Please choose{"\n"}Crowdsource type</Text>
+                  <View style={{ alignSelf: "center", gap: 10, width: "100%" }}>
+                    <TouchableOpacity style={modalStyles.button} onPress={() => {
+                      navigation.navigate('Crowdsource', {
+                        screen: 'CrowdCreateHiring5',
+                        params: {
+                          reset: true,
+                        },
+                      });
+                      setModalVisible(false);
+                    }
+                    }>
+                      <Text style={modalStyles.buttonText}>Hiring</Text>
+                    </TouchableOpacity>
 
-            <View style={{alignSelf:"center", gap:10, width:"100%"}}>
-            <TouchableOpacity style={modalStyles.button} onPress={() => {
-              navigation.navigate('Crowdsource', {
-                screen: 'CrowdCreateHiring5',
-                params: {
-                  reset: true,
-                },
-              });
-              setModalVisible(false);
-            }
-            }>
-              <Text style={modalStyles.buttonText}>Hiring</Text>
-            </TouchableOpacity>
+                    <TouchableOpacity style={modalStyles.button} onPress={() => {
+                      navigation.navigate('Crowdsource', {
+                        screen: 'CrowdCreateEvent5',
+                        params: {
+                          reset: true,
+                        },
+                      });
+                      setModalVisible(false);
+                    }
+                    }>
+                      <Text style={modalStyles.buttonText}>Event</Text>
+                    </TouchableOpacity>
 
-            <TouchableOpacity style={modalStyles.button} onPress={() => {
-              navigation.navigate('Crowdsource', {
-                screen: 'CrowdCreateEvent5',
-                params: {
-                  reset: true,
-                },
-              });
-              setModalVisible(false);
-            }
-            }>
-              <Text style={modalStyles.buttonText}>Event</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={modalStyles.button} onPress={() => {
-              navigation.navigate('Crowdsource', {
-                screen: 'CrowdCreateQuest5',
-                params: {
-                  reset: true,
-                },
-              });
-              setModalVisible(false);
-            }
-            }>
-              <Text style={modalStyles.buttonText}>Quest</Text>
-            </TouchableOpacity>
+                    <TouchableOpacity style={modalStyles.button} onPress={() => {
+                      navigation.navigate('Crowdsource', {
+                        screen: 'CrowdCreateQuest5',
+                        params: {
+                          reset: true,
+                        },
+                      });
+                      setModalVisible(false);
+                    }
+                    }>
+                      <Text style={modalStyles.buttonText}>Quest</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
             </View>
-            {/*<Pressable*/}
-            {/*    style={[modalStyles.button, modalStyles.buttonClose]}*/}
-            {/*    onPress={() => setModalVisible(!modalVisible)}>*/}
-            {/*  <Text style={modalStyles.textStyle}>Hide Modal</Text>*/}
-            {/*</Pressable>*/}
-          </View>
-        </View>
-      </Modal>
-    </SafeAreaView>
-  )};
+          </TouchableWithoutFeedback>
+        </Modal>
+      </SafeAreaView>
+    );
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer linking={linking}>
         <AuthProvider>
-        <LoadingProvider>
-          {/* {StackNavigatorComponent()} */}
-          {/* <StackNavigatorComponent/> */}
-          <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
-            <Drawer.Screen name="DrawerMain" component={StackNavigatorComponent} options={{ headerShown: false }} />
-          </Drawer.Navigator>
-          {/* <Stack.Navigator>
-            <Stack.Screen
-              name="ReferralCode"
-              component={ReferralCode}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Mint"
-              component={Mint}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Main"
-              component={Main}
-              options={{ headerShown: false }} />
-
-          </Stack.Navigator> */}
+          <LoadingProvider>
+            <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
+              <Drawer.Screen name="DrawerMain" component={StackNavigatorComponent} options={{ headerShown: false }} />
+            </Drawer.Navigator>
           </LoadingProvider>
         </AuthProvider>
       </NavigationContainer>
@@ -284,10 +254,9 @@ const modalStyles = StyleSheet.create({
   },
 });
 
-
 const styles = StyleSheet.create({
-  drawerMenu:{
-    color:"white", fontWeight: "900", marginTop: 20
+  drawerMenu: {
+    color: "white", fontWeight: "900", marginTop: 20
   },
   drawerContent: {
     flex: 1,
@@ -315,5 +284,4 @@ const styles = StyleSheet.create({
 
 });
 
-
-export default StackNavigator
+export default StackNavigator;
