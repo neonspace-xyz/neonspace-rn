@@ -28,6 +28,7 @@ export default function App() {
   }, [error]);
 
   if (!fontsLoaded) {
+    console.log("fontsLoaded", fontsLoaded);
     return null;
   }
   return (
