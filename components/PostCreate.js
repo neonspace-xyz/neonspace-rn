@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, TextInput, Platform, KeyboardAvoidingView, Alert, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Pressable, TextInput, Platform, KeyboardAvoidingView, Alert, TouchableOpacity, Keyboard } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { API_URL, Component_Max_Width, MAX_CHAR_POST } from "../Constant";
 import { useAuth } from "./AuthProvider";
@@ -9,10 +9,26 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
   const { api } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const numberOfLines = Platform.select({
     ios: 4, // Set numberOfLines to 4 on iOS
     android: message ? Math.min(4, message.split('\n').length) : 1, // Let it be undefined on Android to allow multiline
   });
+  useEffect(() => {
+    const keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      (e) => setKeyboardHeight(e.endCoordinates.height)
+    );
+    const keyboardWillHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      () => setKeyboardHeight(0)
+    );
+
+    return () => {
+      keyboardWillShowListener.remove();
+      keyboardWillHideListener.remove();
+    };
+  }, []);
 
   const doHideModal = () => {
     if (loading) return;
@@ -49,10 +65,11 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
   }
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.postModalParent, styles.bottomNavPosition]}
-      behavior="padding" keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
-    >
+    <View style={[
+      styles.postModalParent,
+      styles.bottomNavPosition,
+      { height: keyboardHeight == 0 ? 375 : 320 + keyboardHeight } // Adjust the height based on keyboard
+    ]}>
       <View style={styles.postModal}>
         <View style={[styles.frameParent9, styles.parentFlexBox]}>
           <View style={styles.ellipseParent}>
@@ -123,7 +140,7 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
           Save as draft
         </Text>
       </TouchableOpacity>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 

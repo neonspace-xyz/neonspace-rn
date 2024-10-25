@@ -78,9 +78,20 @@ const Login = () => {
       if (resp.status === 200 && resp?.data) {
         let accessToken = resp.data;
         await AsyncStorage.setItem("usersession", JSON.stringify(accessToken));
-        await  getUser(accessToken); 
-      }
-      else {
+        const user = await getUser(accessToken);
+        hideLoading();
+
+        // Navigate based on user data
+        if (user.invite_verified) {
+          if (user?.owned_nfts?.length === 0) {
+            navigation.replace("Mint");
+          } else {
+            navigation.replace("Main");
+          }
+        } else {
+          navigation.replace("ReferralCode");
+        }
+      } else {
         Alert.alert("Login Failed", "Failed to get access token");
         hideLoading();
       }
@@ -89,7 +100,6 @@ const Login = () => {
       Alert.alert("Login Failed", "Failed to get access token");
       console.error("getTwitterAccessToken-error", error);
       hideLoading();
-      return null;
     }
   };
 
@@ -99,29 +109,14 @@ const Login = () => {
       let resp = await api.get(url);
       let data = resp.data;
       await AsyncStorage.setItem("user", JSON.stringify(data));
-
-      if (data?.owned_nfts?.length == 0) {
-        hideLoading();
-        navigation.navigate("Mint");
-      }
-      else {
-        hideLoading();
-
-        if(data.invite_verified){
-          navigation.replace("Main");
-        }
-        else{
-          navigation.replace("ReferralCode");
-        }
-      }
+      return data;
     } catch (err) {
       if (err.isSessionExpired) {
-        hideLoading();
         await logout(navigation);
       } else {
-        hideLoading();
         console.error("checkLoginStatus-getUser-error", err)
       }
+      throw err;
     }
   }
 
@@ -167,7 +162,7 @@ const Login = () => {
         // await AsyncStorage.removeItem('usersession');
         let usersession = await AsyncStorage.getItem("usersession");
         usersession = JSON.parse(usersession);
-
+        console.log(usersession);
         if (usersession != 'undefined' && usersession != null) {
           try {
             let url = `/user/getUser?userId=${usersession.user_info.user_id}`;
@@ -177,10 +172,13 @@ const Login = () => {
               navigation.navigate("Mint");
             }
             else {
-              if(data.invite_verified){
+              console.log("data", data);
+              if (data.invite_verified) {
+                console.log("Going to main page");
                 navigation.replace("Main");
               }
-              else{
+              else {
+                console.log("Going to referral page");
                 navigation.replace("ReferralCode");
               }
             }
@@ -236,7 +234,7 @@ const Login = () => {
       <Image
         style={[styles.imgLogo]}
         contentFit="cover"
-        source={require("../assets/ic_logo.png")}
+        source={require("../assets/ios-icon.png")}
       />
 
       <LinearGradient
@@ -264,7 +262,7 @@ const Login = () => {
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalBackground}>
+        {/* <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Enter OAuth Verifier</Text>
             <TextInput
@@ -285,7 +283,7 @@ const Login = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </View> */}
       </Modal>
     </SafeAreaView>
   );

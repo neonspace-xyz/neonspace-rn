@@ -5,15 +5,14 @@ import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../
 import { useNavigation } from "@react-navigation/core";
 
 const NotificationSection = ({ item }) => {
-
   return (
     <Pressable index={item?.id}>
       <View style={[styles.frameSpaceBlock]}>
         <View style={styles.bellWrapper}>
           <Image
-            style={styles.bellIcon}
+            style={[styles.bellIcon, styles.circleImage]}
             contentFit="cover"
-            source={require("../assets/ic_bell.png")}
+            source={item.image}
           />
         </View>
         <View style={styles.frameContainer}>
@@ -65,20 +64,18 @@ const styles = StyleSheet.create({
   },
   bellWrapper: {
     borderRadius: Border.br_5xs,
-    backgroundColor: Color.colorTurquoise,
-    // paddingHorizontal: Padding.p_4xs_8,
-    // paddingVertical: Padding.p_7xs_5,
+    backgroundColor: Color.transparent,
     alignItems: "center",
     justifyContent: "center",
-    height:35,
-    width:35,
     flexDirection: "row",
-    // borderWidth:2,
-    // borderColor:'red'
   },
   bellIcon: {
-    width: 17,
-    height: 24,
+    width: 50,
+    height: 50,
+  },
+  circleImage: {
+    borderRadius: 25, // Half of the width and height
+    overflow: 'hidden',
   },
   frameContainer: {
     marginLeft: 10,

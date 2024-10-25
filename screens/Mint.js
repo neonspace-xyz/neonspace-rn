@@ -13,6 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "react-native";
 
 const Mint = () => {
+  console.log('in mint')
   const { api, getUser } = useAuth();
   const navigation = useNavigation();
   const [userInfo, setUserInfo] = useState();
@@ -68,26 +69,26 @@ const Mint = () => {
   useEffect(() => {
     const checkMintStatus = async () => {
       try {
-          let checkUrl = `/nft/mintStatus?op_hash=${hash}`
-          let checkStatus = await api.get(checkUrl);
-          let response = checkStatus.data;
-          if(response?.status == "SUCCESS"){            
-            getUser().then((data) => {
-              setUserInfo(data);
-              if (data?.owned_nfts?.length > 0) {
-                let ownedNft = data?.owned_nfts[0];
-                if (ownedNft?.token_ids?.length > 0) {
-                  setNft(ownedNft.token_ids[0]);
-                  setShowSuccessMint(!showSuccessMint);
-                  setIsLoading(false);
-                }
+        let checkUrl = `/nft/mintStatus?op_hash=${hash}`
+        let checkStatus = await api.get(checkUrl);
+        let response = checkStatus.data;
+        if (response?.status == "SUCCESS") {
+          getUser().then((data) => {
+            setUserInfo(data);
+            if (data?.owned_nfts?.length > 0) {
+              let ownedNft = data?.owned_nfts[0];
+              if (ownedNft?.token_ids?.length > 0) {
+                setNft(ownedNft.token_ids[0]);
+                setShowSuccessMint(!showSuccessMint);
+                setIsLoading(false);
               }
-            });
-          }
-          else{
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-            await checkMintStatus();
-          }
+            }
+          });
+        }
+        else {
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+          await checkMintStatus();
+        }
       } catch (error) {
         setIsLoading(false);
         console.error('Error fetching mint status:', error);
@@ -95,7 +96,7 @@ const Mint = () => {
       }
     };
 
-    if(hash){
+    if (hash) {
       checkMintStatus();
     }
   }, [hash]);
@@ -242,7 +243,7 @@ const Mint = () => {
 
   const handleOutsidePress = () => {
     console.log("outside press")
-    if(showSuccessMint){
+    if (showSuccessMint) {
       if (userInfo?.owned_nfts?.length == 0) {
         //navigation.navigate("Mint");
         setShowSuccessMint(!showSuccessMint);
@@ -257,15 +258,15 @@ const Mint = () => {
     console.log("inside success mint")
   }
 
-  if(isLoading){
-    return <LoadingScreen/>
+  if (isLoading) {
+    return <LoadingScreen />
   }
 
   return (
     <TouchableWithoutFeedback onPress={handleOutsidePress}>
-    <View style={styles.container}>
-    
-      <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
+      <View style={styles.container}>
+
+        <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
         <Image
           style={styles.imgBackground}
           contentFit="cover"
@@ -324,15 +325,15 @@ const Mint = () => {
               style={styles.gradientBorder}
             >
             <View style={styles.buttonInner}> */}
-              <Pressable
-                style={[styles.topUpWalletWrapper, styles.buttonBorder]}
-                onPress={() => setShowReceive(!showReceive)}
-              >
-                <Text style={[styles.topUpWallet, styles.walletTypo]}>
-                  Top up wallet
-                </Text>
-              </Pressable>
-              {/* </View>
+            <Pressable
+              style={[styles.topUpWalletWrapper, styles.buttonBorder]}
+              onPress={() => setShowReceive(!showReceive)}
+            >
+              <Text style={[styles.topUpWallet, styles.walletTypo]}>
+                Top up wallet
+              </Text>
+            </Pressable>
+            {/* </View>
             </LinearGradient> */}
           </View>
 
@@ -342,17 +343,17 @@ const Mint = () => {
             end={{ x: 1, y: 1 }}
             style={styles.gradientBorder}
           >
-          <View style={styles.buttonInner}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => doMint()}
-            >
-            <Text style={[styles.buttonLabel, styles.eth1Typo]}>
-              Mint Neonrabbits
-            </Text>
-          </TouchableOpacity>
-          </View>
-        </LinearGradient>
+            <View style={styles.buttonInner}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => doMint()}
+              >
+                <Text style={[styles.buttonLabel, styles.eth1Typo]}>
+                  Mint Neonrabbits
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
         </View>
 
         {/* View Receive/Top Up Wallet */}
@@ -451,7 +452,7 @@ const Mint = () => {
             </View>
           </View>
         </TouchableWithoutFeedback>
-    </View>
+      </View>
     </TouchableWithoutFeedback>
   );
 };
@@ -619,8 +620,8 @@ const styles = StyleSheet.create({
     // borderWidth:5,
     padding: 2, // Lebar border gradien
     borderRadius: 10,
-    width:"100%",
-    marginTop:24
+    width: "100%",
+    marginTop: 24
   },
   button: {
     // borderWidth: 3,
@@ -629,7 +630,7 @@ const styles = StyleSheet.create({
     // height: 54,
     paddingHorizontal: Padding.p_5xl,
     paddingVertical: Padding.p_xs,
-    borderRadius:10,
+    borderRadius: 10,
     // marginTop: 24,
     // borderColor: Color.colorDeeppink,
     // borderStyle: "solid",
