@@ -5,6 +5,12 @@ import Wallet from './Wallet';
 import MyAssets from './MyAssets';
 import QrCamera from './QrCamera';
 import Webview from '../components/Webview';
+import PostDetail from './PostDetail';
+import PostLike from './PostLike';
+import ChatList from './ChatList';
+import ChatView from './ChatView';
+import OtherProfile from './OtherProfile';
+import Verified from './Verified';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,12 +24,12 @@ function WalletStackNavigator() {
       <Stack.Screen name="Webview3" component={Webview} initialParams={dataToSend} />
       
 
-      {/* <Stack.Screen name="PostDetail1" component={PostDetail} initialParams={dataToSend} />
-      <Stack.Screen name="PostLike1" component={PostLike} initialParams={dataToSend} />
-      <Stack.Screen name="ChatList1" component={ChatList} initialParams={dataToSend} />
-      <Stack.Screen name="ChatView1" component={ChatView} initialParams={dataToSend} />
-      <Stack.Screen name="OtherProfile1" component={OtherProfile} initialParams={dataToSend} />
-      <Stack.Screen name="Verified1" component={Verified} /> */}
+      <Stack.Screen name="PostDetail3" component={PostDetail} initialParams={dataToSend} />
+      <Stack.Screen name="PostLike3" component={PostLike} initialParams={dataToSend} />
+      <Stack.Screen name="ChatList3" component={ChatList} initialParams={dataToSend} />
+      <Stack.Screen name="ChatView3" component={ChatView} initialParams={dataToSend} />
+      <Stack.Screen name="OtherProfile3" component={OtherProfile} initialParams={dataToSend} />
+      <Stack.Screen name="Verified3" component={Verified} />
     </Stack.Navigator>
   );
 }

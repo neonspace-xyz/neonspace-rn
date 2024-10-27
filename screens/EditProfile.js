@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, StatusBar, Switch, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
+import { Padding, FontSize, Color, FontFamily, Border, getFontFamily, StyleContent } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
@@ -91,7 +91,7 @@ backgroundColor: Color.colorGray_100,
         <Text style={[styles.editPicture, styles.save1Typo]}>Edit picture</Text>
 
       </View>
-      <View style={{marginTop:10, padding:10, backgroundColor: Color.colorBlack}}>
+      <View style={[StyleContent, {marginTop:10, padding:10, backgroundColor: Color.colorBlack}]}>
         <View
           style={[
             styles.showMyWalletAddressParent,
@@ -135,8 +135,6 @@ backgroundColor: Color.colorGray_100,
           </Text> */}
         </View>
       </View>
-      
-      
     </SafeAreaView>
   )
 };
@@ -144,8 +142,7 @@ backgroundColor: Color.colorGray_100,
 
 const styles = StyleSheet.create({
   container:{
-    // backgroundColor: Color.colorGray_100,
-    backgroundColor: Color.colorBlack,
+    backgroundColor: Color.colorGray_100,
     width:"100%",
     height:"100%",
     flex:1

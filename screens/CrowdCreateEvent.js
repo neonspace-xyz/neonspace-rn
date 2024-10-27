@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StyleSheet, Text, View, Pressable, Alert, Platform, KeyboardAvoidingView, TouchableOpacity, Button } from "react-native";
-import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle, Padding, Border, getFontFamily } from "../GlobalStyles";
+import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle, Padding, Border, getFontFamily, StyleContent } from "../GlobalStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../components/AuthProvider";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
@@ -132,7 +132,7 @@ const CrowdCreateEvent = () => {
           {/* {item ? "Edit Event" : "Create Event"} */}
         </Text>
       </View>
-      <KeyboardAvoidingView behavior="padding" style={{ width: "100%", flex: 1 }}>
+      <KeyboardAvoidingView behavior="padding" style={[StyleContent, { width: "100%", flex: 1 }]}>
         <ScrollView
           style={styles.frame}
           ref={scrollViewRef}
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     justifyContent: 'flex-start',
     alignItems: "center",
-    backgroundColor: Color.colorGray_200,
+    backgroundColor: Color.colorGray_100,
   },
   frame: {
     width: "100%",

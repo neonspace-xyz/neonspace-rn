@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, StatusBar, Switch, TextInput, FlatList, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
+import { Padding, FontSize, Color, FontFamily, Border, getFontFamily, StyleContent } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
@@ -67,16 +67,16 @@ const Skill = () => {
         </TouchableOpacity>
       </View>
 
-      <FlatList
-        data={data}
-        ListEmptyComponent={() => {
-          return <EmptyView loadingMore={false} />
-        }}
-        renderItem={({ item }) => <Item name={item.name} />}
-        keyExtractor={(item) => item.id}
-      />
-
-
+      <View style={[StyleContent, {paddingTop: 4}]}>
+        <FlatList
+          data={data}
+          ListEmptyComponent={() => {
+            return <EmptyView loadingMore={false} />
+          }}
+          renderItem={({ item }) => <Item name={item.name} />}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
     </SafeAreaView>
   )
 };
@@ -84,8 +84,7 @@ const Skill = () => {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: Color.colorGray_100,
-    backgroundColor: Color.colorBlack,
+    backgroundColor: Color.colorGray_100,
     width: "100%",
     height: "100%",
     flex: 1

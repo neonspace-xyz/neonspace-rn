@@ -30,7 +30,7 @@ const Login = () => {
       console.log("doLogin-token", _oauthToken);
       if (_oauthToken) {
         console.log("link", `${TWITTER_OAUTH}${_oauthToken}`)
-        setModalVisible(true);
+        // setModalVisible(true);
         setOauthToken(_oauthToken);
         openOAuthURL(_oauthToken);
         // navigation.replace("Mint");
@@ -265,7 +265,7 @@ const Login = () => {
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}
       >
-        {/* <View style={styles.modalBackground}>
+        <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Enter OAuth Verifier</Text>
             <TextInput
@@ -286,7 +286,7 @@ const Login = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </View> */}
+        </View>
       </Modal>
     </SafeAreaView>
   );

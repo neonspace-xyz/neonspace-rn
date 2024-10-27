@@ -3,7 +3,7 @@ import { Image, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, V
 import { useNavigation, useRoute } from '@react-navigation/core';
 import ChatSectionBubble from '../components/ChatSectionBubble';
 import ChatSectionBubbleSelf from '../components/ChatSectionBubbleSelf';
-import { Border, Color, FontFamily, FontSize, StyleHeaderImg, StyleHeaderTitle, StyleHeaderView } from '../GlobalStyles';
+import { Border, Color, FontFamily, FontSize, StyleContent, StyleHeaderImg, StyleHeaderTitle, StyleHeaderView } from '../GlobalStyles';
 import { getRandomNumber, getRandomTimestamp, logout } from '../Utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CHAT_OFFSET, WS_URL } from '../Constant';
@@ -66,31 +66,31 @@ const ChatDetail = () => {
   }, []);
 
   useEffect(() => {
-    if (!usersession?.jwt_token) return;
-    // console.log("to", userInfo.user_id);
-    // console.log("token", usersession.jwt_token);
-    // console.log("offset", CHAT_OFFSET);
-    const ws = new WebSocket(`${WS_URL}/chat/start?to=${userInfo?.user_id}&token=${usersession.jwt_token}&offset=${CHAT_OFFSET}`);
+    // if (!usersession?.jwt_token) return;
+    // // console.log("to", userInfo.user_id);
+    // // console.log("token", usersession.jwt_token);
+    // // console.log("offset", CHAT_OFFSET);
+    // const ws = new WebSocket(`${WS_URL}/chat/start?to=${userInfo?.user_id}&token=${usersession.jwt_token}&offset=${CHAT_OFFSET}`);
 
-    ws.onopen = () => {
-      console.log('Connected to WebSocket server');
-    };
+    // ws.onopen = () => {
+    //   console.log('Connected to WebSocket server');
+    // };
 
-    ws.onmessage = (e) => {
-      let newMessage = JSON.parse(e.data);
-      let _message = JSON.parse(newMessage.message);
-      newMessage['message'] = _message;
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    };
+    // ws.onmessage = (e) => {
+    //   let newMessage = JSON.parse(e.data);
+    //   let _message = JSON.parse(newMessage.message);
+    //   newMessage['message'] = _message;
+    //   setMessages((prevMessages) => [...prevMessages, newMessage]);
+    // };
 
-    ws.onclose = () => {
-      console.log('Disconnected from WebSocket server');
-      Alert.alert("Disconnected");
-    };
+    // ws.onclose = () => {
+    //   console.log('Disconnected from WebSocket server');
+    //   Alert.alert("Disconnected");
+    // };
 
-    setSocket(ws);
+    // setSocket(ws);
 
-    return () => ws.close();
+    // return () => ws.close();
   }, [usersession]);
 
   useEffect(() => {
@@ -160,7 +160,7 @@ const ChatDetail = () => {
         </Pressable>
       </View>
 
-      <KeyboardAvoidingView behavior="padding" style={{ width: "100%", flex: 1 }}>
+      <KeyboardAvoidingView behavior="padding" style={[StyleContent]}>
         <ScrollView
           ref={scrollViewRef}
           style={styles.scrollView}
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     justifyContent: 'flex-start',
     alignItems: "center",
-    backgroundColor: Color.colorGray_200,
+    backgroundColor: Color.colorGray_100,
   },
   container_empty: {
     justifyContent: 'center',

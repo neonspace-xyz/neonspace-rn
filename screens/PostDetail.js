@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StyleSheet, Text, View, Pressable, Dimensions, TouchableOpacity, Alert } from "react-native";
-import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle } from "../GlobalStyles";
+import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle, StyleContent } from "../GlobalStyles";
 import PostSection from "../components/PostSection";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../components/AuthProvider";
@@ -82,20 +82,22 @@ const PostDetail = () => {
           Post Details
         </Text>
       </View>
-      <PostSection
-        tab={tab}
-        isDetail={true}
-        index={0}
-        userInfo={userInfo}
-        item={item}
-        onMore={handleMore}
-      />
       <PopupOption
         showEdit={false}
         selectedItemIndex={selectedItemIndex}
         menuPosition={menuPosition}
         handleDelete={confirmDelete}
       />
+      <View style={StyleContent}>
+        <PostSection
+          tab={tab}
+          isDetail={true}
+          index={0}
+          userInfo={userInfo}
+          item={item}
+          onMore={handleMore}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -107,7 +109,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     justifyContent: 'flex-start',
     alignItems: "center",
-    backgroundColor: Color.colorGray_200,
+    backgroundColor: Color.colorGray_100,
   },
   save1Typo: {
     textAlign: "center",

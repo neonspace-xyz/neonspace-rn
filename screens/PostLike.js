@@ -2,7 +2,7 @@ import * as React from "react";
 import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StyleSheet, Text, View, Pressable, FlatList } from "react-native";
-import { Color, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle } from "../GlobalStyles";
+import { Color, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle, StyleContent } from "../GlobalStyles";
 import PostLikeSection from "../components/PostLikeSection";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PostLikeList from "../components/PostLikeList";
@@ -26,9 +26,11 @@ const PostLike = () => {
           Liked By
         </Text>
       </View>
-      <PostLikeList
-        tab={tab}
-        itemLikes={itemLikes} />
+      <View style={StyleContent}>
+        <PostLikeList
+          tab={tab}
+          itemLikes={itemLikes} />
+      </View>
       {/* <View style={[styles.containerList]}>
         <FlatList
           style={styles.flat}
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     justifyContent: 'flex-start',
     alignItems: "center",
-    backgroundColor: Color.colorGray_200,
+    backgroundColor: Color.colorGray_100,
   },
   containerList: {
     width: "100%",

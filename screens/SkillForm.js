@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Switch, TouchableOpacity, Pressable, Image, ScrollView } from 'react-native';
-import { Color, FontSize, getFontFamily } from '../GlobalStyles';
+import { Color, FontSize, getFontFamily, StyleContent } from '../GlobalStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
 
@@ -11,52 +11,44 @@ const SkillForm = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <Pressable
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../assets/back.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>
-          
-          <Text style={
-            [styles.title]
-            // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
-            }>Skill</Text>
-            
-          
-          <View style={styles.headerImage}>
+      <View style={styles.header}>
+        <Pressable
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={require("../assets/back.png")}
+            style={styles.headerImage}
+          />
+        </Pressable>
 
-          </View>
-      </View> 
+        <Text style={
+          [styles.title]
+          // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
+        }>Skill</Text>
+        <View style={styles.headerImage}>
+        </View>
+      </View>
 
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-
+      <ScrollView style={[styles.scrollView, StyleContent]} contentContainerStyle={styles.scrollContent}>
         <View style={styles.formContainer}>
-
-
-
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.input} placeholder="Tokenomics" placeholderTextColor="#ccc" />
+          <View style={styles.inputContainer}>
+            <TextInput style={styles.input} placeholder="Tokenomics" placeholderTextColor="#ccc" />
+          </View>
+          <TouchableOpacity style={styles.deleteButton}>
+            <Text style={styles.deleteButtonText}>Delete expertise</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.deleteButton}>
-          <Text style={styles.deleteButtonText}>Delete expertise</Text>
-        </TouchableOpacity>
-        </View>
-      </ScrollView> 
+      </ScrollView>
     </SafeAreaView>
 
   );
 };
 
 const styles = StyleSheet.create({
-  container:{
-    // backgroundColor: Color.colorGray_100,
-    backgroundColor: Color.colorBlack,
-    width:"100%",
-    height:"100%",
-    flex:1
+  container: {
+    backgroundColor: Color.colorGray_100,
+    width: "100%",
+    height: "100%",
+    flex: 1
   },
   formContainer: {
     padding: 20,
@@ -125,14 +117,14 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
-  title:{
+  title: {
     fontSize: FontSize.labelLarge_size,
     // marginLeft: 14,
     // flex: 1,
-    flexGrow:1, 
-    textAlign:"center", 
-    paddingTop:3, 
-    alignItems:"center",
+    flexGrow: 1,
+    textAlign: "center",
+    paddingTop: 3,
+    alignItems: "center",
     color: Color.darkInk,
     fontWeight: "600",
     fontFamily: getFontFamily("600")

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StyleSheet, Text, View, Pressable, Dimensions, Alert } from "react-native";
-import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle } from "../GlobalStyles";
+import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle, StyleContent } from "../GlobalStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CrowdSectionQuest from "../components/CrowdSectionQuest";
 import { useAuth } from "../components/AuthProvider";
@@ -108,15 +108,6 @@ const CrowdDetailQuest = () => {
           Quest
         </Text>
       </View>
-      <CrowdSectionQuest
-        tab={tab}
-        isDetail={true}
-        index={0}
-        item={item}
-        userInfo={userInfo}
-        onPress={() => handleDetail(item)}
-        onMore={handleMore}
-      />
       <PopupOption
         showEdit={true}
         selectedItemIndex={selectedItemIndex}
@@ -124,6 +115,17 @@ const CrowdDetailQuest = () => {
         handleEdit={handleEdit}
         handleDelete={confirmDelete}
       />
+      <View style={StyleContent}>
+        <CrowdSectionQuest
+          tab={tab}
+          isDetail={true}
+          index={0}
+          item={item}
+          userInfo={userInfo}
+          onPress={() => handleDetail(item)}
+          onMore={handleMore}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     justifyContent: 'flex-start',
     alignItems: "center",
-    backgroundColor: Color.colorGray_200,
+    backgroundColor: Color.colorGray_100,
   },
   save1Typo: {
     textAlign: "center",

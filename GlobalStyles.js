@@ -128,7 +128,7 @@ export const styleHeaderBackIcon = {
   width: "100%",
   height: "100%",
 }
-  
+
 export const StyleTextTitle = {
   textAlign: "center",
   fontWeight: "400",
@@ -136,7 +136,7 @@ export const StyleTextTitle = {
   fontFamily: FontFamily.helvetica,
   color: Color.darkInk,
 };
-  
+
 export const StyleTextTitle2 = {
   textAlign: "center",
   fontWeight: "400",
@@ -144,7 +144,7 @@ export const StyleTextTitle2 = {
   fontFamily: FontFamily.helvetica,
   color: Color.darkInk,
 };
-  
+
 export const StyleButtonBack = {
   width: 32,
   height: 30,
@@ -160,6 +160,12 @@ export const StyleHeaderView = {
   flexDirection: 'row',
   padding: 14,
   backgroundColor: Color.colorGray_100,
+}
+
+export const StyleContent = {
+  width: "100%",
+  height: "100%",
+  backgroundColor: Color.colorBlack,
 }
 
 export const StyleHeaderImg = {

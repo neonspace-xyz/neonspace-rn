@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Switch, TouchableOpacity, Pressable, Image, ScrollView } from 'react-native';
-import { Color, FontSize, getFontFamily } from '../GlobalStyles';
+import { Color, FontSize, getFontFamily, StyleContent } from '../GlobalStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
 
@@ -11,99 +11,98 @@ const ExperienceForm = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <Pressable
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../assets/back.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>
-          
-          <Text style={
-            [styles.title]
-            // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
-            }>Experience</Text>
-            
-          
-          <View style={styles.headerImage}>
+      <View style={styles.header}>
+        <Pressable
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={require("../assets/back.png")}
+            style={styles.headerImage}
+          />
+        </Pressable>
 
-          </View>
-      </View> 
+        <Text style={
+          [styles.title]
+          // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
+        }>Experience</Text>
 
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+
+        <View style={styles.headerImage}>
+
+        </View>
+      </View>
+
+      <ScrollView style={[styles.scrollView, StyleContent]} contentContainerStyle={styles.scrollContent}>
 
         <View style={styles.formContainer}>
 
 
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Title</Text>
-          <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc" />
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Title</Text>
+            <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc" />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Company/Project Name</Text>
+            <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc" />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Employment Type</Text>
+            <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc" />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Location</Text>
+            <TextInput style={styles.input} placeholder="APAC" placeholderTextColor="#ccc" />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Start Date</Text>
+            <TextInput style={styles.input} placeholder="Input link" placeholderTextColor="#ccc" />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.label}>Current role</Text>
+            <Switch
+              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              thumbColor={isCurrentRole ? '#f5dd4b' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={isCurrentRole}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>End Date</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Input link"
+              placeholderTextColor="#ccc"
+              editable={!isCurrentRole} // Disable End Date input if "Current role" is active
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Description</Text>
+            <TextInput
+              style={[styles.input, styles.description]}
+              placeholder="Lorem ipsum"
+              placeholderTextColor="#ccc"
+              multiline
+              maxLength={1000}
+            />
+            <Text style={styles.charCount}>30/1000</Text>
+          </View>
+          <TouchableOpacity style={styles.deleteButton}>
+            <Text style={styles.deleteButtonText}>Delete experience</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Company/Project Name</Text>
-          <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc" />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Employment Type</Text>
-          <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc" />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Location</Text>
-          <TextInput style={styles.input} placeholder="APAC" placeholderTextColor="#ccc" />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Start Date</Text>
-          <TextInput style={styles.input} placeholder="Input link" placeholderTextColor="#ccc" />
-        </View>
-        <View style={styles.switchContainer}>
-          <Text style={styles.label}>Current role</Text>
-          <Switch
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isCurrentRole ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isCurrentRole}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>End Date</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Input link"
-            placeholderTextColor="#ccc"
-            editable={!isCurrentRole} // Disable End Date input if "Current role" is active
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            style={[styles.input, styles.description]}
-            placeholder="Lorem ipsum"
-            placeholderTextColor="#ccc"
-            multiline
-            maxLength={1000}
-          />
-          <Text style={styles.charCount}>30/1000</Text>
-        </View>
-        <TouchableOpacity style={styles.deleteButton}>
-          <Text style={styles.deleteButtonText}>Delete experience</Text>
-        </TouchableOpacity>
-        </View>
-      </ScrollView> 
+      </ScrollView>
     </SafeAreaView>
 
   );
 };
 
 const styles = StyleSheet.create({
-  container:{
-    // backgroundColor: Color.colorGray_100,
-    backgroundColor: Color.colorBlack,
-    width:"100%",
-    height:"100%",
-    flex:1
+  container: {
+    backgroundColor: Color.colorGray_100,
+    width: "100%",
+    height: "100%",
+    flex: 1
   },
   formContainer: {
     padding: 20,
@@ -172,14 +171,14 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
-  title:{
+  title: {
     fontSize: FontSize.labelLarge_size,
     // marginLeft: 14,
     // flex: 1,
-    flexGrow:1, 
-    textAlign:"center", 
-    paddingTop:3, 
-    alignItems:"center",
+    flexGrow: 1,
+    textAlign: "center",
+    paddingTop: 3,
+    alignItems: "center",
     color: Color.darkInk,
     fontWeight: "600",
     fontFamily: getFontFamily("600")
