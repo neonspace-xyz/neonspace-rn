@@ -69,7 +69,6 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   useEffect(() => {
     const check = async () => {
       if (!userInfo) return;
-
       let { names: names1, images: images1 } = processUserVerifiedList(userInfo?.verified_by);
       setUserVerifiedByNames(names1);
       setUserVerifiedByImages(images1);
@@ -270,7 +269,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
               initialLayout={{ width: layout.width }}
             />
             :
-            <FullBio />
+            <FullBio experiences={userInfo?.experiences} skills={userInfo?.skills} />
         }
         {/* <View
           style={styles.verifiedWrapperFlexBox}

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-nati
 import { Color, getFontFamily } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
-const FullBio = ({ isDetail, item }) => {
+const FullBio = ({ experiences, skills }) => {
   const navigation = useNavigation();
   const tab = 4;
   const SkillsCard = () => {
@@ -14,24 +14,14 @@ const FullBio = ({ isDetail, item }) => {
         <TouchableOpacity style={styles.editButton}>
           <Text style={styles.editButtonText}>Edit</Text>
         </TouchableOpacity>
-
-        <View style={styles.skillItem}>
-          <Text style={styles.title}>Tokenomics</Text>
-          <Text style={styles.verified}>Verified by Sam, and 12 others</Text>
-        </View>
-
-        <View style={styles.skillItem}>
-          <Text style={styles.title}>Financial modeling</Text>
-          <Text style={styles.verified}>Verified by Sam, and 12 others</Text>
-        </View>
-
-        <View style={styles.skillItem}>
-          <Text style={styles.title}>Applied Mathematics</Text>
-          <Text style={styles.verified}>Verified by Sam, and 12 others</Text>
-        </View>
-
-        <TouchableOpacity style={styles.viewMoreButton}  onPress={() => navigation.push(`Skill${tab}`, { tab })}>
-          <Text style={styles.viewMoreText}>View all 6 skills</Text>
+        {skills.map((skill) => (
+          <View style={styles.skillItem} id={skill.id}>
+            <Text style={styles.title}>{skill.skill}</Text>
+            <Text style={styles.verified}>{skill.description}</Text>
+          </View>))
+        }
+        <TouchableOpacity style={styles.viewMoreButton} onPress={() => navigation.push(`Skill${tab}`, { tab, skills })}>
+          <Text style={styles.viewMoreText}>View all {skills?.length} skills</Text>
         </TouchableOpacity>
       </View>
     );
@@ -45,25 +35,18 @@ const FullBio = ({ isDetail, item }) => {
         <TouchableOpacity style={styles.editButton}>
           <Text style={styles.editButtonText}>Edit</Text>
         </TouchableOpacity>
-
-        <View style={styles.experienceItem}>
-          <Text style={styles.title}>Developer relations</Text>
-          <Text style={styles.subtitle}>Polygon Labs - Full-time</Text>
-          <Text style={styles.date}>May 2023 - Present</Text>
-          <Text style={styles.description}>
-            Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet.
-          </Text>
-        </View>
-
-        <View style={styles.experienceItem}>
-          <Text style={styles.title}>Developer relations</Text>
-          <Text style={styles.subtitle}>Polygon Labs - Full-time</Text>
-          <Text style={styles.date}>May 2023 - Present</Text>
-          <Text style={styles.description}>Lorem ipsum text here</Text>
-        </View>
-
-        <TouchableOpacity style={styles.viewMoreButton} onPress={() => navigation.push(`Experience${tab}`, { tab })}>
-          <Text style={styles.viewMoreText}>View all 5 experiences</Text>
+        {experiences.map((experience) => (
+          <View style={styles.experienceItem}>
+            <Text style={styles.title}>{experience.role}s</Text>
+            <Text style={styles.subtitle}>{experience.company} - {experience.employment_type}</Text>
+            <Text style={styles.date}>{experience.start_date} - {experience.end_date}</Text>
+            <Text style={styles.description}>
+              {experience.description}
+            </Text>
+          </View>
+        ))}
+        <TouchableOpacity style={styles.viewMoreButton} onPress={() => navigation.push(`Experience${tab}`, { tab, experiences })}>
+          <Text style={styles.viewMoreText}>View all {experiences?.length} experiences</Text>
         </TouchableOpacity>
       </View>
     );
@@ -94,7 +77,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 16,
-    fontFamily:getFontFamily("600"), 
+    fontFamily: getFontFamily("600"),
     fontWeight: "600",
     color: '#FFFFFF',
     marginBottom: 10,

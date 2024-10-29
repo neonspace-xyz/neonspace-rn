@@ -12,25 +12,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import EmptyView from "../components/EmptyView";
 
-const Skill = () => {
+const Skill = ({ route }) => {
   const navigation = useNavigation();
+  const skills = route.params?.skills;
   const tab = 4;
 
-  const data = [
-    { id: '1', name: 'Tokenomics' },
-    { id: '2', name: 'Financial modeling' },
-    { id: '3', name: 'Applied Mathematics' },
-  ];
 
-  const Item = ({ name }) => (
-    <View style={styles.itemContainer}>
-      <Text style={styles.name}>{name}</Text>
+  const Item = ({ id, skill }) => (
+    <View style={styles.itemContainer} id={id}>
+      <Text style={styles.name}>{skill}</Text>
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.deleteButton}>
-          <Text style={styles.deleteButtonText}>Delete</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.editButton} onPress={() => {
-          navigation.push(`SkillForm${tab}`, { tab });
+          navigation.push(`SkillForm${tab}`, { tab, action: "edit", id, skill });
         }}>
           <Text style={styles.editButtonText}>Edit</Text>
         </TouchableOpacity>
@@ -57,7 +50,7 @@ const Skill = () => {
 
         <TouchableOpacity
           onPress={() => {
-            navigation.push(`SkillForm${tab}`, { tab });
+            navigation.push(`SkillForm${tab}`, { tab, action: "new" });
           }}>
           <Image
             source={require("../assets/add.png")}
@@ -67,13 +60,16 @@ const Skill = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={[StyleContent, {paddingTop: 4}]}>
+      <View style={[StyleContent, { paddingTop: 4 }]}>
         <FlatList
-          data={data}
+          data={skills}
           ListEmptyComponent={() => {
             return <EmptyView loadingMore={false} />
           }}
-          renderItem={({ item }) => <Item name={item.name} />}
+          renderItem={({ item }) => {
+            console.log(item)
+            return <Item id={item.id} skill={item.skill} />
+          }}
           keyExtractor={(item) => item.id}
         />
       </View>
@@ -90,13 +86,12 @@ const styles = StyleSheet.create({
     flex: 1
   },
   header: {
-    // marginTop: 60,
     width: "100%",
-    // flex:1,
     flexDirection: 'row',
-    // alignSelf:"flex-",
-    padding: 14,
+    padding: Padding.p_base,
     backgroundColor: Color.colorGray_100,
+    alignItems: 'center',
+    height: 60,
   },
   headerImage: {
     width: 30,

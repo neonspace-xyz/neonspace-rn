@@ -2,85 +2,21 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, StatusBar, Switch, TextInput, FlatList, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily, StyleContent } from "../GlobalStyles";
-import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SearchBar from "../components/SearchBar";
-import ProfileDetail from "../components/ProfileDetail";
-import { useAuth } from "../components/AuthProvider";
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import EmptyView from "../components/EmptyView";
 
-const Experience = () => {
+const Experience = ({ route }) => {
+  const experiences = route.params?.experiences;
   const navigation = useNavigation();
   const tab = 4;
-
-  const data = [
-    {
-      id: '1',
-      role: 'Developer relations',
-      company: 'Polygon Labs - Full-time',
-      duration: 'May 2023 - Present',
-      description:
-        'Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet. Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet.',
-      verifiedBy: 'Verified by Sam, and 12 others',
-    },
-    {
-      id: '2',
-      role: 'Developer relations',
-      company: 'Polygon Labs - Full-time',
-      duration: 'May 2023 - Present',
-      description:
-        'Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet. Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet.',
-      verifiedBy: 'Verified by Sam, and 12 others',
-    },
-    {
-      id: '3',
-      role: 'Developer relations',
-      company: 'Polygon Labs - Full-time',
-      duration: 'May 2023 - Present',
-      description:
-        'Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet. Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet.',
-      verifiedBy: 'Verified by Sam, and 12 others',
-    },
-    {
-      id: '4',
-      role: 'Developer relations',
-      company: 'Polygon Labs - Full-time',
-      duration: 'May 2023 - Present',
-      description:
-        'Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet. Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet.',
-      verifiedBy: 'Verified by Sam, and 12 others',
-    },
-    {
-      id: '5',
-      role: 'Developer relations',
-      company: 'Polygon Labs - Full-time',
-      duration: 'May 2023 - Present',
-      description:
-        'Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet. Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet.',
-      verifiedBy: 'Verified by Sam, and 12 others',
-    },
-    {
-      id: '6',
-      role: 'Developer relations',
-      company: 'Polygon Labs - Full-time',
-      duration: 'May 2023 - Present',
-      description:
-        'Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet. Lorem ipsum text here long text example here hello lorem ipsum dolor sit amet.',
-      verifiedBy: 'Verified by Sam, and 12 others',
-    },
-    // Add more items as needed
-  ];
-
-  const Item = ({ role, company, duration, description, verifiedBy }) => (
+  const Item = ({ role, company, start_date, end_date, description }) => (
     <View style={styles.itemContainer}>
       <Text style={styles.role}>{role}</Text>
       <Text style={styles.company}>{company}</Text>
-      <Text style={styles.duration}>{duration}</Text>
+      <Text style={styles.duration}>{start_date} - {end_date}</Text>
       <Text style={styles.description}>{description}</Text>
-      <Text style={styles.verifiedBy}>{verifiedBy}</Text>
+      {/* <Text style={styles.verifiedBy}>{verifiedBy}</Text> */}
       <View style={styles.buttonContainer}>
         <Button title="Edit" onPress={() => {
           navigation.push(`ExperienceForm${tab}`, { tab });
@@ -119,7 +55,7 @@ const Experience = () => {
       </View>
       <View style={StyleContent}>
         <FlatList
-          data={data}
+          data={experiences}
           ListEmptyComponent={() => {
             return <EmptyView loadingMore={false} />
           }}
@@ -127,9 +63,9 @@ const Experience = () => {
             <Item
               role={item.role}
               company={item.company}
-              duration={item.duration}
+              start_date={item.start_date}
+              end_date={item.end_date}
               description={item.description}
-              verifiedBy={item.verifiedBy}
             />
           )}
           keyExtractor={(item) => item.id}

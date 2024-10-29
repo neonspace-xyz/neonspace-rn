@@ -462,7 +462,7 @@ const Wallet = ({ route }) => {
                 </View>
                 <View style={[styles.wrapperFlexBox]}>
                   <Pressable
-                  onPress={doCopyWallet}
+                    onPress={doCopyWallet}
                     style={[
                       styles.x37e5385aba3592d75436127c7184dWrapper,
                       styles.frameParent2SpaceBlock,
