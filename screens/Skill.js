@@ -19,7 +19,7 @@ const Skill = ({ route }) => {
 
 
   const Item = ({ id, skill }) => (
-    <View style={styles.itemContainer} id={id}>
+    <View style={styles.itemContainer} key={id}>
       <Text style={styles.name}>{skill}</Text>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity style={styles.editButton} onPress={() => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
-import { Color, getFontFamily } from "../GlobalStyles";
+import { Border, Color, getFontFamily, Padding } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
 const FullBio = ({ experiences, skills }) => {
@@ -11,11 +11,11 @@ const FullBio = ({ experiences, skills }) => {
       <View style={styles.container}>
         <Text style={styles.header}>Skills</Text>
 
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity style={styles.editButton} onPress={() => navigation.push(`Skill${tab}`, { tab, skills })}>
           <Text style={styles.editButtonText}>Edit</Text>
         </TouchableOpacity>
         {skills?.map((skill) => (
-          <View style={styles.skillItem} id={skill.id}>
+          <View style={styles.skillItem} key={skill.id}>
             <Text style={styles.title}>{skill.skill}</Text>
             <Text style={styles.verified}>{skill.description}</Text>
           </View>))
@@ -32,12 +32,12 @@ const FullBio = ({ experiences, skills }) => {
       <View style={styles.container}>
         <Text style={styles.header}>Experience</Text>
 
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity style={styles.editButton} onPress={() => navigation.push(`Experience${tab}`, { tab, experiences })}>
           <Text style={styles.editButtonText}>Edit</Text>
         </TouchableOpacity>
         {experiences?.map((experience) => (
-          <View style={styles.experienceItem}>
-            <Text style={styles.title}>{experience.role}s</Text>
+          <View style={styles.experienceItem} key={experience.id}>
+            <Text style={styles.title}>{experience.role}</Text>
             <Text style={styles.subtitle}>{experience.company} - {experience.employment_type}</Text>
             <Text style={styles.date}>{experience.start_date} - {experience.end_date}</Text>
             <Text style={styles.description}>
@@ -85,11 +85,24 @@ const styles = StyleSheet.create({
   editButton: {
     position: 'absolute',
     top: 20,
-    right: 20,
+    right: 10,
+    borderWidth: 1.5,
+    borderRadius: Border.br_5xs,
+    paddingVertical: Padding.p_9xs,
+    borderColor: Color.darkInk,
+    borderStyle: "solid",
+    flexDirection: "row",
+    paddingHorizontal: Padding.p_xs,
+    alignItems: "center",
+    flex: 1,
   },
   editButtonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
+    fontWeight: "400",
+    fontFamily: getFontFamily("400"),
+    textAlign: "left",
+    fontSize: 14,
+    color: Color.darkInk,
+    lineHeight: 20,
   },
   skillItem: {
     marginBottom: 15,

@@ -56,7 +56,9 @@ const SkillForm = ({ route }) => {
         colors={['#FC00A7', '#65EDE3']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={[styles.gradientBorder]}
+        style={[styles.gradientBorder, {          
+          marginBottom:10,
+        }]}
       >
         <View style={{
           backgroundColor: Color.colorGray_100,
