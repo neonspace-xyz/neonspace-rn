@@ -13,6 +13,7 @@ import PostList from "./PostList";
 import ProfileListLikes from "./ProfileListLikes";
 import ProfileListCrowdSource from "./ProfileListCrowdSource";
 import MintingList from "./MintilngList";
+import FastImage from 'react-native-fast-image';
 
 const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const navigation = useNavigation();
@@ -89,14 +90,14 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       }}>
         <View style={{
           // borderWidth:2, borderColor:"red",
-          flex: 1, flexDirection: "row", maxHeight: 120,
-
+          flex: 1, flexDirection: "row", maxHeight: 150,
         }}>
           {userInfo?.profile_image ? (
             <Image
               style={[styles.myProfileItem]}
               contentFit="cover"
               source={userInfo.profile_image}
+              // resizeMode={FastImage.resizeMode.cover}
             />
           ) : (
             <Image

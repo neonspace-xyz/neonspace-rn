@@ -73,11 +73,25 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
       <View style={styles.postModal}>
         <View style={[styles.frameParent9, styles.parentFlexBox]}>
           <View style={styles.ellipseParent}>
+
+          {usersession?.user_info?.profile_image ? (
+            <Image
+              style={[styles.myProfileItem]}
+              contentFit="cover"
+              source={usersession?.user_info?.profile_image}              
+            />
+          ) : (
             <Image
               style={[styles.frameChild, styles.svgrepoLayout]}
               contentFit="cover"
-              source={require("../assets/ellipse-1.png")}
+              source={require("../assets/photo.png")}
             />
+          )}
+            {/* <Image
+              style={[styles.frameChild, styles.svgrepoLayout]}
+              contentFit="cover"
+              source={require("../assets/ellipse-1.png")}
+            /> */}
             <View style={styles.frameContainer}>
               <Text style={[styles.name, styles.timeClr]}>{usersession.user_info.name}</Text>
               <Text style={[styles.endlessmeee, styles.timeClr]}>
@@ -99,6 +113,7 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
         <View style={styles.typeYourPostContainer}>
           <TextInput
             style={[styles.typeYourPostHere]}
+            maxLength={250}
             placeholder="Type your post here"
             placeholderTextColor={Color.colorGray_500}
             value={message}
@@ -117,7 +132,7 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
           ]}
         >
           <Text style={[styles.thePostPreview, styles.postClr]}>
-            The post preview will show the first 280 letters
+            The post preview will show the first 250 letters
           </Text>
           <Text style={[styles.thePostPreview, styles.postClr]}>{message?.length}/{MAX_CHAR_POST - 1}</Text>
         </View>
@@ -289,7 +304,12 @@ const styles = StyleSheet.create({
   },
   buttonLabelDisable: {
     color: Color.colorGray_400,
-  }
+  },
+  myProfileItem: {
+    width: 32,
+    height: 32,
+    borderRadius: 50
+  },
 });
 
 export default PostCreate;

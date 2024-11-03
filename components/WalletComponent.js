@@ -14,6 +14,7 @@ import CustomDropdown from "../components/CustomDropdown";
 import * as WebBrowser from 'expo-web-browser';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Clipboard from 'expo-clipboard';
+import { shortenAddress } from "../Utils";
 
 const WalletComponent = ({ tab }) => {
   const navigation = useNavigation();
@@ -100,11 +101,11 @@ const WalletComponent = ({ tab }) => {
           <View style={[styles.walletBalance0Container]}>
             <View style={[styles.row, styles.row1]}>
               <Text style={[styles.walletBalance]}>Wallet Balance: </Text>
-              <Text style={[styles.eth1Typo]}>0.02 ETH</Text>
+              <Text style={[styles.eth1Typo]}>{parseFloat(userData?.wallet_balance ? userData?.wallet_balance : 0).toFixed(2)} ETH</Text>
             </View>
             <View style={[styles.row, styles.row2]}>
               <Text style={[styles.walletBalance]}>Wallet Address: </Text>
-              <Text style={[styles.eth1Typo]}>0xe...dhv</Text>
+              <Text style={[styles.eth1Typo]}>{userData?.wallet_address ? shortenAddress(userData?.wallet_address) : " 0x00"}</Text>
             </View>
           </View>
           <View>

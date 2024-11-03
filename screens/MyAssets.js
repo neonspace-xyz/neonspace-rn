@@ -52,13 +52,36 @@ const MyAssets = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
+      {/* <Header
         tab={tab}
         userInfo={userData}
         isHideList={!isShowSearch}
         isShowSearch={isShowSearch}
         setIsShowSearch={setIsShowSearch}
-      />
+      /> */}
+
+      <View style={styles.header}>
+          <Pressable
+            onPress={() => navigation.goBack()}>
+            <Image
+              source={require("../assets/back.png")}
+              style={styles.headerImage}
+            />
+          </Pressable>
+          
+          <Text style={
+            [styles.editProfile, styles.timeTypo]
+            // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
+            }>Assets</Text>
+            
+            <Pressable
+            onPress={() => navigation.navigate(`QrCamera${tab}`, { tab })}>
+            <Image
+              source={require("../assets/qr.png")}
+              style={styles.headerImage}
+            />
+          </Pressable>
+      </View>   
       <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
       <View style={{
         justifyContent: "space-between",
@@ -179,7 +202,9 @@ const MyAssets = () => {
         </Text>
       </View>
 
-      <WalletComponent tab={tab} />
+      <View style={{position:"absolute", bottom:0, width:"100%"}}>
+        <WalletComponent tab={tab} />
+      </View>
     </SafeAreaView>
   )
 };

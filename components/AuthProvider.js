@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   api.interceptors.response.use(
     response => response,
     error => {
-      //console.error("axios-error.response", error?.config?.url, error)
+      //console.error("axios-error.response",  error)
       if (
         error.response.status === 500 &&
         (error.response.data.error === 'ExpiredSignature' || error.response.data.error === 'Session expired')

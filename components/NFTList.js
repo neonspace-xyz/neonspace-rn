@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
   },
   containerList: {
     width: "100%",
-    height: "60%",
+    height: "100%",
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 10,

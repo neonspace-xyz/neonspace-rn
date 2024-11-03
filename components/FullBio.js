@@ -14,7 +14,7 @@ const FullBio = ({ experiences, skills }) => {
         <TouchableOpacity style={styles.editButton}>
           <Text style={styles.editButtonText}>Edit</Text>
         </TouchableOpacity>
-        {skills.map((skill) => (
+        {skills?.map((skill) => (
           <View style={styles.skillItem} id={skill.id}>
             <Text style={styles.title}>{skill.skill}</Text>
             <Text style={styles.verified}>{skill.description}</Text>
@@ -35,7 +35,7 @@ const FullBio = ({ experiences, skills }) => {
         <TouchableOpacity style={styles.editButton}>
           <Text style={styles.editButtonText}>Edit</Text>
         </TouchableOpacity>
-        {experiences.map((experience) => (
+        {experiences?.map((experience) => (
           <View style={styles.experienceItem}>
             <Text style={styles.title}>{experience.role}s</Text>
             <Text style={styles.subtitle}>{experience.company} - {experience.employment_type}</Text>
