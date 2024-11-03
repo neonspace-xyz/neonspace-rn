@@ -76,7 +76,9 @@ export const AuthProvider = ({ children }) => {
   const getUser = async () => {
     const now = Date.now();
     const cooldown = 30000;
-    if (now - lastCalled < cooldown) {
+    let reset = await AsyncStorage.getItem("reset");
+
+    if ((now - lastCalled < cooldown) && (reset == "false")) {
       //console.log("wait at least 30 second.");
       let user = await AsyncStorage.getItem("user");
       return JSON.parse(user);
@@ -88,7 +90,8 @@ export const AuthProvider = ({ children }) => {
       let _usersession = await getSession();
       let url = `/user/getUser?userId=${_usersession.user_info.user_id}`;
       let resp = await api.get(url);
-      await AsyncStorage.setItem("user", JSON.stringify(resp.data));
+      await AsyncStorage.setItem("user", JSON.stringify(resp.data));      
+      await AsyncStorage.setItem("reset", "false");
       return resp.data
     } catch (err) {
       let user = await AsyncStorage.getItem("user");

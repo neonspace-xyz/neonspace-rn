@@ -132,7 +132,7 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
           ]}
         >
           <Text style={[styles.thePostPreview, styles.postClr]}>
-            The post preview will show the first 250 letters
+            The post preview will show the first {MAX_CHAR_POST - 1} letters
           </Text>
           <Text style={[styles.thePostPreview, styles.postClr]}>{message?.length}/{MAX_CHAR_POST - 1}</Text>
         </View>

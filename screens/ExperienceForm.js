@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Switch, TouchableOpacity, Pr
 import { Color, FontSize, getFontFamily, StyleContent } from '../GlobalStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const ExperienceForm = () => {
   const navigation = useNavigation();
@@ -87,9 +88,45 @@ const ExperienceForm = () => {
             />
             <Text style={styles.charCount}>30/1000</Text>
           </View>
-          <TouchableOpacity style={styles.deleteButton}>
+          {/* <TouchableOpacity style={styles.deleteButton}>
             <Text style={styles.deleteButtonText}>Delete experience</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+          <LinearGradient
+              colors={['#ff0000', '#ff0000']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.gradientBorder, styles.buttonSendConfirm]}
+
+            >
+              <Pressable
+                style={[{
+                  backgroundColor: Color.colorGray_100,
+                  height: 54, borderRadius: 8,
+                  flex: 1, alignItems: 'center', justifyContent: 'center'
+                }]}
+              >
+                <Text style={[styles.buttonLabel]}>Delete Experience</Text>
+              </Pressable>
+            </LinearGradient>
+
+          <LinearGradient
+              colors={['#FC00A7', '#65EDE3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.gradientBorder, styles.buttonSendConfirm]}
+
+            >
+              <Pressable
+                style={[{
+                  backgroundColor: Color.colorGray_100,
+                  height: 54, borderRadius: 8,
+                  flex: 1, alignItems: 'center', justifyContent: 'center'
+                }]}
+              >
+                <Text style={[styles.buttonLabel]}>Save</Text>
+              </Pressable>
+            </LinearGradient>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -105,8 +142,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   formContainer: {
-    padding: 20,
-    backgroundColor: '#1b1b1b',
+    padding: 5,
+    backgroundColor: '#02030b',
     flex: 1,
   },
   scrollView: {
@@ -126,7 +163,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    backgroundColor: '#3a3a3a',
+    backgroundColor: Color.colorDimgray_100,
     color: '#fff',
     padding: 10,
     borderRadius: 4,
@@ -182,7 +219,24 @@ const styles = StyleSheet.create({
     color: Color.darkInk,
     fontWeight: "600",
     fontFamily: getFontFamily("600")
-  }
+  },
+  gradientBorder: {
+    padding: 2, // Lebar border gradien
+    borderRadius: 8,
+  },
+  buttonSendConfirm: {
+    marginTop: 50,
+    alignSelf: "stretch",
+  },
+  
+  buttonLabel: {
+    lineHeight: 24,
+    fontFamily: getFontFamily("600"),
+    fontWeight: "600",
+    fontSize: FontSize.labelLarge_size,
+    textAlign: "center",
+    color: Color.darkInk,
+  },
 });
 
 export default ExperienceForm;

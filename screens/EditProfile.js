@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const EditProfile = () => {
   const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(false);
+  const [userData, setUserData] = useState();
   const [bio, setBio] = useState();
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -28,7 +29,8 @@ const EditProfile = () => {
       _usersession = JSON.parse(_usersession);
       let url = `/user/getUser?userId=${_usersession.user_info.user_id}`;
       let resp = await api.get(url);
-      setIsEnabled(resp.data.hide_wallet)
+      setUserData(resp.data);
+      setIsEnabled(!resp.data.hide_wallet)
       setBio(resp.data.bio)
     } catch (err) {
       console.log("ERR : ", err)
@@ -46,13 +48,16 @@ const EditProfile = () => {
   const editProfile = async() => {
     let url = `/user/editProfile`;
     let body = {
-      "hide_wallet": isEnabled,
+      "hide_wallet": !isEnabled,
       "bio": bio
     }
 
     let resp = await api.post(url, body);
-    if(resp)
+    if(resp){
+      await AsyncStorage.setItem("reset", "true")
+      // await getUserData()
       navigation.goBack();
+    }
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -83,11 +88,27 @@ backgroundColor: Color.colorGray_100,
       // borderColor:"red",
       // borderWidth:2,
       }}>
-        <Image
+
+          {userData?.profile_image ? (
+            <Image
+              style={[styles.editMyProfileChild]}
+              contentFit="cover"
+              source={userData.profile_image}
+              // resizeMode={FastImage.resizeMode.cover}
+            />
+          ) : (
+            <Image
+              style={[styles.editMyProfileChild]}
+              contentFit="cover"
+              source={require("../assets/photo.png")}
+            />
+          )}
+
+        {/* <Image
           style={[styles.editMyProfileChild]}
           contentFit="cover"
           source={require("../assets/photo.png")}
-        />
+        /> */}
         <Text style={[styles.editPicture, styles.save1Typo]}>Edit picture</Text>
 
       </View>
@@ -259,6 +280,7 @@ const styles = StyleSheet.create({
     // borderWidth:2,
     width: 90,
     height: 90,
+    borderRadius:50
   },
   time: {
     marginTop: -10.5,

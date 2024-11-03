@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
+import React,{ useState, useCallback, useEffect, useContext} from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet, View, Pressable, KeyboardAvoidingView, Platform } from "react-native";
 import { Color } from "../GlobalStyles";
@@ -7,6 +6,7 @@ import PostList from "../components/PostList";
 import { useAuth } from "../components/AuthProvider";
 import Header from "../components/Header";
 import ProfileDetail from "../components/ProfileDetail";
+import { useFocusEffect } from "@react-navigation/core";
 
 const MyProfile = ({ route }) => {
   const { tab } = route?.params;
@@ -15,14 +15,27 @@ const MyProfile = ({ route }) => {
   const [userInfo, setUserInfo] = useState();
   const [isShowSearch, setIsShowSearch] = useState(false);
 
-  useEffect(() => {
-    getSession().then((data) => {
-      setUsersession(data);
-    });
-    getUser().then((user) => {
-      setUserInfo(user);
-    });
-  }, []);
+  // useEffect(() => {
+  //   console.log("get my profile data")
+  //   getSession().then((data) => {
+  //     setUsersession(data);
+  //   });
+  //   getUser().then((user) => {
+  //     setUserInfo(user);
+  //   });
+  // }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getSession().then((data) => {
+        setUsersession(data);
+      });
+      getUser().then((user) => {
+        setUserInfo(user);
+      });
+    }, [])
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <Header

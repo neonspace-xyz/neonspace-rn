@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, TouchableOpacity, useWindowDimensions } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
@@ -14,6 +14,7 @@ import ProfileListLikes from "./ProfileListLikes";
 import ProfileListCrowdSource from "./ProfileListCrowdSource";
 import MintingList from "./MintilngList";
 import FastImage from 'react-native-fast-image';
+import * as Clipboard from 'expo-clipboard';
 
 const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const navigation = useNavigation();
@@ -26,12 +27,32 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const [index, setIndex] = React.useState(0);
   const [isFullBio, setIsFullBio] = useState(false);
   const [isShowCreate, setIsShowCreate] = useState(false);
+  const [showAddressCopied, setShowAddressCopied] = useState(false);
 
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
     { key: 'second', title: 'Crowdsource' },
     { key: 'forth', title: 'Likes' },
   ]);
+
+  useEffect(() => {
+    if (setShowAddressCopied) {
+      const timer = setTimeout(() => {
+        setShowAddressCopied(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAddressCopied])
+
+  const doCopyWallet = async () => {
+    try {
+      await Clipboard.setStringAsync(userInfo?.wallet_address);
+      setShowAddressCopied(!showAddressCopied);
+    } catch (error) {
+      console.error("doCopyWallet", error);
+    }
+  }
+
   const renderScene = SceneMap({
     first: FirstRoute,
     second: SecondRoute,
@@ -162,14 +183,23 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           padding: 10
         }}>
 
+          {userInfo?.hide_wallet == false &&
           <Text
             style={[
               styles.walletAddress0xedhvContainer,
             ]}
           >
             <Text style={styles.walletAddress}>{`Wallet Address: `}</Text>
+            
             <Text style={styles.timeTypo}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
-          </Text>
+            <Pressable onPress={() => doCopyWallet()}>
+              <Image
+                style={styles.copySvgrepoCom1Icon}
+                contentFit="cover"
+                source={require("../assets/ic_copy.png")}
+              />
+            </Pressable>
+          </Text> }
 
           <TouchableOpacity
             style={{
@@ -285,6 +315,17 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           </Text>
         </View> */}
       </View>
+
+      <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
+            <Image
+              style={styles.checkSvgrepoCom1Icon}
+              contentFit="cover"
+              source={require("../assets/ic_check.png")}
+            />
+            <Text style={styles.walletAddressCopied}>
+              Wallet address copied to clipboard
+            </Text>
+          </View>
     </View>
   );
 };
@@ -943,6 +984,27 @@ const styles = StyleSheet.create({
   labelSmall: {
     color: '#ffffff', // Color of the tab labels
     fontSize: 11
+  },
+  copySvgrepoCom1Icon: {
+    width: 18,
+    height: 18,
+    marginLeft: 4,
+    overflow: "hidden",
+  },
+  alert: {
+    bottom: 40,
+    borderRadius: Border.br_3xs,
+    backgroundColor: Color.colorAquamarine,
+    width: 354,
+    padding: Padding.p_xs,
+    alignItems: "center",
+    flexDirection: "row",
+    position: "absolute",
+  },
+  checkSvgrepoCom1Icon: {
+    width: 16,
+    height: 16,
+    overflow: "hidden",
   },
 });
 
