@@ -1,23 +1,71 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Switch, TouchableOpacity, Pressable, Image, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Switch, TouchableOpacity, Pressable, Image, ScrollView, Modal } from 'react-native';
 import { Color, FontSize, getFontFamily, StyleContent, Padding, Margin } from '../GlobalStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
 import { Alert } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { Border } from '../GlobalStyles';
+import { API_URL } from '../Constant';
+import { useAuth } from '../components/AuthProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const SkillForm = ({ route }) => {
+  const { api, getOtherUser } = useAuth();
+
   const action = route.params?.action;
-  const skill = route.params?.skill;
   const id = route.params?.id;
   const navigation = useNavigation();
   const [isCurrentRole, setIsCurrentRole] = useState(false);
   const toggleSwitch = () => setIsCurrentRole(previousState => !previousState);
 
+  const [skill, setSkill] = useState(route.params?.skill);
+  const [description, setDescription] = useState(route.params?.description);
+
+  const saveSkill = async () => {
+    const skillData = {
+      skill,
+      description
+    };
+    if(action === "edit"){
+      skillData.id = id;
+    }
+    
+    try {
+      let url = action === "new" ? (API_URL + `/user/newSkill`) :  (API_URL + `/user/updateSkill`) ;
+      let response = await api.post(url, skillData);
+      if (response.status == 200) {
+        Alert.alert('Success', 'Skill saved successfully');
+        await AsyncStorage.setItem("reset", "true")
+        navigation.goBack();
+      } else {
+        const errorData = await response.json();
+        Alert.alert('Error', errorData.message || 'Failed to save skill');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred while saving skill');
+    }
+  };
   const deleteSkill = () => {
     Alert.alert("Delete skill", "Are you sure you want to delete this skill?", [
       { text: "Cancel", style: "cancel" },
-      { text: "Delete", onPress: () => console.log("Skill deleted") }
+      { text: "Delete", onPress: async() => {
+        try {
+          let url = action === "edit" ? API_URL + `/user/deleteSkill` : '';
+          let response = await api.post(url, {id});
+    
+          if (response.status == 200) {
+            Alert.alert('Success', 'Skill successfully deleted');
+            await AsyncStorage.setItem("reset", "true")
+            navigation.goBack();
+          } else {
+            const errorData = await response.json();
+            Alert.alert('Error', errorData.message || 'Failed to save skill');
+          }
+        } catch (error) {
+          Alert.alert('Error', 'An error occurred while deleting skill');
+        }
+      } }
     ]);
   }
 
@@ -43,13 +91,18 @@ const SkillForm = ({ route }) => {
       <ScrollView style={[styles.scrollView, StyleContent, { paddingTop: 4, marginBottom: -100 }]} contentContainerStyle={styles.scrollContent}>
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
-            <TextInput style={styles.input} placeholder={action === "new" ? "Input new skill" : skill} placeholderTextColor="#ccc" />
+            <TextInput style={styles.input} placeholder={action === "new" ? "Input new skill" : skill} placeholderTextColor="#ccc" 
+              value={skill}
+              onChangeText={setSkill}
+            />
+            <TextInput style={styles.input} placeholder={action === "new" ? "Input new description" : description} placeholderTextColor="#ccc" 
+              value={description}
+              onChangeText={setDescription}
+            />
           </View>
           {action === "new" ? <></> : <TouchableOpacity style={styles.deleteButton} onPress={() => deleteSkill(id)}>
             <Text style={styles.deleteButtonText}>Delete skill</Text>
-          </TouchableOpacity>}
-
-
+          </TouchableOpacity>}          
         </View>
       </ScrollView>
       <LinearGradient
@@ -69,7 +122,7 @@ const SkillForm = ({ route }) => {
         }}>
           <Pressable
             style={[styles.topUpWalletWrapper]}
-            onPress={() => { }}
+            onPress={() => {saveSkill() }}
           >
             <Text style={[styles.topUpWallet]}>
               Save
@@ -90,8 +143,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   formContainer: {
-    padding: 20,
-    backgroundColor: '#1b1b1b',
+    padding: 5,
+    backgroundColor: '#000000',
     flex: 1,
   },
   scrollView: {
@@ -103,7 +156,9 @@ const styles = StyleSheet.create({
     paddingTop: 20,    // Adds space at the top and bottom
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 5,
+    flex: 1,
+    gap:10
   },
   label: {
     fontSize: 14,
@@ -111,9 +166,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    backgroundColor: '#3a3a3a',
+    backgroundColor: Color.colorDimgray_100,
     color: '#fff',
-    padding: 10,
+    padding: 10,    
     borderRadius: 4,
   },
   description: {

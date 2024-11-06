@@ -10,7 +10,7 @@ import { API_URL } from '../Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ExperienceForm = ({route}) => {
-  const { isNew, tab, experience } = route.params;
+  const { action, tab, experience } = route.params;
   const { api, getOtherUser } = useAuth();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -42,28 +42,51 @@ const ExperienceForm = ({route}) => {
     setShowEndDatePicker(false);
   };
 
-  const deleteExperience = async () => {
-    try {
-      let url = !isNew ? API_URL + `/user/deleteExperience` : '';
-      let response = await api.post(url, {id});
-
-      if (response.status == 200) {
-        Alert.alert('Success', 'Experience successfully deleted');
-        setModalVisible(false)
-        await AsyncStorage.setItem("reset", "true")
-        navigation.goBack();
-      } else {
-        const errorData = await response.json();
-        Alert.alert('Error', errorData.message || 'Failed to save experience');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'An error occurred while deleting experience');
-    }
+  const deleteExperience = () => {
+    Alert.alert("Delete experience", "Are you sure you want to delete this experience?", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Delete", onPress: async() => {
+        try {
+          let url = action === "edit" ? API_URL + `/user/deleteExperience` : '';
+          let response = await api.post(url, {id});
+    
+          if (response.status == 200) {
+            Alert.alert('Success', 'Experience successfully deleted');
+            await AsyncStorage.setItem("reset", "true")
+            navigation.goBack();
+          } else {
+            const errorData = await response.json();
+            Alert.alert('Error', errorData.message || 'Failed to save experience');
+          }
+        } catch (error) {
+          Alert.alert('Error', 'An error occurred while deleting experience');
+        }
+      } }
+    ]);
   }
+
+  // const deleteExperience = async () => {
+  //   try {
+  //     let url = action == "edit" ? API_URL + `/user/deleteExperience` : '';
+  //     let response = await api.post(url, {id});
+
+  //     if (response.status == 200) {
+  //       Alert.alert('Success', 'Experience successfully deleted');
+  //       setModalVisible(false)
+  //       await AsyncStorage.setItem("reset", "true")
+  //       navigation.goBack();
+  //     } else {
+  //       const errorData = await response.json();
+  //       Alert.alert('Error', errorData.message || 'Failed to save experience');
+  //     }
+  //   } catch (error) {
+  //     Alert.alert('Error', 'An error occurred while deleting experience');
+  //   }
+  // }
 
   const saveExperience = async () => {
     const experienceData = {
-      id: !isNew ? id : "",
+      id: action === "edit" ? id : "",
       role,
       company,
       employment_type: employmentType,
@@ -73,7 +96,7 @@ const ExperienceForm = ({route}) => {
       description,
     };
     try {
-      let url = isNew ? API_URL + `/user/newExperience` :  API_URL + `/user/updateExperience` ;
+      let url = action === "new" ? API_URL + `/user/newExperience` :  API_URL + `/user/updateExperience` ;
       let response = await api.post(url, experienceData);
 
       if (response.status == 200) {
@@ -200,7 +223,7 @@ const ExperienceForm = ({route}) => {
             <Text style={styles.charCount}>30/1000</Text>
           </View>
 
-          {!isNew &&
+          {action === "edit" &&
           <LinearGradient
               colors={['#ff0000', '#ff0000']}
               start={{ x: 0, y: 0 }}
@@ -215,7 +238,7 @@ const ExperienceForm = ({route}) => {
                   flex: 1, alignItems: 'center', justifyContent: 'center'
                 }]}
                 onPress={() => {
-                  setModalVisible(true)
+                  deleteExperience()
                 }}
               >
                 <Text style={[styles.buttonLabel]}>Delete Experience</Text>

@@ -1,22 +1,33 @@
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, StatusBar, Switch, TextInput, FlatList, Button } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily, StyleContent } from "../GlobalStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import EmptyView from "../components/EmptyView";
+import { useAuth } from "../components/AuthProvider";
+import { useCallback, useState } from "react";
 
 const Experience = ({ route }) => {
-  const experiences = route.params?.experiences;
+  const { getSession, getUser } = useAuth();
+  const [experiences, setExperience] = useState(route.params?.experiences);
   const navigation = useNavigation();
   const tab = 4;
+
+  useFocusEffect (
+    useCallback(() => {
+      getUser().then((user) => {
+        setExperience(user.experiences)
+      });
+    }, [])
+  )
 
   const Item = ({ experience, id, role, company, start_date, end_date, description, employment_type }) => (
     <>
         
         <View style={styles.itemContainer} key={id}>
           <Pressable style={styles.editButton} onPress={() => {
-            navigation.push(`ExperienceForm${tab}`, { tab, isNew:false, experience });
+            navigation.push(`ExperienceForm${tab}`, { tab, action: "edit", experience });
           }}>
             <Text style={styles.editButtonText}>Edit</Text>
           </Pressable>
@@ -65,7 +76,7 @@ const Experience = ({ route }) => {
 
         <TouchableOpacity
           onPress={() => {
-            navigation.push(`ExperienceForm${tab}`, { tab, isNew:true });
+            navigation.push(`ExperienceForm${tab}`, { tab, action:"new" });
           }}>
           <Image
             source={require("../assets/add.png")}

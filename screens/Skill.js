@@ -1,29 +1,72 @@
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, StatusBar, Switch, TextInput, FlatList, Button } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, View, Pressable, StatusBar, Switch, TextInput, FlatList, Button, Alert } from "react-native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily, StyleContent } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../components/SearchBar";
 import ProfileDetail from "../components/ProfileDetail";
 import { useAuth } from "../components/AuthProvider";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import EmptyView from "../components/EmptyView";
+import { API_URL } from "../Constant";
 
 const Skill = ({ route }) => {
+  const { api, getOtherUser } = useAuth();
   const navigation = useNavigation();
-  const skills = route.params?.skills;
+  const { getSession, getUser } = useAuth();
+  const [skills, setSkills] = useState(route.params?.skills);
   const tab = 4;
 
+  const updateGetUser = () => {
+    getUser().then((user) => {
+      setSkills(user.skills)
+    });
+  }
 
-  const Item = ({ id, skill }) => (
+  useFocusEffect (
+    useCallback(() => {
+      updateGetUser();
+    }, [])
+  )
+
+  const deleteSkill = (id) => {
+    Alert.alert("Delete skill", "Are you sure you want to delete this skill?", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Delete", onPress: async() => {
+        try {
+          let url = API_URL + `/user/deleteSkill`;
+          let response = await api.post(url, {id});
+    
+          if (response.status == 200) {
+            Alert.alert('Success', 'Skill successfully deleted');
+            await AsyncStorage.setItem("reset", "true");
+            updateGetUser();
+          } else {
+            const errorData = await response.json();
+            Alert.alert('Error', errorData.message || 'Failed to save skill');
+          }
+        } catch (error) {
+          Alert.alert('Error', 'An error occurred while deleting skill');
+        }
+      } }
+    ]);
+  }
+
+  const Item = ({ id, skill, description }) => (
     <View style={styles.itemContainer} key={id}>
       <Text style={styles.name}>{skill}</Text>
       <View style={styles.buttonsContainer}>
+      <TouchableOpacity style={styles.deleteButton} onPress={() => {
+        deleteSkill(id);
+        }}>
+          <Text style={styles.deleteButtonText}>Delete</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.editButton} onPress={() => {
-          navigation.push(`SkillForm${tab}`, { tab, action: "edit", id, skill });
+          navigation.push(`SkillForm${tab}`, { tab, action: "edit", id, skill, description });
         }}>
           <Text style={styles.editButtonText}>Edit</Text>
         </TouchableOpacity>
@@ -67,8 +110,7 @@ const Skill = ({ route }) => {
             return <EmptyView loadingMore={false} />
           }}
           renderItem={({ item }) => {
-            console.log(item)
-            return <Item id={item.id} skill={item.skill} />
+            return <Item id={item.id} skill={item.skill} description={item.description}/>
           }}
           keyExtractor={(item) => item.id}
         />
@@ -98,12 +140,6 @@ const styles = StyleSheet.create({
     height: 30,
   },
 
-  itemContainer: {
-    backgroundColor: '#2b2b2b', // Background color similar to the image
-    padding: 20,
-    marginVertical: 8,
-    borderRadius: 8,
-  },
   role: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -149,7 +185,7 @@ const styles = StyleSheet.create({
 
 
   itemContainer: {
-    backgroundColor: '#2b2b2b', // Background color similar to the image
+    backgroundColor: Color.colorDarkslategray_400, // Background color similar to the image
     padding: 15,
     marginVertical: 5,
     borderRadius: 8,
@@ -160,9 +196,13 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     color: '#fff',
+    fontSize: 14,
+    fontWeight: "500",
+    fontFamily: getFontFamily("500"),
   },
   buttonsContainer: {
     flexDirection: 'row',
+    gap:10
   },
   deleteButton: {
     backgroundColor: 'red',
@@ -182,9 +222,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 4,
   },
+  
   editButtonText: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: "500",
+    fontFamily: getFontFamily("500"),
+  },
+  deleteButton: {
+    borderColor: 'red',
+    borderWidth: 2,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 4,
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: "500",
+    fontFamily: getFontFamily("500"),
   },
 });
 
