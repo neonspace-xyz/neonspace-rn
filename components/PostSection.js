@@ -32,7 +32,7 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
   }
   return (
     <View style={styles.frame} index={`post${item?.id}`}>
-      <Pressable  onPress={() => isDetail ? null : onPress()}>
+      <Pressable onPress={() => isDetail ? null : onPress()}>
         <View style={styles.frameParent}>
           <View style={styles.frameFlexBox}>
             <Image

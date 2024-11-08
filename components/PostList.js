@@ -51,16 +51,16 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
         if (Object.hasOwnProperty.call(posts, key)) {
           let like = getRandomNumber(0, 7);
           let itemLikes = [];
-          for (let j = 0; j < like; j++) {
+          const post = posts[key];
+          for (let j = 0; j < post.users_liked.length; j++) {
             itemLikes.push({
-              name: `Name${j}`,
-              username: `@username${j}`,
-              image: IMG_PROFILE[getRandomNumber(0, 4)],
-              bio: `Founder at ChainCredit. #DYOR ${j}`,
+              name: post.users_liked[j].name,
+              username: post.users_liked[j].screen_name,
+              image: post.users_liked[j].profile_image,
+              bio: post.users_liked[j].bio,
             })
           }
 
-          const post = posts[key];
           let item = {
             id: key,
             name: post.name,
