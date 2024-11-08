@@ -11,9 +11,7 @@ import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import FullBio from "./FullBio";
 import PostList from "./PostList";
 import ProfileListLikes from "./ProfileListLikes";
-import ProfileListCrowdSource from "./ProfileListCrowdSource";
 import MintingList from "./MintilngList";
-import FastImage from 'react-native-fast-image';
 import * as Clipboard from 'expo-clipboard';
 
 const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
@@ -118,7 +116,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
               style={[styles.myProfileItem]}
               contentFit="cover"
               source={userInfo.profile_image}
-              // resizeMode={FastImage.resizeMode.cover}
+            // resizeMode={FastImage.resizeMode.cover}
             />
           ) : (
             <Image
@@ -184,22 +182,22 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
         }}>
 
           {userInfo?.hide_wallet == false &&
-          <Text
-            style={[
-              styles.walletAddress0xedhvContainer,
-            ]}
-          >
-            <Text style={styles.walletAddress}>{`Wallet Address: `}</Text>
-            
-            <Text style={styles.timeTypo}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
-            <Pressable onPress={() => doCopyWallet()}>
-              <Image
-                style={styles.copySvgrepoCom1Icon}
-                contentFit="cover"
-                source={require("../assets/ic_copy.png")}
-              />
-            </Pressable>
-          </Text> }
+            <Text
+              style={[
+                styles.walletAddress0xedhvContainer,
+              ]}
+            >
+              <Text style={styles.walletAddress}>{`Wallet Address: `}</Text>
+
+              <Text style={styles.timeTypo}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
+              <Pressable onPress={() => doCopyWallet()}>
+                <Image
+                  style={styles.copySvgrepoCom1Icon}
+                  contentFit="cover"
+                  source={require("../assets/ic_copy.png")}
+                />
+              </Pressable>
+            </Text>}
 
           <TouchableOpacity
             style={{
@@ -317,15 +315,15 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       </View>
 
       <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
-            <Image
-              style={styles.checkSvgrepoCom1Icon}
-              contentFit="cover"
-              source={require("../assets/ic_check.png")}
-            />
-            <Text style={styles.walletAddressCopied}>
-              Wallet address copied to clipboard
-            </Text>
-          </View>
+        <Image
+          style={styles.checkSvgrepoCom1Icon}
+          contentFit="cover"
+          source={require("../assets/ic_check.png")}
+        />
+        <Text style={styles.walletAddressCopied}>
+          Wallet address copied to clipboard
+        </Text>
+      </View>
     </View>
   );
 };

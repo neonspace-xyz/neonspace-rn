@@ -43,10 +43,9 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
     if (!userInfo) return;
     setLoadingMore(true);
     try {
-      let url = `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
+      let url = `/user/getAllPosts`;
       let resp = await api.get(url);
-      let posts = resp.data.posts;
-
+      let posts = resp.data;
       let _posts = [];
       for (const key in posts) {
         if (Object.hasOwnProperty.call(posts, key)) {
@@ -64,9 +63,9 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
           const post = posts[key];
           let item = {
             id: key,
-            name: userInfo.name,
-            screen_name: `@${userInfo.screen_name}`,
-            image: userInfo.profile_image,
+            name: post.name,
+            screen_name: `@${post.screen_name}`,
+            image: post.profile_image,
             post_id: post.post_id,
             text: post.post,
             view: post.views,
@@ -222,14 +221,14 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
       />
       {isShowCreate && (
         <Modal
-        visible={isShowCreate}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setIsShowCreate(false)}
-      >
-        <PostCreate
-          usersession={usersession}
-          setIsShowCreate={setIsShowCreate} />
+          visible={isShowCreate}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setIsShowCreate(false)}
+        >
+          <PostCreate
+            usersession={usersession}
+            setIsShowCreate={setIsShowCreate} />
         </Modal>
       )}
       {!isShowCreate && usersession?.user_info?.user_id == userInfo?.user_id && (
@@ -240,7 +239,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
         />
       )}
 
-      
+
       {/* <Modal
         visible={isShowCreate}
         transparent={true}
@@ -253,7 +252,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
         </Modal> */}
 
 
-      
+
     </View>
   );
 };
