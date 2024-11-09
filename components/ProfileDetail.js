@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, Pressable } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, Pressable, ActivityIndicator } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
@@ -26,6 +26,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const [isFullBio, setIsFullBio] = useState(route.params?.isFullBio || false);
   const [isShowCreate, setIsShowCreate] = useState(false);
   const [showAddressCopied, setShowAddressCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
@@ -43,6 +44,12 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
       return () => clearTimeout(timer);
     }
   }, [showAddressCopied])
+
+  useEffect(() => {
+    if (userInfo) {
+      setIsLoading(false);
+    }
+  }, [userInfo]);
 
   const doCopyWallet = async () => {
     try {
@@ -103,230 +110,239 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
     check();
   }, [userInfo])
   return (
-    <View style={[styles.myProfile, isShowSearch && { display: "none" }]}>
-      <View style={{
-        // borderWidth:2, borderColor:'red',
-        flex: 1,
-        backgroundColor: Color.colorGray_100
-      }}>
-        <View style={{
-          // borderWidth:2, borderColor:"red",
-          flex: 1, flexDirection: "row", maxHeight: 150,
-        }}>
-          {userInfo?.profile_image ? (
-            <Image
-              style={[styles.myProfileItem]}
-              contentFit="cover"
-              source={userInfo.profile_image}
-            // resizeMode={FastImage.resizeMode.cover}
-            />
-          ) : (
-            <Image
-              style={[styles.myProfileItem]}
-              contentFit="cover"
-              source={require("../assets/photo.png")}
-            />
-          )}
-          <View style={styles.frameParent10}>
-            <View style={styles.nameParent4}>
-              <Text style={[styles.name6]}>{userInfo?.name ? userInfo.name : "Name"}</Text>
-              <Text style={[styles.endlessmeee6]}>
-                {userInfo?.screen_name ? `@${userInfo.screen_name}` : "@endlessmeee"}
+    <>
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={Color.darkInk} />
+          <Text style={styles.loadingText}>Loading Profile...</Text>
+        </View>
+      ) : (
+        <View style={[styles.myProfile, isShowSearch && { display: "none" }]}>
+          <View style={{
+            // borderWidth:2, borderColor:'red',
+            flex: 1,
+            backgroundColor: Color.colorGray_100
+          }}>
+            <View style={{
+              // borderWidth:2, borderColor:"red",
+              flex: 1, flexDirection: "row", maxHeight: 150,
+            }}>
+              {userInfo?.profile_image ? (
+                <Image
+                  style={[styles.myProfileItem]}
+                  contentFit="cover"
+                  source={userInfo.profile_image}
+                // resizeMode={FastImage.resizeMode.cover}
+                />
+              ) : (
+                <Image
+                  style={[styles.myProfileItem]}
+                  contentFit="cover"
+                  source={require("../assets/photo.png")}
+                />
+              )}
+              <View style={styles.frameParent10}>
+                <View style={styles.nameParent4}>
+                  <Text style={[styles.name6]}>{userInfo?.name ? userInfo.name : "Name"}</Text>
+                  <Text style={[styles.endlessmeee6]}>
+                    {userInfo?.screen_name ? `@${userInfo.screen_name}` : "@endlessmeee"}
+                  </Text>
+                </View>
+                <Text style={[styles.theBioText]}>
+                  {userInfo?.bio ? truncateString(userInfo.bio, 100) : "The bio text will be here. The maximum number of lines is 2 and that means max. characters is 100."}
+                </Text>
+              </View>
+            </View>
+            <View style={{
+              flex: 1, flexDirection: "row", maxHeight: 30, gap: 10
+              // borderColor:"red", borderWidth:2,
+            }}>
+              <TouchableOpacity
+                style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock, { marginLeft: 10 }]}
+                onPress={() => navigation.navigate(`EditProfile${tab}`)}
+              >
+                <Text style={[styles.editProfile]}>
+                  Edit profile
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock,
+                ]}
+                onPress={() => setIsFullBio(!isFullBio)}
+              >
+                <Text style={[styles.editProfile]}>
+                  {isFullBio ? "Default Bio" : "Full Bio"}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={{
+                borderWidth: 1.5, borderColor: 'transparent', marginRight: 10
+              }}>
+                <Image
+                  style={{
+                    width: 25, height: 25,
+
+                  }}
+                  source={require("../assets/share.png")}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={{
+              // borderWidth:2, borderColor:"red", 
+              // flex: 1, padding: 10, gap: 8
+              // flex:1,
+              // flexGrow:0,
+              padding: 10
+            }}>
+
+              {userInfo?.hide_wallet == false &&
+                <Text
+                  style={[
+                    styles.walletAddress0xedhvContainer,
+                  ]}
+                >
+                  <Text style={styles.walletAddress}>{`Wallet Address: `}</Text>
+
+                  <Text style={styles.timeTypo}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
+                  <Pressable onPress={() => doCopyWallet()}>
+                    <Image
+                      style={styles.copySvgrepoCom1Icon}
+                      contentFit="cover"
+                      source={require("../assets/ic_copy.png")}
+                    />
+                  </Pressable>
+                </Text>}
+
+              <TouchableOpacity
+                style={{
+                  marginTop: 15
+                  // borderWidth:2, borderColor:"red"
+                }}
+                onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user: userInfo })}
+              >
+                <Text
+                  style={[
+                    styles.walletAddress0xedhvContainer,
+                  ]}
+                >
+                  <Text style={styles.walletAddress}>{`Verified by: `}</Text>
+
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+
+                    {userVerifiedByImages[0] &&
+                      <CircularImage source={userVerifiedByImages[0]}></CircularImage>
+                    }
+                    {userVerifiedByImages[1] &&
+                      <View style={[styles.imageContainer, {
+                        width: userVerifiedByImages.length * 23,
+                        height: 32,
+                        position: 'relative'
+                      }]}>
+                        {
+                          userVerifiedByImages.map((e, index) => {
+                            return (
+                              <Image key={index} source={e} style={[styles.image, {
+                                zIndex: 9999 - index,
+                                position: 'absolute', left: 20 * index
+                              }]} />
+                            )
+                          })
+                        }
+                      </View>
+                    }
+                    <Text style={[styles.samPolymathAnd, styles.textTypo, { paddingLeft: 4 }]}>
+                      {userVerifiedByNames}
+                    </Text>
+                  </View>
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{
+                  marginTop: 15
+                  //  borderWidth:2, borderColor:"red"
+                }}
+                onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, user: userInfo })}
+              >
+                <Text
+                  style={[
+                    styles.walletAddress0xedhvContainer,
+                  ]}
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                    <Text style={[styles.walletAddress, { color: 'white' }]}>{`Verified: `}</Text>
+
+
+                    <View style={{
+                      // borderColor:'red', 
+                      // borderWidth:2, 
+                      width: userVerifiedImages.length * 23,
+                      height: 32,
+                      position: 'relative'
+                    }}>
+                      {
+                        userVerifiedImages.map((e, index) => {
+                          return (
+                            <Image key={index} source={e} style={[styles.image, {
+                              zIndex: 9999 - index,
+                              position: 'absolute', left: 20 * index
+                            }]} />
+                          )
+                        })
+                      }
+                    </View>
+                    <Text style={[styles.samPolymathAnd, styles.textTypo, { paddingLeft: 4 }]}>
+                      {userVerifiedNames}
+                    </Text>
+                  </View>
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={[styles.frameParent8]}>
+            {
+              !isFullBio ?
+                <TabView
+                  navigationState={{ index, routes, tab, isShowSearch, isShowCreate }}
+                  renderScene={renderScene}
+                  onIndexChange={setIndex}
+                  renderTabBar={renderTabBar}
+                  style={{ backgroundColor: Color.colorGray_100, marginBottom: -40 }}
+                  initialLayout={{ width: layout.width }}
+                />
+                :
+                <FullBio experiences={userInfo?.experiences} skills={userInfo?.skills} />
+            }
+            {/* <View
+              style={styles.verifiedWrapperFlexBox}
+            >
+              <Text style={[styles.youVerified, styles.bioExampleTypo]}>
+                Posts
               </Text>
             </View>
-            <Text style={[styles.theBioText]}>
-              {userInfo?.bio ? truncateString(userInfo.bio, 100) : "The bio text will be here. The maximum number of lines is 2 and that means max. characters is 100."}
+            <View style={[styles.verifiedByWrapper, styles.verifiedWrapperFlexBox]}>
+              <Text style={[styles.youVerified, styles.bioExampleTypo]}>
+                Likes
+              </Text>
+            </View> */}
+          </View>
+
+          <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
+            <Image
+              style={styles.checkSvgrepoCom1Icon}
+              contentFit="cover"
+              source={require("../assets/ic_check.png")}
+            />
+            <Text style={styles.walletAddressCopied}>
+              Wallet address copied to clipboard
             </Text>
           </View>
         </View>
-        <View style={{
-          flex: 1, flexDirection: "row", maxHeight: 30, gap: 10
-          // borderColor:"red", borderWidth:2,
-        }}>
-          <TouchableOpacity
-            style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock, { marginLeft: 10 }]}
-            onPress={() => navigation.navigate(`EditProfile${tab}`)}
-          >
-            <Text style={[styles.editProfile]}>
-              Edit profile
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock,
-            ]}
-            onPress={() => setIsFullBio(!isFullBio)}
-          >
-            <Text style={[styles.editProfile]}>
-              {isFullBio ? "Default Bio" : "Full Bio"}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={{
-            borderWidth: 1.5, borderColor: 'transparent', marginRight: 10
-          }}>
-            <Image
-              style={{
-                width: 25, height: 25,
-
-              }}
-              source={require("../assets/share.png")}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={{
-          // borderWidth:2, borderColor:"red", 
-          // flex: 1, padding: 10, gap: 8
-          // flex:1,
-          // flexGrow:0,
-          padding: 10
-        }}>
-
-          {userInfo?.hide_wallet == false &&
-            <Text
-              style={[
-                styles.walletAddress0xedhvContainer,
-              ]}
-            >
-              <Text style={styles.walletAddress}>{`Wallet Address: `}</Text>
-
-              <Text style={styles.timeTypo}>{userInfo?.wallet_address ? shortenAddress(userInfo?.wallet_address) : " 0x00"}</Text>
-              <Pressable onPress={() => doCopyWallet()}>
-                <Image
-                  style={styles.copySvgrepoCom1Icon}
-                  contentFit="cover"
-                  source={require("../assets/ic_copy.png")}
-                />
-              </Pressable>
-            </Text>}
-
-          <TouchableOpacity
-            style={{
-              marginTop: 15
-              // borderWidth:2, borderColor:"red"
-            }}
-            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user: userInfo })}
-          >
-            <Text
-              style={[
-                styles.walletAddress0xedhvContainer,
-              ]}
-            >
-              <Text style={styles.walletAddress}>{`Verified by: `}</Text>
-
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-
-                {userVerifiedByImages[0] &&
-                  <CircularImage source={userVerifiedByImages[0]}></CircularImage>
-                }
-                {userVerifiedByImages[1] &&
-                  <View style={[styles.imageContainer, {
-                    width: userVerifiedByImages.length * 23,
-                    height: 32,
-                    position: 'relative'
-                  }]}>
-                    {
-                      userVerifiedByImages.map((e, index) => {
-                        return (
-                          <Image key={index} source={e} style={[styles.image, {
-                            zIndex: 9999 - index,
-                            position: 'absolute', left: 20 * index
-                          }]} />
-                        )
-                      })
-                    }
-                  </View>
-                }
-                <Text style={[styles.samPolymathAnd, styles.textTypo, { paddingLeft: 4 }]}>
-                  {userVerifiedByNames}
-                </Text>
-              </View>
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              marginTop: 15
-              //  borderWidth:2, borderColor:"red"
-            }}
-            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, user: userInfo })}
-          >
-            <Text
-              style={[
-                styles.walletAddress0xedhvContainer,
-              ]}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-                <Text style={[styles.walletAddress, { color: 'white' }]}>{`Verified: `}</Text>
-
-
-                <View style={{
-                  // borderColor:'red', 
-                  // borderWidth:2, 
-                  width: userVerifiedImages.length * 23,
-                  height: 32,
-                  position: 'relative'
-                }}>
-                  {
-                    userVerifiedImages.map((e, index) => {
-                      return (
-                        <Image key={index} source={e} style={[styles.image, {
-                          zIndex: 9999 - index,
-                          position: 'absolute', left: 20 * index
-                        }]} />
-                      )
-                    })
-                  }
-                </View>
-                <Text style={[styles.samPolymathAnd, styles.textTypo, { paddingLeft: 4 }]}>
-                  {userVerifiedNames}
-                </Text>
-              </View>
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={[styles.frameParent8]}>
-        {
-          !isFullBio ?
-            <TabView
-              navigationState={{ index, routes, tab, isShowSearch, isShowCreate }}
-              renderScene={renderScene}
-              onIndexChange={setIndex}
-              renderTabBar={renderTabBar}
-              style={{ backgroundColor: Color.colorGray_100, marginBottom: -40 }}
-              initialLayout={{ width: layout.width }}
-            />
-            :
-            <FullBio experiences={userInfo?.experiences} skills={userInfo?.skills} />
-        }
-        {/* <View
-          style={styles.verifiedWrapperFlexBox}
-        >
-          <Text style={[styles.youVerified, styles.bioExampleTypo]}>
-            Posts
-          </Text>
-        </View>
-        <View style={[styles.verifiedByWrapper, styles.verifiedWrapperFlexBox]}>
-          <Text style={[styles.youVerified, styles.bioExampleTypo]}>
-            Likes
-          </Text>
-        </View> */}
-      </View>
-
-      <View style={[styles.alert, !showAddressCopied && { display: "none" }]}>
-        <Image
-          style={styles.checkSvgrepoCom1Icon}
-          contentFit="cover"
-          source={require("../assets/ic_check.png")}
-        />
-        <Text style={styles.walletAddressCopied}>
-          Wallet address copied to clipboard
-        </Text>
-      </View>
-    </View>
+      )}
+    </>
   );
 };
 
@@ -1005,6 +1021,19 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     overflow: "hidden",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.colorGray_100,
+  },
+  loadingText: {
+    marginTop: 10,
+    color: Color.darkInk,
+    fontSize: FontSize.size_sm,
+    fontFamily: getFontFamily("500"),
+    fontWeight: "500",
   },
 });
 
