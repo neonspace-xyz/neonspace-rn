@@ -14,6 +14,7 @@ import { FontSize, Color, getFontFamily } from './GlobalStyles';
 import { LoadingProvider } from './components/LoadingContext';
 import { shortenAddress } from './Utils';
 import { useAuth } from './components/AuthProvider';
+
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Drawer = createDrawerNavigator();
@@ -73,6 +74,18 @@ const StackNavigator = () => {
 
     return (
       <SafeAreaView style={styles.drawerContent}>
+          <TouchableOpacity
+            style={[styles.svgrepoLayout]}
+            onPress={() => {
+              props.navigation.closeDrawer()
+            }}
+          >
+            <Image
+              style={[styles.icon1, styles.iconLayout]}
+              contentFit="cover"
+              source={require("./assets/ic_close_white.png")}
+            />
+          </TouchableOpacity>
         <View style={styles.drawerSection}>
           <TouchableOpacity
             style={styles.userInfoSection}
@@ -282,11 +295,11 @@ const styles = StyleSheet.create({
   },
   drawerContent: {
     flex: 1,
-    padding: 16,
     backgroundColor: Color.colorDarkslategray_400,
   },
   drawerSection: {
-    marginVertical: 16,
+    paddingLeft:24,
+    paddingTop:10
   },
   title: {
     fontSize: 20,
@@ -305,7 +318,6 @@ const styles = StyleSheet.create({
   },
 
   userInfoSection: {
-    padding: 10,
     borderRadius: 10,
     // Add subtle highlight effect
     backgroundColor: Color.colorDarkslategray_300,
@@ -317,6 +329,18 @@ const styles = StyleSheet.create({
     fontFamily: getFontFamily("400"),
     fontSize: FontSize.labelLarge_size,
   },
+  svgrepoLayout: {
+    width: '100%',
+    alignItems:'flex-end',
+    marginTop:10,
+    paddingRight:10,
+    // borderWidth:2,
+    // borderColor:'red'
+  },
+  icon1:{
+    width:32,
+    height:32
+  }
 });
 
 export default StackNavigator;
