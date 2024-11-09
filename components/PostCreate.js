@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TextInput, Platform, KeyboardAvoidingView, Alert, TouchableOpacity, Keyboard } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
@@ -68,6 +68,18 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
     setMessage(input);
   }
 
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <View style={[
       styles.postModalParent,
@@ -78,19 +90,19 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
         <View style={[styles.frameParent9, styles.parentFlexBox]}>
           <View style={styles.ellipseParent}>
 
-          {usersession?.user_info?.profile_image ? (
-            <Image
-              style={[styles.myProfileItem]}
-              contentFit="cover"
-              source={usersession?.user_info?.profile_image}              
-            />
-          ) : (
-            <Image
-              style={[styles.frameChild, styles.svgrepoLayout]}
-              contentFit="cover"
-              source={require("../assets/photo.png")}
-            />
-          )}
+            {usersession?.user_info?.profile_image ? (
+              <Image
+                style={[styles.myProfileItem]}
+                contentFit="cover"
+                source={usersession?.user_info?.profile_image}
+              />
+            ) : (
+              <Image
+                style={[styles.frameChild, styles.svgrepoLayout]}
+                contentFit="cover"
+                source={require("../assets/photo.png")}
+              />
+            )}
             {/* <Image
               style={[styles.frameChild, styles.svgrepoLayout]}
               contentFit="cover"
@@ -116,6 +128,7 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
         </View>
         <View style={styles.typeYourPostContainer}>
           <TextInput
+            ref={inputRef}
             style={[styles.typeYourPostHere]}
             maxLength={250}
             placeholder="Type your post here"
