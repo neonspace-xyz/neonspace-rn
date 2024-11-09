@@ -26,35 +26,33 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
     }
   };
 
-   // Function to fetch search items
-  const fetchSearchItems = useCallback(async() => {
+  // Function to fetch search items
+  const fetchSearchItems = useCallback(async () => {
     if (searchValue == '') return;
     let data = [];
     setLoadingMore(true);
     setEmptyText('');
     try {
-      let url = `/twitter/getUser`;
-      let body = {
-        "screen_name": searchValue
-      };
+      let url = `/twitter/search?userId=${searchValue}`;
       console.log("Header-search-url", url)
-      console.log("Header-search-input", body)
-      let resp = await api.post(url, body);
+      let resp = await api.get(url);
       if (resp.data) {
-        let user = resp.data;
-        console.log("Header-search-resp", user);
-        url = `/user/getUser?userId=${user.id}`;
-
-        try {
-          resp = await api.get(url);
-          if (resp.data) {
-            console.log("user : ", resp.data)
-            data.push(resp.data);
-          }
-        } catch (e) {
-          if(e.response.data.error) setEmptyText(e.response.data.error);
-          console.error("fetchSearchItems-getUser", e.response.data.error)
-        }
+        let users = resp.data;
+        console.log("Header-search-resp", users);
+        users.forEach(user => {
+          data.push(user);
+        });
+        // url = `/user/getUser?userId=${user.id}`;
+        // try {
+        //   resp = await api.get(url);
+        //   if (resp.data) {
+        //     console.log("user : ", resp.data)
+        //     data.push(resp.data);
+        //   }
+        // } catch (e) {
+        //   if (e.response.data.error) setEmptyText(e.response.data.error);
+        //   console.error("fetchSearchItems-getUser", e.response.data.error)
+        // }
       }
     } catch (error) {
       // Alert.alert("User not found");
@@ -67,8 +65,8 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
 
   const debouncedFetchSearchItems = useCallback(debounce(fetchSearchItems, 500), [fetchSearchItems]);
 
-   // Trigger debounced function when searchValue changes
-   useEffect(() => {
+  // Trigger debounced function when searchValue changes
+  useEffect(() => {
     if (searchValue) {
       debouncedFetchSearchItems();
     }
@@ -89,11 +87,11 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
       <View style={styles.header}>
         <Pressable
           onPress={() => navigation.openDrawer()} >
-        {userInfo?.profile_image ? (
+          {userInfo?.profile_image ? (
             <Image
               style={[styles.myProfileItem]}
               contentFit="cover"
-              source={userInfo.profile_image}              
+              source={userInfo.profile_image}
             />
           ) : (
             <Image
@@ -103,7 +101,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
             />
           )}
         </Pressable>
-        
+
         <Pressable
           style={[styles.headerIcon, !isShowSearch && { display: "none" }]}
           onPress={() => handleBlurTextInput()}>

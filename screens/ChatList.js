@@ -87,7 +87,7 @@ const ChatList = () => {
         let user = resp.data;
         url = `/user/getUser?userId=${user.id}`;
         resp = await api.get(url);
-        if (resp.data) {
+        if (resp.data && resp.data.username !== "Suspended") {
           data.push(resp.data);
         }
       }

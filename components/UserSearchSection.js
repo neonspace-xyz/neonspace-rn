@@ -4,6 +4,10 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 
 const UserSearchSection = ({ isDetail, item, onPress }) => {
+  // Don't render if username is "Suspended"
+  if (item.username === "Suspended") {
+    return null;
+  }
 
   return (
     <Pressable index={item?.id} onPress={() => isDetail ? null : onPress()}>
@@ -11,26 +15,13 @@ const UserSearchSection = ({ isDetail, item, onPress }) => {
         <Image
           style={[styles.frameChild, styles.frameChildLayout]}
           contentFit="cover"
-          source={item.profile_image}
+          source={{ uri: item.profile_image_url }}
         />
         <View style={styles.frameGroup}>
           <View style={styles.nameParentFlexBox}>
             <Text style={[styles.name]}>{item.name}</Text>
             <Text style={[styles.endlessmeee]}>
-              @{item.screen_name}
-            </Text>
-          </View>
-          <View style={[styles.nameOfNftParent, styles.nameParentFlexBox]}>
-            <Text style={[styles.nameOfNft]}>
-              Name of NFT
-            </Text>
-            <Image
-              style={styles.frameItem}
-              contentFit="cover"
-              source={require("../assets/ic_dot_white.png")}
-            />
-            <Text style={[styles.price04Eth]}>
-              Price: {item.price} ETH
+              @{item.username}
             </Text>
           </View>
         </View>
@@ -53,11 +44,12 @@ const styles = StyleSheet.create({
     paddingVertical: Padding.p_sm,
     paddingHorizontal: Padding.p_xs,
     flexDirection: "row",
+    alignItems: "center",
   },
   frameChildLayout: {
     width: 32,
     height: 32,
-    borderRadius:50
+    borderRadius: 50
   },
   frameChild: {
     height: 32,
@@ -65,6 +57,7 @@ const styles = StyleSheet.create({
   frameGroup: {
     marginLeft: 10,
     flex: 1,
+    justifyContent: "center",
   },
   nameParentFlexBox: {
     flexDirection: "row",
