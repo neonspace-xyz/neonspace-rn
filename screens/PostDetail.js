@@ -2,8 +2,8 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { StyleSheet, Text, View, Pressable, Dimensions, TouchableOpacity, Alert } from "react-native";
-import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle, StyleContent } from "../GlobalStyles";
+import { StyleSheet, Text, View, Pressable, Dimensions, TouchableOpacity, Alert, Modal, ActivityIndicator } from "react-native";
+import { Color, FontSize, FontFamily, StyleHeaderView, StyleHeaderImg, StyleHeaderTitle, StyleContent, getFontFamily } from "../GlobalStyles";
 import PostSection from "../components/PostSection";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../components/AuthProvider";
@@ -13,12 +13,12 @@ const PostDetail = () => {
   const route = useRoute();
   const { tab, item } = route.params;
   const navigation = useNavigation();
-
-  const { getUser } = useAuth();
+  const { api, getUser } = useAuth();
   const windowDimensions = Dimensions.get('window');
   const [userInfo, setUserInfo] = useState();
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+  const [isDeletingPost, setIsDeletingPost] = useState(false);
 
   useEffect(() => {
     getUser().then((data) => {
@@ -44,9 +44,30 @@ const PostDetail = () => {
     setSelectedItemIndex(index);
   };
 
-  const handleDelete = () => {
-    console.log(`Deleting item ${selectedItemIndex}`);
-    setSelectedItemIndex(null);
+  const handleDelete = async () => {
+    setIsDeletingPost(true);
+    try {
+      // Call delete API
+      const url = `/user/deletePost?postId=${item.post_id}`;
+      await api.post(url);
+
+      // Navigate back after successful deletion
+      navigation.goBack();
+
+    } catch (error) {
+      if (error.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.error("PostDetail-handleDelete-error", error);
+        Alert.alert(
+          "Error",
+          "Failed to delete post. Please try again."
+        );
+      }
+    } finally {
+      setIsDeletingPost(false);
+      setSelectedItemIndex(null);
+    }
   };
 
   const confirmDelete = () => {
@@ -98,6 +119,19 @@ const PostDetail = () => {
           onMore={handleMore}
         />
       </View>
+
+      <Modal
+        transparent={true}
+        visible={isDeletingPost}
+        animationType="fade"
+      >
+        <View style={styles.loadingModalContainer}>
+          <View style={styles.loadingModalContent}>
+            <ActivityIndicator size="large" color={Color.darkInk} />
+            <Text style={styles.loadingText}>Deleting post...</Text>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -148,6 +182,25 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: '#ccc',
+  },
+  loadingModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  loadingModalContent: {
+    backgroundColor: Color.colorDarkslategray_400,
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: Color.darkInk,
+    marginTop: 10,
+    fontSize: FontSize.size_sm,
+    fontFamily: getFontFamily("500"),
+    fontWeight: "500",
   },
 });
 

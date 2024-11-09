@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, Pressable } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
 import CrowdListHiring from "./CrowdListHiring";
@@ -16,14 +16,14 @@ import * as Clipboard from 'expo-clipboard';
 
 const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const navigation = useNavigation();
-
+  const route = useRoute();
   const layout = useWindowDimensions();
   const [userVerifiedByImages, setUserVerifiedByImages] = useState([]);
   const [userVerifiedByNames, setUserVerifiedByNames] = useState('');
   const [userVerifiedImages, setUserVerifiedImages] = useState([]);
   const [userVerifiedNames, setUserVerifiedNames] = useState('');
   const [index, setIndex] = React.useState(0);
-  const [isFullBio, setIsFullBio] = useState(false);
+  const [isFullBio, setIsFullBio] = useState(route.params?.isFullBio || false);
   const [isShowCreate, setIsShowCreate] = useState(false);
   const [showAddressCopied, setShowAddressCopied] = useState(false);
 

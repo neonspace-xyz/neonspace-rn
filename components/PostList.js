@@ -1,9 +1,9 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
-import { Color } from "../GlobalStyles";
+import { FontSize, Color, getFontFamily } from "../GlobalStyles";
 import PostSection from "../components/PostSection";
 import { convertTimestamp, getRandomNumber, logout } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
@@ -28,6 +28,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
   const flatListRef = useRef(null);
 
   const [isShowCreate, setIsShowCreate] = useState(false);
+  const [isDeletingPost, setIsDeletingPost] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -43,13 +44,15 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
     if (!userInfo) return;
     setLoadingMore(true);
     try {
-      let url = `/user/getAllPosts`;
+      let url = isProfile ?
+        `/user/getPost?userId=${userInfo.user_id}&page=${page}` :
+        `/user/getAllPosts`;
+
       let resp = await api.get(url);
-      let posts = resp.data;
+      let posts = isProfile ? resp.data.posts : resp.data;
       let _posts = [];
       for (const key in posts) {
         if (Object.hasOwnProperty.call(posts, key)) {
-          let like = getRandomNumber(0, 7);
           let itemLikes = [];
           const post = posts[key];
           for (let j = 0; j < post.users_liked.length; j++) {
@@ -146,9 +149,39 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
     setSelectedItemIndex(index);
   };
 
-  const handleDelete = () => {
-    console.log(`Deleting item ${selectedItemIndex}`);
-    setSelectedItemIndex(null);
+  const handleDelete = async () => {
+    console.log("PostList-handleDelete-selectedItemIndex", selectedItemIndex);
+    setIsDeletingPost(true);
+    try {
+      // Get the post to delete
+      const postToDelete = items[selectedItemIndex];
+
+      // Call delete API
+      const url = `/user/deletePost?postId=${postToDelete.post_id}`;
+      await api.post(url);
+
+      // Update items state by filtering out the deleted post
+      setItems(currentItems =>
+        currentItems.filter(item => item.post_id !== postToDelete.post_id)
+      );
+
+      // Clear selected item
+      setSelectedItemIndex(null);
+
+    } catch (error) {
+      if (error.isSessionExpired) {
+        await logout(navigation);
+      } else {
+        console.error("PostList-handleDelete-error", error);
+        console.log("PostList-handleDelete-error", error.data);
+        Alert.alert(
+          "Error",
+          "Failed to delete post. Please try again."
+        );
+      }
+    } finally {
+      setIsDeletingPost(false);
+    }
   };
 
   const confirmDelete = () => {
@@ -239,20 +272,18 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
         />
       )}
 
-
-      {/* <Modal
-        visible={isShowCreate}
+      <Modal
         transparent={true}
-        animationType="slide"
-        onRequestClose={() => setIsShowCreate(false)}
+        visible={isDeletingPost}
+        animationType="fade"
       >
-        <PostCreate
-          usersession={usersession}
-          setIsShowCreate={setIsShowCreate} />
-        </Modal> */}
-
-
-
+        <View style={styles.loadingModalContainer}>
+          <View style={styles.loadingModalContent}>
+            <ActivityIndicator size="large" color={Color.darkInk} />
+            <Text style={styles.loadingText}>Deleting post...</Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -272,6 +303,25 @@ const styles = StyleSheet.create({
   },
   flat: {
     width: "100%"
+  },
+  loadingModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  loadingModalContent: {
+    backgroundColor: Color.colorDarkslategray_400,
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: Color.darkInk,
+    marginTop: 10,
+    fontSize: FontSize.size_sm,
+    fontFamily: getFontFamily("500"),
+    fontWeight: "500",
   },
 });
 
