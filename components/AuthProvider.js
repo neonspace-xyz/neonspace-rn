@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
       return Promise.reject(error);
     }
   );
-  
+
   // Response Interceptor
   api.interceptors.response.use(
     response => response,
@@ -47,16 +47,16 @@ export const AuthProvider = ({ children }) => {
         (error.response.data.error === 'ExpiredSignature' || error.response.data.error === 'Session expired')
       ) {
         setIsAuthenticated(false);
-        try{
-        navigation.reset({
+        try {
+          navigation.reset({
             index: 0,
             routes: [{ name: "Login" }]
           });
-        }catch(e){}
+        } catch (e) { }
         // Handle the error in the component level
         return Promise.reject({ ...error, isSessionExpired: true });
       }
-  
+
       return Promise.reject(error);
     }
   );
@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }) => {
       let _usersession = await getSession();
       let url = `/user/getUser?userId=${_usersession.user_info.user_id}`;
       let resp = await api.get(url);
-      await AsyncStorage.setItem("user", JSON.stringify(resp.data));      
+      await AsyncStorage.setItem("user", JSON.stringify(resp.data));
       await AsyncStorage.setItem("reset", "false");
       return resp.data
     } catch (err) {

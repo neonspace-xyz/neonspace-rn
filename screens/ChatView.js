@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Image, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View, TextInput, Platform, BackHandler, Alert } from 'react-native'
+import { Image, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View, TextInput, Platform, BackHandler, Alert, ActivityIndicator } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/core';
 import ChatSectionBubble from '../components/ChatSectionBubble';
 import ChatSectionBubbleSelf from '../components/ChatSectionBubbleSelf';
@@ -13,7 +13,6 @@ const ChatDetail = () => {
   const { getSession, getOtherUser } = useAuth();
   const route = useRoute();
   const { tab, userInfo } = route.params;
-
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
   const [userInfo2, setUserInfo2] = useState();
@@ -22,6 +21,7 @@ const ChatDetail = () => {
   const [messages, setMessages] = useState([]);
   const [loadingSend, setLoadingSend] = useState(false);
   const [socket, setSocket] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const numberOfLines = Platform.select({
     ios: 4, // Set numberOfLines to 4 on iOS
@@ -35,18 +35,27 @@ const ChatDetail = () => {
   }, []);
 
   useEffect(() => {
+    console.log('Getting user info')
+    console.log(userInfo)
+    setIsLoading(true);
+
     if (userInfo?.to?.user_id) {
+      console.log('Setting user info because to field is provided')
       setUserInfo2(userInfo.to);
       getOtherUser(userInfo.to.user_id).then((user) => {
         setUserInfo2(user);
+        setIsLoading(false);
       })
     }
     else if (userInfo?.user_id) {
+      console.log('Setting user info because user_id field is provided')
       setUserInfo2(userInfo);
       getOtherUser(userInfo.user_id).then((user) => {
         setUserInfo2(user);
+        setIsLoading(false);
       })
     } else {
+      setIsLoading(false);
       return;
     }
   }, [userInfo]);
@@ -66,29 +75,30 @@ const ChatDetail = () => {
   }, []);
 
   useEffect(() => {
-    // if (!usersession?.jwt_token) return;
-    // // console.log("to", userInfo.user_id);
-    // // console.log("token", usersession.jwt_token);
-    // // console.log("offset", CHAT_OFFSET);
-    // const ws = new WebSocket(`${WS_URL}/chat/start?to=${userInfo?.user_id}&token=${usersession.jwt_token}&offset=${CHAT_OFFSET}`);
+    if (!usersession?.jwt_token) return;
+    // console.log("to", userInfo.user_id);
+    // console.log("token", usersession.jwt_token);
+    // console.log("offset", CHAT_OFFSET);
+    console.log(`Connecting chat to ${WS_URL}/chat/start?to=${userInfo2?.user_id}&token=${usersession.jwt_token}&offset=${CHAT_OFFSET}`)
+    const ws = new WebSocket(`${WS_URL}/chat/start?to=${userInfo2?.user_id}&token=${usersession.jwt_token}&offset=${CHAT_OFFSET}`);
 
-    // ws.onopen = () => {
-    //   console.log('Connected to WebSocket server');
-    // };
+    ws.onopen = () => {
+      console.log('Connected to WebSocket server');
+    };
 
-    // ws.onmessage = (e) => {
-    //   let newMessage = JSON.parse(e.data);
-    //   let _message = JSON.parse(newMessage.message);
-    //   newMessage['message'] = _message;
-    //   setMessages((prevMessages) => [...prevMessages, newMessage]);
-    // };
+    ws.onmessage = (e) => {
+      let newMessage = JSON.parse(e.data);
+      let _message = JSON.parse(newMessage.message);
+      newMessage['message'] = _message;
+      setMessages((preaMessages) => [...preaMessages, newMessage]);
+    };
 
-    // ws.onclose = () => {
-    //   console.log('Disconnected from WebSocket server');
-    //   Alert.alert("Disconnected");
-    // };
+    ws.onclose = () => {
+      console.log('Disconnected from WebSocket server');
+      Alert.alert("Disconnected");
+    };
 
-    // setSocket(ws);
+    setSocket(ws);
 
     // return () => ws.close();
   }, [usersession]);
@@ -99,23 +109,6 @@ const ChatDetail = () => {
     }
   }, [messages]);
 
-  const getChatHistory = async () => {
-    if (!usersession) return;
-
-    let data = [];
-    for (let i = 1; i < getRandomNumber(1, 3); i++) {
-      data.push({
-        "from": i % 2 === 0 ? userInfo.user_id : usersession.user_info.user_id,
-        "to": i % 2 === 0 ? usersession.user_info.user_id : userInfo.user_id,
-        "message": {
-          "content": `recent text message view here if the text is too${i}`,
-          "timestamp": "2024-08-14T12: 11: 00.338Z"
-        },
-        "timestamp": getRandomTimestamp(2)
-      })
-    }
-    setMessages(data);
-  }
 
   const sendMessage = async () => {
     if (input == '') {
@@ -127,7 +120,14 @@ const ChatDetail = () => {
       setInput('');
     }
   }
-  // console.log("userInfo2", userInfo2)
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="large" color={Color.darkInk} />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container} keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
@@ -142,13 +142,13 @@ const ChatDetail = () => {
         <Text style={[StyleHeaderTitle]}>
           {userInfo2?.name ? userInfo2?.name : "Name"}
           {`\n`}
-          {userInfo2?.screen_name ? `a@${userInfo2?.screen_name}` : "@endlessmee"}
+          {userInfo2?.screen_name ? `@${userInfo2?.screen_name}` : "@endlessmee"}
         </Text>
         <Pressable
           onPress={() => { navigation.push(`OtherProfile${tab}`, { tab, user: userInfo2 }); }}>
           {userInfo2?.profile_image ? (
             <Image
-              source={userInfo2?.profile_image}
+              source={{ uri: userInfo2.profile_image }}
               style={StyleHeaderImg}
             />
           ) : (
@@ -168,28 +168,22 @@ const ChatDetail = () => {
           onLayout={() => scrollViewRef.current.scrollToEnd({ animated: true })}
         >
           {messages?.length > 0 ? messages?.map((item, index) => {
-            if (item?.to == userInfo?.user_id) {
+            // Check if the message is from the current user (usersession)
+            const isFromMe = item?.from === usersession?.user_info?.user_id;
+
+            if (isFromMe) {
               return (<ChatSectionBubbleSelf key={index} item={item} />)
-            }
-            else {
+            } else {
               return (<ChatSectionBubble key={index} item={item} />)
             }
           }) : (
             <View style={styles.container_empty}>
-              <Image
-                style={styles.speechBubble1Icon}
-                contentFit="cover"
-                source={require("../assets/ic_trophy.png")}
-              />
               <Text style={[styles.startChatting]}>
                 Start chatting
               </Text>
               <Text
                 style={[styles.clickOnThe]}
-              >{`Click on the text box below to begin.`}</Text>
-              <Text
-                style={[styles.clickOnThe, styles.clickOnTheTypo]}
-              >{`Be sure to indicate whether the message was sent by you, [name], or if it’s just a prompt for us to understand more about the context or situation.`}</Text>
+              >{`Start chatting with your new friend`}</Text>
             </View>
           )}
         </ScrollView>
@@ -269,7 +263,7 @@ const styles = StyleSheet.create({
     width: "100%",
     // height:"100%",
     // height:"80%",
-    // paddingTop: 10,
+    paddingTop: 20,
     // borderColor:"red",
     // borderWidth:1
   },
@@ -305,6 +299,9 @@ const styles = StyleSheet.create({
   },
   buttonDisable: {
     opacity: 0.5
+  },
+  loadingContainer: {
+    justifyContent: 'center',
   },
 });
 

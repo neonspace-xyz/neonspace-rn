@@ -39,7 +39,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
 
 
   const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
-    const { getUser, getSession } = useAuth();
+    const { getSession } = useAuth();
     // const [userInfo, setUserInfo] = useState();
     const [usersession, setUsersession] = useState();
 
@@ -83,11 +83,11 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
     return (userInfo &&
       <View>
         <CrowdListHiring
-        tab={4}
-        userInfo={userInfo}
-        isProfile={false}
-        isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} />
+          tab={4}
+          userInfo={userInfo}
+          isProfile={false}
+          isShowSearch={isShowSearch}
+          isShowCreate={isShowCreate} />
       </View>)
 
   };
@@ -105,12 +105,12 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
     return (userInfo &&
       <View>
         <MintingList
-        tab={4}
-        usersession={usersession}
-        userInfo={userInfo}
-        isProfile={false}
-        isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} />
+          tab={4}
+          usersession={usersession}
+          userInfo={userInfo}
+          isProfile={false}
+          isShowSearch={isShowSearch}
+          isShowCreate={isShowCreate} />
       </View>)
 
   };
@@ -321,16 +321,25 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
           )}
           <TouchableOpacity
             style={{
-              borderWidth: 1.5, borderColor: 'transparent', marginHorizontal: 5
+              borderWidth: 1.5,
+              borderColor: 'transparent',
+              marginHorizontal: 5
             }}
             onPress={() => {
-              navigation.push(`ChatView${tab}`, { tab, userInfo })
+              console.log('Going to chat from profile detail 2')
+              navigation.push(`ChatView${tab}`, {
+                tab: tab,
+                userInfo: {
+                  to: userInfo,
+                  user_id: userInfo.user_id
+                }
+              })
             }}
           >
             <Image
               style={{
-                width: 25, height: 25,
-
+                width: 25,
+                height: 25,
               }}
               source={require("../assets/ic_chat.png")}
             />

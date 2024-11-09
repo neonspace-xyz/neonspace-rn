@@ -1,4 +1,4 @@
-export const API_URL = "https://dev-api.neonspace.xyz";
+export const API_URL = "http://localhost:8080";
 export const WS_URL = "wss://dev-api.neonspace.xyz";
 
 export const TWITTER_OAUTH = "https://api.twitter.com/oauth/authorize?oauth_token="

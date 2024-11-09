@@ -115,7 +115,14 @@ const ChatList = () => {
 
   const handleDetail = (item) => {
     if (isShowCreate) return;
-    navigation.push(`ChatView${tab}`, { tab, userInfo: item });
+    console.log('Going to chat list')
+    navigation.push(`ChatView${tab}`, {
+      tab: tab,
+      userInfo: {
+        to: item,
+        user_id: item.to.user_id
+      }
+    });
   };
 
   return (
