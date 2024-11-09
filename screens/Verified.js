@@ -22,10 +22,10 @@ const Verified = () => {
     setVerifiedData(user.verified);
     setVerifiedByData(user.verified_by);
 
-    getOtherUser(user.user_id).then((user) => {
-      setVerifiedData(user.verified);
-      setVerifiedByData(user.verified_by);
-    })
+    // getOtherUser(user.user_id).then((user) => {
+    //   setVerifiedData(user.verified);
+    //   setVerifiedByData(user.verified_by);
+    // })
   },[user])
 
   return (

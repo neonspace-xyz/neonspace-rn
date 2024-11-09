@@ -1,7 +1,7 @@
 import React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
 const VerifiedListSection = ({ tab, item }) => {
@@ -56,12 +56,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   name: {
-    fontWeight: "500",
+    
     fontSize: FontSize.labelLarge_size,
+    fontWeight: "500",
+    fontFamily: getFontFamily("500"),
   },
   endlessmeee: {
     marginLeft: 6,
     fontSize: FontSize.labelLarge_size,
+    fontWeight: "400",
+    fontFamily: getFontFamily("400"),
   },
   nameParent: {
     alignItems: "center",
@@ -71,11 +75,12 @@ const styles = StyleSheet.create({
     marginTop: 2,
     alignSelf: "stretch",
     textAlign: "left",
+    fontWeight: "400",
+    fontFamily: getFontFamily("400"),
   },
   nameTypo: {
     textAlign: "left",
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
   },
 });
 

@@ -24,7 +24,7 @@ const OtherProfile = () => {
     getSession().then((data) => {
       setUsersession(data);
     });
-    setUserInfo(user)
+    // setUserInfo(user)
     getOtherUser(user.user_id).then((user) => {
       setUserInfo(user)
     });

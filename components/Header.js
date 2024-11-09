@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, View, Pressable, TextInput, StatusBar, Alert, FlatList, ActivityIndicator } from "react-native";
@@ -7,6 +7,7 @@ import { Color, FontFamily, FontSize, getFontFamily } from "../GlobalStyles";
 import { useAuth } from "../components/AuthProvider";
 import UserSearchSection from "./UserSearchSection";
 import EmptyView from "./EmptyView";
+import debounce from 'lodash.debounce';
 
 const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) => {
   const { api } = useAuth();
@@ -25,7 +26,8 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
     }
   };
 
-  const fetchSearchItems = async () => {
+   // Function to fetch search items
+  const fetchSearchItems = useCallback(async() => {
     if (searchValue == '') return;
     let data = [];
     setLoadingMore(true);
@@ -46,6 +48,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
         try {
           resp = await api.get(url);
           if (resp.data) {
+            console.log("user : ", resp.data)
             data.push(resp.data);
           }
         } catch (e) {
@@ -60,7 +63,18 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
       setSearchItems(data);
       setLoadingMore(false);
     }
-  };
+  }, [searchValue]);
+
+  const debouncedFetchSearchItems = useCallback(debounce(fetchSearchItems, 500), [fetchSearchItems]);
+
+   // Trigger debounced function when searchValue changes
+   useEffect(() => {
+    if (searchValue) {
+      debouncedFetchSearchItems();
+    }
+    // Cleanup the debounce on unmount
+    return () => debouncedFetchSearchItems.cancel();
+  }, [searchValue, debouncedFetchSearchItems]);
 
   const handleDetail = (item) => {
     if (isHideList) return;
@@ -106,6 +120,8 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
           value={searchValue}
           onChangeText={(text) => {
             setSearchValue(text);
+            console.log("onchange text")
+            debouncedFetchSearchItems();
           }}
           onFocus={() => {
             if (!isShowSearch) {

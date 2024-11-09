@@ -421,7 +421,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
               marginTop: 15
               // borderWidth:2, borderColor:"red"
             }}
-            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user: userInfo })}
+            onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, user: userInfo })}
           >
             <Text
               style={[
