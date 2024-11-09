@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Switch, TouchableOpacity, Pressable, Image, ScrollView, Alert, Modal } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Switch, TouchableOpacity, Pressable, Image, ScrollView, Alert, Modal, KeyboardAvoidingView } from 'react-native';
 import { Color, FontSize, getFontFamily, StyleContent } from '../GlobalStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
@@ -134,7 +134,8 @@ const ExperienceForm = ({route}) => {
         </View>
       </View>
 
-      <ScrollView style={[styles.scrollView, StyleContent]} contentContainerStyle={styles.scrollContent}>
+      <KeyboardAvoidingView behavior="padding" style={[StyleContent]}>
+      <ScrollView style={[styles.scrollView]} contentContainerStyle={styles.scrollContent}>
 
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
@@ -290,6 +291,7 @@ const ExperienceForm = ({route}) => {
             </View>
           </Modal>
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
 
   );
@@ -314,6 +316,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     alignItems: 'stretch',  // Ensures children fill the width
     paddingVertical: 20,    // Adds space at the top and bottom
+    height:'150%'
   },
   inputContainer: {
     marginBottom: 20,

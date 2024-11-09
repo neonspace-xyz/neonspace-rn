@@ -4,11 +4,14 @@ import { StyleSheet, Text, View, Pressable, TextInput, Platform, KeyboardAvoidin
 import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { API_URL, Component_Max_Width, MAX_CHAR_POST } from "../Constant";
 import { useAuth } from "./AuthProvider";
+import { useRefresh } from "./RefreshProvider";
 
 const PostCreate = ({ usersession, setIsShowCreate }) => {
   const { api } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const { triggerRefresh } = useRefresh();
+
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const numberOfLines = Platform.select({
     ios: 4, // Set numberOfLines to 4 on iOS
@@ -49,6 +52,7 @@ const PostCreate = ({ usersession, setIsShowCreate }) => {
       if (resp.status == 200) {
         Alert.alert("Your post has been published successfully!")
         setLoading(false);
+        triggerRefresh();
         doHideModal();
       }
     } catch (error) {

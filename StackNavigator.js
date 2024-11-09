@@ -14,6 +14,7 @@ import { FontSize, Color, getFontFamily } from './GlobalStyles';
 import { LoadingProvider } from './components/LoadingContext';
 import { shortenAddress } from './Utils';
 import { useAuth } from './components/AuthProvider';
+import { RefreshProvider } from './components/RefreshProvider';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -213,9 +214,11 @@ const StackNavigator = () => {
       <NavigationContainer linking={linking}>
         <AuthProvider>
           <LoadingProvider>
-            <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
-              <Drawer.Screen name="DrawerMain" component={StackNavigatorComponent} options={{ headerShown: false }} />
-            </Drawer.Navigator>
+            <RefreshProvider>
+              <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
+                <Drawer.Screen name="DrawerMain" component={StackNavigatorComponent} options={{ headerShown: false }} />
+              </Drawer.Navigator>
+            </RefreshProvider>
           </LoadingProvider>
         </AuthProvider>
       </NavigationContainer>

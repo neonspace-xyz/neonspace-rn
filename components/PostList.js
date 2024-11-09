@@ -12,6 +12,7 @@ import PopupOption from "./PopupOption";
 import ButtonFAB from "./ButtonFAB";
 import PostCreate from "./PostCreate";
 import EmptyView from "./EmptyView";
+import { useRefresh } from "./RefreshProvider";
 
 const PostList = ({ tab, isProfile, usersession, userInfo }) => {
   const { api } = useAuth();
@@ -21,7 +22,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-
+  const { refreshTrigger } = useRefresh();
   const windowDimensions = Dimensions.get('window');
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
@@ -38,7 +39,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
 
   useEffect(() => {
     fetchItems();
-  }, [userInfo]);
+  }, [userInfo, refreshTrigger]);
 
   const fetchItems = async () => {
     if (!userInfo) return;
