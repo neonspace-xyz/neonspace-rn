@@ -109,6 +109,7 @@ const StackNavigator = () => {
                 screen: 'MyProfile4',
                 params: {
                   reset: true,
+                  isFullBio: true,
                 },
               });
             }
