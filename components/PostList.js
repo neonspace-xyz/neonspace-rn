@@ -43,13 +43,15 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
     if (!userInfo) return;
     setLoadingMore(true);
     try {
-      let url = `/user/getAllPosts`;
+      let url = isProfile ?
+        `/user/getPost?userId=${userInfo.user_id}&page=${page}` :
+        `/user/getAllPosts`;
+
       let resp = await api.get(url);
-      let posts = resp.data;
+      let posts = isProfile ? resp.data.posts : resp.data;
       let _posts = [];
       for (const key in posts) {
         if (Object.hasOwnProperty.call(posts, key)) {
-          let like = getRandomNumber(0, 7);
           let itemLikes = [];
           const post = posts[key];
           for (let j = 0; j < post.users_liked.length; j++) {
