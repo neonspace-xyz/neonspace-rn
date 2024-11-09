@@ -17,23 +17,6 @@ import { Image } from "expo-image";
 const Main = () => {
   // Create the bottom tab navigator
   const Tab = createBottomTabNavigator();
-  const Drawer = createDrawerNavigator();
-  
-  const CustomDrawerContent = (props) => (
-    <SafeAreaView style={styles.drawerContent}>
-      <View style={styles.drawerSection}>
-        <Text style={{color:"white"}}>Name</Text>
-        <Text style={{color:"white"}}>@endlessmeeee</Text>
-        <Text style={{color:"white"}}>Wallet Address: 0xe...dhv</Text>
-
-        <View style={{marginTop:20}}>
-          <Text style={{color:"white"}}>Post Crowdsource</Text>
-          <Text style={{color:"white"}}>My Full Bio</Text>
-          <Text style={{color:"white"}}>Wallet</Text>
-        </View>
-      </View>
-    </SafeAreaView>
-  );
 
   const TabNavigatorComponent = () => (
     <Tab.Navigator
@@ -60,7 +43,7 @@ const Main = () => {
             iconName = focused ? 'person' : 'person-outline';
           } else if (route.name === 'Crowdsource') {
             iconName = focused ? 'logo-usd' : 'logo-usd';
-          } 
+          }
 
           return <Icon name={iconName} size={size} color={color} />;
         },
@@ -88,7 +71,7 @@ const Main = () => {
             });
           }
         })} />
-        <Tab.Screen name="Crowdsource" component={CrowdsourceStackNavigator}
+      <Tab.Screen name="Crowdsource" component={CrowdsourceStackNavigator}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             navigation.navigate('Crowdsource', {
@@ -152,31 +135,31 @@ const Main = () => {
 
           if (route.name === 'Home') {
             return <Image
-              style={{width:32, height:32, opacity:focused? 1 : 0.32}}
+              style={{ width: 32, height: 32, opacity: focused ? 1 : 0.32 }}
               source={require('../assets/icon-home.png')}
             />
-          } 
+          }
           else if (route.name === 'Notification') {
             return <Image
-              style={{width:32, height:32, opacity:focused? 1 : 0.32}}
+              style={{ width: 32, height: 32, opacity: focused ? 1 : 0.32 }}
               source={require('../assets/icon-notification.png')}
             />
           } else if (route.name === 'Wallet') {
             return <Image
-              style={{width:32, height:32, opacity:focused? 1 : 0.32}}
+              style={{ width: 32, height: 32, opacity: focused ? 1 : 0.32 }}
               source={require('../assets/icon-wallet.png')}
             />
           } else if (route.name === 'Profile') {
             return <Image
-              style={{width:32, height:32, opacity:focused? 1 : 0.32}}
+              style={{ width: 32, height: 32, opacity: focused ? 1 : 0.32 }}
               source={require('../assets/icon-profile.png')}
             />
           } else if (route.name === 'Crowdsource') {
             return <Image
-              style={{width:32, height:32, opacity:focused? 1 : 0.32}}
+              style={{ width: 32, height: 32, opacity: focused ? 1 : 0.32 }}
               source={require('../assets/icon-crowdsource.png')}
             />
-          } 
+          }
           // return <Icon name={iconName} size={size} color={color} />;
           // return <Text>TESTS</Text>
         },
@@ -184,15 +167,16 @@ const Main = () => {
 
         tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'gray',
-        tabBarStyle: { backgroundColor: Color.colorGray_100, 
-        borderTopColor: 'transparent'
-        // height: 50
-        // paddingTop:12,
-        // paddingBottom:24,
-        // paddingLeft:26,
-        // paddingRight:24
-        
-         },
+        tabBarStyle: {
+          backgroundColor: Color.colorGray_100,
+          borderTopColor: 'transparent'
+          // height: 50
+          // paddingTop:12,
+          // paddingBottom:24,
+          // paddingLeft:26,
+          // paddingRight:24
+
+        },
         tabBarLabelStyle: { fontSize: 10 },
         // tabBarActiveTintColor: 'tomato',
         // tabBarInactiveTintColor: 'gray',
@@ -212,7 +196,7 @@ const Main = () => {
             });
           }
         })} />
-        <Tab.Screen name="Crowdsource" component={CrowdsourceStackNavigator}
+      <Tab.Screen name="Crowdsource" component={CrowdsourceStackNavigator}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             navigation.navigate('Crowdsource', {
@@ -259,26 +243,5 @@ const Main = () => {
     </Tab.Navigator>
   )
 };
-
-
-const styles = StyleSheet.create({
-  drawerContent: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: Color.colorDarkslategray_100,
-  },
-  drawerSection: {
-    marginVertical: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default Main;

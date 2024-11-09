@@ -10,7 +10,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable, Alert, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Color, getFontFamily } from './GlobalStyles';
+import { FontSize, Color, getFontFamily } from './GlobalStyles';
 import { LoadingProvider } from './components/LoadingContext';
 import { shortenAddress } from './Utils';
 import { useAuth } from './components/AuthProvider';
@@ -58,23 +58,44 @@ const StackNavigator = () => {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
     const [userInfo, setUserInfo] = useState();
-    const { getUser } = useAuth();
+    const { getUser, getSession } = useAuth();
+
     useEffect(() => {
-      getUser().then((user) => {
-        setUserInfo(user);
+      getSession().then((session) => {
+        if (session?.user_info) {
+          setUserInfo(session.user_info);
+        }
+        getUser().then((user) => {
+          setUserInfo(user);
+        });
       });
-    }, [])
+    }, []);
+
     return (
       <SafeAreaView style={styles.drawerContent}>
         <View style={styles.drawerSection}>
-          <Image
-            style={[styles.myProfileItem]}
-            contentFit="cover"
-            source={userInfo?.profile_image ? { uri: userInfo.profile_image } : require("./assets/photo.png")}
-          />
-          <Text style={{ color: "white" }}>{userInfo?.name}</Text>
-          <Text style={{ color: "white" }}>{userInfo?.screen_name}</Text>
-          <Text style={{ color: "white" }}>{userInfo?.wallet_address ? shortenAddress(userInfo.wallet_address) : '0x00'}</Text>
+          <TouchableOpacity
+            style={styles.userInfoSection}
+            onPress={() => {
+              navigation.navigate('Profile', {
+                screen: 'MyProfile4',
+                params: {
+                  tab: '4',
+                  user: userInfo,
+                  reset: true,
+                },
+              });
+            }}
+          >
+            <Image
+              style={[styles.myProfileItem]}
+              contentFit="cover"
+              source={userInfo?.profile_image ? { uri: userInfo.profile_image } : require("./assets/photo.png")}
+            />
+            <Text style={styles.userInfoText}>{userInfo?.name || "Loading..."}</Text>
+            <Text style={styles.userInfoText}>{userInfo?.screen_name ? `@${userInfo.screen_name}` : "Loading..."}</Text>
+            <Text style={styles.userInfoText}>{userInfo?.wallet_address ? shortenAddress(userInfo.wallet_address) : '0x00'}</Text>
+          </TouchableOpacity>
 
           <View style={{ marginTop: 50 }}>
             <TouchableOpacity onPress={() => {
@@ -282,6 +303,19 @@ const styles = StyleSheet.create({
     borderRadius: 50
   },
 
+  userInfoSection: {
+    padding: 10,
+    borderRadius: 10,
+    // Add subtle highlight effect
+    backgroundColor: Color.colorDarkslategray_300,
+  },
+
+  userInfoText: {
+    color: "white",
+    marginTop: 4,
+    fontFamily: getFontFamily("400"),
+    fontSize: FontSize.labelLarge_size,
+  },
 });
 
 export default StackNavigator;
