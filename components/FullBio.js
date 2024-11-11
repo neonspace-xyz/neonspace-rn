@@ -78,23 +78,29 @@ const FullBio = ({ userInfo, isOtherProfile }) => {
   };
 
   return (
-    <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-      <ExperienceCard />
-      <SkillsCard />
-    </ScrollView>
+    <View style={styles.mainContainer}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <ExperienceCard />
+        <SkillsCard />
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: Color.colorGray_100,
+  },
   scrollView: {
     flex: 1,
     paddingHorizontal: 10,
-    backgroundColor: Color.colorGray_100,
   },
   scrollContent: {
-    alignItems: 'stretch',
     paddingVertical: 20,
-    paddingBottom: 100,
   },
   container: {
     backgroundColor: Color.colorDarkslategray_400,

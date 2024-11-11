@@ -474,21 +474,19 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
           </View>
 
           <View style={[styles.frameParent8]}>
-            {!isFullBio ? (
-              <TabView
-                navigationState={{ index, routes, tab, isShowSearch, isShowCreate }}
-                renderScene={renderScene}
-                onIndexChange={setIndex}
-                renderTabBar={renderTabBar}
-                style={{ backgroundColor: Color.colorGray_100, marginBottom: -40 }}
-                initialLayout={{ width: layout.width }}
-              />
-            ) : (
-              <FullBio
-                userInfo={userInfo}
-                isOtherProfile={userInfo?.user_id !== usersession?.user_id}
-              />
-            )}
+            <TabView
+              navigationState={{ index, routes, tab, isShowSearch, isShowCreate }}
+              renderScene={!isFullBio ? renderScene : () => (
+                <FullBio
+                  userInfo={userInfo}
+                  isOtherProfile={userInfo?.user_id !== usersession?.user_id}
+                />
+              )}
+              onIndexChange={setIndex}
+              renderTabBar={!isFullBio ? renderTabBar : () => null}
+              style={{ backgroundColor: Color.colorGray_100, marginBottom: -40 }}
+              initialLayout={{ width: layout.width }}
+            />
           </View>
         </View>
       )}
