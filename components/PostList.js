@@ -67,6 +67,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
 
           let item = {
             id: key,
+            user_id: post.user_id,
             name: post.name,
             screen_name: `@${post.screen_name}`,
             image: post.profile_image,

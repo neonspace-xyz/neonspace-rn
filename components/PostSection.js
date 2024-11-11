@@ -3,7 +3,7 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { formatPostTimestamp, getFormattedPostTimestamp } from "../Utils";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "./AuthProvider";
 
 const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) => {
@@ -30,11 +30,19 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
       }
     }
   }
+
+  const handleProfilePress = () => {
+    navigation.push('OtherProfile1', { tab: '1', user: item });
+  };
+
   return (
     <View style={styles.frame} index={`post${item?.id}`}>
       <Pressable onPress={() => isDetail ? null : onPress()}>
         <View style={styles.frameParent}>
-          <View style={styles.frameFlexBox}>
+          <TouchableOpacity
+            style={styles.frameFlexBox}
+            onPress={handleProfilePress}
+          >
             <Image
               style={styles.frameChild}
               contentFit="cover"
@@ -55,7 +63,10 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
               <Text style={[styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
             </View>
             {`@${userInfo?.screen_name}` == item?.screen_name && (
-              <TouchableOpacity onPress={(event) => onMore(event, index)} style={styles.viewImgMore}>
+              <TouchableOpacity
+                onPress={(event) => onMore(event, index)}
+                style={styles.viewImgMore}
+              >
                 <Image
                   style={styles.imgMore}
                   contentFit="cover"
@@ -63,7 +74,7 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
                 />
               </TouchableOpacity>
             )}
-          </View>
+          </TouchableOpacity>
           <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
             {item?.text}
           </Text>

@@ -8,9 +8,9 @@ import { useAuth } from "../components/AuthProvider";
 import ProfileDetail2 from "../components/ProfileDetail2";
 
 const OtherProfile = () => {
-  console.log("OtherProfile : ")
   const route = useRoute();
   const { tab, user } = route.params;
+  console.log("OtherProfile-user", user, tab);
   const [usersession, setUsersession] = useState();
   const [userInfo, setUserInfo] = useState();
   const [isLoading, setIsLoading] = useState(true);
