@@ -1,53 +1,78 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from "react-native";
 import { Border, Color, getFontFamily, Padding } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
-const FullBio = ({ experiences, skills }) => {
+const FullBio = ({ userInfo, isOtherProfile }) => {
+  console.log("FullBio-userInfo", userInfo);
   const navigation = useNavigation();
   const tab = 4;
+
   const SkillsCard = () => {
+    const isEmpty = !userInfo.skills || userInfo.skills.length === 0;
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, isEmpty && styles.containerEmpty]}>
         <Text style={styles.header}>Skills</Text>
 
-        <TouchableOpacity style={styles.editButton} onPress={() => navigation.push(`Skill${tab}`, { tab, skills })}>
-          <Text style={styles.editButtonText}>Edit</Text>
-        </TouchableOpacity>
-        {skills?.map((skill) => (
-          <View style={styles.skillItem} key={skill.id}>
-            <Text style={styles.title}>{skill.skill}</Text>
-            <Text style={styles.verified}>{skill.description}</Text>
-          </View>))
-        }
-        <TouchableOpacity style={styles.viewMoreButton} onPress={() => navigation.push(`Skill${tab}`, { tab, skills })}>
-          <Text style={styles.viewMoreText}>View all {skills?.length} skills</Text>
-        </TouchableOpacity>
+        {!isOtherProfile && (
+          <TouchableOpacity style={styles.editButton} onPress={() => navigation.push(`Skill${tab}`, { tab, skills: userInfo.skills })}>
+            <Text style={styles.editButtonText}>Edit</Text>
+          </TouchableOpacity>
+        )}
+        {isEmpty ? (
+          <Text style={styles.emptyText}>
+            @{userInfo.screen_name} has not updated their skills
+          </Text>
+        ) : (
+          userInfo.skills.map((skill) => (
+            <View style={styles.skillItem} key={skill.id}>
+              <Text style={styles.title}>{skill.skill}</Text>
+              <Text style={styles.verified}>{skill.description}</Text>
+            </View>
+          ))
+        )}
+        {!isOtherProfile && (
+          <TouchableOpacity style={styles.viewMoreButton} onPress={() => navigation.push(`Skill${tab}`, { tab, skills: userInfo.skills })}>
+            <Text style={styles.viewMoreText}>View all {userInfo.skills?.length} skills</Text>
+          </TouchableOpacity>
+        )}
       </View>
     );
   };
 
   const ExperienceCard = () => {
+    const isEmpty = !userInfo.experiences || userInfo.experiences.length === 0;
+    console.log("ExperienceCard-userInfo", userInfo.experiences);
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, isEmpty && styles.containerEmpty]}>
         <Text style={styles.header}>Experience</Text>
 
-        <TouchableOpacity style={styles.editButton} onPress={() => navigation.push(`Experience${tab}`, { tab, experiences })}>
-          <Text style={styles.editButtonText}>Edit</Text>
-        </TouchableOpacity>
-        {experiences?.map((experience) => (
-          <View style={styles.experienceItem} key={experience.id}>
-            <Text style={styles.title}>{experience.role}</Text>
-            <Text style={styles.subtitle}>{experience.company} - {experience.employment_type}</Text>
-            <Text style={styles.date}>{experience.start_date} - {experience.end_date}</Text>
-            <Text style={styles.description}>
-              {experience.description}
-            </Text>
-          </View>
-        ))}
-        <TouchableOpacity style={styles.viewMoreButton} onPress={() => navigation.push(`Experience${tab}`, { tab, experiences })}>
-          <Text style={styles.viewMoreText}>View all {experiences?.length} experiences</Text>
-        </TouchableOpacity>
+        {!isOtherProfile && (
+          <TouchableOpacity style={styles.editButton} onPress={() => navigation.push(`Experience${tab}`, { tab, experiences: userInfo.experiences })}>
+            <Text style={styles.editButtonText}>Edit</Text>
+          </TouchableOpacity>
+        )}
+        {isEmpty ? (
+          <Text style={styles.emptyText}>
+            @{userInfo.screen_name} has not updated their experience
+          </Text>
+        ) : (
+          userInfo.experiences.map((experience) => (
+            <View style={styles.experienceItem} key={experience.id}>
+              <Text style={styles.title}>{experience.role}</Text>
+              <Text style={styles.subtitle}>{experience.company} - {experience.employment_type}</Text>
+              <Text style={styles.date}>{experience.start_date} - {experience.end_date}</Text>
+              <Text style={styles.description}>
+                {experience.description}
+              </Text>
+            </View>
+          ))
+        )}
+        {!isOtherProfile && (
+          <TouchableOpacity style={styles.viewMoreButton} onPress={() => navigation.push(`Experience${tab}`, { tab, experiences: userInfo.experiences })}>
+            <Text style={styles.viewMoreText}>View all {userInfo.experiences?.length} experiences</Text>
+          </TouchableOpacity>
+        )}
       </View>
     );
   };
@@ -64,16 +89,22 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     paddingHorizontal: 10,
+    backgroundColor: Color.colorGray_100,
   },
   scrollContent: {
-    alignItems: 'stretch',  // Ensures children fill the width
-    paddingVertical: 20,    // Adds space at the top and bottom
+    alignItems: 'stretch',
+    paddingVertical: 20,
+    paddingBottom: 100,
   },
   container: {
     backgroundColor: Color.colorDarkslategray_400,
     padding: 20,
     borderRadius: 10,
     marginBottom: 20,
+    minHeight: 150,
+  },
+  containerEmpty: {
+    minHeight: 100,
   },
   header: {
     fontSize: 16,
@@ -141,6 +172,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#FFFFFF',
     marginTop: 5,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: '#AAAAAA',
+    textAlign: 'center',
+    paddingVertical: 10,
   },
 });
 

@@ -474,31 +474,21 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
           </View>
 
           <View style={[styles.frameParent8]}>
-            {
-              !isFullBio ?
-                <TabView
-                  navigationState={{ index, routes, tab, isShowSearch, isShowCreate }}
-                  renderScene={renderScene}
-                  onIndexChange={setIndex}
-                  renderTabBar={renderTabBar}
-                  style={{ backgroundColor: Color.colorGray_100, marginBottom: -40 }}
-                  initialLayout={{ width: layout.width }}
-                />
-                :
-                <FullBio />
-            }
-            {/* <View
-              style={styles.verifiedWrapperFlexBox}
-            >
-              <Text style={[styles.youVerified, styles.bioExampleTypo]}>
-                Posts
-              </Text>
-            </View>
-            <View style={[styles.verifiedByWrapper, styles.verifiedWrapperFlexBox]}>
-              <Text style={[styles.youVerified, styles.bioExampleTypo]}>
-                Likes
-              </Text>
-            </View> */}
+            {!isFullBio ? (
+              <TabView
+                navigationState={{ index, routes, tab, isShowSearch, isShowCreate }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                renderTabBar={renderTabBar}
+                style={{ backgroundColor: Color.colorGray_100, marginBottom: -40 }}
+                initialLayout={{ width: layout.width }}
+              />
+            ) : (
+              <FullBio
+                userInfo={userInfo}
+                isOtherProfile={userInfo?.user_id !== usersession?.user_id}
+              />
+            )}
           </View>
         </View>
       )}
@@ -1082,6 +1072,51 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_sm,
     fontFamily: getFontFamily("500"),
     fontWeight: "500",
+  },
+  emptyStateContainer: {
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyStateText: {
+    fontFamily: getFontFamily("400"),
+    fontSize: FontSize.size_sm,
+    color: Color.darkInk,
+    opacity: 0.7,
+    textAlign: 'center',
+  },
+  bioSection: {
+    marginTop: 16,
+    padding: 16,
+    backgroundColor: Color.colorDarkslategray_400,
+    borderRadius: 8,
+  },
+  bioHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  bioTitle: {
+    fontSize: FontSize.size_lg,
+    fontFamily: getFontFamily("500"),
+    color: Color.darkInk,
+    fontWeight: "500",
+  },
+  experienceContainer: {
+    padding: 8,
+  },
+  experienceItem: {
+    backgroundColor: Color.colorDarkslategray_400,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 8,
+  },
+  skillsContainer: {
+    padding: 8,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
   },
 });
 

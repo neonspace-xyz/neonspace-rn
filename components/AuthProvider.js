@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
       console.debug("getOtherUser-id", id);
       let url = `/user/getUser?userId=${id}`;
       let resp = await api.get(url);
-      console.debug("getOtherUser-resp", resp.data);
+      // console.debug("getOtherUser-resp", resp.data);
       return resp.data
     } catch (err) {
       console.error("getOtherUser-error", err);

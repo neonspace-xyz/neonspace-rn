@@ -316,7 +316,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                   initialLayout={{ width: layout.width }}
                 />
                 :
-                <FullBio experiences={userInfo?.experiences} skills={userInfo?.skills} />
+                <FullBio userInfo={userInfo} isOtherProfile={false} />
             }
             {/* <View
               style={styles.verifiedWrapperFlexBox}

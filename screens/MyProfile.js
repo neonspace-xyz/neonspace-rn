@@ -1,4 +1,4 @@
-import React,{ useState, useCallback, useEffect, useContext} from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet, View, Pressable, KeyboardAvoidingView, Platform } from "react-native";
 import { Color } from "../GlobalStyles";
@@ -46,7 +46,7 @@ const MyProfile = ({ route }) => {
         setIsShowSearch={setIsShowSearch}
       />
 
-    {/* <KeyboardAvoidingView      
+      {/* <KeyboardAvoidingView      
       behavior="padding" keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     > */}
       <ProfileDetail
