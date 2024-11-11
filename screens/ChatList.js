@@ -122,7 +122,7 @@ const ChatList = () => {
       tab: tab,
       userInfo: {
         to: item,
-        user_id: item.user_id
+        user_id: item.to.user_id
       }
     });
   };
