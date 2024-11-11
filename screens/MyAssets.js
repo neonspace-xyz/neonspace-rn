@@ -61,27 +61,27 @@ const MyAssets = () => {
       /> */}
 
       <View style={styles.header}>
-          <Pressable
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../assets/back.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>
-          
-          <Text style={
-            [styles.editProfile, styles.timeTypo]
-            // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
-            }>Assets</Text>
-            
-            <Pressable
-            onPress={() => navigation.navigate(`QrCamera${tab}`, { tab })}>
-            <Image
-              source={require("../assets/qr.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>
-      </View>   
+        <Pressable
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={require("../assets/back.png")}
+            style={styles.headerImage}
+          />
+        </Pressable>
+
+        <Text style={
+          [styles.editProfile, styles.timeTypo]
+          // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
+        }>Assets</Text>
+
+        <Pressable
+          onPress={() => navigation.navigate(`QrCamera${tab}`, { tab })}>
+          <Image
+            source={require("../assets/qr.png")}
+            style={styles.headerImage}
+          />
+        </Pressable>
+      </View>
       <StatusBar backgroundColor={Color.colorGray_100} barStyle="light-content" />
       <View style={{
         justifyContent: "space-between",
@@ -99,7 +99,7 @@ const MyAssets = () => {
             <Image
               style={styles.frameChild}
               contentFit="cover"
-              source={userData?.owned_nfts[0]?.token_ids[0]?.image}
+              source={userData?.profile_image}
             />
             :
             <Image
@@ -112,7 +112,7 @@ const MyAssets = () => {
         <View style={styles.frameWrapper}>
           <View style={styles.neonrabbit287Parent}>
             <Text style={[styles.neonrabbit287]}>
-              {userData && userData?.owned_nfts[0]?.token_ids[0]?.name}
+              {userData && userData?.screen_name}
             </Text>
             <View style={styles.walletAddress0xedhvGroup}>
               <Text
@@ -202,7 +202,7 @@ const MyAssets = () => {
         </Text>
       </View>
 
-      <View style={{position:"absolute", bottom:0, width:"100%"}}>
+      <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
         <WalletComponent tab={tab} />
       </View>
     </SafeAreaView>

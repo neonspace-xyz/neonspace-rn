@@ -12,12 +12,9 @@ import { getRandomNumber, getRandomTimestamp } from "../Utils";
 import PostCreate from "./PostCreate";
 import { IMG_PROFILE } from "../Constant";
 import EmptyView from "./EmptyView";
+import { ethers } from "ethers";
 
 const TokenList = ({ itemsData }) => {
-  const navigation = useNavigation();
-  const [searchValue, setSearchValue] = useState('');
-  const [items, setItems] = useState([{}, {}]);
-  const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -109,14 +106,19 @@ const TokenList = ({ itemsData }) => {
     }
   };
 
-  const handleDetail = (item) => {
-    navigation.navigate("PostDetail", { item });
+  const formatTokenBalance = (balance, decimals) => {
+    return ethers.formatUnits(balance, decimals);
+  };
+
+  const calculateUsdValue = (balance, decimals, usdPrice) => {
+    const tokenBalance = Number(formatTokenBalance(balance, decimals));
+    return (tokenBalance * usdPrice).toFixed(2);
   };
 
   return (
     <View style={[styles.containerList]}>
       <FlatList
-        data={items}
+        data={itemsData}
         style={[{
           //borderWidth:2, borderColor:'yellow',
           paddingLeft: 10, paddingRight: 10, paddingTop: 10
@@ -140,43 +142,32 @@ const TokenList = ({ itemsData }) => {
           loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
         }
         renderItem={({ item }) => {
+          const formattedBalance = formatTokenBalance(item.balance, item.decimals);
+          const usdValue = calculateUsdValue(item.balance, item.decimals, item.usd_price);
+
           return (
             <View style={styles.ellipseFlexBox}>
               <Image
                 style={styles.frameItem}
                 contentFit="cover"
-                source={require("../assets/photo.png")}
+                source={item.logo ? { uri: item.logo } : require("../assets/photo.png")}
               />
               <View style={{ justifyContent: "center", flex: 1 }}>
-                <Text style={{
-                  fontWeight: "500",
-                  fontFamily: getFontFamily("500"),
-                  textAlign: "left",
-                  color: Color.darkInk,
-                  alignSelf: "stretch",
-                  fontSize: FontSize.labelLarge_size,
-                }}>
-                  Bitcoin
+                <Text style={styles.tokenName}>
+                  {item.name}
                 </Text>
-                <Text style={{
-                  fontWeight: "400",
-                  fontFamily: getFontFamily("400"),
-                  opacity: 0.7,
-                  textAlign: "left",
-                  color: Color.darkInk,
-                  alignSelf: "stretch",
-                  fontSize: FontSize.labelLarge_size,
-                }}>
-                  0.02 Bitcoin
+                <Text style={styles.tokenSymbol}>
+                  {Number(formattedBalance).toFixed(2)} {item.symbol}
                 </Text>
               </View>
-              <Text style={{
-                textAlign: "right",
-                fontWeight: "500",
-                fontFamily: getFontFamily("500"),
-                color: Color.darkInk,
-                fontSize: FontSize.labelLarge_size,
-              }}>$100</Text>
+              <View style={styles.priceContainer}>
+                <Text style={styles.tokenPrice}>
+                  ${usdValue}
+                </Text>
+                <Text style={styles.tokenPriceUnit}>
+                  ${item.usd_price.toFixed(2)}
+                </Text>
+              </View>
             </View>
           )
         }}
@@ -258,6 +249,41 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
+  },
+  tokenName: {
+    fontWeight: "500",
+    fontFamily: getFontFamily("500"),
+    textAlign: "left",
+    color: Color.darkInk,
+    alignSelf: "stretch",
+    fontSize: FontSize.labelLarge_size,
+  },
+  tokenSymbol: {
+    fontWeight: "400",
+    fontFamily: getFontFamily("400"),
+    opacity: 0.7,
+    textAlign: "left",
+    color: Color.darkInk,
+    alignSelf: "stretch",
+    fontSize: FontSize.labelLarge_size,
+  },
+  priceContainer: {
+    alignItems: 'flex-end',
+  },
+  tokenPrice: {
+    textAlign: "right",
+    fontWeight: "500",
+    fontFamily: getFontFamily("500"),
+    color: Color.darkInk,
+    fontSize: FontSize.labelLarge_size,
+  },
+  tokenPriceUnit: {
+    textAlign: "right",
+    fontWeight: "400",
+    fontFamily: getFontFamily("400"),
+    color: Color.darkInk,
+    fontSize: FontSize.labelSmall_size,
+    opacity: 0.7,
   },
 });
 
