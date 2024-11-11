@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Switch, TouchableOpacity, Pressable, Image, ScrollView, Alert, Modal, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Switch, TouchableOpacity, Pressable, Image, ScrollView, Alert, Modal, KeyboardAvoidingView, Platform } from 'react-native';
 import { Color, FontSize, getFontFamily, StyleContent } from '../GlobalStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
@@ -9,7 +9,7 @@ import { useAuth } from '../components/AuthProvider';
 import { API_URL } from '../Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ExperienceForm = ({route}) => {
+const ExperienceForm = ({ route }) => {
   const { action, tab, experience } = route.params;
   const { api, getOtherUser } = useAuth();
   const navigation = useNavigation();
@@ -31,37 +31,49 @@ const ExperienceForm = ({route}) => {
   const toggleSwitch = () => setIsCurrentRole(previousState => !previousState);
 
   const onStartDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || startDate;
-    setStartDate(currentDate);
     setShowStartDatePicker(false);
+    if (selectedDate) {
+      setStartDate(selectedDate);
+    }
   };
 
   const onEndDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || endDate;
-    setEndDate(currentDate);
     setShowEndDatePicker(false);
+    if (selectedDate) {
+      setEndDate(selectedDate);
+    }
+  };
+
+  const showStartPicker = () => {
+    setShowStartDatePicker(true);
+  };
+
+  const showEndPicker = () => {
+    setShowEndDatePicker(true);
   };
 
   const deleteExperience = () => {
     Alert.alert("Delete experience", "Are you sure you want to delete this experience?", [
       { text: "Cancel", style: "cancel" },
-      { text: "Delete", onPress: async() => {
-        try {
-          let url = action === "edit" ? API_URL + `/user/deleteExperience` : '';
-          let response = await api.post(url, {id});
-    
-          if (response.status == 200) {
-            Alert.alert('Success', 'Experience successfully deleted');
-            await AsyncStorage.setItem("reset", "true")
-            navigation.goBack();
-          } else {
-            const errorData = await response.json();
-            Alert.alert('Error', errorData.message || 'Failed to save experience');
+      {
+        text: "Delete", onPress: async () => {
+          try {
+            let url = action === "edit" ? API_URL + `/user/deleteExperience` : '';
+            let response = await api.post(url, { id });
+
+            if (response.status == 200) {
+              Alert.alert('Success', 'Experience successfully deleted');
+              await AsyncStorage.setItem("reset", "true")
+              navigation.goBack();
+            } else {
+              const errorData = await response.json();
+              Alert.alert('Error', errorData.message || 'Failed to save experience');
+            }
+          } catch (error) {
+            Alert.alert('Error', 'An error occurred while deleting experience');
           }
-        } catch (error) {
-          Alert.alert('Error', 'An error occurred while deleting experience');
         }
-      } }
+      }
     ]);
   }
 
@@ -91,12 +103,12 @@ const ExperienceForm = ({route}) => {
       company,
       employment_type: employmentType,
       location,
-      start_date: startDate ? startDate.toLocaleDateString("en-CA")+"T00:00:00Z" : "",
-      end_date: endDate ? endDate.toLocaleDateString("en-CA")+"T00:00:00Z" : "",
+      start_date: startDate ? startDate.toLocaleDateString("en-CA") + "T00:00:00Z" : "",
+      end_date: endDate ? endDate.toLocaleDateString("en-CA") + "T00:00:00Z" : "",
       description,
     };
     try {
-      let url = action === "new" ? API_URL + `/user/newExperience` :  API_URL + `/user/updateExperience` ;
+      let url = action === "new" ? API_URL + `/user/newExperience` : API_URL + `/user/updateExperience`;
       let response = await api.post(url, experienceData);
 
       if (response.status == 200) {
@@ -134,119 +146,131 @@ const ExperienceForm = ({route}) => {
         </View>
       </View>
 
-      <KeyboardAvoidingView behavior="padding" style={[StyleContent]}>
-      <ScrollView style={[styles.scrollView]} contentContainerStyle={styles.scrollContent}>
-
-        <View style={styles.formContainer}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Title</Text>
-            <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc" value={role}
-              onChangeText={setRole}/>
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Company/Project Name</Text>
-            <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc"  value={company}
-              onChangeText={setCompany} />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Employment Type</Text>
-            <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc"  value={employmentType}
-              onChangeText={setEmploymentType} />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Location</Text>
-            <TextInput style={styles.input} placeholder="APAC" placeholderTextColor="#ccc"  value={location}
-              onChangeText={setLocation} />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Start Date</Text>
-            <Pressable onPress={() => setShowStartDatePicker(true)}>
-              <TextInput
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.formContainer}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Title</Text>
+              <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc" value={role}
+                onChangeText={setRole} />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Company/Project Name</Text>
+              <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc" value={company}
+                onChangeText={setCompany} />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Employment Type</Text>
+              <TextInput style={styles.input} placeholder="Name" placeholderTextColor="#ccc" value={employmentType}
+                onChangeText={setEmploymentType} />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Location</Text>
+              <TextInput style={styles.input} placeholder="APAC" placeholderTextColor="#ccc" value={location}
+                onChangeText={setLocation} />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Start Date</Text>
+              <TouchableOpacity
                 style={styles.input}
-                placeholder="YYYY-MM-DD"
-                placeholderTextColor="#ccc"
-                value={startDate.toISOString().split('T')[0]} // Display date in YYYY-MM-DD format
-                editable={false}
-              />
-            </Pressable>
-            {showStartDatePicker && (
-              <DateTimePicker
-                value={startDate}
-                mode="date"
-                display="default"
-                onChange={onStartDateChange}
-              />
-            )}
-          </View>
-
-          
-          <View style={styles.switchContainer}>
-            <Text style={styles.label}>Current role</Text>
-            <Switch
-              trackColor={{ false: '#767577', true: '#81b0ff' }}
-              thumbColor={isCurrentRole ? '#f5dd4b' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isCurrentRole}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>End Date</Text>
-            <Pressable onPress={() => setShowEndDatePicker(true)}>
-              <TextInput
-                style={styles.input}
-                placeholder="YYYY-MM-DD"
-                placeholderTextColor="#ccc"
-                value={endDate.toISOString().split('T')[0]}
-                editable={false}
-              />
-            </Pressable>
-            {showEndDatePicker && (
-              <DateTimePicker
-                value={endDate}
-                mode="date"
-                display="default"
-                onChange={onEndDateChange}
-              />
-            )}
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Description</Text>
-            <TextInput
-              style={[styles.input, styles.description]}
-              placeholder="Lorem ipsum"
-              placeholderTextColor="#ccc"
-              multiline
-              maxLength={1000}
-              value={description}
-              onChangeText={setDescription}
-            />
-            <Text style={styles.charCount}>30/1000</Text>
-          </View>
-
-          {action === "edit" &&
-          <LinearGradient
-              colors={['#ff0000', '#ff0000']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.gradientBorder, styles.buttonSendConfirm, {height:40}]}
-
-            >
-              <Pressable
-                style={[{
-                  backgroundColor: Color.colorGray_100,
-                  height: 40, borderRadius: 8,
-                  flex: 1, alignItems: 'center', justifyContent: 'center'
-                }]}
-                onPress={() => {
-                  deleteExperience()
-                }}
+                onPress={() => setShowStartDatePicker(true)}
               >
-                <Text style={[styles.buttonLabel]}>Delete Experience</Text>
-              </Pressable>
-            </LinearGradient> }
+                <Text style={{ color: '#fff' }}>
+                  {startDate.toISOString().split('T')[0]}
+                </Text>
+              </TouchableOpacity>
+              {showStartDatePicker && (
+                <DateTimePicker
+                  value={startDate}
+                  mode="date"
+                  display="spinner"
+                  onChange={onStartDateChange}
+                  style={{ backgroundColor: Color.colorDarkslategray_400 }}
+                  textColor={Color.darkInk}
+                  themeVariant="dark"
+                />
+              )}
+            </View>
 
-          <LinearGradient
+
+            <View style={styles.switchContainer}>
+              <Text style={styles.label}>Current role</Text>
+              <Switch
+                trackColor={{ false: '#767577', true: '#81b0ff' }}
+                thumbColor={isCurrentRole ? '#f5dd4b' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isCurrentRole}
+              />
+            </View>
+            {!isCurrentRole && (
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>End Date</Text>
+                <TouchableOpacity
+                  style={styles.input}
+                  onPress={() => setShowEndDatePicker(true)}
+                >
+                  <Text style={{ color: '#fff' }}>
+                    {endDate.toISOString().split('T')[0]}
+                  </Text>
+                </TouchableOpacity>
+                {showEndDatePicker && (
+                  <DateTimePicker
+                    value={endDate}
+                    mode="date"
+                    display="spinner"
+                    onChange={onEndDateChange}
+                    style={{ backgroundColor: Color.colorDarkslategray_400 }}
+                    textColor={Color.darkInk}
+                    themeVariant="dark"
+                  />
+                )}
+              </View>
+            )}
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Description</Text>
+              <TextInput
+                style={[styles.input, styles.description]}
+                placeholder="Lorem ipsum"
+                placeholderTextColor="#ccc"
+                multiline
+                maxLength={1000}
+                value={description}
+                onChangeText={setDescription}
+              />
+              <Text style={styles.charCount}>30/1000</Text>
+            </View>
+
+            {action === "edit" &&
+              <LinearGradient
+                colors={['#ff0000', '#ff0000']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={[styles.gradientBorder, styles.buttonSendConfirm, { height: 40 }]}
+
+              >
+                <Pressable
+                  style={[{
+                    backgroundColor: Color.colorGray_100,
+                    height: 40, borderRadius: 8,
+                    flex: 1, alignItems: 'center', justifyContent: 'center'
+                  }]}
+                  onPress={() => {
+                    deleteExperience()
+                  }}
+                >
+                  <Text style={[styles.buttonLabel]}>Delete Experience</Text>
+                </Pressable>
+              </LinearGradient>}
+
+            <LinearGradient
               colors={['#FC00A7', '#65EDE3']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
@@ -264,20 +288,20 @@ const ExperienceForm = ({route}) => {
                 <Text style={[styles.buttonLabel]}>Save</Text>
               </Pressable>
             </LinearGradient>
-        </View>
+          </View>
 
-        <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
+          <Modal
+            visible={modalVisible}
+            transparent={true}
+            animationType="slide"
+            onRequestClose={() => setModalVisible(false)}
           >
             <View style={styles.modalBackground}>
               <View style={styles.modalContainer}>
                 <Text style={styles.modalTitle}>Delete Experience</Text>
-                
+
                 <Text>Are you sure?</Text>
-                <View style={[styles.modalButtons, {marginTop:20}]}>
+                <View style={[styles.modalButtons, { marginTop: 20 }]}>
                   <TouchableOpacity onPress={() => setModalVisible(false)}>
                     <Text style={styles.cancelButton}>No</Text>
                   </TouchableOpacity>
@@ -290,7 +314,7 @@ const ExperienceForm = ({route}) => {
               </View>
             </View>
           </Modal>
-      </ScrollView>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
 
@@ -306,7 +330,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     padding: 5,
-    backgroundColor: '#02030b',
+    backgroundColor: Color.colorGray_100,
     flex: 1,
   },
   scrollView: {
@@ -314,9 +338,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   scrollContent: {
-    alignItems: 'stretch',  // Ensures children fill the width
-    paddingVertical: 20,    // Adds space at the top and bottom
-    height:'150%'
+    alignItems: 'stretch',
+    paddingVertical: 20,
+    paddingBottom: 100,
   },
   inputContainer: {
     marginBottom: 20,
@@ -392,7 +416,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignSelf: "stretch",
   },
-  
+
   buttonLabel: {
     lineHeight: 24,
     fontFamily: getFontFamily("600"),

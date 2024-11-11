@@ -14,7 +14,7 @@ const Experience = ({ route }) => {
   const navigation = useNavigation();
   const tab = 4;
 
-  useFocusEffect (
+  useFocusEffect(
     useCallback(() => {
       getUser().then((user) => {
         setExperience(user.experiences)
@@ -24,20 +24,20 @@ const Experience = ({ route }) => {
 
   const Item = ({ experience, id, role, company, start_date, end_date, description, employment_type }) => (
     <>
-        
-        <View style={styles.itemContainer} key={id}>
-          <Pressable style={styles.editButton} onPress={() => {
-            navigation.push(`ExperienceForm${tab}`, { tab, action: "edit", experience });
-          }}>
-            <Text style={styles.editButtonText}>Edit</Text>
-          </Pressable>
-          <Text style={styles.role}>{role}</Text>
-          <Text style={styles.company}>{company} - {employment_type}</Text>
-          <Text style={styles.duration}>{start_date} - {end_date}</Text>
-          <Text style={styles.description}>
-            {description}
-          </Text>
-        </View>
+
+      <View style={styles.itemContainer} key={id}>
+        <Pressable style={styles.editButton} onPress={() => {
+          navigation.push(`ExperienceForm${tab}`, { tab, action: "edit", experience });
+        }}>
+          <Text style={styles.editButtonText}>Edit</Text>
+        </Pressable>
+        <Text style={styles.role}>{role}</Text>
+        <Text style={styles.company}>{company} - {employment_type}</Text>
+        <Text style={styles.duration}>{start_date} - {end_date}</Text>
+        <Text style={styles.description}>
+          {description}
+        </Text>
+      </View>
 
     </>
   )
@@ -76,7 +76,7 @@ const Experience = ({ route }) => {
 
         <TouchableOpacity
           onPress={() => {
-            navigation.push(`ExperienceForm${tab}`, { tab, action:"new" });
+            navigation.push(`ExperienceForm${tab}`, { tab, action: "new" });
           }}>
           <Image
             source={require("../assets/add.png")}
@@ -113,17 +113,14 @@ const Experience = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.colorDarkslategray_400,
+    backgroundColor: Color.colorGray_100,
     width: "100%",
     height: "100%",
     flex: 1
   },
   header: {
-    // marginTop: 60,
     width: "100%",
-    // flex:1,
     flexDirection: 'row',
-    // alignSelf:"flex-",
     padding: 14,
     backgroundColor: Color.colorGray_100,
   },
