@@ -49,12 +49,15 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
               source={item.image}
             />
             <View style={[styles.frameFlexBox]}>
-              <View style={styles.frameFlexBox}>
+              <TouchableOpacity
+                style={styles.frameFlexBox}
+                onPress={handleProfilePress}
+              >
                 <Text style={[styles.name]}>{item?.name}</Text>
                 <Text style={[styles.endlessmeee, styles.nameTypo]}>
                   {item?.screen_name}
                 </Text>
-              </View>
+              </TouchableOpacity>
               <Image
                 style={styles.frameItem}
                 contentFit="cover"

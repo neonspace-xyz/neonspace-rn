@@ -31,6 +31,7 @@ const OtherProfile = () => {
       } catch (error) {
         console.error("Failed to load profile:", error);
       } finally {
+        console.log(`Load finish`)
         setIsLoading(false);
       }
     };

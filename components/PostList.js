@@ -71,6 +71,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
             name: post.name,
             screen_name: `@${post.screen_name}`,
             image: post.profile_image,
+            user_id: post.user_id,
             post_id: post.post_id,
             text: post.post,
             view: post.views,

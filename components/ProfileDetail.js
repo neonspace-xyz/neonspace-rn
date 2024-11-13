@@ -34,7 +34,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
     { key: 'forth', title: 'Likes' },
   ]);
 
-  console.log(userInfo)
+  console.log('ProfileDetail : ', userInfo)
 
   useEffect(() => {
     if (setShowAddressCopied) {
