@@ -116,6 +116,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
           placeholder="Search by X handle"
           placeholderTextColor={Color.colorGray_500}
           value={searchValue}
+          returnKeyType="search"
           onChangeText={(text) => {
             setSearchValue(text);
             console.log("onchange text")

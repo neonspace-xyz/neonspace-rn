@@ -15,9 +15,10 @@ const EditProfile = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [userData, setUserData] = useState();
   const [bio, setBio] = useState();
+  const [bioError, setBioError] = useState('');
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  const {api} = useAuth();
+  const { api } = useAuth();
 
   const getUser = async () => {
     try {
@@ -45,7 +46,12 @@ const EditProfile = () => {
     getUser();
   }, [])
 
-  const editProfile = async() => {
+  const editProfile = async () => {
+    if (bio && bio.length > 255) {
+      setBioError('Bio cannot exceed 255 characters');
+      return;
+    }
+
     let url = `/user/editProfile`;
     let body = {
       "hide_wallet": !isEnabled,
@@ -53,56 +59,58 @@ const EditProfile = () => {
     }
 
     let resp = await api.post(url, body);
-    if(resp){
+    if (resp) {
       await AsyncStorage.setItem("reset", "true")
-      // await getUserData()
       navigation.goBack();
     }
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-          <Pressable
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require("../assets/back.png")}
-              style={styles.headerImage}
-            />
-          </Pressable>
-          
-          <Text style={
-            [styles.editProfile]
-            // {flexGrow:1, color:"white", textAlign:"center", paddingTop:10, alignItems:"center"}
-            }>Edit Profile</Text>
-            
-          <Pressable
-            onPress={() => editProfile()}>
-            <Text style={[styles.save1]}>Save</Text>
-          </Pressable>
-      </View> 
+        <Pressable
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={require("../assets/back.png")}
+            style={styles.headerImage}
+          />
+        </Pressable>
+
+        <Text style={styles.editProfile}>Edit Profile</Text>
+
+        <Pressable
+          onPress={() => editProfile()}
+          disabled={bioError !== ''}
+        >
+          <Text style={[
+            styles.save1,
+            bioError ? styles.saveDisabled : null
+          ]}>Save</Text>
+        </Pressable>
+      </View>
 
       <View style={{
-        flexDirection:"column", width:"100%", 
-        alignItems:"center", gap:10, paddingTop:20, paddingBottom: 20,
-backgroundColor: Color.colorGray_100,
-      // borderColor:"red",
-      // borderWidth:2,
+        flexDirection: "column", width: "100%",
+        alignItems: "center", gap: 10, paddingTop: 20, paddingBottom: 20,
+        backgroundColor: Color.colorGray_100,
+        // borderColor:"red",
+        // borderWidth:2,
       }}>
 
-          {userData?.profile_image ? (
-            <Image
-              style={[styles.editMyProfileChild]}
-              contentFit="cover"
-              source={userData.profile_image}
-              // resizeMode={FastImage.resizeMode.cover}
-            />
-          ) : (
-            <Image
-              style={[styles.editMyProfileChild]}
-              contentFit="cover"
-              source={require("../assets/photo.png")}
-            />
-          )}
+        {userData?.profile_image ? (
+          <Image
+            style={[styles.editMyProfileChild]}
+            contentFit="cover"
+            source={userData.profile_image}
+          // resizeMode={FastImage.resizeMode.cover}
+          />
+        ) : (
+          <Image
+            style={[styles.editMyProfileChild]}
+            contentFit="cover"
+            source={require("../assets/photo.png")}
+          />
+        )}
 
         {/* <Image
           style={[styles.editMyProfileChild]}
@@ -112,7 +120,7 @@ backgroundColor: Color.colorGray_100,
         <Text style={[styles.editPicture, styles.save1Typo]}>Edit picture</Text>
 
       </View>
-      <View style={[StyleContent, {marginTop:10, padding:10, backgroundColor: Color.colorBlack}]}>
+      <View style={[StyleContent, { marginTop: 10, padding: 10, backgroundColor: Color.colorBlack }]}>
         <View
           style={[
             styles.showMyWalletAddressParent,
@@ -129,8 +137,8 @@ backgroundColor: Color.colorGray_100,
             /> */}
 
             <Switch
-              trackColor={{false: '#767577', true: '#81b0ff'}}
-              style={{transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]}}
+              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
               thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch}
@@ -146,14 +154,18 @@ backgroundColor: Color.colorGray_100,
             style={[styles.bioInput]}
             multiline={true}
             numberOfLines={4}
-            placeholder="Type your text here..."
+            placeholder="Edit your bio here..."
+            placeholderTextColor={Color.colorGray_400}
             value={bio}
-            onChangeText={(text) => setBio(text)}
+            onChangeText={(text) => {
+              setBio(text);
+              setBioError(text.length > 160 ? 'Bio cannot exceed 160 characters' : '');
+            }}
             textAlignVertical="top"
           />
-          {/* <Text style={[styles.theBioText, styles.theBioTextTypo]}>
-            {userData?.bio}
-          </Text> */}
+          {bioError ? (
+            <Text style={styles.errorText}>{bioError}</Text>
+          ) : null}
         </View>
       </View>
     </SafeAreaView>
@@ -162,11 +174,11 @@ backgroundColor: Color.colorGray_100,
 
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     backgroundColor: Color.colorGray_100,
-    width:"100%",
-    height:"100%",
-    flex:1
+    width: "100%",
+    height: "100%",
+    flex: 1
   },
   header: {
     // marginTop: 60,
@@ -188,14 +200,12 @@ const styles = StyleSheet.create({
     left: 0,
     position: "absolute",
   },
-  bioInput:{
-    // borderWidth:2,
-    // borderColor:"red",
-    alignItems:"flex-start",
-    width:"90%",
+  bioInput: {
+    alignItems: "flex-start",
+    width: "90%",
     color: Color.darkInk,
     fontFamily: getFontFamily("400"),
-    fontWeight:"400"
+    fontWeight: "400"
   },
   iconLayout1: {
     maxHeight: "100%",
@@ -280,7 +290,7 @@ const styles = StyleSheet.create({
     // borderWidth:2,
     width: 90,
     height: 90,
-    borderRadius:50
+    borderRadius: 50
   },
   time: {
     marginTop: -10.5,
@@ -382,10 +392,10 @@ const styles = StyleSheet.create({
     fontSize: FontSize.labelLarge_size,
     // marginLeft: 14,
     // flex: 1,
-    flexGrow:1, 
-    textAlign:"center", 
-    paddingTop:3, 
-    alignItems:"center",
+    flexGrow: 1,
+    textAlign: "center",
+    paddingTop: 3,
+    alignItems: "center",
     color: Color.darkInk,
     fontWeight: "600",
     fontFamily: getFontFamily("600")
@@ -428,7 +438,7 @@ const styles = StyleSheet.create({
     color: Color.darkInk,
     fontSize: FontSize.labelLarge_size,
     fontWeight: "500",
-    fontFamily:getFontFamily("500"),
+    fontFamily: getFontFamily("500"),
     textAlign: "left",
   },
   groupChild: {
@@ -464,9 +474,8 @@ const styles = StyleSheet.create({
   },
   bioParent: {
     marginTop: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap:20
+    flexDirection: 'column',
+    gap: 20,
   },
   editMyProfile: {
     backgroundColor: Color.colorGray_200,
@@ -474,6 +483,18 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: "100%",
     flex: 1,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: FontSize.size_sm,
+    fontFamily: getFontFamily("400"),
+    alignSelf: 'flex-start',
+    marginLeft: 0,
+    marginTop: 5,
+  },
+  saveDisabled: {
+    opacity: 0.5,
+    color: Color.colorGray_400,
   },
 });
 
