@@ -24,7 +24,7 @@ const OtherProfile = () => {
       try {
         const [sessionData, userData] = await Promise.all([
           getSession(),
-          getOtherUser(user.user_id)
+          getOtherUser(user.id)
         ]);
         setUsersession(sessionData);
         setUserInfo(userData);

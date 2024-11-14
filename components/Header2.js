@@ -52,6 +52,7 @@ const Header2 = ({ tab, isHideList, isShowSearch, setIsShowSearch }) => {
   };
 
   const handleDetail = (item) => {
+    console.log("Going to other profile from header2 : ", item)
     if (isHideList) return;
     setIsShowSearch(false);
     setSearchValue('');

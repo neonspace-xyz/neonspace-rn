@@ -75,6 +75,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
   }, [searchValue, debouncedFetchSearchItems]);
 
   const handleDetail = (item) => {
+    console.log('Going to user from header1');
     if (isHideList) return;
     setIsShowSearch(false);
     setSearchValue('');
