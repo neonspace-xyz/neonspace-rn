@@ -40,7 +40,13 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
         let users = resp.data;
         console.log("Header-search-resp", users);
         users.forEach(user => {
-          data.push(user);
+          let u = {
+            user_id: user.id,
+            name: user.name,
+            profile_image_url: user.profile_image_url,
+            username: user.username
+          }
+          data.push(u);
         });
         // url = `/user/getUser?userId=${user.id}`;
         // try {
@@ -75,7 +81,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
   }, [searchValue, debouncedFetchSearchItems]);
 
   const handleDetail = (item) => {
-    console.log('Going to user from header1');
+    console.log('Going to user from header1 : ', item);
     if (isHideList) return;
     setIsShowSearch(false);
     setSearchValue('');
@@ -204,6 +210,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center",
+    // borderColor:'red',
+    // borderWidth:2,
     marginTop: 10,
     backgroundColor: Color.colorGray_200,
     zIndex: 1

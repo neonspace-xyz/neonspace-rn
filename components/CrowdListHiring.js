@@ -247,8 +247,9 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
   }
 
   return (
-    <View style={[isProfile ? styles.containerListProfile : styles.containerList]}>
-      <FlatList
+    // <View style={[isProfile ? styles.containerListProfile : styles.containerList]}>
+    <View style={[styles.containerList]}>
+    <FlatList
         ref={flatListRef}
         style={styles.flat}
         data={items}

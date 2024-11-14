@@ -35,6 +35,7 @@ const PostHome = ({ route }) => {
       <PostList
         tab={tab}
         isProfile={false}
+        isShowSearch={isShowSearch}
         usersession={usersession}
         userInfo={usersession?.user_info} />
     </SafeAreaView>

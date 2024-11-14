@@ -5,7 +5,8 @@ import { Color } from "../GlobalStyles"
 const ButtonFAB = ({ isTab, isProfile, doCreate }) => {
 
   return (
-    <View style={[styles.containerFAB, { bottom: Platform.OS == "ios" ? isTab ? 20 : isProfile ? 20 : 40 : isTab ? 60 : isProfile ? 60 : 80 }]}>
+    // <View style={[styles.containerFAB, { bottom: Platform.OS == "ios" ? isTab ? 20 : isProfile ? 20 : 40 : isTab ? 60 : isProfile ? 60 : 80 }]}>
+    <View style={[styles.containerFAB, { bottom: Platform.OS == "ios" ? 20:20 }]}>
       <Pressable style={styles.FAB} onPress={doCreate}>
         <Icon name="add" size={45} color={Color.colorBlack} />
       </Pressable>

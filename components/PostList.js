@@ -14,7 +14,7 @@ import PostCreate from "./PostCreate";
 import EmptyView from "./EmptyView";
 import { useRefresh } from "./RefreshProvider";
 
-const PostList = ({ tab, isProfile, usersession, userInfo }) => {
+const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
   const { api } = useAuth();
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
@@ -211,7 +211,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
   }
 
   return (
-    <View style={[isProfile ? styles.containerListProfile : styles.containerList]}>
+    <View style={[styles.containerList]}>
       <FlatList
         ref={flatListRef}
         style={styles.flat}
@@ -267,7 +267,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo }) => {
             setIsShowCreate={setIsShowCreate} />
         </Modal>
       )}
-      {!isShowCreate && usersession?.user_info?.user_id == userInfo?.user_id && (
+      {!isShowSearch && !isShowCreate && usersession?.user_info?.user_id == userInfo?.user_id && (
         <ButtonFAB
           isTab={false}
           isProfile={isProfile}
@@ -295,8 +295,11 @@ const styles = StyleSheet.create({
   containerList: {
     width: "100%",
     height: "100%",
+    flex:1,
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
+    // borderColor:'blue',
+    // borderWidth:2,
   },
   containerListProfile: {
     width: "100%",

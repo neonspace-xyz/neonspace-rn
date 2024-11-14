@@ -114,6 +114,8 @@ export default function CrowdsourceView({ route }) {
     container: {
       flex: 1,
       backgroundColor: Color.colorGray_100,
+      // borderColor:'red',
+      // borderWidth:2
     },
     text: {
       fontSize: 20,
@@ -163,7 +165,7 @@ export default function CrowdsourceView({ route }) {
         onIndexChange={setIndex}
         renderTabBar={renderTabBar}
         initialLayout={{ width: layout.width }}
-        style={{ marginBottom: -40, backgroundColor: Color.colorBlack }}
+        style={{ backgroundColor: Color.colorBlack }}
       />
     </SafeAreaView>
   );
@@ -173,6 +175,7 @@ const styles = StyleSheet.create({
   containerTab: {
     flex: 1,
     width: "100%",
+    height:"100%",
     overflow: "hidden",
     // justifyContent: 'center',
     // alignItems: "center",

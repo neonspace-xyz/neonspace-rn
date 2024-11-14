@@ -54,7 +54,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
     }, [])
 
     return (userInfo &&
-      <View>
+      <View style={{flex:1}}>
         <PostList
           tab={4}
           isProfile={true}
@@ -245,13 +245,14 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
         <View style={[styles.myProfile, isShowSearch && { display: "none" }]}>
           <View style={{
             // borderWidth:2, borderColor:'red',
-            flex: 1,
+            // flex: 1,
             backgroundColor: Color.colorGray_100
           }}>
             <View style={{
               // borderWidth:2, borderColor:"red",
-              flex: 1, flexDirection: "row", maxHeight: 120,
-
+              // flex: 1, 
+              flexDirection: "row", 
+              // maxHeight: 120,
             }}>
               {userInfo?.profile_image ? (
                 <Image
@@ -279,7 +280,8 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
               </View>
             </View>
             <View style={{
-              flex: 1, flexDirection: "row", maxHeight: 30, gap: 10
+              // flex: 1, 
+              flexDirection: "row", maxHeight: 30, gap: 10
               // borderColor:"red", borderWidth:2,
             }}>
               {userInfo?.user_id == usersession?.user_id ? (
@@ -377,6 +379,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
               // flex: 1, padding: 10, gap: 8
               // flex:1,
               // flexGrow:0,
+              marginTop:10,
               padding: 10
             }}>
 
@@ -391,84 +394,111 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
 
               <TouchableOpacity
                 style={{
-                  marginTop: 15
+                  marginTop: 10,
+                  marginBottom: 10
                   // borderWidth:2, borderColor:"red"
                 }}
                 onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user: userInfo })}
               >
-                <Text
+                 <View
                   style={[
-                    styles.walletAddress0xedhvContainer,
+                    {
+                      flexDirection: "row", 
+                      alignItems: "center",
+                    },
                   ]}
-                >
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-                    <Text style={[styles.walletAddress, { color: 'white' }]}>{`Verified by: `}</Text>
+                  >
+                    <Text style={styles.verifiedByTitle}>{`Verified by: `}</Text>
 
 
-                    <View style={{
-                      // borderColor:'red', 
-                      // borderWidth:2, 
-                      width: userVerifiedByImages.length * 23,
-                      height: 32,
-                      position: 'relative'
-                    }}>
-                      {
-                        userVerifiedByImages.map((e, index) => {
-                          return (
-                            <Image key={index} source={e} style={[styles.image, {
-                              zIndex: 9999 - index,
-                              position: 'absolute', left: 20 * index
-                            }]} />
-                          )
-                        })
-                      }
-                    </View>
-                    <Text style={[styles.samPolymathAnd, styles.textTypo, { paddingLeft: 4 }]}>
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    {userVerifiedByImages[0] &&
+                      <View style={[{
+                        // borderWidth:2, borderColor:'red', 
+                        width:30}]}>
+                        <Image source={userVerifiedByImages[0]} style={styles.image} />
+                      </View>
+                    }
+                    {userVerifiedByImages[1] &&
+                      <View style={[styles.imageContainer, {
+                        width: userVerifiedByImages.length * 23,
+                        height: 32,
+                        position: 'relative'
+                      }]}>
+                        {
+                          userVerifiedByImages.map((e, index) => {
+                            return (
+                              <Image key={index} source={e} style={[styles.image, {
+                                zIndex: 9999 - index,
+                                position: 'absolute', left: 20 * index
+                              }]} />
+                            )
+                          })
+                        }
+                      </View>
+                    }
+
+                    <Text style={[styles.userVerifiedByNames]}>
                       {userVerifiedByNames}
-                    </Text>
+                    </Text>  
                   </View>
-                </Text>
+                </View>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={{
-                  marginTop: 15
+                  // marginTop: 15
                   // borderWidth:2, borderColor:"red"
                 }}
                 onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: false, user: userInfo })}
               >
-                <Text
+                <View
                   style={[
-                    styles.walletAddress0xedhvContainer,
+                    {
+                      flexDirection: "row", 
+                      // flex:1,     
+                      alignItems: "center",
+                    },
                   ]}
                 >
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-                    <Text style={[styles.walletAddress, { color: 'white' }]}>{`Verified: `}</Text>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>                    
+                    <Text style={styles.verifiedByTitle}>{`Verified: `}</Text>
+                    <View>
+                      <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        {userVerifiedImages[0] &&
+                          <View style={[{
+                            // borderWidth:2, borderColor:'red', 
+                            width:30}]}>
+                            <Image source={userVerifiedImages[0]} style={styles.image} />
+                          </View>
+                        }
+                        {userVerifiedImages[1] &&
+                          <View style={[styles.imageContainer, {
+                            width: userVerifiedImages.length * 23,
+                            height: 32,
+                            position: 'relative'
+                          }]}>
+                            {
+                              userVerifiedImages.map((e, index) => {
+                                return (
+                                  <Image key={index} source={e} style={[styles.image, {
+                                    zIndex: 9999 - index,
+                                    position: 'absolute', left: 20 * index
+                                  }]} />
+                                )
+                              })
+                            }
+                          </View>
+                        }
 
-
-                    <View style={{
-                      // borderColor:'red', 
-                      // borderWidth:2, 
-                      width: userVerifiedImages.length * 23,
-                      height: 32,
-                      position: 'relative'
-                    }}>
-                      {
-                        userVerifiedImages.map((e, index) => {
-                          return (
-                            <Image key={index} source={e} style={[styles.image, {
-                              zIndex: 9999 - index,
-                              position: 'absolute', left: 20 * index
-                            }]} />
-                          )
-                        })
-                      }
+                        <Text style={[styles.userVerifiedByNames]}>
+                          {userVerifiedNames}
+                        </Text>  
+                      </View>
+                      
                     </View>
-                    <Text style={[styles.samPolymathAnd, styles.textTypo, { paddingLeft: 4 }]}>
-                      {userVerifiedNames}
-                    </Text>
                   </View>
-                </Text>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -1115,6 +1145,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
+  },
+  verifiedByTitle: {
+    height:20,
+    color: Color.darkInk,
+    fontSize: FontSize.labelLarge_size,
+    fontFamily: getFontFamily("400"),
+    fontWeight: "400",
+    marginRight:5
+    // borderColor:'red', 
+    // borderWidth:2,
+  },
+  userVerifiedByNames: {
+    fontSize: FontSize.size_xs,
+    color: Color.darkInk,
+    fontFamily: getFontFamily(400),
+    fontWeight: 400,
+    marginLeft:5,
+    // borderColor:'blue',
+    // borderWidth:2,
+    height:15,
   },
 });
 

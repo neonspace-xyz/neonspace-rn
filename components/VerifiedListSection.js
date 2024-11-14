@@ -1,14 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
+import { useAuth } from "./AuthProvider";
 
 const VerifiedListSection = ({ tab, item }) => {
   const navigation = useNavigation();
+  const { getUser, getSession } = useAuth();
+  const [userInfo, setUserInfo] = useState();
+
+  useEffect(() => {
+    getSession().then((session) => {
+      if (session?.user_info) {
+        setUserInfo(session.user_info);
+      }
+      getUser().then((user) => {
+        setUserInfo(user);
+      });
+    });
+  }, []);
 
   return (
-    <Pressable onPress={() => { navigation.push(`OtherProfile${tab}`, { tab, user: item }); }}>
+    <Pressable onPress={() => { 
+        if(item.user_id == userInfo.user_id){
+          navigation.push(`MyProfile${tab}`, { tab, user: item });
+        }
+        else{
+          navigation.push(`OtherProfile${tab}`, { tab, user: item });
+        }
+    }}>
       <View index={item?.id} style={[styles.frameParent]}>
         <Image
           style={styles.frameChild}
