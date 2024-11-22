@@ -228,11 +228,13 @@ const Login = () => {
         source={require("../assets/group-872.png")}
       />
       <Text style={[styles.txtTitle, styles.txtStyle]}>
-        Neonrabbits
+        Neonspace
+        {/* Neonrabbits */}
       </Text>
       <Text style={[styles.txtDesc, styles.txtStyle]}>
-        Neonrabbits are connecting the dots of their lives, and always on
-        adventure together at Neonspace
+        Stay Anon, And Build Trust Through Social Proof
+        {/* Neonrabbits are connecting the dots of their lives, and always on
+        adventure together at Neonspace */}
       </Text>
       <Image
         style={[styles.imgLogo]}
@@ -306,17 +308,17 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   txtTitle: {
-    top: 140,
-    fontSize: FontSize.size_13xl,
-    fontWeight: "600",
+    top: "43%",
+    fontSize: 40,
+    fontWeight: "400",
     position: "absolute",
     textAlign: "center",
-    color: Color.darkInk,
-    fontFamily: getFontFamily("600"),
+    color: Color.colorTitle,
+    // fontFamily: getFontFamily("400"),
   },
   txtDesc: {
-    top: 199,
-    fontSize: FontSize.size_sm,
+    top: "58%",
+    fontSize: FontSize.size_lg,
     position: "absolute",
     width: "80%",
     fontFamily: getFontFamily("400"),
@@ -327,7 +329,7 @@ const styles = StyleSheet.create({
   },
   imgLogo: {
     marginTop: -111,
-    top: "50%",
+    top: "30%",
     width: 222,
     height: 222,
     position: "absolute",

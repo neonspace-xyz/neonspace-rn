@@ -58,6 +58,7 @@ export const Color = {
   colorDarkslategray_200: "#3f3f3f",
   colorDarkslategray_300: "#2b2d41",
   colorDarkslategray_400: "#2a2d41",
+  colorTitle: "rgba(56, 118, 214, 1)",
   darkInk: "#fff",
   colorGainsboro_100: "#d9d9d9",
   colorGray_100: "#16171f",
