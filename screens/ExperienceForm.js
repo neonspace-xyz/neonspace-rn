@@ -124,6 +124,14 @@ const ExperienceForm = ({ route }) => {
     }
   };
 
+
+  const onChangeDetail = (input) => {
+    if (input.length >= 1000) {
+      input = input.substring(0, 1000);
+    }
+    setDescription(input)
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -243,9 +251,9 @@ const ExperienceForm = ({ route }) => {
                 multiline
                 maxLength={1000}
                 value={description}
-                onChangeText={setDescription}
+                onChangeText={(text) => onChangeDetail(text)}
               />
-              <Text style={styles.charCount}>30/1000</Text>
+              <Text style={styles.charCount}>{description?.length ? description?.length : 0}/1000</Text>
             </View>
 
             {action === "edit" &&

@@ -210,7 +210,7 @@ const ChatList = () => {
           onEndReached={onLoadMore}
           onEndReachedThreshold={0.1}
           ListEmptyComponent={() => {
-            return <EmptyView loadingMore={loadingMore} />
+            return <EmptyView loadingMore={loadingMore} text={"No direct messages"} />
           }}
           ListFooterComponent={() =>
             loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />

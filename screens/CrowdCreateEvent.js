@@ -108,7 +108,9 @@ const CrowdCreateEvent = () => {
   };
 
   const onChangeDetail = (input) => {
-    if (input.length == MAX_CHAR_DETAIL) return;
+    if (input.length >= MAX_CHAR_DETAIL) {
+      input = input.substring(0, MAX_CHAR_DETAIL - 1);
+    }
     handleInputChange('description', input)
   }
 
@@ -246,7 +248,7 @@ const CrowdCreateEvent = () => {
                 />
                 <View style={styles.frameSubDetail}>
                   <Text style={styles.textSubDetailLeft}>The post preview will show the first 280 letters</Text>
-                  <Text style={styles.textSubDetailRight}>{input?.detail?.length}/{MAX_CHAR_DETAIL - 1}</Text>
+                  <Text style={styles.textSubDetailRight}>{input?.description?.length ? input?.description?.length : 0}/{MAX_CHAR_DETAIL - 1}</Text>
                 </View>
               </View>
             </View>

@@ -4,7 +4,7 @@ import { Border, Color, getFontFamily, Padding } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/core";
 
 const FullBio = ({ userInfo, isOtherProfile }) => {
-  console.log("FullBio-userInfo", userInfo);
+  // console.log("FullBio-userInfo", userInfo);
   const navigation = useNavigation();
   const tab = 4;
 
@@ -42,7 +42,7 @@ const FullBio = ({ userInfo, isOtherProfile }) => {
 
   const ExperienceCard = () => {
     const isEmpty = !userInfo.experiences || userInfo.experiences.length === 0;
-    console.log("ExperienceCard-userInfo", userInfo.experiences);
+    // console.log("ExperienceCard-userInfo", userInfo.experiences);
     return (
       <View style={[styles.container, isEmpty && styles.containerEmpty]}>
         <Text style={styles.header}>Experience</Text>
@@ -57,13 +57,13 @@ const FullBio = ({ userInfo, isOtherProfile }) => {
             @{userInfo.screen_name} has not updated their experience
           </Text>
         ) : (
-          userInfo.experiences.map((experience) => (
+          userInfo.experiences.slice(0, 2).map((experience) => (
             <View style={styles.experienceItem} key={experience.id}>
               <Text style={styles.title}>{experience.role}</Text>
               <Text style={styles.subtitle}>{experience.company} - {experience.employment_type}</Text>
               <Text style={styles.date}>{experience.start_date} - {experience.end_date}</Text>
               <Text style={styles.description}>
-                {experience.description}
+                {experience.description.substring(0, 250)}
               </Text>
             </View>
           ))

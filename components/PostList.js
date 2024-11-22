@@ -245,6 +245,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
               userInfo={usersession?.user_info}
               onPress={() => handleDetail(item)}
               onMore={handleMore}
+              onRefresh={onRefresh}
             />
           )
         }}

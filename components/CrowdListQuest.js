@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
@@ -11,6 +11,7 @@ import CrowdSectionQuest from "./CrowdSectionQuest";
 import PopupOption from "./PopupOption";
 import ButtonFAB from "./ButtonFAB";
 import EmptyView from "./EmptyView";
+import PostCreate from "./PostCreate";
 
 const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
   const { api, getOtherUser } = useAuth();
@@ -25,6 +26,7 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const flatListRef = useRef(null);
+  const [isShowCreate, setIsShowCreate] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -237,7 +239,8 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
   };
 
   const doCreate = () => {
-    navigation.push(`CrowdCreateQuest${tab}`, { tab });
+    // navigation.push(`CrowdCreateQuest${tab}`, { tab });
+    setIsShowCreate(true);
   }
 
   return (
@@ -286,7 +289,19 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
         handleEdit={handleEdit}
         handleDelete={confirmDelete}
       />
-      {usersession?.user_info?.user_id == userInfo?.user_id && (
+      {isShowCreate && (
+        <Modal
+          visible={isShowCreate}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setIsShowCreate(false)}
+        >
+          <PostCreate
+            usersession={usersession}
+            setIsShowCreate={setIsShowCreate} />
+        </Modal>
+      )}
+      {!isShowCreate && usersession?.user_info?.user_id == userInfo?.user_id && (
         <ButtonFAB
           isTab={true}
           isProfile={false}

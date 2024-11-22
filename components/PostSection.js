@@ -6,7 +6,7 @@ import { formatPostTimestamp, getFormattedPostTimestamp } from "../Utils";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "./AuthProvider";
 
-const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) => {
+const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore, onRefresh }) => {
   const navigation = useNavigation();
   const { api } = useAuth();
   const [likes, setLikes] = useState(item?.like);
@@ -28,6 +28,7 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) 
       } else {
         setLikes(likes - 1)
       }
+      onRefresh();
     }
   }
 

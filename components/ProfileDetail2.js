@@ -16,7 +16,7 @@ import { IMG_PROFILE } from "../Constant";
 import MintingList from "./MintilngList";
 
 const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
-  console.log("ProfileDetail2 : ", userInfo)
+  // console.log("ProfileDetail2 : ", userInfo)
   const navigation = useNavigation();
 
   const { api } = useAuth();

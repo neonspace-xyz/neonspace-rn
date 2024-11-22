@@ -28,13 +28,19 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const [showAddressCopied, setShowAddressCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    if(route?.params?.isFullBio) {
+      setIsFullBio(route.params?.isFullBio)
+    }
+  }, [route])
+
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
     { key: 'second', title: 'Crowdsource' },
     { key: 'forth', title: 'Likes' },
   ]);
 
-  console.log('ProfileDetail : ', userInfo)
+  // console.log('ProfileDetail : ', userInfo)
 
   useEffect(() => {
     if (setShowAddressCopied) {

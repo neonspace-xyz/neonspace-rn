@@ -88,7 +88,9 @@ const CrowdCreateQuest = () => {
   };
 
   const onChangeDetail = (input) => {
-    if (input.length == MAX_CHAR_DETAIL) return;
+    if (input.length >= MAX_CHAR_DETAIL) {
+      input = input.substring(0, MAX_CHAR_DETAIL - 1);
+    }
     handleInputChange('description', input)
   }
 
@@ -185,7 +187,7 @@ const CrowdCreateQuest = () => {
                 />
                 <View style={styles.frameSubDesc}>
                   <Text style={styles.textSubDescLeft}>The post preview will show the first 280 letters</Text>
-                  <Text style={styles.textSubDescRight}>{input?.description?.length}/{MAX_CHAR_DETAIL - 1}</Text>
+                  <Text style={styles.textSubDetailRight}>{input?.description?.length ? input?.description?.length : 0}/{MAX_CHAR_DETAIL - 1}</Text>
                 </View>
               </View>
             </View>

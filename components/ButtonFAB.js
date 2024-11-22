@@ -8,7 +8,7 @@ const ButtonFAB = ({ isTab, isProfile, doCreate }) => {
     // <View style={[styles.containerFAB, { bottom: Platform.OS == "ios" ? isTab ? 20 : isProfile ? 20 : 40 : isTab ? 60 : isProfile ? 60 : 80 }]}>
     <View style={[styles.containerFAB, { bottom: Platform.OS == "ios" ? 20:20 }]}>
       <Pressable style={styles.FAB} onPress={doCreate}>
-        <Icon name="add" size={45} color={Color.colorBlack} />
+        <Icon name="add" size={30} color={Color.colorBlack} />
       </Pressable>
     </View>
   )
@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
   },
   FAB: {
     backgroundColor: Color.darkInk, // Adjust color as needed
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
