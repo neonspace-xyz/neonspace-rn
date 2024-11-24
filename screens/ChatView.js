@@ -87,6 +87,7 @@ const ChatDetail = () => {
     };
 
     ws.onmessage = (e) => {
+      console.log(`ChatDetail-onmessage-e.data`, e.data)
       let newMessage = JSON.parse(e.data);
       let _message = JSON.parse(newMessage.message);
       newMessage['message'] = _message;

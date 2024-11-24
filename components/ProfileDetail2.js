@@ -323,10 +323,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
         ...userInfo,
         owned_by_current_user: true
       };
-      // Update any parent components that need to know about this change
-      if (onUserInfoUpdate) {
-        onUserInfoUpdate(updatedUserInfo);
-      }
+      userInfo = updatedUserInfo;
     }
   };
 
