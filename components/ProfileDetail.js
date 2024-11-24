@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, Pressable, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, Pressable, ActivityIndicator, Modal } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
@@ -29,6 +29,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const [isShowCreate, setIsShowCreate] = useState(false);
   const [showAddressCopied, setShowAddressCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showMintPrompt, setShowMintPrompt] = useState(false);
 
   useEffect(() => {
     if (route?.params?.isFullBio) {
@@ -111,6 +112,11 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
 
     check();
   }, [userInfo])
+
+  const handleBioToggle = () => {
+    setIsFullBio(!isFullBio);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -169,9 +175,8 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock,
-                ]}
-                onPress={() => setIsFullBio(!isFullBio)}
+                style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock]}
+                onPress={handleBioToggle}
               >
                 <Text style={[styles.editProfile]}>
                   {isFullBio ? "Default Bio" : "Full Bio"}
@@ -371,6 +376,52 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
           </View>
         </View>
       )}
+
+      {/* Add Mint Prompt Modal */}
+      <Modal
+        transparent={true}
+        visible={showMintPrompt}
+        animationType="fade"
+        onRequestClose={() => setShowMintPrompt(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalContainer}
+          activeOpacity={1}
+          onPress={() => setShowMintPrompt(false)}
+        >
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.modalContent}
+            onPress={e => e.stopPropagation()}
+          >
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowMintPrompt(false)}
+            >
+              <Text style={styles.closeButtonText}>✕</Text>
+            </TouchableOpacity>
+
+            <Image
+              style={styles.modalImage}
+              source={userInfo?.profile_image}
+            />
+            <Text style={styles.modalTitle}>
+              To view full bio, you should mint Christine's bio!
+            </Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.mintButton}
+                onPress={() => {
+                  setShowMintPrompt(false);
+                  // Add mint navigation or action here
+                }}
+              >
+                <Text style={styles.mintButtonText}>Mint</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
     </>
   );
 };
@@ -1120,6 +1171,58 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_sm,
     fontFamily: getFontFamily("500"),
     fontWeight: "500",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: Color.colorGray_100,
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    width: '80%',
+    position: 'relative',
+  },
+  modalImage: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+    borderRadius: 100,
+    overflow: 'hidden',
+  },
+  modalTitle: {
+    color: Color.darkInk,
+    fontSize: FontSize.size_lg,
+    fontFamily: getFontFamily("600"),
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  mintButton: {
+    backgroundColor: Color.colorDarkslategray_400,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+  },
+  mintButtonText: {
+    color: Color.darkInk,
+    fontSize: FontSize.size_lg,
+    fontFamily: getFontFamily("600"),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    zIndex: 1,
+    padding: 10,
+  },
+  closeButtonText: {
+    color: Color.darkInk,
+    fontSize: 20,
+    fontWeight: "600",
+    fontFamily: getFontFamily("600"),
   },
 });
 

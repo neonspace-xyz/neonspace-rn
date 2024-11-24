@@ -48,7 +48,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
       let url = isProfile ?
         `/user/getPost?userId=${userInfo.user_id}&page=${page}` :
         `/user/getAllPosts`;
-
+      console.log(`PostList-fetchItems-url`, url)
       let resp = await api.get(url);
       let posts = isProfile ? resp.data.posts : resp.data;
       let _posts = [];
@@ -85,6 +85,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
       }
       setItems(_posts);
     } catch (error) {
+      console.log(eror)
       if (error.isSessionExpired) {
         await logout(navigation);
       } else {
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
   containerList: {
     width: "100%",
     height: "100%",
-    flex:1,
+    flex: 1,
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
     // borderColor:'blue',

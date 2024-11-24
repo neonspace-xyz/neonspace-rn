@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity, useWindowDimensions, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity, useWindowDimensions, ActivityIndicator, Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import { getRandomNumber, processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
@@ -31,6 +31,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
   const [isFullBio, setIsFullBio] = useState(false);
   const [isShowCreate, setIsShowCreate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showMintPrompt, setShowMintPrompt] = useState(false);
 
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
@@ -258,6 +259,17 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
     }
   }, [userInfo]);
 
+  const handleBioToggle = () => {
+    console.log(`userInfo`, userInfo)
+    if (userInfo?.user_id === usersession?.user_id || userInfo?.owned_by_current_user) {
+      // If current user owns the profile, show full bio directly
+      setIsFullBio(!isFullBio);
+    } else {
+      // If not owner, show mint prompt
+      setShowMintPrompt(true);
+    }
+  };
+
   return (
     <>
       {isLoading ? (
@@ -320,7 +332,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
-                    onPress={() => setIsFullBio(!isFullBio)}
+                    onPress={handleBioToggle}
                   >
                     <Text style={[styles.editProfile, styles.editProfileTypo]}>
                       {isFullBio ? "Default Bio" : "Full Bio"}
@@ -351,7 +363,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.editProfileWrapper, styles.profileWrapperSpaceBlock]}
-                    onPress={() => setIsFullBio(!isFullBio)}
+                    onPress={handleBioToggle}
                   >
                     <Text style={[styles.editProfile, styles.editProfileTypo]}>
                       {isFullBio ? "Default Bio" : "Full Bio"}
@@ -546,6 +558,52 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
           </View>
         </View>
       )}
+
+      {/* Add Mint Prompt Modal */}
+      <Modal
+        transparent={true}
+        visible={showMintPrompt}
+        animationType="fade"
+        onRequestClose={() => setShowMintPrompt(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalContainer}
+          activeOpacity={1}
+          onPress={() => setShowMintPrompt(false)}
+        >
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.modalContent}
+            onPress={e => e.stopPropagation()}
+          >
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowMintPrompt(false)}
+            >
+              <Text style={styles.closeButtonText}>✕</Text>
+            </TouchableOpacity>
+
+            <Image
+              style={styles.modalImage}
+              source={userInfo?.profile_image}
+            />
+            <Text style={styles.modalTitle}>
+              To view full bio, you should mint {userInfo?.name}'s bio!
+            </Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.mintButton}
+                onPress={() => {
+                  setShowMintPrompt(false);
+                  // Add mint navigation or action here
+                }}
+              >
+                <Text style={styles.mintButtonText}>Mint</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
     </>
   );
 };
@@ -1191,6 +1249,58 @@ const styles = StyleSheet.create({
     // borderColor:'blue',
     // borderWidth:2,
     height: 15,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: Color.colorGray_100,
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    width: '80%',
+    position: 'relative',
+  },
+  modalImage: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+    borderRadius: 100,
+    overflow: 'hidden',
+  },
+  modalTitle: {
+    color: Color.darkInk,
+    fontSize: FontSize.size_lg,
+    fontFamily: getFontFamily("600"),
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  mintButton: {
+    backgroundColor: Color.colorDarkslategray_400,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+  },
+  mintButtonText: {
+    color: Color.darkInk,
+    fontSize: FontSize.size_lg,
+    fontFamily: getFontFamily("600"),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    zIndex: 1,
+    padding: 10,
+  },
+  closeButtonText: {
+    color: Color.darkInk,
+    fontSize: 20,
+    fontWeight: "600",
+    fontFamily: getFontFamily("600"),
   },
 });
 
