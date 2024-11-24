@@ -15,6 +15,7 @@ import PostCreate from "./PostCreate";
 
 const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
   const { api, getOtherUser } = useAuth();
+  const isCurrentUser = userInfo?.user_id == usersession?.user_info?.user_id;
   const navigation = useNavigation();
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
@@ -91,7 +92,15 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
           datetime: job.posted_at,
           itemLikes: itemLikes
         }
-        _jobs.push(item);
+        if (isCurrentUser) {
+          //only push if item user_id is the current user
+          if (job.user_id == userInfo.user_id) {
+            _jobs.push(item);
+          }
+        } else {
+          //Always push item
+          _jobs.push(item);
+        }
       }
       setItems(_jobs);
     } catch (error) {

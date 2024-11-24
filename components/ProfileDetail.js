@@ -29,7 +29,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if(route?.params?.isFullBio) {
+    if (route?.params?.isFullBio) {
       setIsFullBio(route.params?.isFullBio)
     }
   }, [route])
@@ -94,13 +94,6 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
     />
   );
 
-  const CircularImage = ({ source }) => {
-    return (
-      <View style={[{borderWidth:2, borderColor:'red'}]}>
-        <Image source={source} style={styles.image} />
-      </View>
-    );
-  };
   useEffect(() => {
     const check = async () => {
       if (!userInfo) return;
@@ -201,8 +194,8 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
               // flex:1,
               // gap:5,
               // flexGrow:0,
-              marginTop:10,
-              paddingLeft:10
+              marginTop: 10,
+              paddingLeft: 10
             }}>
 
               {userInfo?.hide_wallet == false &&
@@ -236,7 +229,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                 <View
                   style={[
                     {
-                      flexDirection: "row", 
+                      flexDirection: "row",
                       alignItems: "center",
                     },
                   ]}
@@ -247,7 +240,8 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                     {userVerifiedByImages[0] &&
                       <View style={[{
                         // borderWidth:2, borderColor:'red', 
-                        width:30}]}>
+                        width: 30
+                      }]}>
                         <Image source={userVerifiedByImages[0]} style={styles.image} />
                       </View>
                     }
@@ -272,9 +266,8 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
 
                     <Text style={[styles.userVerifiedByNames]}>
                       {userVerifiedByNames}
-                    </Text>  
+                    </Text>
                   </View>
-                    
                 </View>
               </TouchableOpacity>
 
@@ -287,7 +280,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                 <View
                   style={[
                     {
-                      flexDirection: "row", 
+                      flexDirection: "row",
                       // flex:1,     
                       alignItems: "center",
                     },
@@ -300,7 +293,8 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                       {userVerifiedImages[0] &&
                         <View style={[{
                           // borderWidth:2, borderColor:'red', 
-                          width:30}]}>
+                          width: 30
+                        }]}>
                           <Image source={userVerifiedImages[0]} style={styles.image} />
                         </View>
                       }
@@ -325,9 +319,9 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
 
                       <Text style={[styles.userVerifiedByNames]}>
                         {userVerifiedNames}
-                      </Text>  
+                      </Text>
                     </View>
-                    
+
                   </View>
                 </View>
               </TouchableOpacity>
@@ -342,7 +336,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                   renderScene={renderScene}
                   onIndexChange={setIndex}
                   renderTabBar={renderTabBar}
-                  style={{ backgroundColor: Color.colorGray_100}}
+                  style={{ backgroundColor: Color.colorGray_100 }}
                   initialLayout={{ width: layout.width }}
                 />
                 :
@@ -393,7 +387,7 @@ const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
   }, [])
 
   return (userInfo &&
-    <View style={{flex:1}}>
+    <View style={{ flex: 1 }}>
       <PostList
         tab={4}
         isProfile={true}
@@ -747,12 +741,12 @@ const styles = StyleSheet.create({
     fontWeight: "400"
   },
   verifiedByTitle: {
-    height:20,
+    height: 20,
     color: Color.darkInk,
     fontSize: FontSize.labelLarge_size,
     fontFamily: getFontFamily("400"),
     fontWeight: "400",
-    marginRight:5
+    marginRight: 5
     // borderColor:'red', 
     // borderWidth:2,
   },
@@ -790,10 +784,10 @@ const styles = StyleSheet.create({
     color: Color.darkInk,
     fontFamily: getFontFamily(400),
     fontWeight: 400,
-    marginLeft:5,
+    marginLeft: 5,
     // borderColor:'blue',
     // borderWidth:2,
-    height:15,
+    height: 15,
   },
   verified: {
     width: 55,
@@ -997,7 +991,7 @@ const styles = StyleSheet.create({
     // borderWidth:2,
     // borderColor:'red',
     // height:200,
-    flex:1
+    flex: 1
     // flexGrow: 1.6
     // borderColor:"blue",
     // borderWidth:2,
