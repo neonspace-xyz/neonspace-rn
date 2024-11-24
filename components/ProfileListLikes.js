@@ -7,11 +7,8 @@ import { Color } from "../GlobalStyles";
 import { convertTimestamp, getRandomNumber, logout } from "../Utils";
 import { IMG_PROFILE } from "../Constant";
 import { useAuth } from "./AuthProvider";
-import CrowdSectionHiring from "./CrowdSectionHiring";
 import EmptyView from "./EmptyView";
-import CrowdSectionEvent from "./CrowdSectionEvent";
-import CrowdSectionQuest from "./CrowdSectionQuest";
-import PostSection from "./PostSection";
+import MintingListData from "./MintingListData";
 
 const ProfileListLikes = ({ tab, isProfile, usersession, userInfo }) => {
   const { api, getOtherUser } = useAuth();
@@ -42,11 +39,12 @@ const ProfileListLikes = ({ tab, isProfile, usersession, userInfo }) => {
     setLoadingMore(true);
     let likes = [];
     try {
+      let _likes = await getLikes();
       // let _likes = await getItems('post');
-      // likes = [...likes, ..._likes];
-
-      let _likes = await getItems('hiring');
       likes = [...likes, ..._likes];
+
+      // let _likes = await getItems('hiring');
+      // likes = [...likes, ..._likes];
 
       // _likes = await getItems('event');
       // likes = [...likes, ..._likes];
@@ -67,212 +65,24 @@ const ProfileListLikes = ({ tab, isProfile, usersession, userInfo }) => {
       setLoadingMore(false);
     }
   }
-
-  const getItems = async (type) => {
+  const getLikes = async () => {
+    console.log(`getLikes-userInfo`, userInfo.user_id);
     let result = [];
-    try {
-      let url = '';
-      let page = 1;
-      if (type == 'post') {
-        url = `/user/getPost?userId=${userInfo.user_id}&page=${page}`;
-        let resp = await api.get(url);
-        let data = resp.data.posts;
-
-        let _items = [];
-        for (const key in data) {
-          if (Object.hasOwnProperty.call(data, key)) {
-            let like = getRandomNumber(0, 7);
-            let itemLikes = [];
-            for (let j = 0; j < like; j++) {
-              itemLikes.push({
-                name: `Name${j}`,
-                username: `@username${j}`,
-                image: IMG_PROFILE[getRandomNumber(0, 4)],
-                bio: `Founder at ChainCredit. #DYOR ${j}`,
-              })
-            }
-
-            const post = data[key];
-            let item = {
-              item_type: 'post',
-              id: key,
-              name: userInfo.name,
-              screen_name: `@${userInfo.screen_name}`,
-              image: userInfo.profile_image,
-              post_id: post.post_id,
-              text: post.post,
-              view: post.views,
-              like: post.likes,
-              liked_by_user: post.liked_by_user,
-              datetime: convertTimestamp(post.published_timestamp),
-              itemLikes: itemLikes
-            }
-            result.push(item);
-          }
-        }
-      }
-      else if (type == 'hiring') {
-        url = `/crowdsource/hiring/list?page=${page}`;
-        let resp = await api.get(url);
-        let data = resp.data.jobs;
-
-        let _items = [];
-        let _users = {};
-        for (const job of data) {
-          if (_users[job.user_id]) continue;
-
-          let otherUser = await getOtherUser(job.user_id);
-          if (!otherUser) continue;
-          _users[job.user_id] = {
-            name: otherUser.name,
-            screen_name: otherUser.screen_name,
-            profile_image: otherUser.profile_image,
-          };
-        }
-
-        for (const job of data) {
-          let like = getRandomNumber(0, 7);
-          let itemLikes = [];
-          for (let j = 0; j < like; j++) {
-            itemLikes.push({
-              name: `Name${j}`,
-              username: `@username${j}`,
-              image: IMG_PROFILE[getRandomNumber(0, 4)],
-              bio: `Founder at ChainCredit. #DYOR ${j}`,
-            })
-          }
-
-          let _user = _users[job.user_id];
-          let item = {
-            item_type: 'hiring',
-            id: job.id,
-            fullname: _user?.name,
-            screen_name: `@${_user?.screen_name}`,
-            image: _user?.profile_image,
-            user_id: job.user_id,
-            title: job.title,
-            company: job.company,
-            location: job.location,
-            salary_range: job.salary_range,
-            description: job.description,
-            view: getRandomNumber(0, 100),
-            like: like,
-            datetime: job.created_at,
-            itemLikes: itemLikes
-          }
-          result.push(item);
-        }
-      }
-      else if (type == 'event') {
-        url = `/crowdsource/event/list?page=${page}`;
-        let resp = await api.get(url);
-        let data = resp.data.events;
-
-        let _items = [];
-        let _users = {};
-        for (const _item of data) {
-          if (_users[_item.owner_id]) continue;
-
-          let otherUser = await getOtherUser(_item.owner_id);
-          if (!otherUser) continue;
-          _users[_item.owner_id] = {
-            name: otherUser.name,
-            screen_name: otherUser.screen_name,
-            profile_image: otherUser.profile_image,
-          };
-        }
-
-        for (const _item of data) {
-          let like = getRandomNumber(0, 7);
-          let itemLikes = [];
-          for (let j = 0; j < like; j++) {
-            itemLikes.push({
-              name: `Name${j}`,
-              username: `@username${j}`,
-              image: IMG_PROFILE[getRandomNumber(0, 4)],
-              bio: `Founder at ChainCredit. #DYOR ${j}`,
-            })
-          }
-
-          let _user = _users[_item.owner_id];
-          let item = {
-            item_type: 'event',
-            id: _item.id,
-            fullname: _user?.name,
-            screen_name: `@${_user?.screen_name}`,
-            image: _user?.profile_image,
-            user_id: _item.owner_id,
-            name: _item.name,
-            host: _item.host,
-            location: _item.location,
-            date: _item.date,
-            event_link: _item.event_link,
-            description: _item.description,
-            view: getRandomNumber(0, 100),
-            like: like,
-            datetime: _item.created_at,
-            itemLikes: itemLikes
-          }
-          result.push(item);
-        }
-      }
-      else if (type == 'quest') {
-        url = `/crowdsource/quest/list?page=${page}`;
-        let resp = await api.get(url);
-        let data = resp.data.events;
-
-        let _items = [];
-        let _users = {};
-        for (const _item of data) {
-          if (_users[_item.user_id]) continue;
-
-          let otherUser = await getOtherUser(_item.user_id);
-          if (!otherUser) continue;
-          _users[_item.user_id] = {
-            name: otherUser.name,
-            screen_name: otherUser.screen_name,
-            profile_image: otherUser.profile_image,
-          };
-        }
-
-        for (const _item of data) {
-          let like = getRandomNumber(0, 7);
-          let itemLikes = [];
-          for (let j = 0; j < like; j++) {
-            itemLikes.push({
-              name: `Name${j}`,
-              username: `@username${j}`,
-              image: IMG_PROFILE[getRandomNumber(0, 4)],
-              bio: `Founder at ChainCredit. #DYOR ${j}`,
-            })
-          }
-
-          let _user = _users[_item.user_id];
-
-          let item = {
-            item_type: 'quest',
-            id: _item.id,
-            fullname: _user?.name,
-            screen_name: `@${_user?.screen_name}`,
-            image: _user?.profile_image,
-            user_id: _item.user_id,
-            name: _item.name,
-            company: _item.company,
-            link: _item.link,
-            description: _item.description,
-            view: getRandomNumber(0, 100),
-            like: like,
-            datetime: _item.created_at,
-            itemLikes: itemLikes
-          }
-          result.push(item);
-        }
-      }
-    } catch (error) {
-      console.error("getItems", error)
-    } finally {
-      return result;
+    url = `/user/likes?userId=${userInfo.user_id}`;
+    let resp = await api.get(url);
+    let posts = resp.data.liked_posts;
+    for (const post of posts) {
+      result.push({
+        type: 'like',
+        item_type: 'post',
+        from: userInfo.screen_name,
+        to: post.user_info.username,
+        screen_name: `@${post.user_info.username}`,
+        image: post.user_info.profile_image_url,
+        post_id: post.id,
+      });
     }
+    return result;
   }
 
   const handleDetail = (item) => {
@@ -367,59 +177,18 @@ const ProfileListLikes = ({ tab, isProfile, usersession, userInfo }) => {
           loadingMore && <ActivityIndicator style={{ marginVertical: 20 }} />
         }
         renderItem={({ item, index }) => {
+          console.log('like-item', item);
           // console.log('l-datetime', index, item.id, item.datetime, item.item_type);
-          if (item.item_type == 'post') {
-            return (
-              <PostSection
-                tab={tab}
-                isDetail={false}
-                index={index}
-                item={item}
-                userInfo={usersession?.user_info}
-                onPress={() => handleDetail(item)}
-                onMore={handleMore}
-              />
-            )
-          }
-          else if (item.item_type == 'hiring') {
-            return (
-              <CrowdSectionHiring
-                tab={tab}
-                isDetail={false}
-                index={index}
-                item={item}
-                userInfo={userInfo}
-                onPress={() => handleDetail(item)}
-                onMore={handleMore}
-              />
-            )
-          }
-          else if (item.item_type == 'event') {
-            return (
-              <CrowdSectionEvent
-                tab={tab}
-                isDetail={false}
-                index={index}
-                item={item}
-                userInfo={userInfo}
-                onPress={() => handleDetail(item)}
-                onMore={handleMore}
-              />
-            )
-          }
-          else if (item.item_type == 'quest') {
-            return (
-              <CrowdSectionQuest
-                tab={tab}
-                isDetail={false}
-                index={index}
-                item={item}
-                userInfo={userInfo}
-                onPress={() => handleDetail(item)}
-                onMore={handleMore}
-              />
-            )
-          }
+          return <MintingListData
+            tab={tab}
+            isDetail={false}
+            index={index}
+            item={item}
+            userInfo={userInfo}
+            onPress={() => handleDetail(item)}
+            onMore={handleMore}
+          />
+          return <></>
         }}
       />
     </View>

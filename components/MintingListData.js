@@ -18,11 +18,11 @@ const MintingListData = ({ tab, isDetail, index, userInfo, item, onPress, onMore
               <View style={styles.frameFlexBox}>
                 <Text style={[styles.name, styles.nameTypo]}>{item?.fullname}</Text>
                 <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                  {item?.from} minted {item?.to}'s bio
+                  {item?.from} {item?.type == 'like' ? 'liked' : 'minted'} {item?.to}'s {item?.item_type == 'post' ? 'post' : 'bio'}
                 </Text>
-              </View>             
+              </View>
             </View>
-          </View>          
+          </View>
         </View>
       </Pressable>
     </View>
