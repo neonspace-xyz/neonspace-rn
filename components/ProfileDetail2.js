@@ -54,7 +54,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
     }, [])
 
     return (userInfo &&
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <PostList
           tab={4}
           isProfile={true}
@@ -118,24 +118,48 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
 
   const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
     const { getUser } = useAuth();
-    const [itemLikes, setItemLikes] = useState();
+    const [itemLikes, setItemLikes] = useState([]);
+
+    const { api } = useAuth();
+    const getLikes = async () => {
+      console.log(`getLikes-userInfo`, userInfo.user_id);
+      let result = [];
+      url = `/user/likes?userId=${userInfo.user_id}`;
+      let resp = await api.get(url);
+      let posts = resp.data.liked_posts;
+      for (const post of posts) {
+        result.push({
+          type: 'like',
+          item_type: 'post',
+          from: userInfo.screen_name,
+          to: post.user_info.username,
+          screen_name: `@${post.user_info.username}`,
+          image: post.user_info.profile_image_url,
+          post_id: post.id,
+        });
+      }
+      return result;
+    }
 
     useEffect(() => {
-      const setLikes = () => {
-        let like = getRandomNumber(10, 15);
-        let itemLikes = [];
-        for (let j = 0; j < like; j++) {
+      const setLikes = async () => {
+        console.log('setLikes')
+        let _likes = await getLikes();
+        for (let j = 0; j < _likes.length; j++) {
           itemLikes.push({
-            name: `Name${j}`,
-            username: `@username${j}`,
-            image: IMG_PROFILE[getRandomNumber(0, 4)],
-            bio: `Founder at ChainCredit. #DYOR ${j}`,
+            name: ``,
+            username: `Liked @${_likes[j].to}'s post`,
+            image: _likes[j].image,
+            bio: ``,
           })
         }
+        console.log(itemLikes)
         setItemLikes(itemLikes);
       };
-      setLikes();
-    }, [])
+      if (userInfo) {
+        setLikes();
+      }
+    }, [userInfo, itemLikes])
     return (userInfo &&
       <View style={{ flex: 1 }} >
         {/* <CrowdListEvent
@@ -251,7 +275,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
             <View style={{
               // borderWidth:2, borderColor:"red",
               // flex: 1, 
-              flexDirection: "row", 
+              flexDirection: "row",
               // maxHeight: 120,
             }}>
               {userInfo?.profile_image ? (
@@ -379,7 +403,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
               // flex: 1, padding: 10, gap: 8
               // flex:1,
               // flexGrow:0,
-              marginTop:10,
+              marginTop: 10,
               padding: 10
             }}>
 
@@ -400,22 +424,23 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
                 }}
                 onPress={() => navigation.push(`Verified${tab}`, { tab, verifiedByParam: true, user: userInfo })}
               >
-                 <View
+                <View
                   style={[
                     {
-                      flexDirection: "row", 
+                      flexDirection: "row",
                       alignItems: "center",
                     },
                   ]}
-                  >
-                    <Text style={styles.verifiedByTitle}>{`Verified by: `}</Text>
+                >
+                  <Text style={styles.verifiedByTitle}>{`Verified by: `}</Text>
 
 
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
                     {userVerifiedByImages[0] &&
                       <View style={[{
                         // borderWidth:2, borderColor:'red', 
-                        width:30}]}>
+                        width: 30
+                      }]}>
                         <Image source={userVerifiedByImages[0]} style={styles.image} />
                       </View>
                     }
@@ -440,7 +465,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
 
                     <Text style={[styles.userVerifiedByNames]}>
                       {userVerifiedByNames}
-                    </Text>  
+                    </Text>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -455,20 +480,21 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
                 <View
                   style={[
                     {
-                      flexDirection: "row", 
+                      flexDirection: "row",
                       // flex:1,     
                       alignItems: "center",
                     },
                   ]}
                 >
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>                    
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
                     <Text style={styles.verifiedByTitle}>{`Verified: `}</Text>
                     <View>
                       <View style={{ flexDirection: "row", alignItems: "center" }}>
                         {userVerifiedImages[0] &&
                           <View style={[{
                             // borderWidth:2, borderColor:'red', 
-                            width:30}]}>
+                            width: 30
+                          }]}>
                             <Image source={userVerifiedImages[0]} style={styles.image} />
                           </View>
                         }
@@ -493,9 +519,9 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
 
                         <Text style={[styles.userVerifiedByNames]}>
                           {userVerifiedNames}
-                        </Text>  
+                        </Text>
                       </View>
-                      
+
                     </View>
                   </View>
                 </View>
@@ -1147,12 +1173,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   verifiedByTitle: {
-    height:20,
+    height: 20,
     color: Color.darkInk,
     fontSize: FontSize.labelLarge_size,
     fontFamily: getFontFamily("400"),
     fontWeight: "400",
-    marginRight:5
+    marginRight: 5
     // borderColor:'red', 
     // borderWidth:2,
   },
@@ -1161,10 +1187,10 @@ const styles = StyleSheet.create({
     color: Color.darkInk,
     fontFamily: getFontFamily(400),
     fontWeight: 400,
-    marginLeft:5,
+    marginLeft: 5,
     // borderColor:'blue',
     // borderWidth:2,
-    height:15,
+    height: 15,
   },
 });
 

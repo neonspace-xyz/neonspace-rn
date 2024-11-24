@@ -13,6 +13,8 @@ import PostList from "./PostList";
 import ProfileListLikes from "./ProfileListLikes";
 import MintingList from "./MintilngList";
 import * as Clipboard from 'expo-clipboard';
+import PostLikeList from "./PostLikeList";
+import { IMG_PROFILE } from "../Constant";
 
 const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const navigation = useNavigation();
@@ -37,6 +39,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
     { key: 'second', title: 'Crowdsource' },
+    // { key: 'third', title: 'Minting' },
     { key: 'forth', title: 'Likes' },
   ]);
 
@@ -451,29 +454,63 @@ const ThirdRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
     </View>)
 };
 
-const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
-  const { getUser, getSession } = useAuth();
+const ForthRoute = () => {
+  console.log('Rendering forth route');
+  const { getUser } = useAuth();
+  const { api } = useAuth();
+
   const [userInfo, setUserInfo] = useState();
-  const [usersession, setUsersession] = useState();
+  const [itemLikes, setItemLikes] = useState([]);
+
+  const getLikes = async () => {
+    console.log(`getLikes-userInfo`, userInfo.user_id);
+    let result = [];
+    url = `/user/likes?userId=${userInfo.user_id}`;
+    let resp = await api.get(url);
+    let posts = resp.data.liked_posts;
+    for (const post of posts) {
+      result.push({
+        type: 'like',
+        item_type: 'post',
+        from: userInfo.screen_name,
+        to: post.user_info.username,
+        screen_name: `@${post.user_info.username}`,
+        image: post.user_info.profile_image_url,
+        post_id: post.id,
+      });
+    }
+    return result;
+  }
 
   useEffect(() => {
     getUser().then((user) => {
       setUserInfo(user);
     });
-    getSession().then((user) => {
-      setUsersession(user);
-    })
-  }, [])
+    const setLikes = async () => {
+      console.log('setLikes')
+      let _likes = await getLikes();
+      for (let j = 0; j < _likes.length; j++) {
+        itemLikes.push({
+          name: ``,
+          username: `Liked @${_likes[j].to}'s post`,
+          image: _likes[j].image,
+          bio: ``,
+        })
+      }
+      console.log(itemLikes)
+      setItemLikes(itemLikes);
+    };
+    if (userInfo) {
+      setLikes();
+    }
+  }, userInfo, itemLikes)
+
 
   return (userInfo &&
     <View>
-      <ProfileListLikes
+      <PostLikeList
         tab={4}
-        usersession={usersession}
-        userInfo={userInfo}
-        isProfile={false}
-        isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} />
+        itemLikes={itemLikes} />
     </View>)
 };
 
