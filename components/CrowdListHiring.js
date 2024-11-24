@@ -48,7 +48,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
 
       let _jobs = [];
       let _users = {};
-      
+
       // for (const job of jobs) {
       //   if (_users[job.user_id]) continue;
 
@@ -77,12 +77,9 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
 
         let item = {
           id: job.id,
-          fullname:"Dummy",
-          screen_name:"Dummy",
-          image:"",
-          // fullname: _user?.name,
-          // screen_name: `@${_user?.screen_name}`,
-          // image: _user?.profile_image,
+          fullname: job.user_info.name,
+          screen_name: job.user_info.screen_name,
+          image: job.user_info.profile_image_url,
           user_id: job.user_id,
           title: job.title,
           company: job.company,
@@ -252,7 +249,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
   return (
     // <View style={[isProfile ? styles.containerListProfile : styles.containerList]}>
     <View style={[styles.containerList]}>
-    <FlatList
+      <FlatList
         ref={flatListRef}
         style={styles.flat}
         data={items}

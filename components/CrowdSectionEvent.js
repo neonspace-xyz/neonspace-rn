@@ -8,7 +8,6 @@ import { useNavigation } from "@react-navigation/core";
 const CrowdSectionEvent = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) => {
   const navigation = useNavigation();
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
-
   return (
     <View style={styles.frame} index={`event${item?.id}`} >
       <Pressable onPress={() => isDetail ? null : onPress()}>

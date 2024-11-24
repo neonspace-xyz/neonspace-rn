@@ -75,9 +75,9 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
         // let _user = _users[_item.owner_id];
         let item = {
           id: _item.id,
-          fullname: "Dummy",//_user?.name,
-          screen_name: "Dummy",//`@${_user?.screen_name}`,
-          image: "",//_user?.profile_image,
+          fullname: _item.user_info.name,//_user?.name,
+          screen_name: _item.user_info.screen_name,//`@${_user?.screen_name}`,
+          image: _item.user_info.profile_image_url,//_user?.profile_image,
           user_id: _item.owner_id,
           name: _item.name,
           host: _item.host,
@@ -103,40 +103,6 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
       setLoadingMore(false);
     }
   }
-
-  const fetchItemsa = async () => {
-    let data = [];
-    for (let i = 1; i < getRandomNumber(); i++) {
-      let like = getRandomNumber(0, 7);
-      let itemLikes = [];
-      for (let j = 0; j < like; j++) {
-        itemLikes.push({
-          name: `Name${j}`,
-          username: `@username${j}`,
-          image: IMG_PROFILE[getRandomNumber(0, 4)],
-          bio: `Founder at ChainCredit. #DYOR ${j}`,
-        })
-      }
-      let view = getRandomNumber(0, 100);
-      data.push({
-        id: i,
-        fullname: `Name${i}`,
-        screen_name: '@FimoTex96172',//`@username${i}`,
-        image: IMG_PROFILE[getRandomNumber(0, 4)],
-        name: `Title${i}`,
-        host: `Host${i}`,
-        location: `Location${i}`,
-        event_link: 'https://neonrabbits.io',
-        date: getRandomTimestamp(10),
-        description: 'Event details lorem ipsum neonrabbits team is hiring a marketing lead who’s able to launch branding & marketing initiatives with strategic part lorem ipsum long text here example lorem ipsum.',
-        view: view,
-        like: like,
-        datetime: getRandomTimestamp(30),
-        itemLikes: itemLikes
-      });
-    }
-    setItems(data);
-  };
 
   const handleDetail = (item) => {
     navigation.push(`CrowdDetailEvent${tab}`, { tab, item });
