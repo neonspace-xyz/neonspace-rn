@@ -65,6 +65,10 @@ const NotificationList = ({ route }) => {
         notificationTitle = `User unverified`
         eventType = `${event.payload.verifier.username} Unverified ${event.payload.verified.username}`
       }
+      else if (event.event_type == "job_created") {
+        notificationTitle = `Job created`
+        eventType = `${event.payload.user.username} Created a new job`
+      }
       else if (event.event_type == "post_updated") {
         notificationTitle = `Post Updated`
         eventType = "Updaed a post"
