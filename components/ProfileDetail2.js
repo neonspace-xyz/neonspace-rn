@@ -32,6 +32,9 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
   const [isShowCreate, setIsShowCreate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showMintPrompt, setShowMintPrompt] = useState(false);
+  const [isMinting, setIsMinting] = useState(false);
+  const [mintSuccess, setMintSuccess] = useState(false);
+  const [mintError, setMintError] = useState(null);
 
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
@@ -267,6 +270,63 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
     } else {
       // If not owner, show mint prompt
       setShowMintPrompt(true);
+    }
+  };
+
+  const handleMint = async () => {
+    try {
+      console.log(`handleMint-start address to mint = ${userInfo.wallet_address}`)
+      setIsMinting(true);
+      setMintError(null);
+
+      // Initial mint call
+      const mintResponse = await api.post('/user/mintNeonspaceNft', {
+        user_id: userInfo.user_id,
+      });
+      console.log(`handleMint-mintResponse`, mintResponse)
+      const { transaction_hash } = mintResponse.data;
+
+      // Poll for mint status
+      const checkMintStatus = async () => {
+        try {
+          const statusResponse = await api.get(`/nft/mintStatus?op_hash=${transaction_hash}`);
+          if (statusResponse.data.status === "SUCCESS") {
+            setIsMinting(false);
+            setMintSuccess(true);
+            updateUserInfoAfterMint();
+          } else {
+            // Continue polling after 5 seconds
+            setTimeout(checkMintStatus, 5000);
+          }
+        } catch (error) {
+          console.error("Error checking mint status:", error);
+          setIsMinting(false);
+          setMintError("Failed to check mint status");
+        }
+      };
+
+      // Start polling
+      checkMintStatus();
+
+    } catch (error) {
+      console.error("Error minting NFT:", error);
+      setIsMinting(false);
+      setMintError("Failed to mint NFT");
+    }
+  };
+
+  // First, add a function to update the userInfo state
+  const updateUserInfoAfterMint = () => {
+    if (userInfo) {
+      // Create a new object with all existing properties plus owned_by_current_user set to true
+      const updatedUserInfo = {
+        ...userInfo,
+        owned_by_current_user: true
+      };
+      // Update any parent components that need to know about this change
+      if (onUserInfoUpdate) {
+        onUserInfoUpdate(updatedUserInfo);
+      }
     }
   };
 
@@ -562,45 +622,105 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
       {/* Add Mint Prompt Modal */}
       <Modal
         transparent={true}
-        visible={showMintPrompt}
+        visible={showMintPrompt || isMinting || mintSuccess}
         animationType="fade"
-        onRequestClose={() => setShowMintPrompt(false)}
+        onRequestClose={() => {
+          if (!isMinting) {
+            setShowMintPrompt(false);
+            setMintSuccess(false);
+            setMintError(null);
+          }
+        }}
       >
         <TouchableOpacity
           style={styles.modalContainer}
           activeOpacity={1}
-          onPress={() => setShowMintPrompt(false)}
+          onPress={() => {
+            if (!isMinting) {
+              setShowMintPrompt(false);
+              setMintSuccess(false);
+              setMintError(null);
+            }
+          }}
         >
           <TouchableOpacity
             activeOpacity={1}
             style={styles.modalContent}
             onPress={e => e.stopPropagation()}
           >
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowMintPrompt(false)}
-            >
-              <Text style={styles.closeButtonText}>✕</Text>
-            </TouchableOpacity>
+            {!isMinting && !mintSuccess && (
+              <>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setShowMintPrompt(false)}
+                >
+                  <Text style={styles.closeButtonText}>✕</Text>
+                </TouchableOpacity>
 
-            <Image
-              style={styles.modalImage}
-              source={userInfo?.profile_image}
-            />
-            <Text style={styles.modalTitle}>
-              To view full bio, you should mint {userInfo?.name}'s bio!
-            </Text>
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={styles.mintButton}
-                onPress={() => {
-                  setShowMintPrompt(false);
-                  // Add mint navigation or action here
-                }}
-              >
-                <Text style={styles.mintButtonText}>Mint</Text>
-              </TouchableOpacity>
-            </View>
+                <Image
+                  style={styles.modalImage}
+                  source={userInfo?.profile_image}
+                />
+                <Text style={styles.modalTitle}>
+                  To view full bio, you should mint {userInfo?.name}'s bio!
+                </Text>
+                {mintError && (
+                  <Text style={styles.errorText}>{mintError}</Text>
+                )}
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={styles.mintButton}
+                    onPress={handleMint}
+                  >
+                    <Text style={styles.mintButtonText}>Mint</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+
+            {isMinting && (
+              <View style={styles.mintingContainer}>
+                <ActivityIndicator size="large" color={Color.darkInk} />
+                <Text style={styles.mintingText}>
+                  Minting {userInfo?.name}'s NFT...
+                </Text>
+              </View>
+            )}
+
+            {mintSuccess && (
+              <>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => {
+                    setMintSuccess(false);
+                    setShowMintPrompt(false);
+                    updateUserInfoAfterMint();
+                    setIsFullBio(true); // Show full bio after successful mint
+                  }}
+                >
+                  <Text style={styles.closeButtonText}>✕</Text>
+                </TouchableOpacity>
+
+                <Image
+                  style={styles.modalImage}
+                  source={userInfo?.profile_image}
+                />
+                <Text style={styles.modalTitle}>
+                  You now own {userInfo?.name}'s NFT!
+                </Text>
+                <TouchableOpacity
+                  style={styles.mintButton}
+                  onPress={() => {
+                    setMintSuccess(false);
+                    setShowMintPrompt(false);
+                    updateUserInfoAfterMint();
+                    setIsFullBio(true); // Show full bio after successful mint
+                  }}
+                >
+                  <Text style={styles.mintButtonText}>Close</Text>
+                </TouchableOpacity>
+              </>
+            )}
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
@@ -1301,6 +1421,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     fontFamily: getFontFamily("600"),
+  },
+  mintingContainer: {
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mintingText: {
+    marginTop: 20,
+    color: Color.darkInk,
+    fontSize: FontSize.size_lg,
+    fontFamily: getFontFamily("500"),
+    textAlign: 'center',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: FontSize.size_sm,
+    fontFamily: getFontFamily("500"),
   },
 });
 
