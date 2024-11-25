@@ -8,15 +8,22 @@ import './gesture-handler';
 
 export default function App() {
   const [fontsLoaded, error] = useFonts({
-    'Clash Grotesk': require('./assets/fonts/ClashGrotesk.ttf'),
-    'ClashGrotesk-Bold': require('./assets/fonts/ClashGrotesk-Bold.ttf'),
-    'ClashGrotesk-Extralight': require('./assets/fonts/ClashGrotesk-Extralight.ttf'),
-    'ClashGrotesk-Light': require('./assets/fonts/ClashGrotesk-Light.ttf'),
-    'ClashGrotesk-Medium': require('./assets/fonts/ClashGrotesk-Medium.ttf'),
-    'ClashGrotesk-Regular': require('./assets/fonts/ClashGrotesk-Regular.ttf'),
-    'ClashGrotesk-Semibold': require('./assets/fonts/ClashGrotesk-Semibold.ttf'),
-    'ClashGrotesk-Variable': require('./assets/fonts/ClashGrotesk-Variable.ttf'),
+    // 'Clash Grotesk': require('./assets/fonts/ClashGrotesk.ttf'),
+    // 'ClashGrotesk-Bold': require('./assets/fonts/ClashGrotesk-Bold.ttf'),
+    // 'ClashGrotesk-Extralight': require('./assets/fonts/ClashGrotesk-Extralight.ttf'),
+    // 'ClashGrotesk-Light': require('./assets/fonts/ClashGrotesk-Light.ttf'),
+    // 'ClashGrotesk-Medium': require('./assets/fonts/ClashGrotesk-Medium.ttf'),
+    // 'ClashGrotesk-Regular': require('./assets/fonts/ClashGrotesk-Regular.ttf'),
+    // 'ClashGrotesk-Semibold': require('./assets/fonts/ClashGrotesk-Semibold.ttf'),
+    // 'ClashGrotesk-Variable': require('./assets/fonts/ClashGrotesk-Variable.ttf'),
     'Satoshi': require('./assets/fonts/Satoshi.ttf'),
+
+    'ClashGrotesk-Bold': require('./assets/fonts/ClashGrotesk-Bold.otf'),
+    'ClashGrotesk-Extralight': require('./assets/fonts/ClashGrotesk-Extralight.otf'),
+    'ClashGrotesk-Light': require('./assets/fonts/ClashGrotesk-Light.otf'),
+    'ClashGrotesk-Medium': require('./assets/fonts/ClashGrotesk-Medium.otf'),
+    'ClashGrotesk-Regular': require('./assets/fonts/ClashGrotesk-Regular.otf'),
+    'ClashGrotesk-Semibold': require('./assets/fonts/ClashGrotesk-Semibold.otf'),
     // 'SF Pro Text': require('./assets/fonts/SfProText.OTF')
   });
 

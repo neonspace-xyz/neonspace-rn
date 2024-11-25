@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal, Text } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal, Text, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
@@ -211,9 +211,10 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
     setIsShowCreate(true);
   }
 
-  return (
-    <View style={[styles.containerList]}>
-      <FlatList
+  const Content = () => {
+    return (
+      <>
+        <FlatList
         ref={flatListRef}
         style={styles.flat}
         data={items}
@@ -289,6 +290,17 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
           </View>
         </View>
       </Modal>
+      </>
+    )
+  }
+
+  return (
+    <View style={{
+      flex:1, 
+      //borderColor:'red', borderWidth:2, 
+      // marginBottom:Platform.OS == "ios" ? -35 : 0
+      }}>
+      <Content/>
     </View>
   );
 };
@@ -296,11 +308,10 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
 const styles = StyleSheet.create({
   containerList: {
     width: "100%",
-    height: "100%",
     flex: 1,
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
-    // borderColor:'blue',
+    // borderColor:'red',
     // borderWidth:2,
   },
   containerListProfile: {
@@ -310,7 +321,9 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorGray_200,
   },
   flat: {
-    width: "100%"
+    width: "100%",
+    // borderColor:'red',
+    // borderWidth:2,
   },
   loadingModalContainer: {
     flex: 1,

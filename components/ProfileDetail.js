@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, Pressable, ActivityIndicator, Modal } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, Pressable, ActivityIndicator, Modal, Platform } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import { processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
@@ -35,7 +35,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
     if (route?.params?.isFullBio) {
       setIsFullBio(route.params?.isFullBio)
     }
-  }, [route])
+  }, [route.params?.isFullBio])
 
   const [routes] = React.useState([
     { key: 'first', title: 'Posts' },
@@ -344,7 +344,10 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                   renderScene={renderScene}
                   onIndexChange={setIndex}
                   renderTabBar={renderTabBar}
-                  style={{ backgroundColor: Color.colorGray_100 }}
+                  style={{ backgroundColor: Color.colorGray_100, 
+                  // borderWidth:2, 
+                  // borderColor:'red', 
+                  marginBottom:Platform.OS == "ios" ? -35 : 0 }}
                   initialLayout={{ width: layout.width }}
                 />
                 :
@@ -439,9 +442,11 @@ const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
       setUsersession(user);
     })
   }, [])
-
   return (userInfo &&
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1,
+    // borderWidth:2, 
+    // borderColor:'red'
+    }}>
       <PostList
         tab={4}
         isProfile={true}
@@ -466,7 +471,7 @@ const SecondRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
   }, [])
 
   return (userInfo &&
-    <View>
+    <View style={{flex:1}}>
       <CrowdListHiring
         tab={4}
         usersession={usersession}

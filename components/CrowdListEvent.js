@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
@@ -76,7 +76,7 @@ const CrowdListEvent = ({ tab, isProfile, usersession, userInfo }) => {
         let item = {
           id: _item.id,
           fullname: _item.user_info.name,//_user?.name,
-          screen_name: _item.user_info.screen_name,//`@${_user?.screen_name}`,
+          screen_name: _item.user_info.username,//`@${_user?.screen_name}`,
           image: _item.user_info.profile_image_url,//_user?.profile_image,
           user_id: _item.owner_id,
           name: _item.name,
@@ -287,6 +287,7 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
+    // marginBottom:Platform.OS == "ios" ? -35 : 0
   },
   containerListProfile: {
     width: "100%",

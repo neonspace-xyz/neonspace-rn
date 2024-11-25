@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator, Dimensions, Alert, Modal, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useFocusEffect } from '@react-navigation/core';
@@ -79,7 +79,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
         let item = {
           id: job.id,
           fullname: job.user_info.name,
-          screen_name: job.user_info.screen_name,
+          screen_name: job.user_info.username,
           image: job.user_info.profile_image_url,
           user_id: job.user_id,
           title: job.title,
@@ -328,9 +328,11 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
 const styles = StyleSheet.create({
   containerList: {
     width: "100%",
-    height: "100%",
     alignItems: "center",
     backgroundColor: Color.colorGray_200,
+    flex:1,
+    // borderWidth:2,
+    // borderColor:'red',
   },
   containerListProfile: {
     width: "100%",

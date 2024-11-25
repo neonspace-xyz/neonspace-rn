@@ -8,16 +8,20 @@ import ChatList from './ChatList';
 import ChatView from './ChatView';
 import OtherProfile from './OtherProfile';
 import Verified from './Verified';
+import CrowdsourceView from './CrowdsourceView';
+import MyProfile from './MyProfile';
 
 const Stack = createNativeStackNavigator();
 
 function PostStackNavigator() {
 
   const dataToSend = { tab: 1 };
-
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PostList1" component={PostHome} initialParams={dataToSend} />
+      {/* <Stack.Screen name="PostList1" component={CrowdsourceView} initialParams={dataToSend} /> */}
+      {/* <Stack.Screen name="PostList1" component={MyProfile} initialParams={dataToSend} /> */}
+      
       <Stack.Screen name="PostDetail1" component={PostDetail} initialParams={dataToSend} />
       <Stack.Screen name="PostLike1" component={PostLike} initialParams={dataToSend} />
       <Stack.Screen name="ChatList1" component={ChatList} initialParams={dataToSend} />

@@ -8,6 +8,7 @@ import { useAuth } from "../components/AuthProvider";
 import UserSearchSection from "./UserSearchSection";
 import EmptyView from "./EmptyView";
 import debounce from 'lodash.debounce';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) => {
   const { api } = useAuth();
@@ -176,6 +177,8 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: Color.colorGray_100,
     paddingVertical: 10,
+    // borderColor:'yellow',
+    // borderWidth:2
   },
   header: {
     flexDirection: 'row',

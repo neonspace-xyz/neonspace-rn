@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
-import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { formatPostTimestamp, getFormattedPostTimestamp, truncateString } from "../Utils";
 import { useNavigation } from "@react-navigation/core";
 
@@ -22,8 +22,8 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
             <View style={[styles.frameFlexBox]}>
               <View style={styles.frameFlexBox}>
                 <Text style={[styles.name, styles.nameTypo]}>{item?.fullname}</Text>
-                <Text style={[styles.endlessmeee, styles.nameTypo]}>
-                  {item?.screen_name}
+                <Text style={[styles.endlessmeee]}>
+                  @{item?.screen_name}
                 </Text>
               </View>
               <Image
@@ -31,7 +31,7 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
                 contentFit="cover"
                 source={require("../assets/ic_dot_white.png")}
               />
-              <Text style={[styles.txtDateTime, styles.txtDefault]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
+              <Text style={[styles.txtDateTime]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
             </View>
             {userInfo?.user_id == item?.user_id && (
               <TouchableOpacity onPress={(event) => onMore(event, index)} style={styles.viewImgMore}>
@@ -46,8 +46,8 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
           {/* Added Title, Company, Location, and Detail */}
           <View style={styles.detailsContainer}>
             <View style={styles.titleDetailContainer}>
-              <Text style={[styles.titleText, styles.textStyle]}>{item?.title}</Text>
-              <Text style={[styles.detailText, styles.textStyle]}>{item?.salary_range}</Text>
+              <Text style={[styles.titleText]}>{item?.title}</Text>
+              <Text style={[styles.detailText]}>{item?.salary_range}</Text>
             </View>
             <Text style={[styles.companyText, styles.textStyle]}>{item?.company}</Text>
             <Text style={[styles.locationText, styles.textStyle]}>{item?.location}</Text>
@@ -106,8 +106,8 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
             )}
           </View>
         </View>
-      </Pressable >
-    </View >
+      </Pressable>
+    </View>
   );
 };
 
@@ -144,6 +144,9 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     textAlign: "left",
     fontSize: FontSize.labelLarge_size,
+    fontFamily: getFontFamily("500"),
+    color: Color.darkInk,
+    textAlign: "left",
   },
   nameTypo: {
     color: Color.darkInk,
@@ -151,6 +154,9 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   endlessmeee: {
+    color: Color.darkInk,
+    fontFamily: getFontFamily("400"),
+    fontWeight: "400",
     marginLeft: 6,
     textAlign: "left",
     fontSize: FontSize.labelLarge_size,
@@ -159,7 +165,8 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_sm,
     textAlign: "left",
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("400"),
+    fontWeight: 400
   },
   imSoExcitedSpaceBlock: {
     marginTop: 8,
@@ -178,7 +185,8 @@ const styles = StyleSheet.create({
     color: Color.colorGray_400,
     fontSize: FontSize.size_xs,
     textAlign: "left",
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("400"),
+    fontWeight: 400
   },
   frameItem: {
     width: 3,
@@ -201,11 +209,15 @@ const styles = StyleSheet.create({
   txtDateTime: {
     marginLeft: 12,
     textAlign: "left",
+    fontSize: FontSize.size_xs,
+    color: Color.darkInk,
+    fontFamily: getFontFamily("400"), fontWeight:400
   },
   txtDefault: {
     fontSize: FontSize.size_xs,
     color: Color.darkInk,
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("400"),
+    fontWeight: 400
   },
   viewImgMore: {
     width: 25,
@@ -235,20 +247,28 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: FontSize.size_sm,
-    fontFamily: FontFamily.clashGrotesk,
+    fontFamily: getFontFamily("400"),
+    fontWeight: 400,
     color: Color.darkInk,
   },
   titleText: {
-    fontWeight: "bold",
+    fontSize: FontSize.size_sm,
+    fontFamily: getFontFamily("600"),
+    fontWeight: 600,
+    color: Color.darkInk,
   },
   detailText: {
-    fontWeight: "bold",
+    fontSize: FontSize.size_sm,
+    fontFamily: getFontFamily("600"),
+    fontWeight: 600,
+    color: Color.darkInk,
   },
   companyText: {
     marginTop: 4,
   },
   locationText: {
     marginTop: 4,
+    opacity:0.6
   },
 });
 

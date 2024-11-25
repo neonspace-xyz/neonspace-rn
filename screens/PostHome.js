@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { Color } from "../GlobalStyles";
 import PostList from "../components/PostList";
 import { useAuth } from "../components/AuthProvider";
@@ -31,13 +31,16 @@ const PostHome = ({ route }) => {
         isHideList={!isShowSearch}
         isShowSearch={isShowSearch}
         setIsShowSearch={setIsShowSearch}
-      />
+      />    
+
+      <View style={{flex:1,marginBottom:Platform.OS == "ios" ? -35 : 0}}>
       <PostList
         tab={tab}
         isProfile={false}
         isShowSearch={isShowSearch}
         usersession={usersession}
         userInfo={usersession?.user_info} />
+        </View>  
     </SafeAreaView>
   );
 };
@@ -46,10 +49,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+    // height:"120%",
     overflow: "hidden",
     // justifyContent: 'center',
     // alignItems: "center",
     backgroundColor: Color.colorGray_100,
+    // borderColor:'blue',
+    // borderWidth:2
   },
   containerFAB: {
     position: 'absolute',

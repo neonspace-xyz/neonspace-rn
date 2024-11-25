@@ -17,7 +17,7 @@ const Login = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [preparing, setPreparing] = useState(false);
-
+  const [link, setLink] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const [oauthToken, setOauthToken] = useState('');
   const [oauthVerifier, setOAuthVerifier] = useState('');
@@ -30,6 +30,7 @@ const Login = () => {
       console.log("doLogin-token", _oauthToken);
       if (_oauthToken) {
         console.log("link", `${TWITTER_OAUTH}${_oauthToken}`)
+        setLink(`${TWITTER_OAUTH}${_oauthToken}`)
         setModalVisible(true);
         setOauthToken(_oauthToken);
         openOAuthURL(_oauthToken);
@@ -270,6 +271,13 @@ const Login = () => {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Enter OAuth Verifier</Text>
+            
+            <TextInput
+              style={styles.input}
+              placeholder="Link"
+              value={link}
+              onChangeText={setLink}
+            />
             <TextInput
               style={styles.input}
               placeholder="OAuth Verifier"

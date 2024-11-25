@@ -77,7 +77,7 @@ const CrowdListQuest = ({ tab, isProfile, usersession, userInfo }) => {
         let item = {
           id: _item.id,
           fullname: _item.user_info.name,
-          screen_name: _item.user_info.screen_name,
+          screen_name: _item.user_info.username,
           image: _item.user_info.profile_image_url,
           user_id: _item.user_id,
           name: _item.name,

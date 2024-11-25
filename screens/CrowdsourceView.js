@@ -1,4 +1,4 @@
-import { StyleSheet, View, useWindowDimensions, StatusBar } from 'react-native';
+import { StyleSheet, View, useWindowDimensions, StatusBar, Platform } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { useAuth } from '../components/AuthProvider';
 import React, { useEffect, useState } from 'react';
@@ -89,6 +89,8 @@ const renderScene = SceneMap({
 });
 
 export default function CrowdsourceView({ route }) {
+  const { getSession, getUser } = useAuth();
+ 
   const layout = useWindowDimensions();
   const { tab } = route?.params;
 
@@ -98,8 +100,18 @@ export default function CrowdsourceView({ route }) {
     { key: 'second', title: CROWD.EVENT, tab: 5 },
     { key: 'third', title: CROWD.QUEST, tab: 5 },
   ]);
-
+  const [usersession, setUsersession] = useState();
+  const [userInfo, setUserInfo] = useState();
   const [isShowSearch, setIsShowSearch] = useState(false);
+
+  useEffect(() => {
+    getSession().then((data) => {
+      setUsersession(data);
+    });
+    getUser().then((user) => {
+      setUserInfo(user);
+    });
+  }, []);
 
   const renderTabBar = (props) => (
     <TabBar
@@ -114,6 +126,8 @@ export default function CrowdsourceView({ route }) {
     container: {
       flex: 1,
       backgroundColor: Color.colorGray_100,
+      marginBottom:Platform.OS == "ios" ? -35 : 0
+
       // borderColor:'red',
       // borderWidth:2
     },
@@ -155,6 +169,7 @@ export default function CrowdsourceView({ route }) {
     <SafeAreaView style={styles.container}>
       <Header
         tab={tab}
+        userInfo={userInfo}
         isHideList={!isShowSearch}
         isShowSearch={isShowSearch}
         setIsShowSearch={setIsShowSearch}
@@ -174,12 +189,12 @@ export default function CrowdsourceView({ route }) {
 const styles = StyleSheet.create({
   containerTab: {
     flex: 1,
-    width: "100%",
-    height:"100%",
     overflow: "hidden",
     // justifyContent: 'center',
     // alignItems: "center",
     backgroundColor: Color.colorGray_100,
+    // borderColor:'blue',
+    // borderWidth:2
   },
   containerFAB: {
     position: 'absolute',

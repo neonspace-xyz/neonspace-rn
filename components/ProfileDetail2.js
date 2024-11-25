@@ -86,7 +86,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
     }, [])
 
     return (userInfo &&
-      <View>
+      <View style={{flex:1}}>
         <CrowdListHiring
           tab={4}
           userInfo={userInfo}
