@@ -503,7 +503,7 @@ const SecondRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
         tab={4}
         usersession={usersession}
         userInfo={userInfo}
-        isProfile={false}
+        isProfile={true}
         isShowSearch={isShowSearch}
         isShowCreate={isShowCreate} />
     </View>)

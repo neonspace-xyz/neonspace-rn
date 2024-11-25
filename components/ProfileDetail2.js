@@ -90,7 +90,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
         <CrowdListHiring
           tab={4}
           userInfo={userInfo}
-          isProfile={false}
+          isProfile={true}
           isShowSearch={isShowSearch}
           isShowCreate={isShowCreate} />
       </View>)

@@ -183,7 +183,10 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
     const menuWidth = 190; // Adjust based on your menu width
     const menuHeight = 81; // Adjust based on your menu height
     let newLeft = pageX;
-    let newTop = pageY - 150; // Position the menu below the button
+    let newTop = pageY - 180; // Position the menu below the button
+    if(isProfile) {
+      newTop = pageY - 420;
+    }
     let windowHeight = windowDimensions.height - 100;
 
     if (newLeft + menuWidth > windowDimensions.width) {
@@ -194,9 +197,9 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
       newTop = pageY - 280;
     }
 
-    if (isProfile) {
-      newTop = newTop - (windowDimensions.height / 2) + 100;
-    }
+    // if (isProfile) {
+    //   newTop = newTop - (windowDimensions.height / 2) + 100;
+    // }
 
     setMenuPosition({ top: newTop, left: newLeft });
     setSelectedItemIndex(index);

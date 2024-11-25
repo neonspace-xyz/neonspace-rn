@@ -134,7 +134,10 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
     const menuWidth = 190; // Adjust based on your menu width
     const menuHeight = 81; // Adjust based on your menu height
     let newLeft = pageX;
-    let newTop = pageY - 110; // Position the menu below the button
+    let newTop = pageY - 140; // Position the menu below the button
+    if(isProfile) {
+      newTop = pageY - 100;
+    }
     let windowHeight = windowDimensions.height - 100;
 
     if (newLeft + menuWidth > windowDimensions.width) {
