@@ -103,12 +103,12 @@ export const processUserVerifiedList = (users) => {
         }
       }
       if (users?.length > 2) {
-        let sisa = userInfo.verified.length - 2;
-        _verifiedNameArr.push(`and ${sisa} other${sisa > 1 && 's'}`);
+        let sisa = users.length - 2;
+        _verifiedNameArr.push(`and ${sisa} other${sisa > 1 ? 's' : ''}`);
       }
 
       if (_verifiedNameArr.length > 0) {
-        names = _verifiedNameArr.join(",");
+        names = _verifiedNameArr.join(", ");
       }
     }
   } catch (error) {

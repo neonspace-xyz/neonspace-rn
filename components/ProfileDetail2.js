@@ -86,7 +86,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
     }, [])
 
     return (userInfo &&
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <CrowdListHiring
           tab={4}
           userInfo={userInfo}
@@ -505,7 +505,32 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
 
 
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    {userVerifiedByImages[0] &&
+                    {userVerifiedByImages[1] ?
+                      userVerifiedByImages[1] &&
+                      <View style={[styles.imageContainer, {
+                        width: userVerifiedByImages.length * 23,
+                        height: 32,
+                        position: 'relative'
+                      }]}>
+                        {
+                          userVerifiedByImages.map((e, index) => {
+                            return (
+                              <Image key={index} source={e} style={[styles.image, {
+                                zIndex: 9999 - index,
+                                position: 'absolute', left: 20 * index
+                              }]} />
+                            )
+                          })
+                        }
+                      </View> :
+                      <View style={[{
+                        // borderWidth:2, borderColor:'red', 
+                        width: 30
+                      }]}>
+                        <Image source={userVerifiedByImages[0]} style={styles.image} />
+                      </View>
+                    }
+                    {/* {userVerifiedByImages[0] &&
                       <View style={[{
                         // borderWidth:2, borderColor:'red', 
                         width: 30
@@ -530,7 +555,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
                           })
                         }
                       </View>
-                    }
+                    } */}
 
                     <Text style={[styles.userVerifiedByNames]}>
                       {userVerifiedByNames}
@@ -559,7 +584,31 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
                     <Text style={styles.verifiedByTitle}>{`Verified: `}</Text>
                     <View>
                       <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        {userVerifiedImages[0] &&
+                        {userVerifiedImages[1] ?
+                          <View style={[styles.imageContainer, {
+                            width: userVerifiedImages.length * 23,
+                            height: 32,
+                            position: 'relative'
+                          }]}>
+                            {
+                              userVerifiedImages.map((e, index) => {
+                                return (
+                                  <Image key={index} source={e} style={[styles.image, {
+                                    zIndex: 9999 - index,
+                                    position: 'absolute', left: 20 * index
+                                  }]} />
+                                )
+                              })
+                            }
+                          </View> :
+                          <View style={[{
+                            // borderWidth:2, borderColor:'red', 
+                            width: 30
+                          }]}>
+                            <Image source={userVerifiedImages[0]} style={styles.image} />
+                          </View>
+                        }
+                        {/* {userVerifiedImages[0] &&
                           <View style={[{
                             // borderWidth:2, borderColor:'red', 
                             width: 30
@@ -584,7 +633,7 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
                               })
                             }
                           </View>
-                        }
+                        } */}
 
                         <Text style={[styles.userVerifiedByNames]}>
                           {userVerifiedNames}

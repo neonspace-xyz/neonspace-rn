@@ -298,7 +298,31 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
 
                   <View>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
-                      {userVerifiedImages[0] &&
+                      {userVerifiedImages[1] ?
+                        <View style={[styles.imageContainer, {
+                          width: userVerifiedImages.length * 23,
+                          height: 32,
+                          position: 'relative'
+                        }]}>
+                          {
+                            userVerifiedImages.map((e, index) => {
+                              return (
+                                <Image key={index} source={e} style={[styles.image, {
+                                  zIndex: 9999 - index,
+                                  position: 'absolute', left: 20 * index
+                                }]} />
+                              )
+                            })
+                          }
+                        </View> :
+                        <View style={[{
+                          // borderWidth:2, borderColor:'red', 
+                          width: 30
+                        }]}>
+                          <Image source={userVerifiedImages[0]} style={styles.image} />
+                        </View>
+                      }
+                      {/* {userVerifiedImages[0] &&
                         <View style={[{
                           // borderWidth:2, borderColor:'red', 
                           width: 30
@@ -323,7 +347,7 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                             })
                           }
                         </View>
-                      }
+                      } */}
 
                       <Text style={[styles.userVerifiedByNames]}>
                         {userVerifiedNames}
@@ -344,10 +368,12 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
                   renderScene={renderScene}
                   onIndexChange={setIndex}
                   renderTabBar={renderTabBar}
-                  style={{ backgroundColor: Color.colorGray_100, 
-                  // borderWidth:2, 
-                  // borderColor:'red', 
-                  marginBottom:Platform.OS == "ios" ? -35 : 0 }}
+                  style={{
+                    backgroundColor: Color.colorGray_100,
+                    // borderWidth:2, 
+                    // borderColor:'red', 
+                    marginBottom: Platform.OS == "ios" ? -35 : 0
+                  }}
                   initialLayout={{ width: layout.width }}
                 />
                 :
@@ -443,9 +469,10 @@ const FirstRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
     })
   }, [])
   return (userInfo &&
-    <View style={{ flex: 1,
-    // borderWidth:2, 
-    // borderColor:'red'
+    <View style={{
+      flex: 1,
+      // borderWidth:2, 
+      // borderColor:'red'
     }}>
       <PostList
         tab={4}
@@ -471,7 +498,7 @@ const SecondRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
   }, [])
 
   return (userInfo &&
-    <View style={{flex:1}}>
+    <View style={{ flex: 1 }}>
       <CrowdListHiring
         tab={4}
         usersession={usersession}
