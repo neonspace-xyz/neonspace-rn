@@ -23,6 +23,7 @@ const SkillForm = ({ route }) => {
   const [description, setDescription] = useState(route.params?.description);
 
   const saveSkill = async () => {
+    if(skill == '' || description == '') return;
     const skillData = {
       skill,
       description
@@ -43,6 +44,7 @@ const SkillForm = ({ route }) => {
         Alert.alert('Error', errorData.message || 'Failed to save skill');
       }
     } catch (error) {
+      console.error(error);
       Alert.alert('Error', 'An error occurred while saving skill');
     }
   };

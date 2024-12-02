@@ -53,7 +53,7 @@ const Verified = () => {
           }}
         >
           <Text style={[styles.youVerified, styles.bioExampleTypo]}>
-            You verified
+            Verified
           </Text>
         </Pressable>
         <Pressable 

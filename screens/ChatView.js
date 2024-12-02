@@ -203,7 +203,7 @@ const ChatDetail = () => {
             <Pressable onPress={sendMessage}>
               <Image
                 style={[styles.btnSendChat, loadingSend && styles.buttonDisable]}
-                source={require("../assets/ic_back_white.png")}
+                source={require("../assets/ic_next_white.png")}
               />
             </Pressable>
           </View>

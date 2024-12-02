@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { formatEventTime, formatPostTimestamp, getFormattedPostTimestamp, truncateString } from "../Utils";
 import { useNavigation } from "@react-navigation/core";
+import * as WebBrowser from 'expo-web-browser';
 
 const CrowdSectionQuest = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) => {
   const navigation = useNavigation();
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
 
+  const [url, setUrl] = useState('');
+  
+  useEffect(() => {
+    openLink();
+  }, [url])
+
+  const openLink = async () => {
+    if (url == '') return;
+    await WebBrowser.openBrowserAsync(url);
+  }
+
   return (
     <View style={styles.frame} index={`quest${item?.id}`}>
-      <Pressable  onPress={() => isDetail ? null : onPress()}>
+      <Pressable onPress={() => isDetail ? null : onPress()}>
         <View style={styles.frameParent}>
           <View style={styles.frameFlexBox}>
             <Image
@@ -49,7 +61,14 @@ const CrowdSectionQuest = ({ tab, isDetail, index, userInfo, item, onPress, onMo
               <Text style={[styles.titleText]}>{item?.name}</Text>
             </View>
             <Text style={[styles.companyText, styles.textStyle]}>{item?.company}</Text>
-            <Text style={[styles.linkText, styles.textStyle]}>Link: {item?.link}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                if (item?.link) {
+                  setUrl(item?.link)
+                }
+              }}>
+              <Text style={[styles.linkText, styles.textStyle]}>Link: {item?.link}</Text>
+            </TouchableOpacity>
           </View>
 
           <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
@@ -207,7 +226,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: FontSize.size_xs,
     color: Color.darkInk,
-    fontFamily: getFontFamily("400"), fontWeight:400
+    fontFamily: getFontFamily("400"), fontWeight: 400
   },
   txtDefault: {
     fontSize: FontSize.size_xs,

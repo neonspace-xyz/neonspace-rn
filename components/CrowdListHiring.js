@@ -43,7 +43,7 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
     if (!userInfo) return;
     setLoadingMore(true);
     try {
-      let url = `/crowdsource/hiring/list?page=${page}`//&user=${userInfo.user_id};
+      let url = `/crowdsource/hiring/list?page=${page}&user=${userInfo.user_id}`;
       let resp = await api.get(url);
       let jobs = resp.data.jobs;
 

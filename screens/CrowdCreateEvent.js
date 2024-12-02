@@ -272,6 +272,7 @@ const CrowdCreateEvent = () => {
         mode="date"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
+        confirmTextIOS="Done"
       />
       
     </SafeAreaView>

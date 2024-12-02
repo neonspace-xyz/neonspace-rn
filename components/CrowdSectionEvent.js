@@ -1,14 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, TouchableOpacity } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding, getFontFamily } from "../GlobalStyles";
 import { formatEventTime, formatPostTimestamp, getFormattedPostTimestamp, truncateString } from "../Utils";
 import { useNavigation } from "@react-navigation/core";
+import * as WebBrowser from 'expo-web-browser';
 
 const CrowdSectionEvent = ({ tab, isDetail, index, userInfo, item, onPress, onMore }) => {
   const navigation = useNavigation();
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
+
+  const [url, setUrl] = useState('');
   
+  useEffect(() => {
+    openLink();
+  }, [url])
+
+  const openLink = async () => {
+    if (url == '') return;
+    await WebBrowser.openBrowserAsync(url);
+  }
+
   return (
     <View style={styles.frame} index={`event${item?.id}`} >
       <Pressable onPress={() => isDetail ? null : onPress()}>
@@ -51,7 +63,14 @@ const CrowdSectionEvent = ({ tab, isDetail, index, userInfo, item, onPress, onMo
             </View>
             <Text style={[styles.companyText, styles.textStyle]}>{item?.host}</Text>
             <Text style={[styles.locationText, styles.textStyle]}>{item?.location}</Text>
-            <Text style={[styles.linkText, styles.textStyle]}>Link: {item?.event_link}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                if (item?.event_link) {
+                  setUrl(item?.event_link)
+                }
+              }}>
+              <Text style={[styles.linkText, styles.textStyle]}>Link: {item?.event_link}</Text>
+            </TouchableOpacity>
           </View>
 
           <Text style={[styles.imSoExcited, styles.imSoExcitedSpaceBlock]}>
@@ -209,7 +228,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: FontSize.size_xs,
     color: Color.darkInk,
-    fontFamily: getFontFamily("400"), fontWeight:400
+    fontFamily: getFontFamily("400"), fontWeight: 400
   },
   txtDefault: {
     fontSize: FontSize.size_xs,
@@ -269,7 +288,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     marginTop: 4,
-    opacity:0.6
+    opacity: 0.6
   },
   linkText: {
     marginTop: 16,
