@@ -22,6 +22,7 @@ import CrowdDetailQuest from './CrowdDetailQuest';
 import CrowdCreateHiring from './CrowdCreateHiring';
 import CrowdCreateEvent from './CrowdCreateEvent';
 import CrowdCreateQuest from './CrowdCreateQuest';
+import EditProfilePicture from './EditProfilePicture';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,8 @@ function ProfileStackNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MyProfile4" component={MyProfile} initialParams={dataToSend} />
       <Stack.Screen name="EditProfile4" component={EditProfile} initialParams={dataToSend} />
+      <Stack.Screen name="EditProfilePicture4" component={EditProfilePicture} initialParams={dataToSend} />
+      
       <Stack.Screen name="Verified4" component={Verified} initialParams={dataToSend} />
       <Stack.Screen name="OtherProfile4" component={OtherProfile} initialParams={dataToSend} />
 

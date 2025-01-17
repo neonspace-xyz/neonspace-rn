@@ -175,7 +175,10 @@ const ProfileDetail = ({ tab, userInfo, isShowSearch }) => {
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock]}
+                style={[styles.shareProfileWrapper, styles.profileWrapperSpaceBlock, 
+                {
+                  borderColor: isFullBio ? 'red' : 'white'
+                }]}
                 onPress={handleBioToggle}
               >
                 <Text style={[styles.editProfile]}>

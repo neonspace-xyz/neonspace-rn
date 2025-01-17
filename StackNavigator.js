@@ -15,6 +15,8 @@ import { LoadingProvider } from './components/LoadingContext';
 import { shortenAddress } from './Utils';
 import { useAuth } from './components/AuthProvider';
 import { RefreshProvider } from './components/RefreshProvider';
+import EditProfilePicture from './screens/EditProfilePicture';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -31,6 +33,11 @@ const StackNavigator = () => {
   const StackNavigatorComponent = () => {
     return (
       <Stack.Navigator>
+      {/* <Stack.Screen
+          name="EditProfilePicture"
+          component={EditProfilePicture}
+          options={{ headerShown: false }}
+        /> */}
         <Stack.Screen
           name="Login"
           component={Login}
@@ -73,6 +80,22 @@ const StackNavigator = () => {
       });
     }, []);
 
+    const logout = async() => {
+      await AsyncStorage.removeItem('usersession');
+      Alert.alert(
+        'Logout',
+        'Logout success',
+        [{
+          text: 'OK', onPress: () => {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "Login" }]
+            });
+          }
+        }]
+      );
+    }
+
     return (
       <SafeAreaView style={styles.drawerContent}>
           <TouchableOpacity
@@ -87,7 +110,9 @@ const StackNavigator = () => {
               source={require("./assets/ic_close_white.png")}
             />
           </TouchableOpacity>
-        <View style={styles.drawerSection}>
+        <View style={[styles.drawerSection, 
+        //{borderColor:'red', borderWidth:2}
+        ]}>
           <TouchableOpacity
             style={styles.userInfoSection}
             onPress={() => {
@@ -146,7 +171,15 @@ const StackNavigator = () => {
         <Button title="Home" onPress={() => props.navigation.navigate('Home')} />
         <Button title="Profile" onPress={() => props.navigation.navigate('Profile')} /> */}
         </View>
-
+        <View style={[styles.drawerSection, 
+        {flex:1,
+        //borderColor:'red', borderWidth:2, 
+        justifyContent:'flex-end'}
+        ]}>
+          <TouchableOpacity  onPress={logout}>
+          <Text style={[styles.drawerMenu, {color:'white', marginBottom:70}]}>Log Out</Text>
+          </TouchableOpacity>
+        </View>
         <Modal
           animationType="slide"
           transparent={true}

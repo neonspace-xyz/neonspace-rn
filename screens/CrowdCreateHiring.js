@@ -9,6 +9,7 @@ import { useAuth } from "../components/AuthProvider";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { API_URL, Component_Max_Width, MAX_CHAR_DETAIL } from "../Constant";
 import api from "../utils/ApiHandler";
+import { LinearGradient } from "expo-linear-gradient";
 
 const CrowdCreateHiring = () => {
   const route = useRoute();
@@ -193,7 +194,8 @@ const CrowdCreateHiring = () => {
               <Text style={styles.txtTitle}>Job description</Text>
               <View style={styles.frameDetail}>
                 <TextInput
-                  style={[styles.textDetail]}
+                  style={[styles.textDetail, {color:
+                  input?.description?.length > MAX_CHAR_DETAIL ? 'red' : 'white'}]}
                   placeholder="Job description"
                   placeholderTextColor={Color.colorGray_500}
                   value={input?.description}
@@ -209,17 +211,46 @@ const CrowdCreateHiring = () => {
                 </View>
               </View>
             </View>
-            <TouchableOpacity
+
+
+            <View
+            style={{
+              marginTop:25,
+              marginBottom:10,
+              padding: 15
+            }}>
+              <LinearGradient
+                colors={['#FC00A7', '#65EDE3']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.gradientBorder}
+              >
+                <View style={styles.buttonInner}>
+                  <TouchableOpacity
+                    style={[styles.buttonContainer]}
+                    disabled={loading}
+              onPress={doSave}
+                  >
+                    <Text style={[styles.buttonLabel, styles.txtStyle, {color:'white'}]}>
+                    {loading ? "Saving" : "Post"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </LinearGradient>
+            </View>
+
+            {/* <TouchableOpacity
               style={styles.viewSave}
               disabled={loading}
               onPress={doSave}
             >
               <View style={[styles.btnSave, styles.buttonEnable]}>
                 <Text style={[styles.buttonLabel, styles.buttonLabelEnable]}>
-                  {loading ? "Saving" : "Save"}
+                  {loading ? "Saving" : "Post"}
                 </Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -335,7 +366,25 @@ const styles = StyleSheet.create({
   },
   buttonLabelDisable: {
     color: Color.colorGray_400,
-  }
+  },
+  buttonInner: {
+    width: "100%",
+    backgroundColor: '#1c1c1c', // Warna background tombol
+    borderRadius: 10,
+  },
+  gradientBorder: {
+    padding: 2, // Lebar border gradien
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    borderRadius: 10,
+  },
 });
 
 export default CrowdCreateHiring;
