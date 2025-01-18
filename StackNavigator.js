@@ -81,6 +81,7 @@ const StackNavigator = () => {
     }, []);
 
     const logout = async() => {
+      props.navigation.closeDrawer();
       await AsyncStorage.removeItem('usersession');
       Alert.alert(
         'Logout',

@@ -138,7 +138,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
             }
           }}
           onBlur={() => {
-            if(searchValue == '' && searchItems.length == 0) {
+            if(searchItems.length == 0) {
               handleBlurTextInput();
             }
           }}
