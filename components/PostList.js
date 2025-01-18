@@ -97,7 +97,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
   }
 
   const onScroll = async () => {
-    if (selectedItemIndex) {
+    if (selectedItemIndex != null) {
       setSelectedItemIndex(null);
     }
   }
@@ -120,6 +120,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
 
   const handleDetail = (item) => {
     if (isShowCreate) return;
+    setSelectedItemIndex(null);
     console.log(`PostDetail${tab}`)
     navigation.push(`PostDetail${tab}`, { tab, item });
   };

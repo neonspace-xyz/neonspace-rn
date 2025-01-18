@@ -148,11 +148,12 @@ const CrowdListHiring = ({ tab, isProfile, usersession, userInfo }) => {
   };
 
   const handleDetail = (item) => {
+    setSelectedItemIndex(null);
     navigation.push(`CrowdDetailHiring${tab}`, { tab, item });
   };
 
   const onScroll = async () => {
-    if (selectedItemIndex) {
+    if (selectedItemIndex != null) {
       setSelectedItemIndex(null);
     }
   }

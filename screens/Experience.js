@@ -22,25 +22,25 @@ const Experience = ({ route }) => {
     }, [])
   )
 
-  const Item = ({ experience, id, role, company, start_date, end_date, description, employment_type }) => (
-    <>
-
-      <View style={styles.itemContainer} key={id}>
-        <Pressable style={styles.editButton} onPress={() => {
-          navigation.push(`ExperienceForm${tab}`, { tab, action: "edit", experience });
-        }}>
-          <Text style={styles.editButtonText}>Edit</Text>
-        </Pressable>
-        <Text style={styles.role}>{role}</Text>
-        <Text style={styles.company}>{company} - {employment_type}</Text>
-        <Text style={styles.duration}>{start_date} - {end_date}</Text>
-        <Text style={styles.description}>
-          {description}
-        </Text>
-      </View>
-
-    </>
-  )
+  const Item = ({ experience, id, role, company, start_date, end_date, description, employment_type }) => {
+    return (
+      <>
+        <View style={styles.itemContainer} key={id}>
+          <Pressable style={styles.editButton} onPress={() => {
+            navigation.push(`ExperienceForm${tab}`, { tab, action: "edit", experience });
+          }}>
+            <Text style={styles.editButtonText}>Edit</Text>
+          </Pressable>
+          <Text style={styles.role}>{role}</Text>
+          <Text style={styles.company}>{company} - {employment_type}</Text>
+          <Text style={styles.duration}>{start_date} - {end_date}</Text>
+          <Text style={styles.description}>
+            {description}
+          </Text>
+        </View>
+      </>
+    );
+  }
 
   // const Item = ({ role, company, start_date, end_date, description }) => (
   //   <View style={styles.itemContainer}>

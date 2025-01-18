@@ -34,7 +34,8 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
     setLoadingMore(true);
     setEmptyText('');
     try {
-      let url = `/twitter/search?userId=${searchValue}`;
+      let input = searchValue[0] === "@" ? searchValue.slice(1) : searchValue
+      let url = `/twitter/search?userId=${input}`;
       console.log("Header-search-url", url)
       let resp = await api.get(url);
       if (resp.data) {
@@ -134,6 +135,11 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
             if (!isShowSearch) {
               setSearchItems([]);
               setIsShowSearch(!isShowSearch);
+            }
+          }}
+          onBlur={() => {
+            if(searchValue == '' && searchItems.length == 0) {
+              handleBlurTextInput();
             }
           }}
           onSubmitEditing={fetchSearchItems}
