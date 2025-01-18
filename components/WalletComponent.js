@@ -42,6 +42,7 @@ const WalletComponent = ({ tab }) => {
 
   useEffect(() => {
     getUser().then((user) => {
+      // console.log("USER : ", user)
       setUserData(user);
     })
   }, [])
@@ -101,12 +102,12 @@ const WalletComponent = ({ tab }) => {
           <View style={[styles.walletBalance0Container]}>
             <View style={[styles.row, styles.row1]}>
               <Text style={[styles.walletBalance]}>Wallet Balance: </Text>
-              <Text style={[styles.eth1Typo]}>{parseFloat(userData?.wallet_balance ? userData?.wallet_balance : 0).toFixed(2)} ETH</Text>
+              <Text style={[styles.walletBalance, {fontFamily:getFontFamily("500"), fontWeight:500}]}>${parseFloat(userData?.wallet_balance ? userData?.wallet_balance : 0).toFixed(2)}</Text>
             </View>
-            <View style={[styles.row, styles.row2]}>
+            {/* <View style={[styles.row, styles.row2]}>
               <Text style={[styles.walletBalance]}>Wallet Address: </Text>
               <Text style={[styles.eth1Typo]}>{userData?.wallet_address ? shortenAddress(userData?.wallet_address) : " 0x00"}</Text>
-            </View>
+            </View> */}
           </View>
           <View>
             <LinearGradient
