@@ -202,12 +202,8 @@ const MyAssets = () => {
         </Text>
       </View>
 
-      <View style={{ 
-        position: "absolute", bottom: 0, width: "100%",
-        // borderColor:'red', borderWidth:2 
-      }}>
         <WalletComponent tab={tab} />
-      </View>
+
     </SafeAreaView>
   )
 };
