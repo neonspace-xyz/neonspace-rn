@@ -33,7 +33,7 @@ const WalletComponent = ({ tab }) => {
 
   const doCopyWallet = async () => {
     try {
-      await Clipboard.setStringAsync("0x37E5385AbA3592D75436127C7184dA175574398e");
+      await Clipboard.setStringAsync(userData?.wallet_address);
       setShowAddressCopied(!showAddressCopied);
     } catch (error) {
       console.error("doCopyWallet", error);
@@ -61,6 +61,8 @@ const WalletComponent = ({ tab }) => {
       setShowTransferAction(!showTransferAction);
       setShowSend(!showSend);
       setShowSendInput(!showSendInput);
+      setInputSend("")
+
     }
     else if (showSendInput) {
       Keyboard.dismiss();
@@ -251,9 +253,12 @@ const WalletComponent = ({ tab }) => {
             />
             <View style={styles.xedhvParent}>
               <Text style={[styles.xedhv1]}>
-                0xe...dhv
+              {userData?.wallet_address && shortenAddress(userData?.wallet_address)}
               </Text>
-              <Pressable onPress={() => setShowAddressCopied(!showAddressCopied)}>
+              <Pressable onPress={() => {
+                doCopyWallet();  
+                // setShowAddressCopied(!showAddressCopied)
+              }}>
                 <Image
                   style={styles.copySvgrepoCom1Icon}
                   contentFit="cover"
@@ -548,7 +553,7 @@ const WalletComponent = ({ tab }) => {
           height:"100%",
           width: "100%",
           }]}>
-            {showSendResult ? (
+            {showSendResult || showSendConfirm ? (
               <Pressable
                 style={styles.containerSendClose}
                 onPress={doSendBack}
@@ -623,6 +628,7 @@ const WalletComponent = ({ tab }) => {
                         alignItems: 'center', justifyContent: 'center'
                       }]}
                       onPress={doSendNext}
+                      disabled={inputSend.length == 0}
                     >
                       <Text style={[styles.buttonLabel]}>Confirm</Text>
                     </Pressable>
@@ -663,7 +669,7 @@ const WalletComponent = ({ tab }) => {
                         ]}
                       >
                         <Text style={styles.walletAddress}>
-                          0x37E5385AbA3592D75436127C7184dA175574398e
+                          {inputSend}
                         </Text>
                       </Pressable>
                     </View>
@@ -753,10 +759,14 @@ const WalletComponent = ({ tab }) => {
 
             {// Send Confirm Transaction 
             }
-            <View style={[styles.frameView, !showSendResult && { display: "none" }]}>
+            <View style={[{
+              flex:1, justifyContent:'space-between'
+            },styles.frameView, !showSendResult && { display: "none" }]}>
+             
+             <View>
               <View>
                 <View style={styles.sendParent1}>
-                  <Text style={[styles.send, styles.ethTypo1]}>Send</Text>
+                  <Text style={[styles.send]}>Sent</Text>
                   <View style={styles.youAreSending367WorthOfWrapper}>
                     <Text style={styles.youAreSendingContainer}>
                       <Text style={styles.youAreSending}>
@@ -785,6 +795,7 @@ const WalletComponent = ({ tab }) => {
                   </View>
                 </View>
               </TouchableOpacity>
+              </View>
               <View style={styles.buttonWrapper}>
 
                 <LinearGradient
@@ -798,7 +809,7 @@ const WalletComponent = ({ tab }) => {
                     style={[{
                       backgroundColor: Color.colorGray_100,
                       height: 54, borderRadius: 8,
-                      flex: 1, alignItems: 'center', justifyContent: 'center'
+                      alignItems: 'center', justifyContent: 'center'
                     }]}
                     onPress={doSendNext}
                   >

@@ -42,6 +42,7 @@ const MyAssets = () => {
   const doCopyWallet = async () => {
     try {
       if (userData?.wallet_address) {
+        // console.log("WALLET ADDRESS : ",userData?.wallet_address)
         await Clipboard.setStringAsync(userData?.wallet_address);
       }
       setShowAddressCopied(!showAddressCopied);
