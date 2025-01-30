@@ -36,11 +36,11 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
     try {
       let input = searchValue[0] === "@" ? searchValue.slice(1) : searchValue
       let url = `/twitter/search?userId=${input}`;
-      console.log("Header-search-url", url)
+      // console.log("Header-search-url", url)
       let resp = await api.get(url);
       if (resp.data) {
         let users = resp.data;
-        console.log("Header-search-resp", users);
+        // console.log("Header-search-resp", users);
         users.forEach(user => {
           let u = {
             user_id: user.id,
@@ -128,7 +128,7 @@ const Header = ({ tab, isHideList, isShowSearch, setIsShowSearch, userInfo }) =>
           returnKeyType="search"
           onChangeText={(text) => {
             setSearchValue(text);
-            console.log("onchange text")
+            console.log(" text")
             debouncedFetchSearchItems();
           }}
           onFocus={() => {

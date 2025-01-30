@@ -233,17 +233,16 @@ const EditProfile = ({ route }) => {
                   }}
                 />
 
-                {usernameError && 
-                <Text style={
-                  {
-                    color: 'white',
-                    fontSize: FontSize.size_sm,
-                    fontFamily: getFontFamily("400"),
-                    alignSelf: 'flex-start',
-                    marginLeft: 5,
-                    opacity:0.4
-                  }
-                }>Username unavailable</Text>}
+                {usernameError &&
+                  <Text style={
+                    {
+                      color: Color.colorGray_700,
+                      fontSize: FontSize.size_sm,
+                      fontFamily: getFontFamily("400"),
+                      alignSelf: 'flex-start',
+                      marginTop: 16,
+                    }
+                  }>Username unavailable</Text>}
               </View>
             </View>
             
@@ -294,20 +293,21 @@ const EditProfile = ({ route }) => {
                 }>
                   <Text style={
                     {
-                      color: 'white',
+                      color: Color.colorGray_700,
                       fontSize: FontSize.size_sm,
                       fontFamily: getFontFamily("400"),
                       alignSelf: 'flex-start',
-                      marginLeft: 5,
-                      marginTop: 5,
+                      marginTop: 16,
                     }
                   }>Maximum 100 letters</Text>
                   <Text style={
-                    {color:'white',
-                    fontSize: FontSize.size_sm,
-                    alignSelf: 'flex-start',
-                    marginTop: 5,
-                      fontFamily: getFontFamily("400"),}
+                    {
+                      color: Color.colorGray_700,
+                      fontSize: FontSize.size_sm,
+                      alignSelf: 'flex-start',
+                      marginTop: 16,
+                      fontFamily: getFontFamily("400"),
+                    }
                   }>
                     {bio?.length}/100
                   </Text>

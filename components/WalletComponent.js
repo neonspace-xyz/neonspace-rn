@@ -1049,7 +1049,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   frameParent3: {
-    zIndex: 2,
+    // zIndex: 2,
     alignSelf: "stretch",
     alignItems: "center",
   },
