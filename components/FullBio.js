@@ -146,8 +146,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    fontWeight: "500",
+    fontFamily: getFontFamily("500"),
+    color: Color.darkInk,
   },
   verified: {
     fontSize: 14,

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, Alert, TouchableOpacity, useWindowDimensions, ActivityIndicator, Modal } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Padding, FontSize, Color, FontFamily, Border, getFontFamily } from "../GlobalStyles";
 import { getRandomNumber, processUserVerifiedList, shortenAddress, truncateString } from "../Utils";
 import CrowdListEvent from "./CrowdListEvent";

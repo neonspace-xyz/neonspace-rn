@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Image, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View, TextInput, Platform, BackHandler, Alert, ActivityIndicator } from 'react-native'
+import { Image, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, View, TextInput, Platform, BackHandler, Alert, ActivityIndicator, Keyboard } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/core';
 import ChatSectionBubble from '../components/ChatSectionBubble';
 import ChatSectionBubbleSelf from '../components/ChatSectionBubbleSelf';
@@ -110,15 +110,52 @@ const ChatDetail = () => {
     }
   }, [messages]);
 
+  const generateRandomReply = () => {
+    const replies = [
+      "Okay!",
+      "Alright!",
+      "Got it.",
+      "Interesting!",
+      "Can you explain more?",
+      "Hmm, that's great.",
+      "Sounds good!",
+      "I see what you mean.",
+    ];
+    
+    return replies[Math.floor(Math.random() * replies.length)];
+  };
+  
+
 
   const sendMessage = async () => {
     if (input == '') {
       return;
     }
     if (socket && input.trim()) {
-      const message = { content: input, timestamp: new Date() };
-      socket.send(JSON.stringify(message));
+      if (true) {
+        let msg = [
+          {
+            message: {
+              content: input
+            },
+            timestamp: new Date(),
+            from: usersession?.user_info?.user_id
+          },
+          {
+            message: {
+              content: generateRandomReply()
+            },
+            timestamp: new Date(),
+          }
+        ];
+        setMessages((prevMessages) => [...prevMessages, msg[0], msg[1]]);
+      }
+      else {
+        const message = { content: input, timestamp: new Date() };
+        socket.send(JSON.stringify(message));
+      }
       setInput('');
+      Keyboard.dismiss();
     }
   }
 

@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontFamily: getFontFamily("500"),
     textAlign: "left",
-    fontSize: 14,
+    fontSize: 16,
     color: Color.darkInk,
   },
   company: {
@@ -148,8 +148,7 @@ const styles = StyleSheet.create({
     fontFamily: getFontFamily("400"),
     textAlign: "left",
     fontSize: 14,
-    color: Color.darkInk,
-    opacity: 0.6
+    color: '#AAAAAA',
   },
   duration: {
     marginTop: 2,
@@ -157,17 +156,14 @@ const styles = StyleSheet.create({
     fontFamily: getFontFamily("400"),
     textAlign: "left",
     fontSize: 14,
-    color: Color.darkInk,
-    opacity: 0.6
+    color: '#AAAAAA',
   },
   description: {
-    fontWeight: "400",
-    fontFamily: getFontFamily("400"),
     textAlign: "left",
     fontSize: 14,
-    color: Color.darkInk,
+    color: '#FFFFFF',
     marginTop: 10,
-    lineHeight: 20,
+    // lineHeight: 20,
   },
   verifiedBy: {
     fontSize: 14,
