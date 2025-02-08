@@ -71,7 +71,7 @@ const NotificationList = ({ route }) => {
       }
       else if (event.event_type == "post_updated") {
         notificationTitle = `Post Updated`
-        eventType = "Updaed a post"
+        eventType = "Updated a post"
         continue
       }
       const d = {
@@ -81,6 +81,7 @@ const NotificationList = ({ route }) => {
         description: `${eventType}`,
         datetime: isToday ? `Today ${momentDate.format("h:mm A")}` : momentDate.format("DD/MM/YYYY h:mm A"),
         image: event.payload.user?.profile_image_url || event.payload.verifier.profile_image_url || "",
+        eventtype: event.event_type
       };
       data.push(d);
     }
@@ -89,6 +90,7 @@ const NotificationList = ({ route }) => {
 
   useEffect(() => {
     getNotification()
+    // fetchItems()
   }, [])
   /*
   useEffect(() => {
@@ -117,15 +119,23 @@ const NotificationList = ({ route }) => {
   const fetchItems = async () => {
     let data = [];
     for (let i = 1; i < getRandomNumber(); i++) {
+      let title = getRandomString();
       data.push({
         id: i,
         title: `Notification title here${i}`,
-        description: `Notification details and information here${i}`,
+        description: `${title} Test here${i}`,
         datetime: moment(getRandomTimestamp(7)).format("DD/MM/YYYY h:mm A"),
+        eventtype: title,
+        image:'https://placehold.co/200x200'
       });
     }
     setItems(data);
   };
+
+  const getRandomString = () => {
+    const options = ["job_created", "event_created", "quest_created", "other_created"];
+    return options[Math.floor(Math.random() * options.length)];
+}
 
   const onRefresh = async () => {
     //setRefreshing(true);

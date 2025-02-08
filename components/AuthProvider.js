@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
         usersession = JSON.parse(usersession)
         if (usersession) {
           let token = usersession.jwt_token;
+          console.log("TOKEN : ", token)
           if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
           }

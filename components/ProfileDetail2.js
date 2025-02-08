@@ -120,63 +120,101 @@ const ProfileDetail2 = ({ tab, userInfo, usersession, isShowSearch }) => {
 
   };
 
-  const ForthRoute = ({ index, routes, tab, isShowSearch, isShowCreate }) => {
+  const ForthRoute = () => {
+    console.log('Rendering forth route');
     const { getUser } = useAuth();
-    const [itemLikes, setItemLikes] = useState([]);
-
     const { api } = useAuth();
-    const getLikes = async () => {
+    const [itemLikes, setItemLikes] = useState([]);
+  
+    const getLikes = async (userInfo) => {
       console.log(`getLikes-userInfo`, userInfo.user_id);
       let result = [];
       url = `/user/likes?userId=${userInfo.user_id}`;
       let resp = await api.get(url);
       let posts = resp.data.liked_posts;
+      //console.log("POSTS: ", posts)
       for (const post of posts) {
         result.push({
+          user_id: post.user_id,
           type: 'like',
           item_type: 'post',
           from: userInfo.screen_name,
           to: post.user_info.username,
-          screen_name: `@${post.user_info.username}`,
+          screen_name: `${post.user_info.username}`,
           image: post.user_info.profile_image_url,
           post_id: post.id,
+          datetime: post?.created_at,
+          text: post?.content,
+          name: `${post.user_info.name}`
         });
       }
       return result;
     }
-
-    useEffect(() => {
-      const setLikes = async () => {
-        console.log('setLikes')
-        let _likes = await getLikes();
-        for (let j = 0; j < _likes.length; j++) {
-          itemLikes.push({
-            name: ``,
-            username: `Liked @${_likes[j].to}'s post`,
-            image: _likes[j].image,
-            bio: ``,
-          })
-        }
-        console.log(itemLikes)
-        setItemLikes(itemLikes);
-      };
-      if (userInfo) {
-        setLikes();
+  
+    function getRandomString() {
+      const options = ["post", "crowdsource"];
+      return options[Math.floor(Math.random() * options.length)];
+    }
+    
+    const setLikes = async (user) => {
+      // console.log('setLikes : ', user)
+      let _likes = await getLikes(user);
+      let items = []
+      for (let j = 0; j < _likes.length; j++) {
+        items.push({
+          id: _likes[j]?.post_id,
+          // item_type: _likes[j]?.item_type,
+          user_id: _likes[j]?.user_id,
+          item_type: getRandomString(),
+          name: _likes[j]?.to,
+          screen_name: _likes[j]?.screen_name,
+          username: `Liked @${_likes[j]?.to}'s post`,
+          fullname: _likes[j]?.name,
+          image: _likes[j]?.image,
+          bio: ``,
+          datetime: _likes[j]?.datetime,
+          text: _likes[j].text,
+  
+          title: "Crowdsource Title",
+          salary_range: "Salary Range",
+          company:"Company",
+          location:"Location",
+          description:"Description",
+          view:1,
+          like:10
+        })
       }
-    }, [userInfo, itemLikes])
-    return (userInfo &&
-      <View style={{ flex: 1 }} >
-        {/* <CrowdListEvent
-        tab={4}
-        userInfo={userInfo}
-        isProfile={false}
-        isShowSearch={isShowSearch}
-        isShowCreate={isShowCreate} /> */}
+      console.log("Item likes : ",itemLikes)
+      setItemLikes(items);
+    };
+  
+  
+    useFocusEffect(
+      React.useCallback(() => {
+        getUser().then(async(user) => {
+          setLikes(user);
+        });
+      }, [])
+    );
+    
+  
+  
+    return (<View>
+    {itemLikes ?
         <PostLikeList
           tab={4}
-          itemLikes={itemLikes} />
+          itemLikes={itemLikes} 
+            fetchItems={() => {
+              getUser().then(async(user) => {
+                setLikes(user);
+              });
+            }}
+          />
+          :
+          <Text>NOT FOUND</Text>}
       </View>)
   };
+  
 
   const renderScene = SceneMap({
     first: FirstRoute,

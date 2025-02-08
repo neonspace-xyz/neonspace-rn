@@ -9,40 +9,48 @@ const CrowdSectionHiring = ({ tab, isDetail, index, userInfo, item, onPress, onM
   const navigation = useNavigation();
   let { timeFormat, dateFormat } = isDetail ? formatPostTimestamp(item?.datetime) : { timeFormat: "", dateFormat: "" }
 
+  const handleProfilePress = () => {
+    navigation.push(`OtherProfile${tab}`, { tab: tab, user: item });
+  };
+
   return (
     <View style={styles.frame} index={`hiring${item?.id}`} >
       <Pressable onPress={() => isDetail ? null : onPress()}>
         <View style={styles.frameParent}>
-          <View style={styles.frameFlexBox}>
-            <Image
-              style={styles.frameChild}
-              contentFit="cover"
-              source={item.image}
-            />
-            <View style={[styles.frameFlexBox]}>
-              <View style={styles.frameFlexBox}>
-                <Text style={[styles.name, styles.nameTypo]}>{item?.fullname}</Text>
-                <Text style={[styles.endlessmeee]}>
-                  @{item?.screen_name}
-                </Text>
-              </View>
+          <TouchableOpacity
+            onPress={handleProfilePress}
+          >
+            <View style={styles.frameFlexBox}>
               <Image
-                style={styles.frameItem}
+                style={styles.frameChild}
                 contentFit="cover"
-                source={require("../assets/ic_dot_white.png")}
+                source={item.image}
               />
-              <Text style={[styles.txtDateTime]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
-            </View>
-            {userInfo?.user_id == item?.user_id && (
-              <TouchableOpacity onPress={(event) => onMore(event, index)} style={styles.viewImgMore}>
+              <View style={[styles.frameFlexBox]}>
+                <View style={styles.frameFlexBox}>
+                  <Text style={[styles.name, styles.nameTypo]}>{item?.fullname}</Text>
+                  <Text style={[styles.endlessmeee]}>
+                    @{item?.screen_name}
+                  </Text>
+                </View>
                 <Image
-                  style={styles.imgMore}
+                  style={styles.frameItem}
                   contentFit="cover"
-                  source={require("../assets/ic_more_white.png")}
+                  source={require("../assets/ic_dot_white.png")}
                 />
-              </TouchableOpacity>
-            )}
-          </View>
+                <Text style={[styles.txtDateTime]}>{getFormattedPostTimestamp(item?.datetime)}</Text>
+              </View>
+              {userInfo?.user_id == item?.user_id && (
+                <TouchableOpacity onPress={(event) => onMore(event, index)} style={styles.viewImgMore}>
+                  <Image
+                    style={styles.imgMore}
+                    contentFit="cover"
+                    source={require("../assets/ic_more_white.png")}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          </TouchableOpacity>
           {/* Added Title, Company, Location, and Detail */}
           <View style={styles.detailsContainer}>
             <View style={styles.titleDetailContainer}>

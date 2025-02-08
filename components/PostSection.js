@@ -33,7 +33,7 @@ const PostSection = ({ tab, isDetail, index, userInfo, item, onPress, onMore, on
   }
 
   const handleProfilePress = () => {
-    navigation.push('OtherProfile1', { tab: '1', user: item });
+    navigation.push(`OtherProfile${tab}`, { tab: tab, user: item });
   };
 
   return (

@@ -28,11 +28,16 @@ const NotificationSection = ({ item }) => {
               >
                 {item?.title}
               </Text>
+
+              {
+                (item?.eventtype == "job_created" ||
+                item?.eventtype == "event_created" ||
+                item?.eventtype == "quest_created") ?
               <Image
                 style={styles.frameChildLayout}
                 contentFit="cover"
                 source={require("../assets/ic_dot_3.png")}
-              />
+              /> : <></>}
             </View>
             <Text
               style={[styles.notificationDetailsAnd]}

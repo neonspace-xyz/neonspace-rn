@@ -56,6 +56,7 @@ function ProfileStackNavigator() {
       <Stack.Screen name="CrowdCreateHiring4" component={CrowdCreateHiring} initialParams={dataToSend} />
       <Stack.Screen name="CrowdCreateEvent4" component={CrowdCreateEvent} initialParams={dataToSend} />
       <Stack.Screen name="CrowdCreateQuest4" component={CrowdCreateQuest} initialParams={dataToSend} />
+      
 
 
       {/* <Stack.Screen name="MyAssets3" component={MyAssets} initialParams={dataToSend} />       */}

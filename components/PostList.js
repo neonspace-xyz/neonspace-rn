@@ -13,6 +13,7 @@ import ButtonFAB from "./ButtonFAB";
 import PostCreate from "./PostCreate";
 import EmptyView from "./EmptyView";
 import { useRefresh } from "./RefreshProvider";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
   const { api } = useAuth();
@@ -217,6 +218,7 @@ const PostList = ({ tab, isProfile, usersession, userInfo, isShowSearch }) => {
 
   const Content = () => {
     return (
+      // <TouchableWithoutFeedback onPress={() => {selectedItemIndex && setSelectedItemIndex(null)}}>
       <>
         <FlatList
         ref={flatListRef}

@@ -123,11 +123,7 @@ const EditProfile = ({ route }) => {
               // resizeMode={FastImage.resizeMode.cover}
               />
             ) : (
-              <Image
-                style={[styles.editMyProfileChild]}
-                contentFit="cover"
-                source={require("../assets/photo.png")}
-              />
+              <></>             
             )}
 
             {/* <Image
