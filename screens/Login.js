@@ -67,13 +67,15 @@ const Login = () => {
     try {
       console.log("getTwitterAccessToken-called");
       showLoading();
+      const url = `${API_URL}/twitter/accessToken`;
       const body = {
         "oauth_token": oauthToken,
         "oauth_verifier": oauthVerifer,
         "referral_code": REFERRAL_CODE
       }
+      console.log("getTwitterAccessToken-url", url);
       console.log("getTwitterAccessToken-body", body);
-      const resp = await axios.post(`${API_URL}/twitter/accessToken`, body);
+      const resp = await axios.post(url, body);
 
       console.log("getTwitterAccessToken-status", resp.status);
       console.log("getTwitterAccessToken-data", resp.data);
@@ -89,7 +91,7 @@ const Login = () => {
     } catch (error) {
       setOAuthVerifier('');
       Alert.alert("Login Failed", "Failed to get access token");
-      console.error("getTwitterAccessToken-error", error);
+      console.error("getTwitterAccessToken-error", error.response.data.error)
       hideLoading();
       return null;
     }
@@ -289,7 +291,7 @@ const Login = () => {
                 <Text style={styles.cancelButton}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
-                setModalVisible(false);
+                // setModalVisible(false);
                 getTwitterAccessToken(oauthToken, oauthVerifier)
               }}>
                 <Text style={styles.confirmButton}>Next</Text>
